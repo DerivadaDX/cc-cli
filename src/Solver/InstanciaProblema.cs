@@ -8,6 +8,7 @@ namespace Solver
         }
 
         internal List<Jugador> Jugadores { get; } = [];
+        internal int CantidadAtomos => AtomosValorados.Count;
         private HashSet<int> AtomosValorados { get; } = [];
 
         internal void AgregarJugador(Jugador jugador)

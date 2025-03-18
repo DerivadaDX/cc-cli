@@ -53,5 +53,30 @@
             Assert.Same(jugador1, instanciaProblema.Jugadores[0]);
             Assert.Same(jugador2, instanciaProblema.Jugadores[1]);
         }
+
+        [Fact]
+        public void CantidadAtomos_JugadoresSinValoraciones_CantidadEsCero()
+        {
+            var instanciaProblema = new InstanciaProblema();
+            instanciaProblema.AgregarJugador(new Jugador(1));
+            instanciaProblema.AgregarJugador(new Jugador(2));
+            Assert.Equal(0, instanciaProblema.CantidadAtomos);
+        }
+
+        [Fact]
+        public void CantidadAtomos_SeAgreganValoraciones_CantidadEsCorrecta()
+        {
+            var jugador1 = new Jugador(1);
+            var jugador2 = new Jugador(2);
+            jugador1.AgregarValoracion(new Atomo(1, 1));
+            jugador1.AgregarValoracion(new Atomo(3, 1));
+            jugador2.AgregarValoracion(new Atomo(5, 1));
+
+            var instanciaProblema = new InstanciaProblema();
+            instanciaProblema.AgregarJugador(jugador1);
+            instanciaProblema.AgregarJugador(jugador2);
+
+            Assert.Equal(3, instanciaProblema.CantidadAtomos);
+        }
     }
 }
