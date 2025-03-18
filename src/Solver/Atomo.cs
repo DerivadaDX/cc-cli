@@ -2,7 +2,7 @@
 {
     internal class Atomo
     {
-        public Atomo(int posicion, decimal valoracion)
+        internal Atomo(int posicion, decimal valoracion)
         {
             if (posicion <= 0)
                 throw new ArgumentException($"La posición debe ser positiva: {posicion}", nameof(posicion));
@@ -12,6 +12,12 @@
 
             if (valoracion > 1)
                 throw new ArgumentException($"La valoración no puede ser mayor que 1: {valoracion}", nameof(valoracion));
+
+            Posicion = posicion;
+            Valoracion = valoracion;
         }
+
+        internal int Posicion { get; }
+        internal decimal Valoracion { get; }
     }
 }
