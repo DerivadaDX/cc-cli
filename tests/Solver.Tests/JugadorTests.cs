@@ -41,8 +41,8 @@
             var jugador = new Jugador(1);
             jugador.AgregarValoracion(new Atomo(posicionAtomo, 1));
 
-            var ex = Assert.Throws<ArgumentException>(() => jugador.AgregarValoracion(new Atomo(posicionAtomo, 0)));
-            Assert.StartsWith($"Ya existe una valoración para el átomo en la posicíon {posicionAtomo}", ex.Message);
+            var ex = Assert.Throws<InvalidOperationException>(() => jugador.AgregarValoracion(new Atomo(posicionAtomo, 0)));
+            Assert.Equal($"Ya existe una valoración para el átomo #{posicionAtomo}", ex.Message);
         }
     }
 }

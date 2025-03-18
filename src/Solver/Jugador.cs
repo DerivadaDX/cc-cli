@@ -14,7 +14,7 @@ namespace Solver
         internal void AgregarValoracion(Atomo atomo)
         {
             if (Valoraciones.Any(v => v.Posicion == atomo.Posicion))
-                throw new ArgumentException($"Ya existe una valoración para el átomo en la posicíon {atomo.Posicion}");
+                throw new InvalidOperationException($"Ya existe una valoración para el átomo #{atomo.Posicion}");
 
             Valoraciones.Add(atomo);
         }
