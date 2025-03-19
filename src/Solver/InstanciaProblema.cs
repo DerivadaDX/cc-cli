@@ -11,6 +11,29 @@ namespace Solver
         internal int CantidadAtomos => AtomosValorados.Count;
         private HashSet<int> AtomosValorados { get; } = [];
 
+        internal static InstanciaProblema CrearDesdeMatrizDeValoraciones(decimal[][] matrizValoraciones)
+        {
+            var instanciaProblema = new InstanciaProblema();
+
+            for (int indiceJugador = 0; indiceJugador < matrizValoraciones.Length; indiceJugador++)
+            {
+                var jugador = new Jugador(indiceJugador + 1);
+                for (int indiceAtomo = 0; indiceAtomo < matrizValoraciones[indiceJugador].Length; indiceAtomo++)
+                {
+                    decimal valoracion = matrizValoraciones[indiceJugador][indiceAtomo];
+                    if (valoracion > 0)
+                    {
+                        var atomo = new Atomo(indiceAtomo + 1, valoracion);
+                        jugador.AgregarValoracion(atomo);
+                    }
+                }
+
+                instanciaProblema.AgregarJugador(jugador);
+            }
+
+            return instanciaProblema;
+        }
+
         internal void AgregarJugador(Jugador jugador)
         {
             if (Jugadores.Any(j => j.Id == jugador.Id))
