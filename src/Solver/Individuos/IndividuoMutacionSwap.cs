@@ -4,6 +4,12 @@
     {
         internal IndividuoMutacionSwap(List<int> cromosoma, InstanciaProblema problema)
         {
+            if (cromosoma == null)
+                throw new ArgumentException("El cromosoma no puede ser null", nameof(cromosoma));
+
+            if (problema == null)
+                throw new ArgumentException("La instancia del problema no puede ser null", nameof(problema));
+
             if (cromosoma.Count == 0)
                 throw new ArgumentException("El cromosoma no puede estar vacío");
 

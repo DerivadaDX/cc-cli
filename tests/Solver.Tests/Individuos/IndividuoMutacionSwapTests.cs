@@ -5,6 +5,20 @@ namespace Solver.Tests.Individuos
     public class IndividuoMutacionSwapTests
     {
         [Fact]
+        public void Constructor_CromosomaNull_LanzaExcepcion()
+        {
+            var ex = Assert.Throws<ArgumentException>(() => new IndividuoMutacionSwap(null, new InstanciaProblema()));
+            Assert.StartsWith("El cromosoma no puede ser null", ex.Message);
+        }
+
+        [Fact]
+        public void Constructor_InstanciaProblemaNull_LanzaExcepcion()
+        {
+            var ex = Assert.Throws<ArgumentException>(() => new IndividuoMutacionSwap([], null));
+            Assert.StartsWith("La instancia del problema no puede ser null", ex.Message);
+        }
+
+        [Fact]
         public void Constructor_CromosomaVacio_LanzaExcepcion()
         {
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoMutacionSwap([], new InstanciaProblema()));
