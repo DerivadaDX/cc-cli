@@ -11,6 +11,24 @@
         }
 
         [Fact]
+        public void CrearDesdeMatrizDeValoraciones_MatrizNull_LanzaExcepcion()
+        {
+            var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(null));
+            Assert.Equal("La matriz de valoraciones no puede ser null", ex.Message);
+        }
+
+        [Fact]
+        public void CrearDesdeMatrizDeValoraciones_MatrizConFilasDesiguales_LanzaExcepcion()
+        {
+            decimal[][] matriz = [
+                [0m, 0m, 1m],
+                [0.5m, 0.5m],
+            ];
+            var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz));
+            Assert.Equal("Todas las filas de la matriz deben tener la misma longitud", ex.Message);
+        }
+
+        [Fact]
         public void CrearDesdeMatrizDeValoraciones_MatrizVacia_CreaInstanciaVacia()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([]);

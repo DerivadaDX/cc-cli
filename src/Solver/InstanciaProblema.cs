@@ -13,6 +13,19 @@ namespace Solver
 
         internal static InstanciaProblema CrearDesdeMatrizDeValoraciones(decimal[][] matrizValoraciones)
         {
+            if (matrizValoraciones == null)
+                throw new ArgumentException("La matriz de valoraciones no puede ser null");
+
+            if (matrizValoraciones.Length > 0)
+            {
+                int longitudPrimeraFila = matrizValoraciones[0].Length;
+                for (int fila = 1; fila < matrizValoraciones.Length; fila++)
+                {
+                    if (matrizValoraciones[fila].Length != longitudPrimeraFila)
+                        throw new ArgumentException("Todas las filas de la matriz deben tener la misma longitud");
+                }
+            }
+
             var instanciaProblema = new InstanciaProblema();
 
             for (int indiceJugador = 0; indiceJugador < matrizValoraciones.Length; indiceJugador++)
