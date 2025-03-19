@@ -2,13 +2,13 @@
 {
     internal class IndividuoMutacionSwap
     {
+        private readonly List<int> _cromosoma;
+        private readonly InstanciaProblema _problema;
+
         internal IndividuoMutacionSwap(List<int> cromosoma, InstanciaProblema problema)
         {
-            if (cromosoma == null)
-                throw new ArgumentException("El cromosoma no puede ser null", nameof(cromosoma));
-
-            if (problema == null)
-                throw new ArgumentException("La instancia del problema no puede ser null", nameof(problema));
+            _cromosoma = cromosoma ?? throw new ArgumentException("El cromosoma no puede ser null", nameof(cromosoma));
+            _problema = problema ?? throw new ArgumentException("La instancia del problema no puede ser null", nameof(problema));
 
             if (cromosoma.Count == 0)
                 throw new ArgumentException("El cromosoma no puede estar vacío");
@@ -16,13 +16,25 @@
             int cantidadJugadores = problema.Jugadores.Count;
             int cantidadCortesEsperada = cantidadJugadores - 1;
 
+            ValidarCantidadGenes(cromosoma, cantidadJugadores);
+            ValidarCortes(cromosoma, problema, cantidadCortesEsperada);
+            ValidarAsignaciones(cromosoma, cantidadJugadores, cantidadCortesEsperada);
+        }
+
+        private void ValidarCantidadGenes(List<int> cromosoma, int cantidadJugadores)
+        {
+            int cantidadCortesEsperada = cantidadJugadores - 1;
             int cantidadGenesEsperada = cantidadCortesEsperada + cantidadJugadores;
+
             if (cromosoma.Count != cantidadGenesEsperada)
             {
                 string mensaje = $"Cantidad de genes inválida. Esperada: {cantidadGenesEsperada}, recibida: {cromosoma.Count}";
                 throw new ArgumentException(mensaje, nameof(cromosoma));
             }
+        }
 
+        private void ValidarCortes(List<int> cromosoma, InstanciaProblema problema, int cantidadCortesEsperada)
+        {
             List<int> cortes = [.. cromosoma.Take(cantidadCortesEsperada).Order()];
             if (cortes.First() < 0)
             {
@@ -35,7 +47,10 @@
                 string mensaje = $"Posición del último corte no puede superar a {problema.CantidadAtomos}: {cortes.Last()}";
                 throw new ArgumentException(mensaje, nameof(cromosoma));
             }
+        }
 
+        private void ValidarAsignaciones(List<int> cromosoma, int cantidadJugadores, int cantidadCortesEsperada)
+        {
             List<int> asignaciones = [.. cromosoma.Skip(cantidadCortesEsperada)];
             List<int> fueraDeRango = [.. asignaciones.Where(a => a < 1 || a > cantidadJugadores).Distinct().Order()];
             if (fueraDeRango.Count > 0)
