@@ -7,10 +7,10 @@
             if (cromosoma.Count == 0)
                 throw new ArgumentException("El cromosoma no puede estar vacío");
 
-            int cantidadCortesEsperada = problema.Jugadores.Count - 1;
-            int cantidadAsigncacionesEsperada = problema.Jugadores.Count;
+            int cantidadJugadores = problema.Jugadores.Count;
+            int cantidadCortesEsperada = cantidadJugadores - 1;
 
-            int cantidadGenesEsperada = cantidadCortesEsperada + cantidadAsigncacionesEsperada;
+            int cantidadGenesEsperada = cantidadCortesEsperada + cantidadJugadores;
             if (cromosoma.Count != cantidadGenesEsperada)
             {
                 string mensaje = $"Cantidad de genes inválida. Esperada: {cantidadGenesEsperada}, recibida: {cromosoma.Count}";
@@ -27,6 +27,21 @@
             if (cortes.Last() > problema.CantidadAtomos)
             {
                 string mensaje = $"Posición del último corte no puede superar a {problema.CantidadAtomos}: {cortes.Last()}";
+                throw new ArgumentException(mensaje, nameof(cromosoma));
+            }
+
+            List<int> asignaciones = [.. cromosoma.Skip(cantidadCortesEsperada)];
+            List<int> fueraDeRango = [.. asignaciones.Where(a => a < 1 || a > cantidadJugadores).Distinct().Order()];
+            if (fueraDeRango.Count > 0)
+            {
+                string mensaje = $"Hay asignaciones fuera del rango [1, {cantidadJugadores}]: ({string.Join(", ", fueraDeRango)})";
+                throw new ArgumentException(mensaje, nameof(cromosoma));
+            }
+
+            List<int> repetidas = asignaciones.GroupBy(a => a).Where(g => g.Count() > 1).Select(g => g.Key).ToList();
+            if (repetidas.Count > 0)
+            {
+                string mensaje = $"Hay porciones asignadas a más de un jugador: ({string.Join(", ", repetidas)})";
                 throw new ArgumentException(mensaje, nameof(cromosoma));
             }
         }

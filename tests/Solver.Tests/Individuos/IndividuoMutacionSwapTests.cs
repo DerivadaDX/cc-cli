@@ -35,5 +35,58 @@ namespace Solver.Tests.Individuos
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoMutacionSwap([3, 2, 1], instanciaProblema));
             Assert.StartsWith("Posición del último corte no puede superar a 2: 3", ex.Message);
         }
+
+        [Fact]
+        public void Constructor_HayUnaAsignacionAJugadoresInvalidoEnCromosoma_LanzaExcepcion()
+        {
+            // El rango permitido para las asignaciones de k jugadores es [1, k]
+            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1m, 0m], [0m, 1m]]);
+            var ex = Assert.Throws<ArgumentException>(() => new IndividuoMutacionSwap([0, 1, 0], instanciaProblema));
+            Assert.StartsWith($"Hay asignaciones fuera del rango [1, 2]: (0)", ex.Message);
+        }
+
+        [Fact]
+        public void Constructor_HayMasDeUnaAsignacionAJugadoresInvalidosEnCromosoma_LanzaExcepcion()
+        {
+            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1m, 0m], [0m, 1m]]);
+            var ex = Assert.Throws<ArgumentException>(() => new IndividuoMutacionSwap([0, -1, 5], instanciaProblema));
+            Assert.StartsWith("Hay asignaciones fuera del rango [1, 2]: (-1, 5)", ex.Message);
+        }
+
+        [Fact]
+        public void Constructor_ListadoDeAsignacionesRepetidasSeMuestraOrdenadoAscendente_LanzaExcepcion()
+        {
+            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([
+                [1m, 0m, 0m, 0m],
+                [0m, 1m, 0m, 0m],
+                [0m, 0m, 1m, 0m],
+                [0m, 0m, 0m, 1m],
+            ]);
+
+            var ex = Assert.Throws<ArgumentException>(() => new IndividuoMutacionSwap([1, 2, 3, 5, 2, 0, -1], instanciaProblema));
+            Assert.StartsWith("Hay asignaciones fuera del rango [1, 4]: (-1, 0, 5)", ex.Message);
+        }
+
+        [Fact]
+        public void Constructor_HayUnaPorcionAsignadaAMasDeUnJugadorEnCromosoma_LanzaExcepcion()
+        {
+            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1m, 0m], [0m, 1m]]);
+            var ex = Assert.Throws<ArgumentException>(() => new IndividuoMutacionSwap([0, 1, 1], instanciaProblema));
+            Assert.StartsWith("Hay porciones asignadas a más de un jugador: (1)", ex.Message);
+        }
+
+        [Fact]
+        public void Constructor_HayMasDeUnaPorcionAsignadaAMasDeUnJugadorEnCromosoma_LanzaExcepcion()
+        {
+            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([
+                [1m, 0m, 0m, 0m],
+                [0m, 1m, 0m, 0m],
+                [0m, 0m, 1m, 0m],
+                [0m, 0m, 0m, 1m],
+             ]);
+
+            var ex = Assert.Throws<ArgumentException>(() => new IndividuoMutacionSwap([0, 0, 4, 2, 2, 3, 3], instanciaProblema));
+            Assert.StartsWith("Hay porciones asignadas a más de un jugador: (2, 3)", ex.Message);
+        }
     }
 }
