@@ -19,7 +19,7 @@
         }
 
         [Fact]
-        public void CrearDesdeMatrizDeValoracione_MatirzValida_CreaInstanciaCorrectamente()
+        public void CrearDesdeMatrizDeValoracione_MatrizValida_CreaInstanciaCorrectamente()
         {
             var instancia = InstanciaProblema.CrearDesdeMatrizDeValoraciones([
                 [ 0.1m, 0.2m, 0m, 0m, 0m, 0.6m, 0m ],
