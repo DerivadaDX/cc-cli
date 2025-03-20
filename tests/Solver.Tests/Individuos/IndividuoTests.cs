@@ -23,7 +23,7 @@ namespace Solver.Tests.Individuos
         public void Constructor_CromosomaVacio_LanzaExcepcion()
         {
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([], new InstanciaProblema()));
-            Assert.Equal("El cromosoma no puede estar vacío", ex.Message);
+            Assert.StartsWith("El cromosoma no puede estar vacío", ex.Message);
         }
 
         [Fact]
