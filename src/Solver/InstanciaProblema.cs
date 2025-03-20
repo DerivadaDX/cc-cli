@@ -30,16 +30,20 @@ namespace Solver
 
             var instanciaProblema = new InstanciaProblema();
 
+            var jugadoresPorId = new Dictionary<int, Jugador>();
             for (int indiceAtomo = 0; indiceAtomo < matrizValoraciones.Length; indiceAtomo++)
             {
                 bool atomoFueValorado = false;
+                int idAtomo = indiceAtomo + 1;
 
                 for (int indiceJugador = 0; indiceJugador < matrizValoraciones[indiceAtomo].Length; indiceJugador++)
                 {
-                    Jugador jugador = instanciaProblema.Jugadores.FirstOrDefault(j => j.Id == indiceJugador + 1);
-                    if (jugador == null)
+                    int idJugador = indiceJugador + 1;
+                    bool noExisteJugador = !jugadoresPorId.TryGetValue(idJugador, out Jugador jugador);
+                    if (noExisteJugador)
                     {
-                        jugador = new Jugador(indiceJugador + 1);
+                        jugador = new Jugador(idJugador);
+                        jugadoresPorId[idJugador] = jugador;
                         instanciaProblema.Jugadores.Add(jugador);
                     }
 
