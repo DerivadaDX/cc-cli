@@ -1,5 +1,4 @@
 ﻿using Solver.Fitness;
-using Solver.Random;
 
 namespace Solver.Individuos
 {
@@ -7,11 +6,9 @@ namespace Solver.Individuos
     {
         protected readonly List<int> _cromosoma;
         protected readonly InstanciaProblema _problema;
-        private readonly GeneradorNumerosRandom _generadorRandom;
 
         protected Individuo(List<int> cromosoma, InstanciaProblema problema)
         {
-            _generadorRandom = GeneradorNumerosRandomFactory.Crear();
             _cromosoma = cromosoma ?? throw new ArgumentException("El cromosoma no puede ser null", nameof(cromosoma));
             _problema = problema ?? throw new ArgumentException("La instancia del problema no puede ser null", nameof(problema));
 
