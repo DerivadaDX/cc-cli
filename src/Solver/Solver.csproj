@@ -4,6 +4,9 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
+
+    <!-- Deshabilito CA1822:Mark members as static -->
+    <NoWarn>CA1822</NoWarn>
   </PropertyGroup>
 
 </Project>
