@@ -20,14 +20,6 @@
         }
 
         [Fact]
-        public void Constructor_Valoracion_NoPuedeSerMayorQueUno()
-        {
-            decimal valoracion = 1.1m;
-            var ex = Assert.Throws<ArgumentException>(() => new Atomo(1, valoracion));
-            Assert.StartsWith($"La valoración no puede ser mayor que 1: {valoracion}", ex.Message);
-        }
-
-        [Fact]
         public void Constructor_Posicion_SeAsigna()
         {
             int posicion = 1;
@@ -35,12 +27,14 @@
             Assert.Equal(posicion, atomo.Posicion);
         }
 
-        [Fact]
-        public void Constructor_Valoracion_SeAsigna()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(.5)]
+        [InlineData(10)]
+        public void Constructor_Valoracion_SeAsigna(double valoracion)
         {
-            decimal valoracion = 0.5m;
-            var atomo = new Atomo(1, valoracion);
-            Assert.Equal(valoracion, atomo.Valoracion);
+            var atomo = new Atomo(1, (decimal)valoracion);
+            Assert.Equal((decimal)valoracion, atomo.Valoracion);
         }
     }
 }
