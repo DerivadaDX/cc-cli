@@ -11,6 +11,19 @@ namespace Solver
         internal int CantidadAtomos => AtomosValorados.Count;
         private HashSet<int> AtomosValorados { get; } = [];
 
+        /// <summary>
+        /// Crea una instancia del problema a partir de una matriz de valoraciones de tamaño NxM, donde N es la cantidad de átomos
+        /// y M es la cantidad de jugadores. Cada fila de la matriz representa un átomo, y cada columna representa un jugador.
+        /// Los valores de la matriz indican la valoración de cada jugador sobre los átomos.
+        /// </summary>
+        /// <param name="matrizValoraciones">
+        /// Matriz de valoraciones donde las filas representan átomos y las columnas representan jugadores.
+        /// Un valor de 0 o negativo indica que el jugador no valora ese átomo.
+        /// </param>
+        /// <returns>
+        /// Una instancia de <see cref="InstanciaProblema"/> que contiene la lista de jugadores y sus valoraciones.
+        /// </returns>
+        /// <exception cref="ArgumentException"></exception>
         internal static InstanciaProblema CrearDesdeMatrizDeValoraciones(decimal[][] matrizValoraciones)
         {
             if (matrizValoraciones == null)
