@@ -80,18 +80,8 @@ namespace Solver
 
             for (int indiceJugador = 0; indiceJugador < matrizValoraciones[0].Length; indiceJugador++)
             {
-                bool columnaInvalida = true;
-
-                for (int indiceAtomo = 0; indiceAtomo < matrizValoraciones.Length; indiceAtomo++)
-                {
-                    if (matrizValoraciones[indiceAtomo][indiceJugador] > 0)
-                    {
-                        columnaInvalida = false;
-                        break;
-                    }
-                }
-
-                if (columnaInvalida)
+                bool jugadorNoValoraNingunAtomo = matrizValoraciones.All(fila => fila[indiceJugador] <= 0);
+                if (jugadorNoValoraNingunAtomo)
                 {
                     throw new ArgumentException(
                         $"El jugador {indiceJugador + 1} no tiene valoraciones positivas sobre ningún átomo.",
