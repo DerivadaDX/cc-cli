@@ -72,7 +72,7 @@ namespace Solver
                     if (jugador == null)
                     {
                         jugador = new Jugador(indiceJugador + 1);
-                        instanciaProblema.AgregarJugador(jugador);
+                        instanciaProblema.Jugadores.Add(jugador);
                     }
 
                     decimal valoracion = matrizValoraciones[indiceAtomo][indiceJugador];
@@ -89,18 +89,6 @@ namespace Solver
             }
 
             return instanciaProblema;
-        }
-
-        internal void AgregarJugador(Jugador jugador)
-        {
-            if (Jugadores.Any(j => j.Id == jugador.Id))
-                throw new InvalidOperationException($"Ya existe un jugador con el id {jugador.Id}");
-
-            Jugadores.Add(jugador);
-            foreach (Atomo atomo in jugador.Valoraciones)
-            {
-                AtomosValorados.Add(atomo.Posicion);
-            }
         }
     }
 }
