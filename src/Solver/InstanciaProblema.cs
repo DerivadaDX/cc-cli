@@ -3,7 +3,7 @@ namespace Solver
 {
     internal class InstanciaProblema
     {
-        internal InstanciaProblema()
+        private InstanciaProblema()
         {
         }
 
@@ -11,51 +11,82 @@ namespace Solver
         internal int CantidadAtomos => AtomosValorados.Count;
         private HashSet<int> AtomosValorados { get; } = [];
 
+        /// <summary>
+        /// Crea una instancia del problema a partir de una matriz de valoraciones de tamaño NxM, donde N es la cantidad de átomos
+        /// y M es la cantidad de jugadores. Cada fila de la matriz representa un átomo, y cada columna representa un jugador.
+        /// Los valores de la matriz indican la valoración de cada jugador sobre los átomos.
+        /// </summary>
+        /// <param name="matrizValoraciones">
+        /// Matriz de valoraciones donde las filas representan átomos y las columnas representan jugadores.
+        /// Un valor de 0 o negativo indica que el jugador no valora ese átomo.
+        /// </param>
+        /// <returns>
+        /// Una instancia de <see cref="InstanciaProblema"/> que contiene la lista de jugadores y sus valoraciones.
+        /// </returns>
+        /// <exception cref="ArgumentException"></exception>
         internal static InstanciaProblema CrearDesdeMatrizDeValoraciones(decimal[][] matrizValoraciones)
         {
-            if (matrizValoraciones == null)
-                throw new ArgumentException("La matriz de valoraciones no puede ser null", nameof(matrizValoraciones));
-
-            if (matrizValoraciones.Length > 0)
-            {
-                int longitudPrimeraFila = matrizValoraciones[0].Length;
-                for (int fila = 1; fila < matrizValoraciones.Length; fila++)
-                {
-                    if (matrizValoraciones[fila].Length != longitudPrimeraFila)
-                        throw new ArgumentException("Todas las filas de la matriz deben tener la misma longitud", nameof(matrizValoraciones));
-                }
-            }
+            ValidarMatriz(matrizValoraciones);
 
             var instanciaProblema = new InstanciaProblema();
 
-            for (int indiceJugador = 0; indiceJugador < matrizValoraciones.Length; indiceJugador++)
+            var jugadoresPorId = new Dictionary<int, Jugador>();
+            for (int indiceAtomo = 0; indiceAtomo < matrizValoraciones.Length; indiceAtomo++)
             {
-                var jugador = new Jugador(indiceJugador + 1);
-                for (int indiceAtomo = 0; indiceAtomo < matrizValoraciones[indiceJugador].Length; indiceAtomo++)
+                bool atomoFueValorado = false;
+                int idAtomo = indiceAtomo + 1;
+
+                for (int indiceJugador = 0; indiceJugador < matrizValoraciones[indiceAtomo].Length; indiceJugador++)
                 {
-                    decimal valoracion = matrizValoraciones[indiceJugador][indiceAtomo];
+                    int idJugador = indiceJugador + 1;
+                    bool noExisteJugador = !jugadoresPorId.TryGetValue(idJugador, out Jugador jugador);
+                    if (noExisteJugador)
+                    {
+                        jugador = new Jugador(idJugador);
+                        jugadoresPorId[idJugador] = jugador;
+                        instanciaProblema.Jugadores.Add(jugador);
+                    }
+
+                    decimal valoracion = matrizValoraciones[indiceAtomo][indiceJugador];
                     if (valoracion > 0)
                     {
                         var atomo = new Atomo(indiceAtomo + 1, valoracion);
                         jugador.AgregarValoracion(atomo);
+                        atomoFueValorado = true;
                     }
                 }
 
-                instanciaProblema.AgregarJugador(jugador);
+                if (atomoFueValorado)
+                    instanciaProblema.AtomosValorados.Add(indiceAtomo + 1);
             }
 
             return instanciaProblema;
         }
 
-        internal void AgregarJugador(Jugador jugador)
+        private static void ValidarMatriz(decimal[][] matrizValoraciones)
         {
-            if (Jugadores.Any(j => j.Id == jugador.Id))
-                throw new InvalidOperationException($"Ya existe un jugador con el id {jugador.Id}");
+            if (matrizValoraciones == null)
+                throw new ArgumentException("La matriz de valoraciones no puede ser null", nameof(matrizValoraciones));
 
-            Jugadores.Add(jugador);
-            foreach (Atomo atomo in jugador.Valoraciones)
+            if (matrizValoraciones.Length == 0)
+                throw new ArgumentException("La matriz de valoraciones no puede estar vacía", nameof(matrizValoraciones));
+
+            int longitudPrimeraFila = matrizValoraciones[0].Length;
+            for (int fila = 1; fila < matrizValoraciones.Length; fila++)
             {
-                AtomosValorados.Add(atomo.Posicion);
+                if (matrizValoraciones[fila].Length != longitudPrimeraFila)
+                    throw new ArgumentException("Todas las filas de la matriz deben tener la misma longitud", nameof(matrizValoraciones));
+            }
+
+            for (int indiceJugador = 0; indiceJugador < matrizValoraciones[0].Length; indiceJugador++)
+            {
+                bool jugadorNoValoraNingunAtomo = matrizValoraciones.All(fila => fila[indiceJugador] <= 0);
+                if (jugadorNoValoraNingunAtomo)
+                {
+                    throw new ArgumentException(
+                        $"El jugador {indiceJugador + 1} no tiene valoraciones positivas sobre ningún átomo.",
+                        nameof(matrizValoraciones));
+                }
             }
         }
     }
