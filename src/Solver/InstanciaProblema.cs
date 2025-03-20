@@ -26,6 +26,41 @@ namespace Solver
         /// <exception cref="ArgumentException"></exception>
         internal static InstanciaProblema CrearDesdeMatrizDeValoraciones(decimal[][] matrizValoraciones)
         {
+            ValidarMatriz(matrizValoraciones);
+
+            var instanciaProblema = new InstanciaProblema();
+
+            for (int indiceAtomo = 0; indiceAtomo < matrizValoraciones.Length; indiceAtomo++)
+            {
+                bool atomoFueValorado = false;
+
+                for (int indiceJugador = 0; indiceJugador < matrizValoraciones[indiceAtomo].Length; indiceJugador++)
+                {
+                    Jugador jugador = instanciaProblema.Jugadores.FirstOrDefault(j => j.Id == indiceJugador + 1);
+                    if (jugador == null)
+                    {
+                        jugador = new Jugador(indiceJugador + 1);
+                        instanciaProblema.Jugadores.Add(jugador);
+                    }
+
+                    decimal valoracion = matrizValoraciones[indiceAtomo][indiceJugador];
+                    if (valoracion > 0)
+                    {
+                        var atomo = new Atomo(indiceAtomo + 1, valoracion);
+                        jugador.AgregarValoracion(atomo);
+                        atomoFueValorado = true;
+                    }
+                }
+
+                if (atomoFueValorado)
+                    instanciaProblema.AtomosValorados.Add(indiceAtomo + 1);
+            }
+
+            return instanciaProblema;
+        }
+
+        private static void ValidarMatriz(decimal[][] matrizValoraciones)
+        {
             if (matrizValoraciones == null)
                 throw new ArgumentException("La matriz de valoraciones no puede ser null", nameof(matrizValoraciones));
 
@@ -59,36 +94,6 @@ namespace Solver
                         nameof(matrizValoraciones));
                 }
             }
-
-            var instanciaProblema = new InstanciaProblema();
-
-            for (int indiceAtomo = 0; indiceAtomo < matrizValoraciones.Length; indiceAtomo++)
-            {
-                bool atomoFueValorado = false;
-
-                for (int indiceJugador = 0; indiceJugador < matrizValoraciones[indiceAtomo].Length; indiceJugador++)
-                {
-                    Jugador jugador = instanciaProblema.Jugadores.FirstOrDefault(j => j.Id == indiceJugador + 1);
-                    if (jugador == null)
-                    {
-                        jugador = new Jugador(indiceJugador + 1);
-                        instanciaProblema.Jugadores.Add(jugador);
-                    }
-
-                    decimal valoracion = matrizValoraciones[indiceAtomo][indiceJugador];
-                    if (valoracion > 0)
-                    {
-                        var atomo = new Atomo(indiceAtomo + 1, valoracion);
-                        jugador.AgregarValoracion(atomo);
-                        atomoFueValorado = true;
-                    }
-                }
-
-                if (atomoFueValorado)
-                    instanciaProblema.AtomosValorados.Add(indiceAtomo + 1);
-            }
-
-            return instanciaProblema;
         }
     }
 }
