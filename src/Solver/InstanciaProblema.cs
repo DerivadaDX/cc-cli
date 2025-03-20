@@ -28,20 +28,30 @@ namespace Solver
 
             var instanciaProblema = new InstanciaProblema();
 
-            for (int indiceJugador = 0; indiceJugador < matrizValoraciones.Length; indiceJugador++)
+            for (int indiceAtomo = 0; indiceAtomo < matrizValoraciones.Length; indiceAtomo++)
             {
-                var jugador = new Jugador(indiceJugador + 1);
-                for (int indiceAtomo = 0; indiceAtomo < matrizValoraciones[indiceJugador].Length; indiceAtomo++)
+                bool atomoFueValorado = false;
+
+                for (int indiceJugador = 0; indiceJugador < matrizValoraciones[indiceAtomo].Length; indiceJugador++)
                 {
-                    decimal valoracion = matrizValoraciones[indiceJugador][indiceAtomo];
+                    Jugador jugador = instanciaProblema.Jugadores.FirstOrDefault(j => j.Id == indiceJugador + 1);
+                    if (jugador == null)
+                    {
+                        jugador = new Jugador(indiceJugador + 1);
+                        instanciaProblema.AgregarJugador(jugador);
+                    }
+
+                    decimal valoracion = matrizValoraciones[indiceAtomo][indiceJugador];
                     if (valoracion > 0)
                     {
                         var atomo = new Atomo(indiceAtomo + 1, valoracion);
                         jugador.AgregarValoracion(atomo);
+                        atomoFueValorado = true;
                     }
                 }
 
-                instanciaProblema.AgregarJugador(jugador);
+                if (atomoFueValorado)
+                    instanciaProblema.AtomosValorados.Add(indiceAtomo + 1);
             }
 
             return instanciaProblema;

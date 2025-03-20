@@ -40,8 +40,12 @@
         public void CrearDesdeMatrizDeValoracione_MatrizValida_CreaInstanciaCorrectamente()
         {
             var instancia = InstanciaProblema.CrearDesdeMatrizDeValoraciones([
-                [0,   1, 1, 2, 3, 5],
-                [3, .1m, 4, 1, 5, 9],
+                [0, 3.9m],
+                [1, 1.2m],
+                [1, 4.6m],
+                [2, 1.5m],
+                [3, 5.3m],
+                [5, 0.0m],
             ]);
 
             Assert.Equal(2, instancia.Jugadores.Count);
@@ -58,13 +62,12 @@
 
             Jugador jugador2 = instancia.Jugadores[1];
             Assert.Equal(2, jugador2.Id);
-            Assert.Equal(6, jugador2.Valoraciones.Count);
-            Assert.Contains(jugador2.Valoraciones, a => a.Posicion == 1 && a.Valoracion == 3);
-            Assert.Contains(jugador2.Valoraciones, a => a.Posicion == 2 && a.Valoracion == .1m);
-            Assert.Contains(jugador2.Valoraciones, a => a.Posicion == 3 && a.Valoracion == 4);
-            Assert.Contains(jugador2.Valoraciones, a => a.Posicion == 4 && a.Valoracion == 1);
-            Assert.Contains(jugador2.Valoraciones, a => a.Posicion == 5 && a.Valoracion == 5);
-            Assert.Contains(jugador2.Valoraciones, a => a.Posicion == 6 && a.Valoracion == 9);
+            Assert.Equal(5, jugador2.Valoraciones.Count);
+            Assert.Contains(jugador2.Valoraciones, a => a.Posicion == 1 && a.Valoracion == 3.9m);
+            Assert.Contains(jugador2.Valoraciones, a => a.Posicion == 2 && a.Valoracion == 1.2m);
+            Assert.Contains(jugador2.Valoraciones, a => a.Posicion == 3 && a.Valoracion == 4.6m);
+            Assert.Contains(jugador2.Valoraciones, a => a.Posicion == 4 && a.Valoracion == 1.5m);
+            Assert.Contains(jugador2.Valoraciones, a => a.Posicion == 5 && a.Valoracion == 5.3m);
         }
 
         [Fact]
