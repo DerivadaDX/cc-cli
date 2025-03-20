@@ -1,12 +1,12 @@
-﻿namespace Solver
+﻿namespace Solver.Random
 {
-    internal class GeneradorNumerosRandom : IGeneradorNumerosRandom
+    internal class GeneradorNumerosRandom
     {
-        private readonly Random _random;
+        private readonly System.Random _random;
 
         internal GeneradorNumerosRandom()
         {
-            _random = new Random();
+            _random = new System.Random();
         }
 
         internal GeneradorNumerosRandom(int seed)
@@ -14,15 +14,15 @@
             if (seed < 0)
                 throw new ArgumentException($"La semilla no puede ser negativa: {seed}", nameof(seed));
 
-            _random = new Random(seed);
+            _random = new System.Random(seed);
         }
 
-        public int Siguiente()
+        internal virtual int Siguiente()
         {
             return _random.Next();
         }
 
-        public int Siguiente(int minimo, int maximo)
+        internal virtual int Siguiente(int minimo, int maximo)
         {
             return _random.Next(minimo, maximo);
         }
