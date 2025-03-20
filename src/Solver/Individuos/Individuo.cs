@@ -13,7 +13,7 @@ namespace Solver.Individuos
             _problema = problema ?? throw new ArgumentException("La instancia del problema no puede ser null", nameof(problema));
 
             if (cromosoma.Count == 0)
-                throw new ArgumentException("El cromosoma no puede estar vacío");
+                throw new ArgumentException("El cromosoma no puede estar vacío", nameof(cromosoma));
 
             ValidarCromosoma(cromosoma, problema);
         }
