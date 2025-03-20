@@ -3,7 +3,7 @@ namespace Solver
 {
     internal class InstanciaProblema
     {
-        internal InstanciaProblema()
+        private InstanciaProblema()
         {
         }
 
@@ -30,7 +30,7 @@ namespace Solver
                 throw new ArgumentException("La matriz de valoraciones no puede ser null", nameof(matrizValoraciones));
 
             if (matrizValoraciones.Length == 0)
-                return new InstanciaProblema();
+                throw new ArgumentException("La matriz de valoraciones no puede estar vacía", nameof(matrizValoraciones));
 
             int longitudPrimeraFila = matrizValoraciones[0].Length;
             for (int fila = 1; fila < matrizValoraciones.Length; fila++)

@@ -8,7 +8,8 @@ namespace Solver.Tests.Individuos
         [Fact]
         public void Constructor_CromosomaNull_LanzaExcepcion()
         {
-            var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub(null, new InstanciaProblema()));
+            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1]]);
+            var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub(null, instanciaProblema));
             Assert.StartsWith("El cromosoma no puede ser null", ex.Message);
         }
 
@@ -22,7 +23,8 @@ namespace Solver.Tests.Individuos
         [Fact]
         public void Constructor_CromosomaVacio_LanzaExcepcion()
         {
-            var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([], new InstanciaProblema()));
+            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1]]);
+            var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([], instanciaProblema));
             Assert.StartsWith("El cromosoma no puede estar vacío", ex.Message);
         }
 

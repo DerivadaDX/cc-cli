@@ -5,7 +5,7 @@
         [Fact]
         public void Constructor_Jugadores_SeInicializaVacio()
         {
-            var instanciaProblema = new InstanciaProblema();
+            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1]]);
             Assert.NotNull(instanciaProblema.Jugadores);
             Assert.Empty(instanciaProblema.Jugadores);
         }
@@ -15,6 +15,13 @@
         {
             var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(null));
             Assert.StartsWith("La matriz de valoraciones no puede ser null", ex.Message);
+        }
+
+        [Fact]
+        public void CrearDesdeMatrizDeValoraciones_MatrizVacia_LanzaExcepcion()
+        {
+            var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones([]));
+            Assert.StartsWith("La matriz de valoraciones no puede estar vacía", ex.Message);
         }
 
         [Fact]
@@ -37,14 +44,6 @@
             ];
             var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz));
             Assert.StartsWith("El jugador 1 no tiene valoraciones positivas sobre ningún átomo.", ex.Message);
-        }
-
-        [Fact]
-        public void CrearDesdeMatrizDeValoraciones_MatrizVacia_CreaInstanciaVacia()
-        {
-            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([]);
-            Assert.NotNull(instanciaProblema.Jugadores);
-            Assert.Empty(instanciaProblema.Jugadores);
         }
 
         [Fact]
