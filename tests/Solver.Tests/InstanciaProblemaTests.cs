@@ -29,6 +29,17 @@
         }
 
         [Fact]
+        public void CrearDesdeMatrizDeValoraciones_MatrizConJugadoresSinValoraciones_LanzaExcepcion()
+        {
+            decimal[][] matriz = [
+                [0, 1, 1],
+                [0, 1, 1],
+            ];
+            var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz));
+            Assert.StartsWith("El jugador 1 no tiene valoraciones positivas sobre ningún átomo.", ex.Message);
+        }
+
+        [Fact]
         public void CrearDesdeMatrizDeValoraciones_MatrizVacia_CreaInstanciaVacia()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([]);

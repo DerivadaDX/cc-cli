@@ -29,13 +29,34 @@ namespace Solver
             if (matrizValoraciones == null)
                 throw new ArgumentException("La matriz de valoraciones no puede ser null", nameof(matrizValoraciones));
 
-            if (matrizValoraciones.Length > 0)
+            if (matrizValoraciones.Length == 0)
+                return new InstanciaProblema();
+
+            int longitudPrimeraFila = matrizValoraciones[0].Length;
+            for (int fila = 1; fila < matrizValoraciones.Length; fila++)
             {
-                int longitudPrimeraFila = matrizValoraciones[0].Length;
-                for (int fila = 1; fila < matrizValoraciones.Length; fila++)
+                if (matrizValoraciones[fila].Length != longitudPrimeraFila)
+                    throw new ArgumentException("Todas las filas de la matriz deben tener la misma longitud", nameof(matrizValoraciones));
+            }
+
+            for (int indiceJugador = 0; indiceJugador < matrizValoraciones[0].Length; indiceJugador++)
+            {
+                bool columnaInvalida = true;
+
+                for (int indiceAtomo = 0; indiceAtomo < matrizValoraciones.Length; indiceAtomo++)
                 {
-                    if (matrizValoraciones[fila].Length != longitudPrimeraFila)
-                        throw new ArgumentException("Todas las filas de la matriz deben tener la misma longitud", nameof(matrizValoraciones));
+                    if (matrizValoraciones[indiceAtomo][indiceJugador] > 0)
+                    {
+                        columnaInvalida = false;
+                        break;
+                    }
+                }
+
+                if (columnaInvalida)
+                {
+                    throw new ArgumentException(
+                        $"El jugador {indiceJugador + 1} no tiene valoraciones positivas sobre ningún átomo.",
+                        nameof(matrizValoraciones));
                 }
             }
 
