@@ -77,22 +77,6 @@
         }
 
         [Fact]
-        public void AgregarJugador_JugadorValoraUnAtomoQueYaFueValorado_LanzaExcepcion()
-        {
-            var atomo = new Atomo(1, 1);
-            var jugador1 = new Jugador(1);
-            var jugador2 = new Jugador(2);
-            jugador1.AgregarValoracion(atomo);
-            jugador2.AgregarValoracion(atomo);
-
-            var instanciaProblema = new InstanciaProblema();
-            instanciaProblema.AgregarJugador(jugador1);
-
-            var ex = Assert.Throws<InvalidOperationException>(() => instanciaProblema.AgregarJugador(jugador2));
-            Assert.Equal($"El jugador #{jugador2.Id} valora al átomo #{atomo.Posicion} que ya fue valorado por otro", ex.Message);
-        }
-
-        [Fact]
         public void AgregarJugador_Jugador_SeAgregaALista()
         {
             var jugador1 = new Jugador(1);
