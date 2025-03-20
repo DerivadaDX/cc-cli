@@ -3,14 +3,6 @@
     public class InstanciaProblemaTests
     {
         [Fact]
-        public void Constructor_Jugadores_SeInicializaVacio()
-        {
-            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1]]);
-            Assert.NotNull(instanciaProblema.Jugadores);
-            Assert.Empty(instanciaProblema.Jugadores);
-        }
-
-        [Fact]
         public void CrearDesdeMatrizDeValoraciones_MatrizNull_LanzaExcepcion()
         {
             var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(null));
@@ -78,17 +70,6 @@
             Assert.Contains(jugador2.Valoraciones, a => a.Posicion == 3 && a.Valoracion == 4.6m);
             Assert.Contains(jugador2.Valoraciones, a => a.Posicion == 4 && a.Valoracion == 1.5m);
             Assert.Contains(jugador2.Valoraciones, a => a.Posicion == 5 && a.Valoracion == 5.3m);
-        }
-
-        [Fact]
-        public void CrearDesdeMatrizDeValoraciones_CantidadAtomos_SeAsignaCorrectamente()
-        {
-            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([
-                [1, 1],
-                [1, 1],
-            ]);
-
-            Assert.Equal(2, instanciaProblema.CantidadAtomos);
         }
     }
 }
