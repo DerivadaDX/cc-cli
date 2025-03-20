@@ -1,12 +1,17 @@
-﻿namespace Solver.Individuos
+﻿using Solver.Fitness;
+using Solver.Random;
+
+namespace Solver.Individuos
 {
-    internal class IndividuoMutacionSwap
+    internal class IndividuoMutacionSwap : Individuo
     {
         private readonly List<int> _cromosoma;
         private readonly InstanciaProblema _problema;
+        private readonly GeneradorNumerosRandom _generadorRandom;
 
         internal IndividuoMutacionSwap(List<int> cromosoma, InstanciaProblema problema)
         {
+            _generadorRandom = GeneradorNumerosRandomFactory.Crear();
             _cromosoma = cromosoma ?? throw new ArgumentException("El cromosoma no puede ser null", nameof(cromosoma));
             _problema = problema ?? throw new ArgumentException("La instancia del problema no puede ser null", nameof(problema));
 
@@ -19,6 +24,21 @@
             ValidarCantidadGenes(cromosoma, cantidadJugadores);
             ValidarCortes(cromosoma, problema, cantidadCortesEsperada);
             ValidarAsignaciones(cromosoma, cantidadJugadores, cantidadCortesEsperada);
+        }
+
+        internal override void Mutar()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal override Individuo Cruzar(Individuo otro)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal override void CalcularFitness(ICalculadoraFitness calculadoraFitness)
+        {
+            throw new NotImplementedException();
         }
 
         private void ValidarCantidadGenes(List<int> cromosoma, int cantidadJugadores)
