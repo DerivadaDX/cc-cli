@@ -34,7 +34,6 @@ namespace Solver
             for (int indiceAtomo = 0; indiceAtomo < matrizValoraciones.Length; indiceAtomo++)
             {
                 bool atomoFueValorado = false;
-                int idAtomo = indiceAtomo + 1;
 
                 for (int indiceJugador = 0; indiceJugador < matrizValoraciones[indiceAtomo].Length; indiceJugador++)
                 {
