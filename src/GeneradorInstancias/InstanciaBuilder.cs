@@ -6,14 +6,26 @@ namespace GeneradorInstancias
         private int _cantidadAtomos;
         private int _cantidadJugadores;
 
-        internal InstanciaBuilder ConAtomos(int cantidadAtomos)
+        internal InstanciaBuilder ConCantidadDeAtomos(int cantidadAtomos)
         {
+            if (cantidadAtomos <= 0)
+            {
+                string mensaje = $"La cantidad de átomos debe ser mayor a cero: {cantidadAtomos}";
+                throw new ArgumentOutOfRangeException(nameof(cantidadAtomos), mensaje);
+            }
+
             _cantidadAtomos = cantidadAtomos;
             return this;
         }
 
-        internal InstanciaBuilder ConJugadores(int cantidadJugadores)
+        internal InstanciaBuilder ConCantidadDeJugadores(int cantidadJugadores)
         {
+            if (cantidadJugadores <= 0)
+            {
+                string mensaje = $"La cantidad de jugadores debe ser mayor a cero: {cantidadJugadores}";
+                throw new ArgumentOutOfRangeException(nameof(cantidadJugadores), mensaje);
+            }
+
             _cantidadJugadores = cantidadJugadores;
             return this;
         }
