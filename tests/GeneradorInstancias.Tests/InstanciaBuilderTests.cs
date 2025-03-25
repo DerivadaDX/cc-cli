@@ -5,7 +5,7 @@ namespace GeneradorInstancias.Tests
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
-        public void ConCAntidadDeAtomos_CantidadInvalida_LanzaExcepcion(int cantidadAtomos)
+        public void ConCantidadDeAtomos_CantidadInvalida_LanzaExcepcion(int cantidadAtomos)
         {
             var builder = new InstanciaBuilder();
             var ex = Assert.Throws<ArgumentOutOfRangeException>(() => builder.ConCantidadDeAtomos(cantidadAtomos));
@@ -15,7 +15,7 @@ namespace GeneradorInstancias.Tests
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
-        public void ConCAntidadDeJugadores_CantidadInvalida_LanzaExcepcion(int cantidadJugadores)
+        public void ConCantidadDeJugadores_CantidadInvalida_LanzaExcepcion(int cantidadJugadores)
         {
             var builder = new InstanciaBuilder();
             var ex = Assert.Throws<ArgumentOutOfRangeException>(() => builder.ConCantidadDeJugadores(cantidadJugadores));
