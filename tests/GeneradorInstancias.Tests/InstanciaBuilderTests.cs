@@ -126,6 +126,23 @@ namespace GeneradorInstancias.Tests
         }
 
         [Fact]
+        public void Build_ValoracionesDisjuntas_CadaFilaTieneUnSoloValorPositivo()
+        {
+            var builder = new InstanciaBuilder()
+                .ConCantidadDeAtomos(4)
+                .ConCantidadDeJugadores(3)
+                .ConValorMaximo(5)
+                .ConValoracionesDisjuntas(true);
+
+            decimal[][] instancia = builder.Build();
+
+            Assert.Equal(1, instancia[0].Count(v => v > 0));
+            Assert.Equal(1, instancia[1].Count(v => v > 0));
+            Assert.Equal(1, instancia[2].Count(v => v > 0));
+            Assert.Equal(1, instancia[3].Count(v => v > 0));
+        }
+
+        [Fact]
         public void Build_ValoracionesNoDisjuntas_NingunaCeldaValeCero()
         {
             var builder = new InstanciaBuilder()
@@ -145,23 +162,6 @@ namespace GeneradorInstancias.Tests
             Assert.NotEqual(0, instancia[2][0]);
             Assert.NotEqual(0, instancia[2][1]);
             Assert.NotEqual(0, instancia[2][2]);
-        }
-
-        [Fact]
-        public void Build_ValoracionesDisjuntas_CadaFilaTieneUnSoloValorPositivo()
-        {
-            var builder = new InstanciaBuilder()
-                .ConCantidadDeAtomos(4)
-                .ConCantidadDeJugadores(3)
-                .ConValorMaximo(5)
-                .ConValoracionesDisjuntas(true);
-
-            decimal[][] instancia = builder.Build();
-
-            Assert.Equal(1, instancia[0].Count(v => v > 0));
-            Assert.Equal(1, instancia[1].Count(v => v > 0));
-            Assert.Equal(1, instancia[2].Count(v => v > 0));
-            Assert.Equal(1, instancia[3].Count(v => v > 0));
         }
     }
 }
