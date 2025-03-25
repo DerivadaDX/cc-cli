@@ -1,6 +1,4 @@
-﻿using Solver.Random;
-
-namespace Solver.Tests.Random
+﻿namespace Common.Tests
 {
     public class GeneradorNumerosRandomTests
     {
