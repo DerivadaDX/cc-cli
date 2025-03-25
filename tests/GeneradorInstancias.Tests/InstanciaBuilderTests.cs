@@ -22,6 +22,16 @@ namespace GeneradorInstancias.Tests
             Assert.StartsWith($"La cantidad de jugadores debe ser mayor a cero: {cantidadJugadores}", ex.Message);
         }
 
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        public void ConValorMaximo_CantidadInvalida_LanzaExcepcion(int valorMaximo)
+        {
+            var builder = new InstanciaBuilder();
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => builder.ConValorMaximo(valorMaximo));
+            Assert.StartsWith($"El valor máximo debe ser positivo: {valorMaximo}", ex.Message);
+        }
+
         [Fact]
         public void Build_SinConfiguracionPrevia_LanzaExcepcion()
         {
@@ -57,6 +67,30 @@ namespace GeneradorInstancias.Tests
 
             Assert.Equal(3, instancia.Length);
             Assert.Equal(2, instancia[0].Length);
+        }
+
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(50)]
+        public void Build_ValorMaximoConfigurado_RespetaLimiteSuperior(int valorMaximo)
+        {
+            var builder = new InstanciaBuilder()
+                .ConCantidadDeAtomos(3)
+                .ConCantidadDeJugadores(3)
+                .ConValorMaximo(valorMaximo);
+
+            decimal[][] matriz = builder.Build();
+
+            Assert.InRange(matriz[0][0], 0, valorMaximo);
+            Assert.InRange(matriz[0][1], 0, valorMaximo);
+            Assert.InRange(matriz[0][2], 0, valorMaximo);
+            Assert.InRange(matriz[1][0], 0, valorMaximo);
+            Assert.InRange(matriz[1][1], 0, valorMaximo);
+            Assert.InRange(matriz[1][2], 0, valorMaximo);
+            Assert.InRange(matriz[2][0], 0, valorMaximo);
+            Assert.InRange(matriz[2][1], 0, valorMaximo);
+            Assert.InRange(matriz[2][2], 0, valorMaximo);
         }
     }
 }
