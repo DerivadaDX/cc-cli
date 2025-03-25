@@ -104,6 +104,28 @@ namespace GeneradorInstancias.Tests
         }
 
         [Fact]
+        public void Build_SinConfigurarValoracionesDisjuntas_CreaNoDisjuntasPorDefecto()
+        {
+            var builder = new InstanciaBuilder()
+                .ConCantidadDeAtomos(3)
+                .ConCantidadDeJugadores(3)
+                .ConValorMaximo(1)
+                .ConValoracionesDisjuntas(false);
+
+            decimal[][] instancia = builder.Build();
+
+            Assert.NotEqual(0, instancia[0][0]);
+            Assert.NotEqual(0, instancia[0][1]);
+            Assert.NotEqual(0, instancia[0][2]);
+            Assert.NotEqual(0, instancia[1][0]);
+            Assert.NotEqual(0, instancia[1][1]);
+            Assert.NotEqual(0, instancia[1][2]);
+            Assert.NotEqual(0, instancia[2][0]);
+            Assert.NotEqual(0, instancia[2][1]);
+            Assert.NotEqual(0, instancia[2][2]);
+        }
+
+        [Fact]
         public void Build_ValoracionesNoDisjuntas_NingunaCeldaValeCero()
         {
             var builder = new InstanciaBuilder()
