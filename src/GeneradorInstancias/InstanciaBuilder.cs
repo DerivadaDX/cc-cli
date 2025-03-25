@@ -69,22 +69,6 @@ namespace GeneradorInstancias
             return instancia;
         }
 
-        private decimal[][] ConstruirInstanciaNoDisjunta()
-        {
-            decimal[][] instancia = ConstruirInstanciaVacia();
-
-            for (int indiceAtomo = 0; indiceAtomo < _cantidadAtomos; indiceAtomo++)
-            {
-                for (int indiceJugador = 0; indiceJugador < _cantidadJugadores; indiceJugador++)
-                {
-                    int valorAleatorio = _generadorNumerosRandom.Siguiente(1, _valorMaximo + 1);
-                    instancia[indiceAtomo][indiceJugador] = valorAleatorio;
-                }
-            }
-
-            return instancia;
-        }
-
         private decimal[][] ConstruirInstanciaDisjunta()
         {
             if (_cantidadAtomos < _cantidadJugadores)
@@ -121,6 +105,22 @@ namespace GeneradorInstancias
                 instancia[atomoElegido][jugadorElegido] = _generadorNumerosRandom.Siguiente(1, _valorMaximo + 1);
 
                 atomosDisponibles.RemoveAt(indiceAtomo);
+            }
+
+            return instancia;
+        }
+
+        private decimal[][] ConstruirInstanciaNoDisjunta()
+        {
+            decimal[][] instancia = ConstruirInstanciaVacia();
+
+            for (int indiceAtomo = 0; indiceAtomo < _cantidadAtomos; indiceAtomo++)
+            {
+                for (int indiceJugador = 0; indiceJugador < _cantidadJugadores; indiceJugador++)
+                {
+                    int valorAleatorio = _generadorNumerosRandom.Siguiente(1, _valorMaximo + 1);
+                    instancia[indiceAtomo][indiceJugador] = valorAleatorio;
+                }
             }
 
             return instancia;
