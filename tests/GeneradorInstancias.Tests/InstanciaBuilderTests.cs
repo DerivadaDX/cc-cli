@@ -9,7 +9,7 @@ namespace GeneradorInstancias.Tests
         {
             var builder = new InstanciaBuilder();
             var ex = Assert.Throws<ArgumentOutOfRangeException>(() => builder.ConCantidadDeAtomos(cantidadAtomos));
-            Assert.StartsWith($"La cantidad de átomos debe ser mayor a cero: {cantidadAtomos}", ex.Message);
+            Assert.StartsWith($"La cantidad de Ã¡tomos debe ser mayor a cero: {cantidadAtomos}", ex.Message);
         }
 
         [Theory]
@@ -29,7 +29,7 @@ namespace GeneradorInstancias.Tests
         {
             var builder = new InstanciaBuilder();
             var ex = Assert.Throws<ArgumentOutOfRangeException>(() => builder.ConValorMaximo(valorMaximo));
-            Assert.StartsWith($"El valor máximo debe ser positivo: {valorMaximo}", ex.Message);
+            Assert.StartsWith($"El valor mÃ¡ximo debe ser positivo: {valorMaximo}", ex.Message);
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace GeneradorInstancias.Tests
         {
             var builder = new InstanciaBuilder();
             var ex = Assert.Throws<InvalidOperationException>(builder.Build);
-            Assert.Equal("Debe especificar el número de átomos y jugadores antes de construir la instancia", ex.Message);
+            Assert.Equal("Debe especificar el nÃºmero de Ã¡tomos y jugadores antes de construir la instancia", ex.Message);
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace GeneradorInstancias.Tests
         {
             var builder = new InstanciaBuilder().ConCantidadDeAtomos(2);
             var ex = Assert.Throws<InvalidOperationException>(builder.Build);
-            Assert.Equal("Debe especificar el número de átomos y jugadores antes de construir la instancia", ex.Message);
+            Assert.Equal("Debe especificar el nÃºmero de Ã¡tomos y jugadores antes de construir la instancia", ex.Message);
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace GeneradorInstancias.Tests
         {
             var builder = new InstanciaBuilder().ConCantidadDeJugadores(2);
             var ex = Assert.Throws<InvalidOperationException>(builder.Build);
-            Assert.Equal("Debe especificar el número de átomos y jugadores antes de construir la instancia", ex.Message);
+            Assert.Equal("Debe especificar el nÃºmero de Ã¡tomos y jugadores antes de construir la instancia", ex.Message);
         }
 
         [Fact]
@@ -64,7 +64,7 @@ namespace GeneradorInstancias.Tests
                 .ConCantidadDeJugadores(3)
                 .ConValoracionesDisjuntas(true);
             var ex = Assert.Throws<InvalidOperationException>(builder.Build);
-            Assert.Equal("No se puede generar una instancia con más jugadores que átomos si las valoraciones son disjuntas", ex.Message);
+            Assert.Equal("No se puede generar una instancia con mÃ¡s jugadores que Ã¡tomos si las valoraciones son disjuntas", ex.Message);
         }
 
         [Fact]
