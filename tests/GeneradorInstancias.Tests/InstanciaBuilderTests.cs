@@ -1,4 +1,4 @@
-namespace GeneradorInstancias.Tests
+namespace GeneradorInstancia.Tests
 {
     public class InstanciaBuilderTests
     {

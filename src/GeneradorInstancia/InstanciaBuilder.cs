@@ -1,6 +1,6 @@
 ﻿using Common;
 
-namespace GeneradorInstancias
+namespace GeneradorInstancia
 {
     internal class InstanciaBuilder
     {
