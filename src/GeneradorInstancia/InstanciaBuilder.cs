@@ -56,9 +56,9 @@ namespace GeneradorInstancia
             return this;
         }
 
-        internal decimal[][] Build()
+        internal decimal[,] Build()
         {
-            decimal[][] instancia;
+            decimal[,] instancia;
 
             if (_valoracionesDisjuntas)
                 instancia = ConstruirInstanciaDisjunta();
@@ -68,7 +68,7 @@ namespace GeneradorInstancia
             return instancia;
         }
 
-        private decimal[][] ConstruirInstanciaDisjunta()
+        private decimal[,] ConstruirInstanciaDisjunta()
         {
             if (_cantidadAtomos < _cantidadJugadores)
             {
@@ -76,7 +76,7 @@ namespace GeneradorInstancia
                 throw new InvalidOperationException(mensaje);
             }
 
-            decimal[][] instancia = ConstruirInstanciaVacia();
+            decimal[,] instancia = ConstruirInstanciaVacia();
 
             List<int> atomosDisponibles = Enumerable.Range(0, _cantidadAtomos).ToList();
             List<int> jugadoresDisponibles = Enumerable.Range(0, _cantidadJugadores).ToList();
@@ -84,12 +84,11 @@ namespace GeneradorInstancia
             while (jugadoresDisponibles.Count > 0)
             {
                 int indiceAtomo = _generadorNumerosRandom.Siguiente(0, atomosDisponibles.Count);
-                int atomoElegido = atomosDisponibles[indiceAtomo];
-
                 int indiceJugador = _generadorNumerosRandom.Siguiente(0, jugadoresDisponibles.Count);
-                int jugadorElegido = jugadoresDisponibles[indiceJugador];
 
-                instancia[atomoElegido][jugadorElegido] = _generadorNumerosRandom.Siguiente(1, _valorMaximo + 1);
+                int atomoElegido = atomosDisponibles[indiceAtomo];
+                int jugadorElegido = jugadoresDisponibles[indiceJugador];
+                instancia[atomoElegido, jugadorElegido] = _generadorNumerosRandom.Siguiente(1, _valorMaximo + 1);
 
                 atomosDisponibles.RemoveAt(indiceAtomo);
                 jugadoresDisponibles.RemoveAt(indiceJugador);
@@ -101,7 +100,7 @@ namespace GeneradorInstancia
                 int jugadorElegido = _generadorNumerosRandom.Siguiente(0, _cantidadJugadores);
                 int atomoElegido = atomosDisponibles[indiceAtomo];
 
-                instancia[atomoElegido][jugadorElegido] = _generadorNumerosRandom.Siguiente(1, _valorMaximo + 1);
+                instancia[atomoElegido, jugadorElegido] = _generadorNumerosRandom.Siguiente(1, _valorMaximo + 1);
 
                 atomosDisponibles.RemoveAt(indiceAtomo);
             }
@@ -109,34 +108,28 @@ namespace GeneradorInstancia
             return instancia;
         }
 
-        private decimal[][] ConstruirInstanciaNoDisjunta()
+        private decimal[,] ConstruirInstanciaNoDisjunta()
         {
-            decimal[][] instancia = ConstruirInstanciaVacia();
+            decimal[,] instancia = ConstruirInstanciaVacia();
 
             for (int indiceAtomo = 0; indiceAtomo < _cantidadAtomos; indiceAtomo++)
             {
                 for (int indiceJugador = 0; indiceJugador < _cantidadJugadores; indiceJugador++)
                 {
                     int valorAleatorio = _generadorNumerosRandom.Siguiente(1, _valorMaximo + 1);
-                    instancia[indiceAtomo][indiceJugador] = valorAleatorio;
+                    instancia[indiceAtomo, indiceJugador] = valorAleatorio;
                 }
             }
 
             return instancia;
         }
 
-        private decimal[][] ConstruirInstanciaVacia()
+        private decimal[,] ConstruirInstanciaVacia()
         {
             if (_cantidadAtomos == 0 || _cantidadJugadores == 0)
                 throw new InvalidOperationException("Debe especificar el número de átomos y jugadores antes de construir la instancia");
 
-            var instancia = new decimal[_cantidadAtomos][];
-
-            for (int indiceAtomo = 0; indiceAtomo < _cantidadAtomos; indiceAtomo++)
-            {
-                instancia[indiceAtomo] = new decimal[_cantidadJugadores];
-            }
-
+            var instancia = new decimal[_cantidadAtomos, _cantidadJugadores];
             return instancia;
         }
     }
