@@ -74,10 +74,10 @@ namespace GeneradorInstancia.Tests
                 .ConCantidadDeAtomos(3)
                 .ConCantidadDeJugadores(2);
 
-            decimal[][] instancia = builder.Build();
+            decimal[,] instancia = builder.Build();
 
-            Assert.Equal(3, instancia.Length);
-            Assert.Equal(2, instancia[0].Length);
+            Assert.Equal(3, instancia.GetLength(0));
+            Assert.Equal(2, instancia.GetLength(1));
         }
 
         [Theory]
@@ -90,17 +90,17 @@ namespace GeneradorInstancia.Tests
                 .ConCantidadDeJugadores(3)
                 .ConValorMaximo(valorMaximo);
 
-            decimal[][] instancia = builder.Build();
+            decimal[,] instancia = builder.Build();
 
-            Assert.InRange(instancia[0][0], 0, valorMaximo);
-            Assert.InRange(instancia[0][1], 0, valorMaximo);
-            Assert.InRange(instancia[0][2], 0, valorMaximo);
-            Assert.InRange(instancia[1][0], 0, valorMaximo);
-            Assert.InRange(instancia[1][1], 0, valorMaximo);
-            Assert.InRange(instancia[1][2], 0, valorMaximo);
-            Assert.InRange(instancia[2][0], 0, valorMaximo);
-            Assert.InRange(instancia[2][1], 0, valorMaximo);
-            Assert.InRange(instancia[2][2], 0, valorMaximo);
+            Assert.InRange(instancia[0, 0], 0, valorMaximo);
+            Assert.InRange(instancia[0, 1], 0, valorMaximo);
+            Assert.InRange(instancia[0, 2], 0, valorMaximo);
+            Assert.InRange(instancia[1, 0], 0, valorMaximo);
+            Assert.InRange(instancia[1, 1], 0, valorMaximo);
+            Assert.InRange(instancia[1, 2], 0, valorMaximo);
+            Assert.InRange(instancia[2, 0], 0, valorMaximo);
+            Assert.InRange(instancia[2, 1], 0, valorMaximo);
+            Assert.InRange(instancia[2, 2], 0, valorMaximo);
         }
 
         [Fact]
@@ -112,50 +112,54 @@ namespace GeneradorInstancia.Tests
                 .ConValorMaximo(1)
                 .ConValoracionesDisjuntas(false);
 
-            decimal[][] instancia = builder.Build();
+            decimal[,] instancia = builder.Build();
 
-            Assert.NotEqual(0, instancia[0][0]);
-            Assert.NotEqual(0, instancia[0][1]);
-            Assert.NotEqual(0, instancia[0][2]);
-            Assert.NotEqual(0, instancia[1][0]);
-            Assert.NotEqual(0, instancia[1][1]);
-            Assert.NotEqual(0, instancia[1][2]);
-            Assert.NotEqual(0, instancia[2][0]);
-            Assert.NotEqual(0, instancia[2][1]);
-            Assert.NotEqual(0, instancia[2][2]);
+            Assert.NotEqual(0, instancia[0, 0]);
+            Assert.NotEqual(0, instancia[0, 1]);
+            Assert.NotEqual(0, instancia[0, 2]);
+            Assert.NotEqual(0, instancia[1, 0]);
+            Assert.NotEqual(0, instancia[1, 1]);
+            Assert.NotEqual(0, instancia[1, 2]);
+            Assert.NotEqual(0, instancia[2, 0]);
+            Assert.NotEqual(0, instancia[2, 1]);
+            Assert.NotEqual(0, instancia[2, 2]);
         }
 
         [Fact]
         public void Build_ValoracionesDisjuntas_CadaFilaTieneUnSoloValorPositivo()
         {
+            int jugadores = 3;
+
             var builder = new InstanciaBuilder()
                 .ConCantidadDeAtomos(4)
-                .ConCantidadDeJugadores(3)
+                .ConCantidadDeJugadores(jugadores)
                 .ConValorMaximo(5)
                 .ConValoracionesDisjuntas(true);
 
-            decimal[][] instancia = builder.Build();
+            decimal[,] instancia = builder.Build();
 
-            Assert.Equal(1, instancia[0].Count(v => v > 0));
-            Assert.Equal(1, instancia[1].Count(v => v > 0));
-            Assert.Equal(1, instancia[2].Count(v => v > 0));
-            Assert.Equal(1, instancia[3].Count(v => v > 0));
+            Assert.Equal(1, Enumerable.Range(0, jugadores).Count(j => instancia[0, j] > 0));
+            Assert.Equal(1, Enumerable.Range(0, jugadores).Count(j => instancia[1, j] > 0));
+            Assert.Equal(1, Enumerable.Range(0, jugadores).Count(j => instancia[2, j] > 0));
+            Assert.Equal(1, Enumerable.Range(0, jugadores).Count(j => instancia[3, j] > 0));
         }
 
         [Fact]
         public void Build_UnSoloJugadorValoracionesDisjuntas_AsignaTodaLaColumnaAlJugador()
         {
+            int jugadores = 1;
+
             var builder = new InstanciaBuilder()
                 .ConCantidadDeAtomos(3)
-                .ConCantidadDeJugadores(1)
+                .ConCantidadDeJugadores(jugadores)
                 .ConValorMaximo(5)
                 .ConValoracionesDisjuntas(true);
 
-            decimal[][] instancia = builder.Build();
+            decimal[,] instancia = builder.Build();
 
-            Assert.Equal(1, instancia[0].Count(v => v > 0));
-            Assert.Equal(1, instancia[1].Count(v => v > 0));
-            Assert.Equal(1, instancia[2].Count(v => v > 0));
+            Assert.Equal(1, Enumerable.Range(0, jugadores).Count(j => instancia[0, j] > 0));
+            Assert.Equal(1, Enumerable.Range(0, jugadores).Count(j => instancia[1, j] > 0));
+            Assert.Equal(1, Enumerable.Range(0, jugadores).Count(j => instancia[2, j] > 0));
         }
 
         [Fact]
@@ -167,17 +171,17 @@ namespace GeneradorInstancia.Tests
                 .ConValorMaximo(1)
                 .ConValoracionesDisjuntas(false);
 
-            decimal[][] instancia = builder.Build();
+            decimal[,] instancia = builder.Build();
 
-            Assert.NotEqual(0, instancia[0][0]);
-            Assert.NotEqual(0, instancia[0][1]);
-            Assert.NotEqual(0, instancia[0][2]);
-            Assert.NotEqual(0, instancia[1][0]);
-            Assert.NotEqual(0, instancia[1][1]);
-            Assert.NotEqual(0, instancia[1][2]);
-            Assert.NotEqual(0, instancia[2][0]);
-            Assert.NotEqual(0, instancia[2][1]);
-            Assert.NotEqual(0, instancia[2][2]);
+            Assert.NotEqual(0, instancia[0, 0]);
+            Assert.NotEqual(0, instancia[0, 1]);
+            Assert.NotEqual(0, instancia[0, 2]);
+            Assert.NotEqual(0, instancia[1, 0]);
+            Assert.NotEqual(0, instancia[1, 1]);
+            Assert.NotEqual(0, instancia[1, 2]);
+            Assert.NotEqual(0, instancia[2, 0]);
+            Assert.NotEqual(0, instancia[2, 1]);
+            Assert.NotEqual(0, instancia[2, 2]);
         }
     }
 }
