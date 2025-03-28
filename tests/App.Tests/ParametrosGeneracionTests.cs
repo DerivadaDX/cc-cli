@@ -1,7 +1,17 @@
-﻿namespace App.Tests
+﻿using Common;
+using NSubstitute;
+using NSubstitute.ExceptionExtensions;
+
+namespace App.Tests
 {
-    public class ParametrosGeneracionTests
+    public class ParametrosGeneracionTests : IDisposable
     {
+        public void Dispose()
+        {
+            FileSystemHelperFactory.SetearHelper(null);
+            GC.SuppressFinalize(this);
+        }
+
         [Fact]
         public void Constructor_AtomosInvalido_LanzaArgumentException()
         {
@@ -28,6 +38,19 @@
         {
             var ex = Assert.Throws<ArgumentException>(() => new ParametrosGeneracion(1, 1, 100, "", false));
             Assert.StartsWith("La ruta no puede estar vacía", ex.Message);
+        }
+
+        [Fact]
+        public void Constructor_RutaSalidaInvalida_LanzaArgumentException()
+        {
+            var excepcion = new Exception("La ruta es inválida");
+
+            var fileSystemHelper = Substitute.For<FileSystemHelper>();
+            fileSystemHelper.GetFullPath("¡ruta-inválida!").Throws(excepcion);
+            FileSystemHelperFactory.SetearHelper(fileSystemHelper);
+
+            var ex = Assert.Throws<ArgumentException>(() => new ParametrosGeneracion(1, 1, 100, "¡ruta-inválida!", false));
+            Assert.StartsWith($"Ruta inválida: {excepcion.Message}", ex.Message);
         }
 
         [Fact]

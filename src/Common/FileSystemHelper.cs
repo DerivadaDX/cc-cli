@@ -16,5 +16,10 @@
         {
             File.WriteAllLines(path, lines);
         }
+
+        public virtual string GetFullPath(string path)
+        {
+            return Path.GetFullPath(path);
+        }
     }
 }

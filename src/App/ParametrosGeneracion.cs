@@ -1,9 +1,15 @@
-﻿namespace App
+﻿using Common;
+
+namespace App
 {
     internal class ParametrosGeneracion
     {
+        private readonly FileSystemHelper _fileSystemHelper;
+
         internal ParametrosGeneracion(int atomos, int agentes, int valorMaximo, string rutaSalida, bool valoracionesDisjuntas)
         {
+            _fileSystemHelper = FileSystemHelperFactory.Crear();
+
             ValidarAtomos(atomos);
             ValidarAgentes(agentes);
             ValidarValorMaximo(valorMaximo);
@@ -44,6 +50,15 @@
         {
             if (string.IsNullOrWhiteSpace(ruta))
                 throw new ArgumentException("La ruta no puede estar vacía", nameof(ruta));
+
+            try
+            {
+                _fileSystemHelper.GetFullPath(ruta);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("Ruta inválida: " + ex.Message, nameof(ruta));
+            }
         }
     }
 }
