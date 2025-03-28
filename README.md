@@ -1,22 +1,100 @@
-# Cake Cutting GenÈtico
+# Cake Cutting Gen√©tico
 
-## DescripciÛn
+## Descripci√≥n
 
-Este proyecto implementa un algoritmo basado en tÈcnicas genÈticas para la divisiÛn justa de una torta discreta (discrete
-cake-cutting) entre m˙ltiples jugadores, con el objetivo de lograr una distribuciÛn libre de envidia (envy-free).
-Se basa en la teorÌa presentada en el artÌculo _Envy-free division of discrete cakes_ de Javier Marenco y Tom·s Tetzlaff.
+Este proyecto implementa un algoritmo basado en t√©cnicas gen√©ticas para la divisi√≥n justa de una torta discreta
+(_discrete cake-cutting_) entre m√∫ltiples jugadores, con el objetivo de lograr una distribuci√≥n **libre de envidia**
+(_envy-free_).
+
+Se basa en la teor√≠a presentada en el art√≠culo _Envy-free division of discrete cakes_ de Javier Marenco y Tom√°s Tetzlaff.
 
 ## Contexto
 
-El problema de divisiÛn del pastel es un problema de asignaciÛn justa en el que un recurso discreto debe ser distribuido
-entre varios jugadores, quienes tienen valoraciones diferentes para cada parte del recurso. El pastel est· compuesto por
-·tomos indivisibles que son valorados de manera distinta por cada jugador.
+El problema de **cake-cutting** es un problema de asignaci√≥n justa, donde un recurso discreto debe ser distribuido entre
+varios jugadores con valoraciones diferentes sobre cada parte.
 
-Las valoraciones de cada jugador sobre los ·tomos deben sumar 1 (100%), representando el valor total que asignan al
-pastel completo.
+El pastel est√° compuesto por **√°tomos indivisibles**, y el objetivo es lograr una asignaci√≥n **libre de envidia**, es
+decir, que ning√∫n jugador prefiera la porci√≥n de otro en vez de la suya.
 
-El objetivo es lograr una asignaciÛn que satisfaga la propiedad de **libre de envidia** (envy-freeness), lo que
-significa que ning˙n jugador prefiere la porciÛn de otro jugador por encima de la suya.
+## Manual de la CLI
+
+### Uso b√°sico
+
+```bash
+cc-cli.exe [comando] [opciones]
+```
+
+### Comandos disponibles
+
+#### 1. Generar instancias
+
+Genera matrices de valoraci√≥n para el problema. Las instancias generadas usan el formato:
+
+```
+[numero_de_atomos] [numero_de_agentes]
+[valor_11] [valor_12] ... [valor_1n]
+[valor_21] [valor_22] ... [valor_2n]
+...
+```
+
+**Sintaxis**:
+
+```bash
+cc-cli.exe generar [opciones]
+```
+
+**Opciones principales**:
+
+| Opci√≥n     | Requerido | Descripci√≥n       |
+|------------|-----------|-------------------|
+| `--atomos` | S√≠        | N√∫mero de √°tomos  |
+| `--agentes`| S√≠        | N√∫mero de agentes |
+
+**Opciones secundarias**:
+
+| Opci√≥n           | Descripci√≥n                              | Valores aceptados                 |
+|------------------|------------------------------------------|-----------------------------------|
+| `--valor-maximo` | Valor m√°ximo para las valoraciones       | Entero positivo (default: 1000)   |
+| `--disjuntas`    | Flag para generar valoraciones disjuntas |                                   |
+| `--output`       | Ruta y nombre del archivo de salida      | Un path (default: `instancia.dat` |
+
+**Ejemplos**:
+
+```bash
+# Instancia b√°sica
+cc-cli.exe generar --atomos 10 --agentes 3
+
+# Con valoraciones disjuntas
+cc-cli.exe generar --atomos 15 --agentes 4 --disjuntas
+
+# Especificando valor m√°ximo
+cc-cli.exe generar --atomos 8 --agentes 2 --valor-maximo 100
+
+# Especificando archivo de salida
+cc-cli.exe generar --atomos 8 --agentes 2 --output datos/instancia1.txt
+
+# Ejemplo completo
+cc-cli.exe generar --atomos 5 --agentes 3 --disjuntas --valor-maximo 500 -output instancia.txt
+```
+
+**Notas:**
+
+- El archivo de salida se sobrescribe sin confirmaci√≥n.
+
+#### 2. Otros comandos
+
+**Mostrar versi√≥n:**
+
+```bash
+cc-cli.exe --version
+```
+
+**Ayuda:**
+
+```bash
+cc-cli.exe --help
+cc-cli.exe generar --help
+```
 
 ## Referencias
 

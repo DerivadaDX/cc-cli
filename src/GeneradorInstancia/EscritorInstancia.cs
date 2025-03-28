@@ -12,7 +12,7 @@ namespace GeneradorInstancia
             _fileSystem = fileSystem;
         }
 
-        public void EscribirInstancia(decimal[,] instancia, string rutaArchivo)
+        public virtual void EscribirInstancia(decimal[,] instancia, string rutaArchivo)
         {
             ArgumentNullException.ThrowIfNull(instancia);
             if (string.IsNullOrWhiteSpace(rutaArchivo))
