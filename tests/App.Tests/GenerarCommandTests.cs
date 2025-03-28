@@ -15,8 +15,9 @@ namespace App.Tests
             var valorMaximoOption = (Option<int>)command.Options.First(o => o.Name == "valor-maximo");
             int valorMaximo = command.Parse("generar --atomos 5 --agentes 3").GetValueForOption(valorMaximoOption);
 
-            Assert.Equal(1000, valorMaximo);
+            Assert.Equal(GenerarCommand.ValorMaximoPorDefecto, valorMaximo);
         }
+
         [Fact]
         public void Create_OutputNoEspecificada_UsaValorPorDefecto()
         {
@@ -24,7 +25,7 @@ namespace App.Tests
             var outputOption = (Option<string>)command.Options.First(o => o.Name == "output");
             string output = command.Parse("generar --atomos 5 --agentes 3").GetValueForOption(outputOption);
 
-            Assert.Equal("instancia.dat", output);
+            Assert.Equal(GenerarCommand.RutaSalidaPorDefecto, output);
         }
 
         [Fact]

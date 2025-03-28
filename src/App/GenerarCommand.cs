@@ -6,14 +6,17 @@ namespace App
 {
     internal static class GenerarCommand
     {
+        internal const int ValorMaximoPorDefecto = 1000;
+        internal const string RutaSalidaPorDefecto = "instancia.dat";
+
         internal static Command Create()
         {
             var command = new Command("generar", "Genera una nueva instancia");
 
             var atomosOption = new Option<int>("--atomos") { IsRequired = true };
             var agentesOption = new Option<int>("--agentes") { IsRequired = true };
-            var valorMaximoOption = new Option<int>("--valor-maximo", () => 1000);
-            var outputOption = new Option<string>("--output", () => "instancia.dat");
+            var valorMaximoOption = new Option<int>("--valor-maximo", () => ValorMaximoPorDefecto);
+            var outputOption = new Option<string>("--output", () => RutaSalidaPorDefecto);
             var disjuntasOption = new Option<bool>("--disjuntas");
 
             command.AddOption(atomosOption);
