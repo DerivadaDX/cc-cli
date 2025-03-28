@@ -8,8 +8,6 @@ Este proyecto implementa un algoritmo basado en técnicas genéticas para la div
 
 Se basa en la teoría presentada en el artículo _Envy-free division of discrete cakes_ de Javier Marenco y Tomás Tetzlaff.
 
----
-
 ## Contexto
 
 El problema de **cake-cutting** es un problema de asignación justa, donde un recurso discreto debe ser distribuido entre
@@ -18,8 +16,6 @@ varios jugadores con valoraciones diferentes sobre cada parte.
 El pastel está compuesto por **átomos indivisibles**, y el objetivo es lograr una asignación **libre de envidia**, es
 decir, que ningún jugador prefiera la porción de otro en vez de la suya.
 
----
-
 ## Manual de la CLI — _Cake Cutting Genético_
 
 ### Uso básico
@@ -27,8 +23,6 @@ decir, que ningún jugador prefiera la porción de otro en vez de la suya.
 ```bash
 cc-cli.exe [comando] [opciones]
 ```
-
----
 
 ### Comandos disponibles
 
@@ -83,7 +77,9 @@ cc-cli.exe generar --atomos 8 --agentes 2 --output datos/instancia1.txt
 cc-cli.exe generar --atomos 5 --agentes 3 --disjuntas --valor-maximo 500 -output instancia.txt
 ```
 
----
+**Notas:**
+
+- El archivo de salida se sobrescribe sin confirmación.
 
 #### 2. Otros comandos
 
@@ -100,14 +96,6 @@ cc-cli.exe --help
 cc-cli.exe generar --help
 cc-cli.exe resolver --help
 ```
-
----
-
-### Notas
-
-- El archivo de salida se sobrescribe sin confirmación.
-
----
 
 ## Referencias
 
