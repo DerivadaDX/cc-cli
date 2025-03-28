@@ -26,31 +26,34 @@ namespace App.Tests
             Assert.StartsWith("Se requieren al menos 1 agente", ex.Message);
         }
 
-        [Fact]
-        public void Constructor_ValorMaximoInvalido_LanzaArgumentException()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        public void Constructor_ValorMaximoInvalido_LanzaArgumentException(int valorMaximo)
         {
-            var ex = Assert.Throws<ArgumentException>(() => new ParametrosGeneracion(1, 1, -1, "ruta.txt", false));
-            Assert.StartsWith("El valor máximo no puede ser negativo", ex.Message);
+            var ex = Assert.Throws<ArgumentException>(() => new ParametrosGeneracion(1, 1, valorMaximo, "ruta.txt", false));
+            Assert.StartsWith("El valor máximo debe ser positivo", ex.Message);
         }
 
-        [Fact]
-        public void Constructor_RutaSalidaVacia_LanzaArgumentException()
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public void Constructor_RutaSalidaVacia_LanzaArgumentException(string rutaSalida)
         {
-            var ex = Assert.Throws<ArgumentException>(() => new ParametrosGeneracion(1, 1, 100, "", false));
+            var ex = Assert.Throws<ArgumentException>(() => new ParametrosGeneracion(1, 1, 100, rutaSalida, false));
             Assert.StartsWith("La ruta no puede estar vacía", ex.Message);
         }
 
         [Fact]
         public void Constructor_RutaSalidaInvalida_LanzaArgumentException()
         {
-            var excepcion = new Exception("La ruta es inválida");
-
             var fileSystemHelper = Substitute.For<FileSystemHelper>();
-            fileSystemHelper.GetFullPath("¡ruta-inválida!").Throws(excepcion);
+            fileSystemHelper.GetFullPath("¡ruta-inválida!").Throws(new Exception("La ruta es inválida"));
             FileSystemHelperFactory.SetearHelper(fileSystemHelper);
 
             var ex = Assert.Throws<ArgumentException>(() => new ParametrosGeneracion(1, 1, 100, "¡ruta-inválida!", false));
-            Assert.StartsWith($"Ruta inválida: {excepcion.Message}", ex.Message);
+            Assert.StartsWith($"Ruta inválida: La ruta es inválida", ex.Message);
         }
 
         [Fact]

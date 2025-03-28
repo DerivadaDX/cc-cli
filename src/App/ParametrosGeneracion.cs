@@ -42,8 +42,8 @@ namespace App
 
         private void ValidarValorMaximo(int valorMaximo)
         {
-            if (valorMaximo < 0)
-                throw new ArgumentException("El valor máximo no puede ser negativoo", nameof(valorMaximo));
+            if (valorMaximo <= 0)
+                throw new ArgumentException("El valor máximo debe ser positivo", nameof(valorMaximo));
         }
 
         private void ValidarRuta(string ruta)
