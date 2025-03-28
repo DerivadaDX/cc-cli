@@ -94,7 +94,6 @@ cc-cli.exe --version
 ```bash
 cc-cli.exe --help
 cc-cli.exe generar --help
-cc-cli.exe resolver --help
 ```
 
 ## Referencias
