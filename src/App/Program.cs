@@ -1,10 +1,17 @@
-﻿namespace App
+﻿using System.CommandLine;
+
+namespace App
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task<int> Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            var rootCommand = new RootCommand("Herramienta CLI para Generación/Resolución de Instancias de Cake Cutting");
+            rootCommand.SetHandler(() => Console.WriteLine("Use un subcomando (generar/resolver). Ver ayuda con --help."));
+            rootCommand.AddCommand(GenerarCommand.Create());
+
+            int exitCode = await rootCommand.InvokeAsync(args);
+            return exitCode;
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace GeneradorInstancia
 {
-    internal class InstanciaBuilder
+    public class InstanciaBuilder
     {
         private int _valorMaximo = 1000;
         private bool _valoracionesDisjuntas = false;
@@ -17,7 +17,7 @@ namespace GeneradorInstancia
             _generadorNumerosRandom = GeneradorNumerosRandomFactory.Crear();
         }
 
-        internal InstanciaBuilder ConCantidadDeAtomos(int cantidadAtomos)
+        public virtual InstanciaBuilder ConCantidadDeAtomos(int cantidadAtomos)
         {
             if (cantidadAtomos <= 0)
             {
@@ -29,7 +29,7 @@ namespace GeneradorInstancia
             return this;
         }
 
-        internal InstanciaBuilder ConCantidadDeJugadores(int cantidadJugadores)
+        public virtual InstanciaBuilder ConCantidadDeJugadores(int cantidadJugadores)
         {
             if (cantidadJugadores <= 0)
             {
@@ -41,7 +41,7 @@ namespace GeneradorInstancia
             return this;
         }
 
-        internal InstanciaBuilder ConValorMaximo(int valorMaximo)
+        public virtual InstanciaBuilder ConValorMaximo(int valorMaximo)
         {
             if (valorMaximo <= 0)
                 throw new ArgumentOutOfRangeException(nameof(valorMaximo), $"El valor máximo debe ser positivo: {valorMaximo}");
@@ -50,13 +50,13 @@ namespace GeneradorInstancia
             return this;
         }
 
-        internal InstanciaBuilder ConValoracionesDisjuntas(bool valoracionesDisjuntas)
+        public virtual InstanciaBuilder ConValoracionesDisjuntas(bool valoracionesDisjuntas)
         {
             _valoracionesDisjuntas = valoracionesDisjuntas;
             return this;
         }
 
-        internal decimal[,] Build()
+        public virtual decimal[,] Build()
         {
             decimal[,] instancia;
 
