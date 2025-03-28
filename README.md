@@ -16,7 +16,7 @@ varios jugadores con valoraciones diferentes sobre cada parte.
 El pastel está compuesto por **átomos indivisibles**, y el objetivo es lograr una asignación **libre de envidia**, es
 decir, que ningún jugador prefiera la porción de otro en vez de la suya.
 
-## Manual de la CLI — _Cake Cutting Genético_
+## Manual de la CLI
 
 ### Uso básico
 
