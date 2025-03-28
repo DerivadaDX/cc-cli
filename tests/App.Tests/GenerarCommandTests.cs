@@ -29,6 +29,16 @@ namespace App.Tests
         }
 
         [Fact]
+        public void Create_DisjuntasNoEspecificada_UsaFalse()
+        {
+            var command = GenerarCommand.Create();
+            var disjuntasOption = (Option<bool>)command.Options.First(o => o.Name == "disjuntas");
+            bool disjuntas = command.Parse("generar --atomos 5 --agentes 3").GetValueForOption(disjuntasOption);
+
+            Assert.False(disjuntas);
+        }
+
+        [Fact]
         public void Create_Command_ConfiguraOpcionesCorrectamente()
         {
             var command = GenerarCommand.Create();
