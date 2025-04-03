@@ -1,5 +1,4 @@
-﻿
-namespace Solver
+﻿namespace Solver
 {
     internal class InstanciaProblema
     {
@@ -7,50 +6,37 @@ namespace Solver
         {
         }
 
-        internal List<Jugador> Jugadores { get; } = [];
+        internal List<Agente> Agentes { get; } = [];
         internal int CantidadAtomos => AtomosValorados.Count;
         private HashSet<int> AtomosValorados { get; } = [];
 
-        /// <summary>
-        /// Crea una instancia del problema a partir de una matriz de valoraciones de tamaño NxM, donde N es la cantidad de átomos
-        /// y M es la cantidad de jugadores. Cada fila de la matriz representa un átomo, y cada columna representa un jugador.
-        /// Los valores de la matriz indican la valoración de cada jugador sobre los átomos.
-        /// </summary>
-        /// <param name="matrizValoraciones">
-        /// Matriz de valoraciones donde las filas representan átomos y las columnas representan jugadores.
-        /// Un valor de 0 o negativo indica que el jugador no valora ese átomo.
-        /// </param>
-        /// <returns>
-        /// Una instancia de <see cref="InstanciaProblema"/> que contiene la lista de jugadores y sus valoraciones.
-        /// </returns>
-        /// <exception cref="ArgumentException"></exception>
         internal static InstanciaProblema CrearDesdeMatrizDeValoraciones(decimal[][] matrizValoraciones)
         {
             ValidarMatriz(matrizValoraciones);
 
             var instanciaProblema = new InstanciaProblema();
 
-            var jugadoresPorId = new Dictionary<int, Jugador>();
+            var agentesPorId = new Dictionary<int, Agente>();
             for (int indiceAtomo = 0; indiceAtomo < matrizValoraciones.Length; indiceAtomo++)
             {
                 bool atomoFueValorado = false;
 
-                for (int indiceJugador = 0; indiceJugador < matrizValoraciones[indiceAtomo].Length; indiceJugador++)
+                for (int indiceAgente = 0; indiceAgente < matrizValoraciones[indiceAtomo].Length; indiceAgente++)
                 {
-                    int idJugador = indiceJugador + 1;
-                    bool noExisteJugador = !jugadoresPorId.TryGetValue(idJugador, out Jugador jugador);
-                    if (noExisteJugador)
+                    int idAgente = indiceAgente + 1;
+                    bool noExisteAgente = !agentesPorId.TryGetValue(idAgente, out Agente agente);
+                    if (noExisteAgente)
                     {
-                        jugador = new Jugador(idJugador);
-                        jugadoresPorId[idJugador] = jugador;
-                        instanciaProblema.Jugadores.Add(jugador);
+                        agente = new Agente(idAgente);
+                        agentesPorId[idAgente] = agente;
+                        instanciaProblema.Agentes.Add(agente);
                     }
 
-                    decimal valoracion = matrizValoraciones[indiceAtomo][indiceJugador];
+                    decimal valoracion = matrizValoraciones[indiceAtomo][indiceAgente];
                     if (valoracion > 0)
                     {
                         var atomo = new Atomo(indiceAtomo + 1, valoracion);
-                        jugador.AgregarValoracion(atomo);
+                        agente.AgregarValoracion(atomo);
                         atomoFueValorado = true;
                     }
                 }
@@ -77,13 +63,13 @@ namespace Solver
                     throw new ArgumentException("Todas las filas de la matriz deben tener la misma longitud", nameof(matrizValoraciones));
             }
 
-            for (int indiceJugador = 0; indiceJugador < matrizValoraciones[0].Length; indiceJugador++)
+            for (int indiceAgente = 0; indiceAgente < matrizValoraciones[0].Length; indiceAgente++)
             {
-                bool jugadorNoValoraNingunAtomo = matrizValoraciones.All(fila => fila[indiceJugador] <= 0);
-                if (jugadorNoValoraNingunAtomo)
+                bool agenteNoValoraNingunAtomo = matrizValoraciones.All(fila => fila[indiceAgente] <= 0);
+                if (agenteNoValoraNingunAtomo)
                 {
                     throw new ArgumentException(
-                        $"El jugador {indiceJugador + 1} no tiene valoraciones positivas sobre ningún átomo.",
+                        $"El agente {indiceAgente + 1} no tiene valoraciones positivas sobre ningún átomo.",
                         nameof(matrizValoraciones));
                 }
             }

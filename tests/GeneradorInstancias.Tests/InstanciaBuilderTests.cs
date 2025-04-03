@@ -15,11 +15,11 @@ namespace GeneradorInstancia.Tests
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
-        public void ConCantidadDeJugadores_CantidadInvalida_LanzaExcepcion(int cantidadJugadores)
+        public void ConCantidadDeAgentes_CantidadInvalida_LanzaExcepcion(int cantidadAgentes)
         {
             var builder = new InstanciaBuilder();
-            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => builder.ConCantidadDeJugadores(cantidadJugadores));
-            Assert.StartsWith($"La cantidad de jugadores debe ser mayor a cero: {cantidadJugadores}", ex.Message);
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => builder.ConCantidadDeAgentes(cantidadAgentes));
+            Assert.StartsWith($"La cantidad de agentes debe ser mayor a cero: {cantidadAgentes}", ex.Message);
         }
 
         [Theory]
@@ -37,7 +37,7 @@ namespace GeneradorInstancia.Tests
         {
             var builder = new InstanciaBuilder();
             var ex = Assert.Throws<InvalidOperationException>(builder.Build);
-            Assert.Equal("Debe especificar el número de átomos y jugadores antes de construir la instancia", ex.Message);
+            Assert.Equal("Debe especificar el número de átomos y agentes antes de construir la instancia", ex.Message);
         }
 
         [Fact]
@@ -45,34 +45,34 @@ namespace GeneradorInstancia.Tests
         {
             var builder = new InstanciaBuilder().ConCantidadDeAtomos(2);
             var ex = Assert.Throws<InvalidOperationException>(builder.Build);
-            Assert.Equal("Debe especificar el número de átomos y jugadores antes de construir la instancia", ex.Message);
+            Assert.Equal("Debe especificar el número de átomos y agentes antes de construir la instancia", ex.Message);
         }
 
         [Fact]
-        public void Build_SoloJugadoresConfigurados_LanzaExcepcion()
+        public void Build_SoloAgentesConfigurados_LanzaExcepcion()
         {
-            var builder = new InstanciaBuilder().ConCantidadDeJugadores(2);
+            var builder = new InstanciaBuilder().ConCantidadDeAgentes(2);
             var ex = Assert.Throws<InvalidOperationException>(builder.Build);
-            Assert.Equal("Debe especificar el número de átomos y jugadores antes de construir la instancia", ex.Message);
+            Assert.Equal("Debe especificar el número de átomos y agentes antes de construir la instancia", ex.Message);
         }
 
         [Fact]
-        public void Build_ValoracionesDisjuntasConMasJugadoresQueAtomos_LanzaExcepcion()
+        public void Build_ValoracionesDisjuntasConMasAgentesQueAtomos_LanzaExcepcion()
         {
             var builder = new InstanciaBuilder()
                 .ConCantidadDeAtomos(2)
-                .ConCantidadDeJugadores(3)
+                .ConCantidadDeAgentes(3)
                 .ConValoracionesDisjuntas(true);
             var ex = Assert.Throws<InvalidOperationException>(builder.Build);
-            Assert.Equal("No se puede generar una instancia con más jugadores que átomos si las valoraciones son disjuntas", ex.Message);
+            Assert.Equal("No se puede generar una instancia con más agentes que átomos si las valoraciones son disjuntas", ex.Message);
         }
 
         [Fact]
-        public void Build_AtomosYJugadoresValidos_DevuelveMatrizCorrecta()
+        public void Build_AtomosYAgentesValidos_DevuelveMatrizCorrecta()
         {
             var builder = new InstanciaBuilder()
                 .ConCantidadDeAtomos(3)
-                .ConCantidadDeJugadores(2);
+                .ConCantidadDeAgentes(2);
 
             decimal[,] instancia = builder.Build();
 
@@ -87,7 +87,7 @@ namespace GeneradorInstancia.Tests
         {
             var builder = new InstanciaBuilder()
                 .ConCantidadDeAtomos(3)
-                .ConCantidadDeJugadores(3)
+                .ConCantidadDeAgentes(3)
                 .ConValorMaximo(valorMaximo);
 
             decimal[,] instancia = builder.Build();
@@ -108,7 +108,7 @@ namespace GeneradorInstancia.Tests
         {
             var builder = new InstanciaBuilder()
                 .ConCantidadDeAtomos(3)
-                .ConCantidadDeJugadores(3)
+                .ConCantidadDeAgentes(3)
                 .ConValorMaximo(1)
                 .ConValoracionesDisjuntas(false);
 
@@ -128,38 +128,38 @@ namespace GeneradorInstancia.Tests
         [Fact]
         public void Build_ValoracionesDisjuntas_CadaFilaTieneUnSoloValorPositivo()
         {
-            int jugadores = 3;
+            int agentes = 3;
 
             var builder = new InstanciaBuilder()
                 .ConCantidadDeAtomos(4)
-                .ConCantidadDeJugadores(jugadores)
+                .ConCantidadDeAgentes(agentes)
                 .ConValorMaximo(5)
                 .ConValoracionesDisjuntas(true);
 
             decimal[,] instancia = builder.Build();
 
-            Assert.Equal(1, Enumerable.Range(0, jugadores).Count(j => instancia[0, j] > 0));
-            Assert.Equal(1, Enumerable.Range(0, jugadores).Count(j => instancia[1, j] > 0));
-            Assert.Equal(1, Enumerable.Range(0, jugadores).Count(j => instancia[2, j] > 0));
-            Assert.Equal(1, Enumerable.Range(0, jugadores).Count(j => instancia[3, j] > 0));
+            Assert.Equal(1, Enumerable.Range(0, agentes).Count(j => instancia[0, j] > 0));
+            Assert.Equal(1, Enumerable.Range(0, agentes).Count(j => instancia[1, j] > 0));
+            Assert.Equal(1, Enumerable.Range(0, agentes).Count(j => instancia[2, j] > 0));
+            Assert.Equal(1, Enumerable.Range(0, agentes).Count(j => instancia[3, j] > 0));
         }
 
         [Fact]
-        public void Build_UnSoloJugadorValoracionesDisjuntas_AsignaTodaLaColumnaAlJugador()
+        public void Build_UnSoloAgenteValoracionesDisjuntas_AsignaTodaLaColumnaAlAgente()
         {
-            int jugadores = 1;
+            int agentes = 1;
 
             var builder = new InstanciaBuilder()
                 .ConCantidadDeAtomos(3)
-                .ConCantidadDeJugadores(jugadores)
+                .ConCantidadDeAgentes(agentes)
                 .ConValorMaximo(5)
                 .ConValoracionesDisjuntas(true);
 
             decimal[,] instancia = builder.Build();
 
-            Assert.Equal(1, Enumerable.Range(0, jugadores).Count(j => instancia[0, j] > 0));
-            Assert.Equal(1, Enumerable.Range(0, jugadores).Count(j => instancia[1, j] > 0));
-            Assert.Equal(1, Enumerable.Range(0, jugadores).Count(j => instancia[2, j] > 0));
+            Assert.Equal(1, Enumerable.Range(0, agentes).Count(j => instancia[0, j] > 0));
+            Assert.Equal(1, Enumerable.Range(0, agentes).Count(j => instancia[1, j] > 0));
+            Assert.Equal(1, Enumerable.Range(0, agentes).Count(j => instancia[2, j] > 0));
         }
 
         [Fact]
@@ -167,7 +167,7 @@ namespace GeneradorInstancia.Tests
         {
             var builder = new InstanciaBuilder()
                 .ConCantidadDeAtomos(3)
-                .ConCantidadDeJugadores(3)
+                .ConCantidadDeAgentes(3)
                 .ConValorMaximo(1)
                 .ConValoracionesDisjuntas(false);
 
