@@ -4,12 +4,12 @@ namespace GeneradorInstancia
 {
     public class EscritorInstancia
     {
-        private readonly IFileSystemHelper _fileSystem;
+        private readonly FileSystemHelper _fileSystemHelper;
 
-        public EscritorInstancia(IFileSystemHelper fileSystem)
+        public EscritorInstancia(FileSystemHelper fileSystem)
         {
             ArgumentNullException.ThrowIfNull(fileSystem);
-            _fileSystem = fileSystem;
+            _fileSystemHelper = fileSystem;
         }
 
         public virtual void EscribirInstancia(decimal[,] instancia, string rutaArchivo)
@@ -23,7 +23,7 @@ namespace GeneradorInstancia
                 CrearDirectorioSiNoExiste(rutaArchivo);
 
                 List<string> lineas = GenerarLineasDeInstancia(instancia);
-                _fileSystem.WriteAllLines(rutaArchivo, lineas);
+                _fileSystemHelper.WriteAllLines(rutaArchivo, lineas);
             }
             catch (Exception ex)
             {
@@ -34,9 +34,9 @@ namespace GeneradorInstancia
         private void CrearDirectorioSiNoExiste(string rutaArchivo)
         {
             string directorio = Path.GetDirectoryName(rutaArchivo);
-            if (!string.IsNullOrEmpty(directorio) && !_fileSystem.DirectoryExists(directorio))
+            if (!string.IsNullOrEmpty(directorio) && !_fileSystemHelper.DirectoryExists(directorio))
             {
-                _fileSystem.CreateDirectory(directorio);
+                _fileSystemHelper.CreateDirectory(directorio);
             }
         }
 
