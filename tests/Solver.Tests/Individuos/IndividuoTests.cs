@@ -6,7 +6,7 @@ namespace Solver.Tests.Individuos
     public class IndividuoTests
     {
         [Fact]
-        public void Constructor_CromosomaNull_LanzaExcepcion()
+        public void Constructor_CromosomaNull_LanzaArgumentException()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1]]);
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub(null, instanciaProblema));
@@ -14,14 +14,14 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void Constructor_InstanciaProblemaNull_LanzaExcepcion()
+        public void Constructor_InstanciaProblemaNull_LanzaArgumentException()
         {
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([], null));
             Assert.StartsWith("La instancia del problema no puede ser null", ex.Message);
         }
 
         [Fact]
-        public void Constructor_CromosomaVacio_LanzaExcepcion()
+        public void Constructor_CromosomaVacio_LanzaArgumentException()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1]]);
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([], instanciaProblema));
@@ -29,16 +29,16 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void Constructor_CantidadGenesInvalidaParaInstanciaDelProblema_LanzaExcepcion()
+        public void Constructor_CantidadGenesInvalidaParaInstanciaDelProblema_LanzaArgumentException()
         {
-            // Para k jugadores se esperan k-1 cortes y k asignaciones
+            // Para k agentes se esperan k-1 cortes y k asignaciones
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1m, 0m], [0m, 1m]]);
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([1, 2], instanciaProblema));
             Assert.StartsWith("Cantidad de genes inválida. Esperada: 3, recibida: 2", ex.Message);
         }
 
         [Fact]
-        public void Constructor_PosicionPrimerCorteEnCromosomaEsNegativa_LanzaExcepcion()
+        public void Constructor_PosicionPrimerCorteEnCromosomaEsNegativa_LanzaArgumentException()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1m, 0m], [0m, 1m]]);
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([-1, 2, 1], instanciaProblema));
@@ -46,7 +46,7 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void Constructor_PosicionUltimoCorteEnCromosomaEsMayorQueCantidadAtomos_LanzaExcepcion()
+        public void Constructor_PosicionUltimoCorteEnCromosomaEsMayorQueCantidadAtomos_LanzaArgumentException()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1m, 0m], [0m, 1m]]);
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([3, 2, 1], instanciaProblema));
@@ -54,16 +54,16 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void Constructor_HayUnaAsignacionAJugadoresInvalidoEnCromosoma_LanzaExcepcion()
+        public void Constructor_HayUnaAsignacionAAgentesInvalidosEnCromosoma_LanzaArgumentException()
         {
-            // El rango permitido para las asignaciones de k jugadores es [1, k]
+            // El rango permitido para las asignaciones de k agentes es [1, k]
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1m, 0m], [0m, 1m]]);
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([0, 1, 0], instanciaProblema));
             Assert.StartsWith($"Hay asignaciones fuera del rango [1, 2]: (0)", ex.Message);
         }
 
         [Fact]
-        public void Constructor_HayMasDeUnaAsignacionAJugadoresInvalidosEnCromosoma_LanzaExcepcion()
+        public void Constructor_HayMasDeUnaAsignacionAAgentesInvalidosEnCromosoma_LanzaArgumentException()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1m, 0m], [0m, 1m]]);
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([0, -1, 5], instanciaProblema));
@@ -71,7 +71,7 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void Constructor_ListadoDeAsignacionesRepetidasSeMuestraOrdenadoAscendente_LanzaExcepcion()
+        public void Constructor_ListadoDeAsignacionesRepetidasSeMuestraOrdenadoAscendente_LanzaArgumentException()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([
                 [1m, 0m, 0m, 0m],
@@ -85,15 +85,15 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void Constructor_HayUnaPorcionAsignadaAMasDeUnJugadorEnCromosoma_LanzaExcepcion()
+        public void Constructor_HayUnaPorcionAsignadaAMasDeUnAgenteEnCromosoma_LanzaArgumentException()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1m, 0m], [0m, 1m]]);
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([0, 1, 1], instanciaProblema));
-            Assert.StartsWith("Hay porciones asignadas a más de un jugador: (1)", ex.Message);
+            Assert.StartsWith("Hay porciones asignadas a más de un agente: (1)", ex.Message);
         }
 
         [Fact]
-        public void Constructor_HayMasDeUnaPorcionAsignadaAMasDeUnJugadorEnCromosoma_LanzaExcepcion()
+        public void Constructor_HayMasDeUnaPorcionAsignadaAMasDeUnAgenteEnCromosoma_LanzaArgumentException()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([
                 [1m, 0m, 0m, 0m],
@@ -103,7 +103,7 @@ namespace Solver.Tests.Individuos
              ]);
 
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([0, 0, 4, 2, 2, 3, 3], instanciaProblema));
-            Assert.StartsWith("Hay porciones asignadas a más de un jugador: (2, 3)", ex.Message);
+            Assert.StartsWith("Hay porciones asignadas a más de un agente: (2, 3)", ex.Message);
         }
 
         private class IndividuoStub : Individuo

@@ -8,7 +8,7 @@ namespace GeneradorInstancia
         private bool _valoracionesDisjuntas = false;
 
         private int _cantidadAtomos;
-        private int _cantidadJugadores;
+        private int _cantidadAgentes;
 
         private readonly GeneradorNumerosRandom _generadorNumerosRandom;
 
@@ -29,15 +29,15 @@ namespace GeneradorInstancia
             return this;
         }
 
-        public virtual InstanciaBuilder ConCantidadDeJugadores(int cantidadJugadores)
+        public virtual InstanciaBuilder ConCantidadDeAgentes(int cantidadAgentes)
         {
-            if (cantidadJugadores <= 0)
+            if (cantidadAgentes <= 0)
             {
-                string mensaje = $"La cantidad de jugadores debe ser mayor a cero: {cantidadJugadores}";
-                throw new ArgumentOutOfRangeException(nameof(cantidadJugadores), mensaje);
+                string mensaje = $"La cantidad de agentes debe ser mayor a cero: {cantidadAgentes}";
+                throw new ArgumentOutOfRangeException(nameof(cantidadAgentes), mensaje);
             }
 
-            _cantidadJugadores = cantidadJugadores;
+            _cantidadAgentes = cantidadAgentes;
             return this;
         }
 
@@ -70,37 +70,37 @@ namespace GeneradorInstancia
 
         private decimal[,] ConstruirInstanciaDisjunta()
         {
-            if (_cantidadAtomos < _cantidadJugadores)
+            if (_cantidadAtomos < _cantidadAgentes)
             {
-                string mensaje = "No se puede generar una instancia con más jugadores que átomos si las valoraciones son disjuntas";
+                string mensaje = "No se puede generar una instancia con más agentes que átomos si las valoraciones son disjuntas";
                 throw new InvalidOperationException(mensaje);
             }
 
             decimal[,] instancia = ConstruirInstanciaVacia();
 
             List<int> atomosDisponibles = Enumerable.Range(0, _cantidadAtomos).ToList();
-            List<int> jugadoresDisponibles = Enumerable.Range(0, _cantidadJugadores).ToList();
+            List<int> agentesDisponibles = Enumerable.Range(0, _cantidadAgentes).ToList();
 
-            while (jugadoresDisponibles.Count > 0)
+            while (agentesDisponibles.Count > 0)
             {
                 int indiceAtomo = _generadorNumerosRandom.Siguiente(0, atomosDisponibles.Count);
-                int indiceJugador = _generadorNumerosRandom.Siguiente(0, jugadoresDisponibles.Count);
+                int indiceAgente = _generadorNumerosRandom.Siguiente(0, agentesDisponibles.Count);
 
                 int atomoElegido = atomosDisponibles[indiceAtomo];
-                int jugadorElegido = jugadoresDisponibles[indiceJugador];
-                instancia[atomoElegido, jugadorElegido] = _generadorNumerosRandom.Siguiente(1, _valorMaximo + 1);
+                int agenteElegido = agentesDisponibles[indiceAgente];
+                instancia[atomoElegido, agenteElegido] = _generadorNumerosRandom.Siguiente(1, _valorMaximo + 1);
 
                 atomosDisponibles.RemoveAt(indiceAtomo);
-                jugadoresDisponibles.RemoveAt(indiceJugador);
+                agentesDisponibles.RemoveAt(indiceAgente);
             }
 
             while (atomosDisponibles.Count > 0)
             {
                 int indiceAtomo = _generadorNumerosRandom.Siguiente(0, atomosDisponibles.Count);
-                int jugadorElegido = _generadorNumerosRandom.Siguiente(0, _cantidadJugadores);
+                int agenteElegido = _generadorNumerosRandom.Siguiente(0, _cantidadAgentes);
                 int atomoElegido = atomosDisponibles[indiceAtomo];
 
-                instancia[atomoElegido, jugadorElegido] = _generadorNumerosRandom.Siguiente(1, _valorMaximo + 1);
+                instancia[atomoElegido, agenteElegido] = _generadorNumerosRandom.Siguiente(1, _valorMaximo + 1);
 
                 atomosDisponibles.RemoveAt(indiceAtomo);
             }
@@ -114,10 +114,10 @@ namespace GeneradorInstancia
 
             for (int indiceAtomo = 0; indiceAtomo < _cantidadAtomos; indiceAtomo++)
             {
-                for (int indiceJugador = 0; indiceJugador < _cantidadJugadores; indiceJugador++)
+                for (int indiceAgente = 0; indiceAgente < _cantidadAgentes; indiceAgente++)
                 {
                     int valorAleatorio = _generadorNumerosRandom.Siguiente(1, _valorMaximo + 1);
-                    instancia[indiceAtomo, indiceJugador] = valorAleatorio;
+                    instancia[indiceAtomo, indiceAgente] = valorAleatorio;
                 }
             }
 
@@ -126,10 +126,10 @@ namespace GeneradorInstancia
 
         private decimal[,] ConstruirInstanciaVacia()
         {
-            if (_cantidadAtomos == 0 || _cantidadJugadores == 0)
-                throw new InvalidOperationException("Debe especificar el número de átomos y jugadores antes de construir la instancia");
+            if (_cantidadAtomos == 0 || _cantidadAgentes == 0)
+                throw new InvalidOperationException("Debe especificar el número de átomos y agentes antes de construir la instancia");
 
-            var instancia = new decimal[_cantidadAtomos, _cantidadJugadores];
+            var instancia = new decimal[_cantidadAtomos, _cantidadAgentes];
             return instancia;
         }
     }

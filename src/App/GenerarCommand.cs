@@ -40,7 +40,7 @@ namespace App
         {
             builder
                 .ConCantidadDeAtomos(parametros.Atomos)
-                .ConCantidadDeJugadores(parametros.Agentes)
+                .ConCantidadDeAgentes(parametros.Agentes)
                 .ConValorMaximo(parametros.ValorMaximo)
                 .ConValoracionesDisjuntas(parametros.ValoracionesDisjuntas);
 

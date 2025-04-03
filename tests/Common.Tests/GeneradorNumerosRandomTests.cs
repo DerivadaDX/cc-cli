@@ -3,7 +3,7 @@
     public class GeneradorNumerosRandomTests
     {
         [Fact]
-        public void GenerarNumerosRandom_SemillaNegativa_LanzaExcepcion()
+        public void GenerarNumerosRandom_SemillaNegativa_LanzaArgumentException()
         {
             var ex = Assert.Throws<ArgumentException>(() => new GeneradorNumerosRandom(-1));
             Assert.StartsWith("La semilla no puede ser negativa: -1", ex.Message);

@@ -58,7 +58,7 @@ namespace App.Tests
 
             var builder = Substitute.For<InstanciaBuilder>();
             builder.ConCantidadDeAtomos(Arg.Any<int>()).Returns(builder);
-            builder.ConCantidadDeJugadores(Arg.Any<int>()).Returns(builder);
+            builder.ConCantidadDeAgentes(Arg.Any<int>()).Returns(builder);
             builder.ConValorMaximo(Arg.Any<int>()).Returns(builder);
             builder.ConValoracionesDisjuntas(Arg.Any<bool>()).Returns(builder);
             builder.Build().Returns(instanciaMock);
@@ -75,7 +75,7 @@ namespace App.Tests
             GenerarCommand.Handler(parametros, builder, escritor);
 
             builder.Received(1).ConCantidadDeAtomos(5);
-            builder.Received(1).ConCantidadDeJugadores(3);
+            builder.Received(1).ConCantidadDeAgentes(3);
             builder.Received(1).ConValorMaximo(100);
             builder.Received(1).ConValoracionesDisjuntas(true);
             builder.Received(1).Build();
