@@ -1,12 +1,15 @@
-# Cake Cutting Genético
+# Cake Cutting CLI
 
 ## Descripción
 
-Este proyecto implementa un algoritmo basado en técnicas genéticas para la división justa de una torta discreta
-(_discrete cake-cutting_) entre múltiples jugadores, con el objetivo de lograr una distribución **libre de envidia**
-(_envy-free_).
+Este proyecto implementa una interfaz de línea de comandos (CLI) para generar y resolver instancias del problema de
+división justa de una torta discreta (_discrete cake-cutting_) entre múltiples jugadores. Utiliza un algoritmo basado en
+técnicas genéticas para encontrar asignaciones **libres de envidia** (_envy-free_).
 
-Se basa en la teoría presentada en el artículo _Envy-free division of discrete cakes_ de Javier Marenco y Tomás Tetzlaff.
+La herramienta permite:
+
+- Generar y exportar instancias del problema con diferentes configuraciones.
+- Resolver instancias utilizando un algoritmo genético (_todavía en desarrollo_).
 
 ## Contexto
 
@@ -45,18 +48,18 @@ cc-cli.exe generar [opciones]
 
 **Opciones principales**:
 
-| Opción     | Requerido | Descripción       |
-|------------|-----------|-------------------|
-| `--atomos` | Sí        | Número de átomos  |
-| `--agentes`| Sí        | Número de agentes |
+| Opción      | Descripción       | Valores aceptados           |
+| ----------- | ----------------- | --------------------------- |
+| `--atomos`  | Número de átomos  | Entero positivo (requerido) |
+| `--agentes` | Número de agentes | Entero positivo (requerido) |
 
 **Opciones secundarias**:
 
-| Opción           | Descripción                              | Valores aceptados                 |
-|------------------|------------------------------------------|-----------------------------------|
-| `--valor-maximo` | Valor máximo para las valoraciones       | Entero positivo (default: 1000)   |
-| `--disjuntas`    | Flag para generar valoraciones disjuntas |                                   |
-| `--output`       | Ruta y nombre del archivo de salida      | Un path (default: `instancia.dat` |
+| Opción           | Descripción                              | Valores aceptados                  |
+| ---------------- | ---------------------------------------- | ---------------------------------- |
+| `--valor-maximo` | Valor máximo para las valoraciones       | Entero positivo (default: 1000)    |
+| `--disjuntas`    | Flag para generar valoraciones disjuntas |                                    |
+| `--output`       | Ruta y nombre del archivo de salida      | Un path (default: `instancia.dat`) |
 
 **Ejemplos**:
 
