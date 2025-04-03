@@ -34,7 +34,7 @@
         }
 
         [Fact]
-        public void AgregarValoracion_ValoracionSobreMismoAtomo_LanzaExcepcion()
+        public void AgregarValoracion_ValoracionSobreMismoAtomo_LanzaInvalidOperationException()
         {
             int posicionAtomo = 1;
 

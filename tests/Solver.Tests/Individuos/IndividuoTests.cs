@@ -6,7 +6,7 @@ namespace Solver.Tests.Individuos
     public class IndividuoTests
     {
         [Fact]
-        public void Constructor_CromosomaNull_LanzaExcepcion()
+        public void Constructor_CromosomaNull_LanzaArgumentException()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1]]);
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub(null, instanciaProblema));
@@ -14,14 +14,14 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void Constructor_InstanciaProblemaNull_LanzaExcepcion()
+        public void Constructor_InstanciaProblemaNull_LanzaArgumentException()
         {
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([], null));
             Assert.StartsWith("La instancia del problema no puede ser null", ex.Message);
         }
 
         [Fact]
-        public void Constructor_CromosomaVacio_LanzaExcepcion()
+        public void Constructor_CromosomaVacio_LanzaArgumentException()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1]]);
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([], instanciaProblema));
@@ -29,7 +29,7 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void Constructor_CantidadGenesInvalidaParaInstanciaDelProblema_LanzaExcepcion()
+        public void Constructor_CantidadGenesInvalidaParaInstanciaDelProblema_LanzaArgumentExceptionn()
         {
             // Para k agentes se esperan k-1 cortes y k asignaciones
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1m, 0m], [0m, 1m]]);
@@ -38,7 +38,7 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void Constructor_PosicionPrimerCorteEnCromosomaEsNegativa_LanzaExcepcion()
+        public void Constructor_PosicionPrimerCorteEnCromosomaEsNegativa_LanzaArgumentException()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1m, 0m], [0m, 1m]]);
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([-1, 2, 1], instanciaProblema));
@@ -46,7 +46,7 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void Constructor_PosicionUltimoCorteEnCromosomaEsMayorQueCantidadAtomos_LanzaExcepcion()
+        public void Constructor_PosicionUltimoCorteEnCromosomaEsMayorQueCantidadAtomos_LanzaArgumentException()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1m, 0m], [0m, 1m]]);
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([3, 2, 1], instanciaProblema));
@@ -54,7 +54,7 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void Constructor_HayUnaAsignacionAAgentesInvalidosEnCromosoma_LanzaExcepcion()
+        public void Constructor_HayUnaAsignacionAAgentesInvalidosEnCromosoma_LanzaArgumentException()
         {
             // El rango permitido para las asignaciones de k agentes es [1, k]
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1m, 0m], [0m, 1m]]);
@@ -63,7 +63,7 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void Constructor_HayMasDeUnaAsignacionAAgentesInvalidosEnCromosoma_LanzaExcepcion()
+        public void Constructor_HayMasDeUnaAsignacionAAgentesInvalidosEnCromosoma_LanzaArgumentException()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1m, 0m], [0m, 1m]]);
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([0, -1, 5], instanciaProblema));
@@ -71,7 +71,7 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void Constructor_ListadoDeAsignacionesRepetidasSeMuestraOrdenadoAscendente_LanzaExcepcion()
+        public void Constructor_ListadoDeAsignacionesRepetidasSeMuestraOrdenadoAscendente_LanzaArgumentException()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([
                 [1m, 0m, 0m, 0m],
@@ -85,7 +85,7 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void Constructor_HayUnaPorcionAsignadaAMasDeUnAgenteEnCromosoma_LanzaExcepcion()
+        public void Constructor_HayUnaPorcionAsignadaAMasDeUnAgenteEnCromosoma_LanzaArgumentException()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1m, 0m], [0m, 1m]]);
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([0, 1, 1], instanciaProblema));
@@ -93,7 +93,7 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void Constructor_HayMasDeUnaPorcionAsignadaAMasDeUnAgenteEnCromosoma_LanzaExcepcion()
+        public void Constructor_HayMasDeUnaPorcionAsignadaAMasDeUnAgenteEnCromosoma_LanzaArgumentException()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([
                 [1m, 0m, 0m, 0m],

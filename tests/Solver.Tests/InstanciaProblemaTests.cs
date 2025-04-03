@@ -3,21 +3,21 @@
     public class InstanciaProblemaTests
     {
         [Fact]
-        public void CrearDesdeMatrizDeValoraciones_MatrizNull_LanzaExcepcion()
+        public void CrearDesdeMatrizDeValoraciones_MatrizNull_LanzaArgumentException()
         {
             var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(null));
             Assert.StartsWith("La matriz de valoraciones no puede ser null", ex.Message);
         }
 
         [Fact]
-        public void CrearDesdeMatrizDeValoraciones_MatrizVacia_LanzaExcepcion()
+        public void CrearDesdeMatrizDeValoraciones_MatrizVacia_LanzaArgumentException()
         {
             var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones([]));
             Assert.StartsWith("La matriz de valoraciones no puede estar vacía", ex.Message);
         }
 
         [Fact]
-        public void CrearDesdeMatrizDeValoraciones_MatrizConFilasDesiguales_LanzaExcepcion()
+        public void CrearDesdeMatrizDeValoraciones_MatrizConFilasDesiguales_LanzaArgumentException()
         {
             decimal[][] matriz = [
                 [0m, 0m, 1m],
@@ -28,7 +28,7 @@
         }
 
         [Fact]
-        public void CrearDesdeMatrizDeValoraciones_MatrizConAgentesSinValoraciones_LanzaExcepcion()
+        public void CrearDesdeMatrizDeValoraciones_MatrizConAgentesSinValoraciones_LanzaArgumentException()
         {
             decimal[][] matriz = [
                 [0, 1, 1],

@@ -5,7 +5,7 @@ namespace GeneradorInstancia.Tests
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
-        public void ConCantidadDeAtomos_CantidadInvalida_LanzaExcepcion(int cantidadAtomos)
+        public void ConCantidadDeAtomos_CantidadInvalida_LanzaArgumentOutOfRangeExceptionn(int cantidadAtomos)
         {
             var builder = new InstanciaBuilder();
             var ex = Assert.Throws<ArgumentOutOfRangeException>(() => builder.ConCantidadDeAtomos(cantidadAtomos));
@@ -15,7 +15,7 @@ namespace GeneradorInstancia.Tests
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
-        public void ConCantidadDeAgentes_CantidadInvalida_LanzaExcepcion(int cantidadAgentes)
+        public void ConCantidadDeAgentes_CantidadInvalida_LanzaArgumentOutOfRangeException(int cantidadAgentes)
         {
             var builder = new InstanciaBuilder();
             var ex = Assert.Throws<ArgumentOutOfRangeException>(() => builder.ConCantidadDeAgentes(cantidadAgentes));
@@ -25,7 +25,7 @@ namespace GeneradorInstancia.Tests
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
-        public void ConValorMaximo_CantidadInvalida_LanzaExcepcion(int valorMaximo)
+        public void ConValorMaximo_CantidadInvalida_LanzaArgumentOutOfRangeException(int valorMaximo)
         {
             var builder = new InstanciaBuilder();
             var ex = Assert.Throws<ArgumentOutOfRangeException>(() => builder.ConValorMaximo(valorMaximo));
@@ -33,7 +33,7 @@ namespace GeneradorInstancia.Tests
         }
 
         [Fact]
-        public void Build_SinConfiguracionPrevia_LanzaExcepcion()
+        public void Build_SinConfiguracionPrevia_LanzaInvalidOperationException()
         {
             var builder = new InstanciaBuilder();
             var ex = Assert.Throws<InvalidOperationException>(builder.Build);
@@ -41,7 +41,7 @@ namespace GeneradorInstancia.Tests
         }
 
         [Fact]
-        public void Build_SoloAtomosConfigurados_LanzaExcepcion()
+        public void Build_SoloAtomosConfigurados_LanzaInvalidOperationException()
         {
             var builder = new InstanciaBuilder().ConCantidadDeAtomos(2);
             var ex = Assert.Throws<InvalidOperationException>(builder.Build);
@@ -49,7 +49,7 @@ namespace GeneradorInstancia.Tests
         }
 
         [Fact]
-        public void Build_SoloAgentesConfigurados_LanzaExcepcion()
+        public void Build_SoloAgentesConfigurados_LanzaInvalidOperationException()
         {
             var builder = new InstanciaBuilder().ConCantidadDeAgentes(2);
             var ex = Assert.Throws<InvalidOperationException>(builder.Build);
@@ -57,7 +57,7 @@ namespace GeneradorInstancia.Tests
         }
 
         [Fact]
-        public void Build_ValoracionesDisjuntasConMasAgentesQueAtomos_LanzaExcepcion()
+        public void Build_ValoracionesDisjuntasConMasAgentesQueAtomos_LanzaInvalidOperationException()
         {
             var builder = new InstanciaBuilder()
                 .ConCantidadDeAtomos(2)
