@@ -14,7 +14,7 @@ namespace GeneradorInstancia.Tests
         [Fact]
         public void EscribirInstancia_InstanciaNull_LanzaArgumentNullException()
         {
-            var fileSystemHelper = Substitute.For<IFileSystemHelper>();
+            var fileSystemHelper = Substitute.For<FileSystemHelper>();
             var escritor = new EscritorInstancia(fileSystemHelper);
             Assert.Throws<ArgumentNullException>(() => escritor.EscribirInstancia(null, "ruta.dat"));
         }
@@ -25,7 +25,7 @@ namespace GeneradorInstancia.Tests
         [InlineData(null)]
         public void EscribirInstancia_RutaVacia_LanzaArgumentException(string rutaInvalida)
         {
-            var fileSystemHelper = Substitute.For<IFileSystemHelper>();
+            var fileSystemHelper = Substitute.For<FileSystemHelper>();
             var escritor = new EscritorInstancia(fileSystemHelper);
 
             var ex = Assert.Throws<ArgumentException>(() => escritor.EscribirInstancia(new decimal[1, 1] { { 1 } }, rutaInvalida));
@@ -35,7 +35,7 @@ namespace GeneradorInstancia.Tests
         [Fact]
         public void EscribirInstancia_RutaSinDirectorio_NoPreguntaSiExisteNiIntentaCrearDirectorio()
         {
-            var fileSystemHelper = Substitute.For<IFileSystemHelper>();
+            var fileSystemHelper = Substitute.For<FileSystemHelper>();
 
             var escritor = new EscritorInstancia(fileSystemHelper);
             escritor.EscribirInstancia(new decimal[1, 1] { { 1 } }, "instancia.dat");
@@ -47,7 +47,7 @@ namespace GeneradorInstancia.Tests
         [Fact]
         public void EscribirInstancia_DirectorioExistente_NoIntentaCrearlo()
         {
-            var fileSystemHelper = Substitute.For<IFileSystemHelper>();
+            var fileSystemHelper = Substitute.For<FileSystemHelper>();
             fileSystemHelper.DirectoryExists("carpeta").Returns(true);
 
             var escritor = new EscritorInstancia(fileSystemHelper);
@@ -59,7 +59,7 @@ namespace GeneradorInstancia.Tests
         [Fact]
         public void EscribirInstancia_DirectorioNoExistente_LoCrea()
         {
-            var fileSystemHelper = Substitute.For<IFileSystemHelper>();
+            var fileSystemHelper = Substitute.For<FileSystemHelper>();
             fileSystemHelper.DirectoryExists("carpeta").Returns(false);
 
             var escritor = new EscritorInstancia(fileSystemHelper);
@@ -72,7 +72,7 @@ namespace GeneradorInstancia.Tests
         public void EscribirInstancia_InstanciaValida_EscribeContenidoCorrecto()
         {
             const string ruta = "instancia.dat";
-            var fileSystemHelper = Substitute.For<IFileSystemHelper>();
+            var fileSystemHelper = Substitute.For<FileSystemHelper>();
 
             var escritor = new EscritorInstancia(fileSystemHelper);
             escritor.EscribirInstancia(new decimal[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } }, ruta);
@@ -89,7 +89,7 @@ namespace GeneradorInstancia.Tests
         public void EscribirInstancia_InstanciaVacia_EscribeSoloEncabezado()
         {
             const string ruta = "vacio.dat";
-            var fileSystemHelper = Substitute.For<IFileSystemHelper>();
+            var fileSystemHelper = Substitute.For<FileSystemHelper>();
 
             var escritor = new EscritorInstancia(fileSystemHelper);
             escritor.EscribirInstancia(new decimal[0, 0], ruta);
@@ -103,7 +103,7 @@ namespace GeneradorInstancia.Tests
         [Fact]
         public void EscribirInstancia_ErrorEscritura_PropagaExcepcion()
         {
-            var fileSystemHelper = Substitute.For<IFileSystemHelper>();
+            var fileSystemHelper = Substitute.For<FileSystemHelper>();
             fileSystemHelper
                 .When(x => x.WriteAllLines(Arg.Any<string>(), Arg.Any<List<string>>()))
                 .Throw(new IOException("Error de disco"));

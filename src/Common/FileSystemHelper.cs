@@ -1,6 +1,6 @@
 ﻿namespace Common
 {
-    public class FileSystemHelper : IFileSystemHelper
+    public class FileSystemHelper
     {
         public virtual void CreateDirectory(string path)
         {

@@ -4,9 +4,9 @@ namespace GeneradorInstancia
 {
     public class EscritorInstancia
     {
-        private readonly IFileSystemHelper _fileSystem;
+        private readonly FileSystemHelper _fileSystem;
 
-        public EscritorInstancia(IFileSystemHelper fileSystem)
+        public EscritorInstancia(FileSystemHelper fileSystem)
         {
             ArgumentNullException.ThrowIfNull(fileSystem);
             _fileSystem = fileSystem;
