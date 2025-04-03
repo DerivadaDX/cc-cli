@@ -5,7 +5,7 @@ namespace GeneradorInstancia.Tests
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
-        public void ConCantidadDeAtomos_CantidadInvalida_LanzaArgumentOutOfRangeExceptionn(int cantidadAtomos)
+        public void ConCantidadDeAtomos_CantidadInvalida_LanzaArgumentOutOfRangeException(int cantidadAtomos)
         {
             var builder = new InstanciaBuilder();
             var ex = Assert.Throws<ArgumentOutOfRangeException>(() => builder.ConCantidadDeAtomos(cantidadAtomos));

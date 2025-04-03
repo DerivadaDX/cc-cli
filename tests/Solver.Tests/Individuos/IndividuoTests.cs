@@ -29,7 +29,7 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void Constructor_CantidadGenesInvalidaParaInstanciaDelProblema_LanzaArgumentExceptionn()
+        public void Constructor_CantidadGenesInvalidaParaInstanciaDelProblema_LanzaArgumentException()
         {
             // Para k agentes se esperan k-1 cortes y k asignaciones
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([[1m, 0m], [0m, 1m]]);
