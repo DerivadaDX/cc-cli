@@ -45,10 +45,10 @@ cc-cli.exe generar [opciones]
 
 **Opciones principales**:
 
-| Opción     | Requerido | Descripción       |
-|------------|-----------|-------------------|
-| `--atomos` | Sí        | Número de átomos  |
-| `--agentes`| Sí        | Número de agentes |
+| Opción      | Descripción       | Valores aceptados           |
+| ----------- | ----------------- | --------------------------- |
+| `--atomos`  | Número de átomos  | Entero positivo (requerido) |
+| `--agentes` | Número de agentes | Entero positivo (requerido) |
 
 **Opciones secundarias**:
 
