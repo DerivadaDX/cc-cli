@@ -33,7 +33,7 @@ namespace GeneradorInstancia
 
         private void CrearDirectorioSiNoExiste(string rutaArchivo)
         {
-            string? directorio = Path.GetDirectoryName(rutaArchivo);
+            string directorio = Path.GetDirectoryName(rutaArchivo);
             if (!string.IsNullOrEmpty(directorio) && !_fileSystem.DirectoryExists(directorio))
             {
                 _fileSystem.CreateDirectory(directorio);

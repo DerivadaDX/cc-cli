@@ -3,21 +3,21 @@
     public class InstanciaProblemaTests
     {
         [Fact]
-        public void CrearDesdeMatrizDeValoraciones_MatrizNull_LanzaExcepcion()
+        public void CrearDesdeMatrizDeValoraciones_MatrizNull_LanzaArgumentException()
         {
             var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(null));
             Assert.StartsWith("La matriz de valoraciones no puede ser null", ex.Message);
         }
 
         [Fact]
-        public void CrearDesdeMatrizDeValoraciones_MatrizVacia_LanzaExcepcion()
+        public void CrearDesdeMatrizDeValoraciones_MatrizVacia_LanzaArgumentException()
         {
             var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones([]));
             Assert.StartsWith("La matriz de valoraciones no puede estar vacía", ex.Message);
         }
 
         [Fact]
-        public void CrearDesdeMatrizDeValoraciones_MatrizConFilasDesiguales_LanzaExcepcion()
+        public void CrearDesdeMatrizDeValoraciones_MatrizConFilasDesiguales_LanzaArgumentException()
         {
             decimal[][] matriz = [
                 [0m, 0m, 1m],
@@ -28,14 +28,14 @@
         }
 
         [Fact]
-        public void CrearDesdeMatrizDeValoraciones_MatrizConJugadoresSinValoraciones_LanzaExcepcion()
+        public void CrearDesdeMatrizDeValoraciones_MatrizConAgentesSinValoraciones_LanzaArgumentException()
         {
             decimal[][] matriz = [
                 [0, 1, 1],
                 [0, 1, 1],
             ];
             var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz));
-            Assert.StartsWith("El jugador 1 no tiene valoraciones positivas sobre ningún átomo.", ex.Message);
+            Assert.StartsWith("El agente 1 no tiene valoraciones positivas sobre ningún átomo.", ex.Message);
         }
 
         [Fact]
@@ -50,26 +50,26 @@
                 [5, 0.0m],
             ]);
 
-            Assert.Equal(2, instanciaProblema.Jugadores.Count);
+            Assert.Equal(2, instanciaProblema.Agentes.Count);
             Assert.Equal(6, instanciaProblema.CantidadAtomos);
 
-            Jugador jugador1 = instanciaProblema.Jugadores[0];
-            Assert.Equal(1, jugador1.Id);
-            Assert.Equal(5, jugador1.Valoraciones.Count);
-            Assert.Contains(jugador1.Valoraciones, a => a.Posicion == 2 && a.Valoracion == 1);
-            Assert.Contains(jugador1.Valoraciones, a => a.Posicion == 3 && a.Valoracion == 1);
-            Assert.Contains(jugador1.Valoraciones, a => a.Posicion == 4 && a.Valoracion == 2);
-            Assert.Contains(jugador1.Valoraciones, a => a.Posicion == 5 && a.Valoracion == 3);
-            Assert.Contains(jugador1.Valoraciones, a => a.Posicion == 6 && a.Valoracion == 5);
+            Agente agente1 = instanciaProblema.Agentes[0];
+            Assert.Equal(1, agente1.Id);
+            Assert.Equal(5, agente1.Valoraciones.Count);
+            Assert.Contains(agente1.Valoraciones, a => a.Posicion == 2 && a.Valoracion == 1);
+            Assert.Contains(agente1.Valoraciones, a => a.Posicion == 3 && a.Valoracion == 1);
+            Assert.Contains(agente1.Valoraciones, a => a.Posicion == 4 && a.Valoracion == 2);
+            Assert.Contains(agente1.Valoraciones, a => a.Posicion == 5 && a.Valoracion == 3);
+            Assert.Contains(agente1.Valoraciones, a => a.Posicion == 6 && a.Valoracion == 5);
 
-            Jugador jugador2 = instanciaProblema.Jugadores[1];
-            Assert.Equal(2, jugador2.Id);
-            Assert.Equal(5, jugador2.Valoraciones.Count);
-            Assert.Contains(jugador2.Valoraciones, a => a.Posicion == 1 && a.Valoracion == 3.9m);
-            Assert.Contains(jugador2.Valoraciones, a => a.Posicion == 2 && a.Valoracion == 1.2m);
-            Assert.Contains(jugador2.Valoraciones, a => a.Posicion == 3 && a.Valoracion == 4.6m);
-            Assert.Contains(jugador2.Valoraciones, a => a.Posicion == 4 && a.Valoracion == 1.5m);
-            Assert.Contains(jugador2.Valoraciones, a => a.Posicion == 5 && a.Valoracion == 5.3m);
+            Agente agente2 = instanciaProblema.Agentes[1];
+            Assert.Equal(2, agente2.Id);
+            Assert.Equal(5, agente2.Valoraciones.Count);
+            Assert.Contains(agente2.Valoraciones, a => a.Posicion == 1 && a.Valoracion == 3.9m);
+            Assert.Contains(agente2.Valoraciones, a => a.Posicion == 2 && a.Valoracion == 1.2m);
+            Assert.Contains(agente2.Valoraciones, a => a.Posicion == 3 && a.Valoracion == 4.6m);
+            Assert.Contains(agente2.Valoraciones, a => a.Posicion == 4 && a.Valoracion == 1.5m);
+            Assert.Contains(agente2.Valoraciones, a => a.Posicion == 5 && a.Valoracion == 5.3m);
         }
     }
 }

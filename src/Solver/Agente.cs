@@ -1,9 +1,8 @@
-﻿
-namespace Solver
+﻿namespace Solver
 {
-    internal class Jugador
+    internal class Agente
     {
-        internal Jugador(int id)
+        internal Agente(int id)
         {
             Id = id;
         }
