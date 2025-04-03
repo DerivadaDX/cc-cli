@@ -16,6 +16,17 @@ namespace App.Tests
         }
 
         [Fact]
+        public void Create_NombreYOpciones_ConfiguradasCorrectamente()
+        {
+            Assert.Equal("generar", _command.Name);
+            Assert.Contains(_command.Options, o => o.Name == "atomos");
+            Assert.Contains(_command.Options, o => o.Name == "agentes");
+            Assert.Contains(_command.Options, o => o.Name == "valor-maximo");
+            Assert.Contains(_command.Options, o => o.Name == "output");
+            Assert.Contains(_command.Options, o => o.Name == "disjuntas");
+        }
+
+        [Fact]
         public void Create_ValorMaximoNoEspecificado_UsaValorPorDefecto()
         {
             var valorMaximoOption = (Option<int>)_command.Options.First(o => o.Name == "valor-maximo");
@@ -40,17 +51,6 @@ namespace App.Tests
             bool disjuntas = _command.Parse("generar --atomos 5 --agentes 3").GetValueForOption(disjuntasOption);
 
             Assert.False(disjuntas);
-        }
-
-        [Fact]
-        public void Create_Command_ConfiguraOpcionesCorrectamente()
-        {
-            Assert.Equal("generar", _command.Name);
-            Assert.Contains(_command.Options, o => o.Name == "atomos");
-            Assert.Contains(_command.Options, o => o.Name == "agentes");
-            Assert.Contains(_command.Options, o => o.Name == "valor-maximo");
-            Assert.Contains(_command.Options, o => o.Name == "output");
-            Assert.Contains(_command.Options, o => o.Name == "disjuntas");
         }
 
         [Fact]
