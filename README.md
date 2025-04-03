@@ -52,11 +52,11 @@ cc-cli.exe generar [opciones]
 
 **Opciones secundarias**:
 
-| Opción           | Descripción                              | Valores aceptados                 |
-|------------------|------------------------------------------|-----------------------------------|
-| `--valor-maximo` | Valor máximo para las valoraciones       | Entero positivo (default: 1000)   |
-| `--disjuntas`    | Flag para generar valoraciones disjuntas |                                   |
-| `--output`       | Ruta y nombre del archivo de salida      | Un path (default: `instancia.dat` |
+| Opción           | Descripción                              | Valores aceptados                  |
+| ---------------- | ---------------------------------------- | ---------------------------------- |
+| `--valor-maximo` | Valor máximo para las valoraciones       | Entero positivo (default: 1000)    |
+| `--disjuntas`    | Flag para generar valoraciones disjuntas |                                    |
+| `--output`       | Ruta y nombre del archivo de salida      | Un path (default: `instancia.dat`) |
 
 **Ejemplos**:
 
