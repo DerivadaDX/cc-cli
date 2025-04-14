@@ -5,6 +5,9 @@ namespace GeneradorInstancia.Tests
 {
     public class EscritorInstanciaTests
     {
+        private const string DirectorioSalida = "nombreCarpeta";
+        private const string NombreArchivoSalida = "instancia.dat";
+
         private readonly decimal[,] _instancia = new decimal[1, 1] { { 1 } };
 
         private readonly FileSystemHelper _fileSystemHelper;
@@ -25,7 +28,7 @@ namespace GeneradorInstancia.Tests
         [Fact]
         public void EscribirInstancia_InstanciaNull_LanzaArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => _escritorInstancia.EscribirInstancia(null, "ruta.dat"));
+            Assert.Throws<ArgumentNullException>(() => _escritorInstancia.EscribirInstancia(null, NombreArchivoSalida));
         }
 
         [Theory]
@@ -41,7 +44,7 @@ namespace GeneradorInstancia.Tests
         [Fact]
         public void EscribirInstancia_RutaSinDirectorio_NoPreguntaSiExisteNiIntentaCrearDirectorio()
         {
-            _escritorInstancia.EscribirInstancia(_instancia, "instancia.dat");
+            _escritorInstancia.EscribirInstancia(_instancia, NombreArchivoSalida);
 
             _fileSystemHelper.DidNotReceive().DirectoryExists(Arg.Any<string>());
             _fileSystemHelper.DidNotReceive().CreateDirectory(Arg.Any<string>());
@@ -50,9 +53,9 @@ namespace GeneradorInstancia.Tests
         [Fact]
         public void EscribirInstancia_DirectorioExistente_NoIntentaCrearlo()
         {
-            _fileSystemHelper.DirectoryExists("carpeta").Returns(true);
+            _fileSystemHelper.DirectoryExists(DirectorioSalida).Returns(true);
 
-            _escritorInstancia.EscribirInstancia(_instancia, "carpeta/instancia.dat");
+            _escritorInstancia.EscribirInstancia(_instancia, DirectorioSalida + "/" + NombreArchivoSalida);
 
             _fileSystemHelper.DidNotReceive().CreateDirectory(Arg.Any<string>());
         }
@@ -60,21 +63,19 @@ namespace GeneradorInstancia.Tests
         [Fact]
         public void EscribirInstancia_DirectorioNoExistente_LoCrea()
         {
-            _fileSystemHelper.DirectoryExists("carpeta").Returns(false);
+            _fileSystemHelper.DirectoryExists(DirectorioSalida).Returns(false);
 
-            _escritorInstancia.EscribirInstancia(_instancia, "carpeta/instancia.dat");
+            _escritorInstancia.EscribirInstancia(_instancia, DirectorioSalida + "/" + NombreArchivoSalida);
 
-            _fileSystemHelper.Received(1).CreateDirectory("carpeta");
+            _fileSystemHelper.Received(1).CreateDirectory(DirectorioSalida);
         }
 
         [Fact]
         public void EscribirInstancia_InstanciaValida_EscribeContenidoCorrecto()
         {
-            const string ruta = "instancia.dat";
+            _escritorInstancia.EscribirInstancia(new decimal[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } }, NombreArchivoSalida);
 
-            _escritorInstancia.EscribirInstancia(new decimal[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } }, ruta);
-
-            _fileSystemHelper.Received(1).WriteAllLines(ruta, Arg.Is<List<string>>(x =>
+            _fileSystemHelper.Received(1).WriteAllLines(NombreArchivoSalida, Arg.Is<List<string>>(x =>
                 x.Count == 3 &&
                 x[0] == "2 3" &&
                 x[1] == "1\t2\t3" &&
@@ -85,11 +86,9 @@ namespace GeneradorInstancia.Tests
         [Fact]
         public void EscribirInstancia_InstanciaVacia_EscribeSoloEncabezado()
         {
-            const string ruta = "vacio.dat";
+            _escritorInstancia.EscribirInstancia(new decimal[0, 0], NombreArchivoSalida);
 
-            _escritorInstancia.EscribirInstancia(new decimal[0, 0], ruta);
-
-            _fileSystemHelper.Received(1).WriteAllLines(ruta, Arg.Is<List<string>>(x =>
+            _fileSystemHelper.Received(1).WriteAllLines(NombreArchivoSalida, Arg.Is<List<string>>(x =>
                 x.Count == 1 &&
                 x[0] == "0 0"
             ));
@@ -102,7 +101,7 @@ namespace GeneradorInstancia.Tests
                 .When(x => x.WriteAllLines(Arg.Any<string>(), Arg.Any<List<string>>()))
                 .Throw(new IOException("Error de disco"));
 
-            var ex = Assert.Throws<IOException>(() => _escritorInstancia.EscribirInstancia(_instancia, "instancia.dat"));
+            var ex = Assert.Throws<IOException>(() => _escritorInstancia.EscribirInstancia(_instancia, NombreArchivoSalida));
             Assert.Equal("Error al escribir la instancia: Error de disco", ex.Message);
         }
     }
