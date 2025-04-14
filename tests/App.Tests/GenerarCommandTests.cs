@@ -8,12 +8,29 @@ namespace App.Tests
 {
     public class GenerarCommandTests
     {
+        private readonly Command _command;
+
+        public GenerarCommandTests()
+        {
+            _command = GenerarCommand.Create();
+        }
+
+        [Fact]
+        public void Create_NombreYOpciones_ConfiguradasCorrectamente()
+        {
+            Assert.Equal("generar", _command.Name);
+            Assert.Contains(_command.Options, o => o.Name == "atomos");
+            Assert.Contains(_command.Options, o => o.Name == "agentes");
+            Assert.Contains(_command.Options, o => o.Name == "valor-maximo");
+            Assert.Contains(_command.Options, o => o.Name == "output");
+            Assert.Contains(_command.Options, o => o.Name == "disjuntas");
+        }
+
         [Fact]
         public void Create_ValorMaximoNoEspecificado_UsaValorPorDefecto()
         {
-            var command = GenerarCommand.Create();
-            var valorMaximoOption = (Option<int>)command.Options.First(o => o.Name == "valor-maximo");
-            int valorMaximo = command.Parse("generar --atomos 5 --agentes 3").GetValueForOption(valorMaximoOption);
+            var valorMaximoOption = (Option<int>)_command.Options.First(o => o.Name == "valor-maximo");
+            int valorMaximo = _command.Parse("generar --atomos 5 --agentes 3").GetValueForOption(valorMaximoOption);
 
             Assert.Equal(GenerarCommand.ValorMaximoPorDefecto, valorMaximo);
         }
@@ -21,9 +38,8 @@ namespace App.Tests
         [Fact]
         public void Create_OutputNoEspecificada_UsaValorPorDefecto()
         {
-            var command = GenerarCommand.Create();
-            var outputOption = (Option<string>)command.Options.First(o => o.Name == "output");
-            string output = command.Parse("generar --atomos 5 --agentes 3").GetValueForOption(outputOption);
+            var outputOption = (Option<string>)_command.Options.First(o => o.Name == "output");
+            string output = _command.Parse("generar --atomos 5 --agentes 3").GetValueForOption(outputOption);
 
             Assert.Equal(GenerarCommand.RutaSalidaPorDefecto, output);
         }
@@ -31,24 +47,10 @@ namespace App.Tests
         [Fact]
         public void Create_DisjuntasNoEspecificada_UsaFalse()
         {
-            var command = GenerarCommand.Create();
-            var disjuntasOption = (Option<bool>)command.Options.First(o => o.Name == "disjuntas");
-            bool disjuntas = command.Parse("generar --atomos 5 --agentes 3").GetValueForOption(disjuntasOption);
+            var disjuntasOption = (Option<bool>)_command.Options.First(o => o.Name == "disjuntas");
+            bool disjuntas = _command.Parse("generar --atomos 5 --agentes 3").GetValueForOption(disjuntasOption);
 
             Assert.False(disjuntas);
-        }
-
-        [Fact]
-        public void Create_Command_ConfiguraOpcionesCorrectamente()
-        {
-            var command = GenerarCommand.Create();
-
-            Assert.Equal("generar", command.Name);
-            Assert.Contains(command.Options, o => o.Name == "atomos");
-            Assert.Contains(command.Options, o => o.Name == "agentes");
-            Assert.Contains(command.Options, o => o.Name == "valor-maximo");
-            Assert.Contains(command.Options, o => o.Name == "output");
-            Assert.Contains(command.Options, o => o.Name == "disjuntas");
         }
 
         [Fact]
