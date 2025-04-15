@@ -39,10 +39,7 @@ namespace GeneradorInstancia.Tests
         [Fact]
         public void Build_SinAtomosSeteados_LanzaInvalidOperationException()
         {
-            var ex = Assert.Throws<InvalidOperationException>(_instanciaBuilder
-                .ConCantidadDeAgentes(2)
-                .Build);
-
+            var ex = Assert.Throws<InvalidOperationException>(_instanciaBuilder.Build);
             Assert.Equal("Debe especificar el número de átomos antes de construir la instancia", ex.Message);
         }
 
@@ -68,6 +65,18 @@ namespace GeneradorInstancia.Tests
         }
 
         [Fact]
+        public void Build_SinTipoDeInstanciaSeteado_LanzaInvalidOperationException()
+        {
+            var ex = Assert.Throws<InvalidOperationException>(_instanciaBuilder
+                .ConCantidadDeAtomos(2)
+                .ConCantidadDeAgentes(2)
+                .ConValorMaximo(5)
+                .Build);
+
+            Assert.Equal("Debe especificar el tipo (disjunta o no disjunta) antes de construir la instancia", ex.Message);
+        }
+
+        [Fact]
         public void Build_ValoracionesDisjuntasConMasAgentesQueAtomos_LanzaInvalidOperationException()
         {
             var ex = Assert.Throws<InvalidOperationException>(_instanciaBuilder
@@ -81,12 +90,13 @@ namespace GeneradorInstancia.Tests
         }
 
         [Fact]
-        public void Build_AtomosYAgentesValidos_DevuelveMatrizCorrecta()
+        public void Build_ConfiguracionCorrecta_DevuelveMatrizCorrecta()
         {
             decimal[,] instancia = _instanciaBuilder
                 .ConCantidadDeAtomos(3)
                 .ConCantidadDeAgentes(2)
                 .ConValorMaximo(5)
+                .ConValoracionesDisjuntas(true)
                 .Build();
 
             Assert.Equal(3, instancia.GetLength(0));
@@ -102,6 +112,7 @@ namespace GeneradorInstancia.Tests
                 .ConCantidadDeAtomos(3)
                 .ConCantidadDeAgentes(3)
                 .ConValorMaximo(valorMaximo)
+                .ConValoracionesDisjuntas(false)
                 .Build();
 
             Assert.InRange(instancia[0, 0], 0, valorMaximo);

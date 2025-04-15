@@ -7,7 +7,7 @@ namespace GeneradorInstancia
         private int _cantidadAtomos;
         private int _cantidadAgentes;
         private int _valorMaximo;
-        private bool _valoracionesDisjuntas;
+        private bool? _valoracionesDisjuntas;
 
         private readonly GeneradorNumerosRandom _generadorNumerosRandom;
 
@@ -66,9 +66,12 @@ namespace GeneradorInstancia
             if (_valorMaximo == 0)
                 throw new InvalidOperationException("Debe especificar el valor máximo antes de construir la instancia");
 
+            if (!_valoracionesDisjuntas.HasValue)
+                throw new InvalidOperationException("Debe especificar el tipo (disjunta o no disjunta) antes de construir la instancia");
+
             decimal[,] instancia;
 
-            if (_valoracionesDisjuntas)
+            if (_valoracionesDisjuntas.Value)
                 instancia = ConstruirInstanciaDisjunta();
             else
                 instancia = ConstruirInstanciaNoDisjunta();

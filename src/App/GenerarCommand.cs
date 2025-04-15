@@ -25,9 +25,9 @@ namespace App
             command.AddOption(outputOption);
             command.AddOption(disjuntasOption);
 
-            command.SetHandler((atomos, agentes, max, output, disjuntas) =>
+            command.SetHandler((atomos, agentes, valorMaximo, output, disjuntas) =>
             {
-                var parametros = new ParametrosGeneracion(atomos, agentes, max, output, disjuntas);
+                var parametros = new ParametrosGeneracion(atomos, agentes, valorMaximo, output, disjuntas);
                 var builder = new InstanciaBuilder();
                 var escritor = new EscritorInstancia(new FileSystemHelper());
                 Handler(parametros, builder, escritor);
