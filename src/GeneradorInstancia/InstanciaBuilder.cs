@@ -4,11 +4,10 @@ namespace GeneradorInstancia
 {
     public class InstanciaBuilder
     {
-        private int _valorMaximo = 1000;
-        private bool _valoracionesDisjuntas = false;
-
         private int _cantidadAtomos;
         private int _cantidadAgentes;
+        private int _valorMaximo;
+        private bool? _valoracionesDisjuntas;
 
         private readonly GeneradorNumerosRandom _generadorNumerosRandom;
 
@@ -58,9 +57,21 @@ namespace GeneradorInstancia
 
         public virtual decimal[,] Build()
         {
+            if (_cantidadAtomos == 0)
+                throw new InvalidOperationException("Debe especificar el número de átomos antes de construir la instancia");
+
+            if (_cantidadAgentes == 0)
+                throw new InvalidOperationException("Debe especificar el número de agentes antes de construir la instancia");
+
+            if (_valorMaximo == 0)
+                throw new InvalidOperationException("Debe especificar el valor máximo antes de construir la instancia");
+
+            if (!_valoracionesDisjuntas.HasValue)
+                throw new InvalidOperationException("Debe especificar el tipo (disjunta o no disjunta) antes de construir la instancia");
+
             decimal[,] instancia;
 
-            if (_valoracionesDisjuntas)
+            if (_valoracionesDisjuntas.Value)
                 instancia = ConstruirInstanciaDisjunta();
             else
                 instancia = ConstruirInstanciaNoDisjunta();
@@ -76,7 +87,7 @@ namespace GeneradorInstancia
                 throw new InvalidOperationException(mensaje);
             }
 
-            decimal[,] instancia = ConstruirInstanciaVacia();
+            var instancia = new decimal[_cantidadAtomos, _cantidadAgentes];
 
             List<int> atomosDisponibles = Enumerable.Range(0, _cantidadAtomos).ToList();
             List<int> agentesDisponibles = Enumerable.Range(0, _cantidadAgentes).ToList();
@@ -110,7 +121,7 @@ namespace GeneradorInstancia
 
         private decimal[,] ConstruirInstanciaNoDisjunta()
         {
-            decimal[,] instancia = ConstruirInstanciaVacia();
+            var instancia = new decimal[_cantidadAtomos, _cantidadAgentes];
 
             for (int indiceAtomo = 0; indiceAtomo < _cantidadAtomos; indiceAtomo++)
             {
@@ -121,15 +132,6 @@ namespace GeneradorInstancia
                 }
             }
 
-            return instancia;
-        }
-
-        private decimal[,] ConstruirInstanciaVacia()
-        {
-            if (_cantidadAtomos == 0 || _cantidadAgentes == 0)
-                throw new InvalidOperationException("Debe especificar el número de átomos y agentes antes de construir la instancia");
-
-            var instancia = new decimal[_cantidadAtomos, _cantidadAgentes];
             return instancia;
         }
     }
