@@ -37,24 +37,23 @@ namespace GeneradorInstancia.Tests
         }
 
         [Fact]
-        public void Build_SinConfiguracionPrevia_LanzaInvalidOperationException()
+        public void Build_SinAtomosSeteados_LanzaInvalidOperationException()
         {
-            var ex = Assert.Throws<InvalidOperationException>(_instanciaBuilder.Build);
-            Assert.Equal("Debe especificar el número de átomos y agentes antes de construir la instancia", ex.Message);
+            var ex = Assert.Throws<InvalidOperationException>(_instanciaBuilder
+                .ConCantidadDeAgentes(2)
+                .Build);
+
+            Assert.Equal("Debe especificar el número de átomos antes de construir la instancia", ex.Message);
         }
 
         [Fact]
-        public void Build_SoloAtomosConfigurados_LanzaInvalidOperationException()
+        public void Build_SinAgentesSeteados_LanzaInvalidOperationException()
         {
-            var ex = Assert.Throws<InvalidOperationException>(_instanciaBuilder.ConCantidadDeAtomos(2).Build);
-            Assert.Equal("Debe especificar el número de átomos y agentes antes de construir la instancia", ex.Message);
-        }
+            var ex = Assert.Throws<InvalidOperationException>(_instanciaBuilder
+                .ConCantidadDeAtomos(2)
+                .Build);
 
-        [Fact]
-        public void Build_SoloAgentesConfigurados_LanzaInvalidOperationException()
-        {
-            var ex = Assert.Throws<InvalidOperationException>(_instanciaBuilder.ConCantidadDeAgentes(2).Build);
-            Assert.Equal("Debe especificar el número de átomos y agentes antes de construir la instancia", ex.Message);
+            Assert.Equal("Debe especificar el número de agentes antes de construir la instancia", ex.Message);
         }
 
         [Fact]
