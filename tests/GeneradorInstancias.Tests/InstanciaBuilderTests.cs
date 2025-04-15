@@ -57,11 +57,23 @@ namespace GeneradorInstancia.Tests
         }
 
         [Fact]
+        public void Build_SinValorMaximoSeteado_LanzaInvalidOperationException()
+        {
+            var ex = Assert.Throws<InvalidOperationException>(_instanciaBuilder
+                .ConCantidadDeAtomos(2)
+                .ConCantidadDeAgentes(2)
+                .Build);
+
+            Assert.Equal("Debe especificar el valor máximo antes de construir la instancia", ex.Message);
+        }
+
+        [Fact]
         public void Build_ValoracionesDisjuntasConMasAgentesQueAtomos_LanzaInvalidOperationException()
         {
             var ex = Assert.Throws<InvalidOperationException>(_instanciaBuilder
                 .ConCantidadDeAtomos(2)
                 .ConCantidadDeAgentes(3)
+                .ConValorMaximo(5)
                 .ConValoracionesDisjuntas(true)
                 .Build);
 
@@ -74,6 +86,7 @@ namespace GeneradorInstancia.Tests
             decimal[,] instancia = _instanciaBuilder
                 .ConCantidadDeAtomos(3)
                 .ConCantidadDeAgentes(2)
+                .ConValorMaximo(5)
                 .Build();
 
             Assert.Equal(3, instancia.GetLength(0));

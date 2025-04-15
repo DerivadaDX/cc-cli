@@ -4,11 +4,10 @@ namespace GeneradorInstancia
 {
     public class InstanciaBuilder
     {
-        private int _valorMaximo = 1000;
-        private bool _valoracionesDisjuntas = false;
-
         private int _cantidadAtomos;
         private int _cantidadAgentes;
+        private int _valorMaximo;
+        private bool _valoracionesDisjuntas;
 
         private readonly GeneradorNumerosRandom _generadorNumerosRandom;
 
@@ -63,6 +62,9 @@ namespace GeneradorInstancia
 
             if (_cantidadAgentes == 0)
                 throw new InvalidOperationException("Debe especificar el número de agentes antes de construir la instancia");
+
+            if (_valorMaximo == 0)
+                throw new InvalidOperationException("Debe especificar el valor máximo antes de construir la instancia");
 
             decimal[,] instancia;
 
