@@ -12,28 +12,18 @@
         [Fact]
         public void CrearDesdeMatrizDeValoraciones_MatrizVacia_LanzaArgumentException()
         {
-            var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones([]));
-            Assert.StartsWith("La matriz de valoraciones no puede estar vacía", ex.Message);
-        }
-
-        [Fact]
-        public void CrearDesdeMatrizDeValoraciones_MatrizConFilasDesiguales_LanzaArgumentException()
-        {
-            decimal[][] matriz = [
-                [0m, 0m, 1m],
-                [0.5m, 0.5m],
-            ];
+            var matriz = new decimal[0, 0];
             var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz));
-            Assert.StartsWith("Todas las filas de la matriz deben tener la misma longitud", ex.Message);
+            Assert.StartsWith("La matriz de valoraciones no puede estar vacía", ex.Message);
         }
 
         [Fact]
         public void CrearDesdeMatrizDeValoraciones_MatrizConAgentesSinValoraciones_LanzaArgumentException()
         {
-            decimal[][] matriz = [
-                [0, 1, 1],
-                [0, 1, 1],
-            ];
+            decimal[,] matriz = {
+                { 0, 1, 1 },
+                { 0, 1, 1 },
+            };
             var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz));
             Assert.StartsWith("El agente 1 no tiene valoraciones positivas sobre ningún átomo.", ex.Message);
         }
@@ -41,14 +31,15 @@
         [Fact]
         public void CrearDesdeMatrizDeValoraciones_MatrizValida_CreaInstanciaCorrectamente()
         {
-            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones([
-                [0, 3.9m],
-                [1, 1.2m],
-                [1, 4.6m],
-                [2, 1.5m],
-                [3, 5.3m],
-                [5, 0.0m],
-            ]);
+            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 0, 3.9m },
+                { 1, 1.2m },
+                { 1, 4.6m },
+                { 2, 1.5m },
+                { 3, 5.3m },
+                { 5, 0.0m },
+            });
 
             Assert.Equal(2, instanciaProblema.Agentes.Count);
             Assert.Equal(6, instanciaProblema.CantidadAtomos);
