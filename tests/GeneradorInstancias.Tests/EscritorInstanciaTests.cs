@@ -1,4 +1,5 @@
 ﻿using Common;
+using Generator;
 using NSubstitute;
 
 namespace GeneradorInstancia.Tests

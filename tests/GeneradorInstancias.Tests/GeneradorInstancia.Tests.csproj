@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\GeneradorInstancia\GeneradorInstancia.csproj" />
+    <ProjectReference Include="..\..\src\Generator\Generator.csproj" />
   </ItemGroup>
 
   <ItemGroup>

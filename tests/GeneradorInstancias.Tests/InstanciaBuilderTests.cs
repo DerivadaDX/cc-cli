@@ -1,3 +1,5 @@
+using Generator;
+
 namespace GeneradorInstancia.Tests
 {
     public class InstanciaBuilderTests
