@@ -1,6 +1,6 @@
 ﻿using System.CommandLine;
 using Common;
-using GeneradorInstancia;
+using Generator;
 
 namespace App
 {

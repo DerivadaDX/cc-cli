@@ -1,7 +1,7 @@
 ﻿using Common;
 using NSubstitute;
 
-namespace GeneradorInstancia.Tests
+namespace Generator.Tests
 {
     public class EscritorInstanciaTests
     {

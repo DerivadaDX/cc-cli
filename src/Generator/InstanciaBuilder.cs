@@ -1,6 +1,6 @@
 ﻿using Common;
 
-namespace GeneradorInstancia
+namespace Generator
 {
     public class InstanciaBuilder
     {
