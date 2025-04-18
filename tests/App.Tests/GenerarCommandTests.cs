@@ -1,7 +1,7 @@
 using System.CommandLine;
 using System.CommandLine.Parsing;
 using Common;
-using GeneradorInstancia;
+using Generator;
 using NSubstitute;
 
 namespace App.Tests
