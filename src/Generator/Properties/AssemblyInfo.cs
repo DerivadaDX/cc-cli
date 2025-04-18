@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("GeneradorInstancia.Tests")]
+[assembly: InternalsVisibleTo("Generator.Tests")]

@@ -1,6 +1,4 @@
-using Generator;
-
-namespace GeneradorInstancia.Tests
+namespace Generator.Tests
 {
     public class InstanciaBuilderTests
     {
