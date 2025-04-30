@@ -27,7 +27,16 @@ namespace Solver
             if (lineas.Length < 1)
                 throw new FormatException("El archivo está vacío o tiene un formato inválido");
 
-            ObtenerDimensiones(lineas[0]);
+            (int filas, int columnas) = ObtenerDimensiones(lineas[0]);
+            if (lineas.Length - 1 != filas)
+                throw new FormatException($"Filas esperadas: {filas}, encontradas: {lineas.Length - 1}");
+
+            for (int numeroFila = 1; numeroFila < lineas.Length; numeroFila++)
+            {
+                string[] valores = lineas[numeroFila].Trim().Split('\t');
+                if (valores.Length != columnas)
+                    throw new FormatException($"Fila {numeroFila}, columnas esperadas: {columnas}, encontradas: {valores.Length}");
+            }
         }
 
         private (int filas, int columnas) ObtenerDimensiones(string primeraLinea)
