@@ -125,12 +125,12 @@ namespace Solver.Tests
         [Theory]
         [InlineData("4.4\t5.5\t6.6")]
         [InlineData("   4.4\t5.5\t6.6   ")]
-        public void LeerInstancia_ArchivoValido_NoArrojaExcepciones(string segundaLinea)
+        public void LeerInstancia_ArchivoValido_NoArrojaExcepciones(string fila1)
         {
             _fileSystemHelper.ReadAllLines(RutaArchivo).Returns([
                 "2 3",
                 "1.1\t2.2\t3.3",
-                segundaLinea
+                fila1
             ]);
 
             decimal[,] instancia = _lectorInstancia.LeerInstancia(RutaArchivo);
