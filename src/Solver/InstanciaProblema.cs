@@ -51,7 +51,6 @@
             return instanciaProblema;
         }
 
-
         private static void ValidarMatriz(decimal[,] matrizValoraciones)
         {
             if (matrizValoraciones == null)
@@ -83,6 +82,5 @@
                 }
             }
         }
-
     }
 }
