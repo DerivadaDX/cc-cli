@@ -3,10 +3,10 @@
     public class InstanciaProblemaTests
     {
         [Fact]
-        public void CrearDesdeMatrizDeValoraciones_MatrizNull_LanzaArgumentException()
+        public void CrearDesdeMatrizDeValoraciones_MatrizNull_LanzaArgumentNullException()
         {
-            var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(null));
-            Assert.StartsWith("La matriz de valoraciones no puede ser null", ex.Message);
+            var ex = Assert.Throws<ArgumentNullException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(null));
+            Assert.Contains("matrizValoraciones", ex.Message);
         }
 
         [Fact]
@@ -25,7 +25,7 @@
                 { 0, 1, 1 },
             };
             var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz));
-            Assert.StartsWith("El agente 1 no tiene valoraciones positivas sobre ningún átomo.", ex.Message);
+            Assert.StartsWith("El agente 1 no tiene valoraciones positivas sobre ningún átomo", ex.Message);
         }
 
         [Fact]

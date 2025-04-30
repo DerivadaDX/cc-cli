@@ -28,8 +28,13 @@ namespace App
             command.SetHandler((atomos, agentes, valorMaximo, output, disjuntas) =>
             {
                 var parametros = new ParametrosGeneracion(atomos, agentes, valorMaximo, output, disjuntas);
-                var builder = new InstanciaBuilder();
-                var escritor = new EscritorInstancia(new FileSystemHelper());
+
+                var generadorNumerosRandom = GeneradorNumerosRandomFactory.Crear();
+                var builder = new InstanciaBuilder(generadorNumerosRandom);
+
+                var fileSystemHelper = FileSystemHelperFactory.Crear();
+                var escritor = new EscritorInstancia(fileSystemHelper);
+
                 Handler(parametros, builder, escritor);
             }, atomosOption, agentesOption, valorMaximoOption, outputOption, disjuntasOption);
 
