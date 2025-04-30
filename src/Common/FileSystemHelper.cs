@@ -25,5 +25,10 @@
         {
             return Path.GetFullPath(path);
         }
+
+        public virtual bool FileExists(string path)
+        {
+            return File.Exists(path);
+        }
     }
 }
