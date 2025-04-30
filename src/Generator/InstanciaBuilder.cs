@@ -13,7 +13,7 @@ namespace Generator
 
         public InstanciaBuilder(GeneradorNumerosRandom generadorNumerosRandom)
         {
-            ArgumentNullException.ThrowIfNull(generadorNumerosRandom);
+            ArgumentNullException.ThrowIfNull(generadorNumerosRandom, nameof(generadorNumerosRandom));
             _generadorNumerosRandom = generadorNumerosRandom;
         }
 
