@@ -9,8 +9,11 @@ namespace Solver.Individuos
 
         protected Individuo(List<int> cromosoma, InstanciaProblema problema)
         {
-            _cromosoma = cromosoma ?? throw new ArgumentException("El cromosoma no puede ser null", nameof(cromosoma));
-            _problema = problema ?? throw new ArgumentException("La instancia del problema no puede ser null", nameof(problema));
+            ArgumentNullException.ThrowIfNull(cromosoma, nameof(cromosoma));
+            ArgumentNullException.ThrowIfNull(problema, nameof(problema));
+
+            _cromosoma = cromosoma;
+            _problema = problema;
 
             if (cromosoma.Count == 0)
                 throw new ArgumentException("El cromosoma no puede estar vacío", nameof(cromosoma));

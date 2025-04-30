@@ -6,18 +6,18 @@ namespace Solver.Tests.Individuos
     public class IndividuoTests
     {
         [Fact]
-        public void Constructor_CromosomaNull_LanzaArgumentException()
+        public void Constructor_CromosomaNull_LanzaArgumentNullException()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,] { { 1 } });
-            var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub(null, instanciaProblema));
-            Assert.StartsWith("El cromosoma no puede ser null", ex.Message);
+            var ex = Assert.Throws<ArgumentNullException>(() => new IndividuoStub(null, instanciaProblema));
+            Assert.Contains("cromosoma", ex.Message);
         }
 
         [Fact]
-        public void Constructor_InstanciaProblemaNull_LanzaArgumentException()
+        public void Constructor_InstanciaProblemaNull_LanzaArgumentNullException()
         {
-            var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([], null));
-            Assert.StartsWith("La instancia del problema no puede ser null", ex.Message);
+            var ex = Assert.Throws<ArgumentNullException>(() => new IndividuoStub([], null));
+            Assert.Contains("problema", ex.Message);
         }
 
         [Fact]

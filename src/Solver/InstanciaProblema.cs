@@ -51,11 +51,9 @@
             return instanciaProblema;
         }
 
-
         private static void ValidarMatriz(decimal[,] matrizValoraciones)
         {
-            if (matrizValoraciones == null)
-                throw new ArgumentException("La matriz de valoraciones no puede ser null", nameof(matrizValoraciones));
+            ArgumentNullException.ThrowIfNull(matrizValoraciones, nameof(matrizValoraciones));
 
             int atomos = matrizValoraciones.GetLength(0);
             int agentes = matrizValoraciones.GetLength(1);
@@ -78,11 +76,10 @@
                 if (agenteNoValoraNingunAtomo)
                 {
                     throw new ArgumentException(
-                        $"El agente {indiceAgente + 1} no tiene valoraciones positivas sobre ningún átomo.",
+                        $"El agente {indiceAgente + 1} no tiene valoraciones positivas sobre ningún átomo",
                         nameof(matrizValoraciones));
                 }
             }
         }
-
     }
 }

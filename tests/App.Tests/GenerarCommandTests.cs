@@ -58,7 +58,7 @@ namespace App.Tests
         {
             var instanciaMock = new decimal[1, 1];
 
-            var builder = Substitute.For<InstanciaBuilder>();
+            var builder = Substitute.For<InstanciaBuilder>(Substitute.For<GeneradorNumerosRandom>());
             builder.ConCantidadDeAtomos(Arg.Any<int>()).Returns(builder);
             builder.ConCantidadDeAgentes(Arg.Any<int>()).Returns(builder);
             builder.ConValorMaximo(Arg.Any<int>()).Returns(builder);

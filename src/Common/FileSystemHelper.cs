@@ -2,6 +2,10 @@
 {
     public class FileSystemHelper
     {
+        internal FileSystemHelper()
+        {
+        }
+
         public virtual void CreateDirectory(string path)
         {
             Directory.CreateDirectory(path);
@@ -20,6 +24,16 @@
         public virtual string GetFullPath(string path)
         {
             return Path.GetFullPath(path);
+        }
+
+        public virtual bool FileExists(string path)
+        {
+            return File.Exists(path);
+        }
+
+        public virtual string[] ReadAllLines(string path)
+        {
+            return File.ReadAllLines(path);
         }
     }
 }

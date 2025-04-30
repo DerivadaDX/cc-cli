@@ -8,13 +8,13 @@ namespace Generator
 
         public EscritorInstancia(FileSystemHelper fileSystem)
         {
-            ArgumentNullException.ThrowIfNull(fileSystem);
+            ArgumentNullException.ThrowIfNull(fileSystem, nameof(fileSystem));
             _fileSystemHelper = fileSystem;
         }
 
         public virtual void EscribirInstancia(decimal[,] instancia, string rutaArchivo)
         {
-            ArgumentNullException.ThrowIfNull(instancia);
+            ArgumentNullException.ThrowIfNull(instancia, nameof(instancia));
             if (string.IsNullOrWhiteSpace(rutaArchivo))
                 throw new ArgumentException("La ruta no puede estar vacía", nameof(rutaArchivo));
 

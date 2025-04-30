@@ -4,12 +4,12 @@
     {
         private readonly Random _random;
 
-        public GeneradorNumerosRandom()
+        internal GeneradorNumerosRandom()
         {
             _random = new Random();
         }
 
-        public GeneradorNumerosRandom(int seed)
+        internal GeneradorNumerosRandom(int seed)
         {
             if (seed < 0)
                 throw new ArgumentException($"La semilla no puede ser negativa: {seed}", nameof(seed));
