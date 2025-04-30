@@ -2,6 +2,10 @@
 {
     public class FileSystemHelper
     {
+        internal FileSystemHelper()
+        {
+        }
+
         public virtual void CreateDirectory(string path)
         {
             Directory.CreateDirectory(path);

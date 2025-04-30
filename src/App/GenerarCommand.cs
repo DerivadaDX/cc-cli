@@ -29,7 +29,8 @@ namespace App
             {
                 var parametros = new ParametrosGeneracion(atomos, agentes, valorMaximo, output, disjuntas);
                 var builder = new InstanciaBuilder();
-                var escritor = new EscritorInstancia(new FileSystemHelper());
+                var fileSystemHelper = FileSystemHelperFactory.Crear();
+                var escritor = new EscritorInstancia(fileSystemHelper);
                 Handler(parametros, builder, escritor);
             }, atomosOption, agentesOption, valorMaximoOption, outputOption, disjuntasOption);
 
