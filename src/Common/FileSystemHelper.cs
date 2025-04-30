@@ -30,5 +30,10 @@
         {
             return File.Exists(path);
         }
+
+        public virtual string[] ReadAllLines(string path)
+        {
+            return File.ReadAllLines(path);
+        }
     }
 }

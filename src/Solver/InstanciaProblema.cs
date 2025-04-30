@@ -76,7 +76,7 @@
                 if (agenteNoValoraNingunAtomo)
                 {
                     throw new ArgumentException(
-                        $"El agente {indiceAgente + 1} no tiene valoraciones positivas sobre ningún átomo.",
+                        $"El agente {indiceAgente + 1} no tiene valoraciones positivas sobre ningún átomo",
                         nameof(matrizValoraciones));
                 }
             }

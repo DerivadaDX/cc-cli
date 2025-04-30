@@ -25,7 +25,7 @@
                 { 0, 1, 1 },
             };
             var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz));
-            Assert.StartsWith("El agente 1 no tiene valoraciones positivas sobre ningún átomo.", ex.Message);
+            Assert.StartsWith("El agente 1 no tiene valoraciones positivas sobre ningún átomo", ex.Message);
         }
 
         [Fact]
