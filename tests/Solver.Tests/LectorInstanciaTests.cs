@@ -109,5 +109,17 @@ namespace Solver.Tests
             var ex = Assert.Throws<FormatException>(() => _lectorInstancia.LeerInstancia(RutaArchivo));
             Assert.StartsWith($"Fila {filaConError}, columnas esperadas: 3, encontradas: {columnasEncontradas}", ex.Message);
         }
+
+        [Theory]
+        [InlineData("@\t2\t3", "4\t5\t6", "@", 0, 0)]
+        [InlineData("1\t2\t3", "4\t5\tAlgo", "Algo", 1, 2)]
+        public void LeerInstancia_CeldaConValorInvalido_ArrojaFormatException(
+            string fila0, string fila1, string valorInvalido, int filaConError, int columnaConError)
+        {
+            _fileSystemHelper.ReadAllLines(RutaArchivo).Returns(["2 3", fila0, fila1]);
+
+            var ex = Assert.Throws<FormatException>(() => _lectorInstancia.LeerInstancia(RutaArchivo));
+            Assert.Equal($"Valor inválido '{valorInvalido}' en ({filaConError}, {columnaConError})", ex.Message);
+        }
     }
 }

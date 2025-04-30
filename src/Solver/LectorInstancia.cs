@@ -22,6 +22,8 @@ namespace Solver
 
             string[] lineas = _fileSystemHelper.ReadAllLines(rutaArchivo);
             ValidarFormatoArchivo(lineas);
+
+            decimal[,] instancia = ParsearLineasAInstancia(lineas);
         }
 
         private void ValidarFormatoArchivo(string[] lineas)
@@ -40,6 +42,27 @@ namespace Solver
                 if (columnas != valores.Length)
                     throw new FormatException($"Fila {indiceFila}, columnas esperadas: {columnas}, encontradas: {valores.Length}");
             }
+        }
+
+        private decimal[,] ParsearLineasAInstancia(string[] lineas)
+        {
+            (int filas, int columnas) = ObtenerDimensiones(lineas[0]);
+            var matriz = new decimal[filas, columnas];
+
+            for (int indiceFila = 0; indiceFila < filas; indiceFila++)
+            {
+                string[] valores = lineas[indiceFila + 1].Trim().Split(SeparadorColumnas);
+                for (int indiceColumna = 0; indiceColumna < columnas; indiceColumna++)
+                {
+                    bool valorInvalido = !decimal.TryParse(valores[indiceColumna], out decimal valor);
+                    if (valorInvalido)
+                        throw new FormatException($"Valor inválido '{valores[indiceColumna]}' en ({indiceFila}, {indiceColumna})");
+
+                    matriz[indiceFila, indiceColumna] = valor;
+                }
+            }
+
+            return matriz;
         }
 
         private (int filas, int columnas) ObtenerDimensiones(string primeraLinea)
