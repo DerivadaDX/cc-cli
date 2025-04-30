@@ -2,19 +2,19 @@
 
 namespace Solver
 {
-    internal class LectorInstancia
+    internal class LectorArchivoMatrizValoraciones
     {
         private const char SeparadorColumnas = '\t';
 
-        private FileSystemHelper _fileSystemHelper;
+        private readonly FileSystemHelper _fileSystemHelper;
 
-        public LectorInstancia(FileSystemHelper fileSystemHelper)
+        public LectorArchivoMatrizValoraciones(FileSystemHelper fileSystemHelper)
         {
             ArgumentNullException.ThrowIfNull(fileSystemHelper, nameof(fileSystemHelper));
             _fileSystemHelper = fileSystemHelper;
         }
 
-        internal decimal[,] LeerInstancia(string rutaArchivo)
+        internal decimal[,] Leer(string rutaArchivo)
         {
             ArgumentNullException.ThrowIfNull(rutaArchivo, nameof(rutaArchivo));
             if (!_fileSystemHelper.FileExists(rutaArchivo))
@@ -23,8 +23,8 @@ namespace Solver
             string[] lineas = _fileSystemHelper.ReadAllLines(rutaArchivo);
             ValidarFormatoArchivo(lineas);
 
-            decimal[,] instancia = ParsearLineasAInstancia(lineas);
-            return instancia;
+            decimal[,] matriz = ParsearLineasAMatriz(lineas);
+            return matriz;
         }
 
         private void ValidarFormatoArchivo(string[] lineas)
@@ -32,7 +32,7 @@ namespace Solver
             if (lineas.Length < 1)
                 throw new FormatException("El archivo está vacío o tiene un formato inválido");
 
-            (int filas, int columnas) = ObtenerDimensiones(lineas[0]);
+            (int filas, int columnas) = ObtenerDimensionesMatriz(lineas[0]);
 
             if (filas != lineas.Length - 1)
                 throw new FormatException($"Filas esperadas: {filas}, encontradas: {lineas.Length - 1}");
@@ -45,9 +45,9 @@ namespace Solver
             }
         }
 
-        private decimal[,] ParsearLineasAInstancia(string[] lineas)
+        private decimal[,] ParsearLineasAMatriz(string[] lineas)
         {
-            (int filas, int columnas) = ObtenerDimensiones(lineas[0]);
+            (int filas, int columnas) = ObtenerDimensionesMatriz(lineas[0]);
             var matriz = new decimal[filas, columnas];
 
             for (int indiceFila = 0; indiceFila < filas; indiceFila++)
@@ -66,7 +66,7 @@ namespace Solver
             return matriz;
         }
 
-        private (int filas, int columnas) ObtenerDimensiones(string primeraLinea)
+        private (int filas, int columnas) ObtenerDimensionesMatriz(string primeraLinea)
         {
             string[] partes = primeraLinea.Trim().Split(' ');
             if (partes.Length != 2)
