@@ -5,6 +5,15 @@ namespace Solver.Tests
 {
     public class LectorInstanciaTests
     {
+        private readonly FileSystemHelper _fileSystemHelper;
+        private readonly LectorInstancia _lectorInstancia;
+
+        public LectorInstanciaTests()
+        {
+            _fileSystemHelper = Substitute.For<FileSystemHelper>();
+            _lectorInstancia = new LectorInstancia(_fileSystemHelper);
+        }
+
         [Fact]
         public void Constructor_FileSystemHelperNull_ArrojaArgumentNullException()
         {
@@ -15,8 +24,7 @@ namespace Solver.Tests
         [Fact]
         public void LeerInstancia_RutaNull_ArrojaArgumentNullException()
         {
-            var lectorInstancia = new LectorInstancia(Substitute.For<FileSystemHelper>());
-            var ex = Assert.Throws<ArgumentNullException>(() => lectorInstancia.LeerInstancia(null));
+            var ex = Assert.Throws<ArgumentNullException>(() => _lectorInstancia.LeerInstancia(null));
             Assert.Contains("rutaArchivo", ex.Message);
         }
 
@@ -26,12 +34,9 @@ namespace Solver.Tests
         [InlineData("rutaArchivo.txt")]
         public void LeerInstancia_ArchivoNoExistente_ArrojaArgumentException(string rutaArchivo)
         {
-            var fileSystemHelper = Substitute.For<FileSystemHelper>();
-            fileSystemHelper.FileExists(Arg.Any<string>()).Returns(false);
+            _fileSystemHelper.FileExists(Arg.Any<string>()).Returns(false);
 
-            var lectorInstancia = new LectorInstancia(Substitute.For<FileSystemHelper>());
-
-            var ex = Assert.Throws<ArgumentException>(() => lectorInstancia.LeerInstancia(rutaArchivo));
+            var ex = Assert.Throws<ArgumentException>(() => _lectorInstancia.LeerInstancia(rutaArchivo));
             Assert.StartsWith($"No existe el archivo '{rutaArchivo}'", ex.Message);
         }
     }
