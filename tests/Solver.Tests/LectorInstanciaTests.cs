@@ -98,13 +98,13 @@ namespace Solver.Tests
         }
 
         [Theory]
-        [InlineData("", "4\t5\t6", "7\t8\t9", 1, 1)]
-        [InlineData("1\t2\t3", "4\t5", "7\t8\t9", 2, 2)]
-        [InlineData("1\t2\t3", "4\t5\t6", "7\t8\t9\t0", 3, 4)]
+        [InlineData("", "4\t5\t6", "7\t8\t9", 0, 1)]
+        [InlineData("1\t2\t3", "4\t5", "7\t8\t9", 1, 2)]
+        [InlineData("1\t2\t3", "4\t5\t6", "7\t8\t9\t0", 2, 4)]
         public void LeerInstancia_NumeroColumnasEsperadasNoCoincideConEncontradas_ArrojaFormatException(
-            string fila1, string fila2, string fila3, int filaConError, int columnasEncontradas)
+            string fila0, string fila1, string fila2, int filaConError, int columnasEncontradas)
         {
-            _fileSystemHelper.ReadAllLines(RutaArchivo).Returns(["3 3", fila1, fila2, fila3]);
+            _fileSystemHelper.ReadAllLines(RutaArchivo).Returns(["3 3", fila0, fila1, fila2]);
 
             var ex = Assert.Throws<FormatException>(() => _lectorInstancia.LeerInstancia(RutaArchivo));
             Assert.StartsWith($"Fila {filaConError}, columnas esperadas: 3, encontradas: {columnasEncontradas}", ex.Message);

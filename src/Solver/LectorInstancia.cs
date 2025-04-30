@@ -34,11 +34,11 @@ namespace Solver
             if (filas != lineas.Length - 1)
                 throw new FormatException($"Filas esperadas: {filas}, encontradas: {lineas.Length - 1}");
 
-            for (int numeroFila = 1; numeroFila < lineas.Length; numeroFila++)
+            for (int indiceFila = 0; indiceFila < filas; indiceFila++)
             {
-                string[] valores = lineas[numeroFila].Trim().Split(SeparadorColumnas);
+                string[] valores = lineas[indiceFila + 1].Trim().Split(SeparadorColumnas);
                 if (columnas != valores.Length)
-                    throw new FormatException($"Fila {numeroFila}, columnas esperadas: {columnas}, encontradas: {valores.Length}");
+                    throw new FormatException($"Fila {indiceFila}, columnas esperadas: {columnas}, encontradas: {valores.Length}");
             }
         }
 
