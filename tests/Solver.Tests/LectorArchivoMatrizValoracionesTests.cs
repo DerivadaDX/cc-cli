@@ -68,6 +68,7 @@ namespace Solver.Tests
 
         [Theory]
         [InlineData("@ 1", "@")]
+        [InlineData("1.1 1", "1.1")]
         [InlineData("Algo 2", "Algo")]
         public void Leer_CantidadFilasInvalida_ArrojaFormatException(string primeraLinea, string valorFilas)
         {
