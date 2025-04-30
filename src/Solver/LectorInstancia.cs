@@ -4,6 +4,8 @@ namespace Solver
 {
     internal class LectorInstancia
     {
+        private const char SeparadorColumnas = '\t';
+
         private FileSystemHelper _fileSystemHelper;
 
         public LectorInstancia(FileSystemHelper fileSystemHelper)
@@ -28,13 +30,14 @@ namespace Solver
                 throw new FormatException("El archivo está vacío o tiene un formato inválido");
 
             (int filas, int columnas) = ObtenerDimensiones(lineas[0]);
-            if (lineas.Length - 1 != filas)
+
+            if (filas != lineas.Length - 1)
                 throw new FormatException($"Filas esperadas: {filas}, encontradas: {lineas.Length - 1}");
 
             for (int numeroFila = 1; numeroFila < lineas.Length; numeroFila++)
             {
-                string[] valores = lineas[numeroFila].Trim().Split('\t');
-                if (valores.Length != columnas)
+                string[] valores = lineas[numeroFila].Trim().Split(SeparadorColumnas);
+                if (columnas != valores.Length)
                     throw new FormatException($"Fila {numeroFila}, columnas esperadas: {columnas}, encontradas: {valores.Length}");
             }
         }
