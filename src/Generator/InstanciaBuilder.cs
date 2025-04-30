@@ -11,9 +11,10 @@ namespace Generator
 
         private readonly GeneradorNumerosRandom _generadorNumerosRandom;
 
-        public InstanciaBuilder()
+        public InstanciaBuilder(GeneradorNumerosRandom generadorNumerosRandom)
         {
-            _generadorNumerosRandom = GeneradorNumerosRandomFactory.Crear();
+            ArgumentNullException.ThrowIfNull(generadorNumerosRandom);
+            _generadorNumerosRandom = generadorNumerosRandom;
         }
 
         public virtual InstanciaBuilder ConCantidadDeAtomos(int cantidadAtomos)

@@ -1,3 +1,6 @@
+using Common;
+using NSubstitute;
+
 namespace Generator.Tests
 {
     public class InstanciaBuilderTests
@@ -6,7 +9,14 @@ namespace Generator.Tests
 
         public InstanciaBuilderTests()
         {
-            _instanciaBuilder = new InstanciaBuilder();
+            var generadorNumerosRandom = Substitute.For<GeneradorNumerosRandom>();
+            _instanciaBuilder = new InstanciaBuilder(generadorNumerosRandom);
+        }
+
+        [Fact]
+        public void Constructor_GeneradorNumerosRandomNull_LanzaArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => new InstanciaBuilder(null));
         }
 
         [Theory]
@@ -127,71 +137,69 @@ namespace Generator.Tests
         }
 
         [Fact]
-        public void Build_SinConfigurarValoracionesDisjuntas_CreaNoDisjuntasPorDefecto()
-        {
-            decimal[,] instancia = _instanciaBuilder
-                .ConCantidadDeAtomos(3)
-                .ConCantidadDeAgentes(3)
-                .ConValorMaximo(1)
-                .ConValoracionesDisjuntas(false)
-                .Build();
-
-            Assert.NotEqual(0, instancia[0, 0]);
-            Assert.NotEqual(0, instancia[0, 1]);
-            Assert.NotEqual(0, instancia[0, 2]);
-            Assert.NotEqual(0, instancia[1, 0]);
-            Assert.NotEqual(0, instancia[1, 1]);
-            Assert.NotEqual(0, instancia[1, 2]);
-            Assert.NotEqual(0, instancia[2, 0]);
-            Assert.NotEqual(0, instancia[2, 1]);
-            Assert.NotEqual(0, instancia[2, 2]);
-        }
-
-        [Fact]
         public void Build_ValoracionesDisjuntas_CadaFilaTieneUnSoloValorPositivo()
         {
-            const int agentes = 3;
+            var generadorNumerosRandom = Substitute.For<GeneradorNumerosRandom>();
+            generadorNumerosRandom.Siguiente(Arg.Any<int>(), Arg.Any<int>()).Returns(0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4);
 
-            decimal[,] instancia = _instanciaBuilder
+            decimal[,] instancia = new InstanciaBuilder(generadorNumerosRandom)
                 .ConCantidadDeAtomos(4)
-                .ConCantidadDeAgentes(agentes)
+                .ConCantidadDeAgentes(3)
                 .ConValorMaximo(5)
                 .ConValoracionesDisjuntas(true)
                 .Build();
 
-            Assert.Equal(1, Enumerable.Range(0, agentes).Count(j => instancia[0, j] > 0));
-            Assert.Equal(1, Enumerable.Range(0, agentes).Count(j => instancia[1, j] > 0));
-            Assert.Equal(1, Enumerable.Range(0, agentes).Count(j => instancia[2, j] > 0));
-            Assert.Equal(1, Enumerable.Range(0, agentes).Count(j => instancia[3, j] > 0));
+            Assert.Equal(1, instancia[0, 0]);
+            Assert.Equal(0, instancia[0, 1]);
+            Assert.Equal(0, instancia[0, 2]);
+
+            Assert.Equal(0, instancia[1, 0]);
+            Assert.Equal(2, instancia[1, 1]);
+            Assert.Equal(0, instancia[1, 2]);
+
+            Assert.Equal(0, instancia[2, 0]);
+            Assert.Equal(0, instancia[2, 1]);
+            Assert.Equal(3, instancia[2, 2]);
+
+            Assert.Equal(4, instancia[3, 0]);
+            Assert.Equal(0, instancia[3, 1]);
+            Assert.Equal(0, instancia[3, 2]);
         }
 
         [Fact]
         public void Build_UnSoloAgenteValoracionesDisjuntas_AsignaTodaLaColumnaAlAgente()
         {
-            const int agentes = 1;
+            var generadorNumerosRandom = Substitute.For<GeneradorNumerosRandom>();
+            generadorNumerosRandom.Siguiente(Arg.Any<int>(), Arg.Any<int>()).Returns(0, 0, 1, 0, 0, 2, 0, 0, 3);
 
-            decimal[,] instancia = _instanciaBuilder
+            decimal[,] instancia = new InstanciaBuilder(generadorNumerosRandom)
                 .ConCantidadDeAtomos(3)
-                .ConCantidadDeAgentes(agentes)
+                .ConCantidadDeAgentes(1)
                 .ConValorMaximo(5)
                 .ConValoracionesDisjuntas(true)
                 .Build();
 
-            Assert.Equal(1, Enumerable.Range(0, agentes).Count(j => instancia[0, j] > 0));
-            Assert.Equal(1, Enumerable.Range(0, agentes).Count(j => instancia[1, j] > 0));
-            Assert.Equal(1, Enumerable.Range(0, agentes).Count(j => instancia[2, j] > 0));
+            Assert.Equal(1, instancia[0, 0]);
+            Assert.Equal(2, instancia[1, 0]);
+            Assert.Equal(3, instancia[2, 0]);
         }
 
         [Fact]
         public void Build_ValoracionesNoDisjuntas_NingunaCeldaValeCero()
         {
-            decimal[,] instancia = _instanciaBuilder
+            const int valorMaximo = 5;
+
+            var generadorNumerosRandom = Substitute.For<GeneradorNumerosRandom>();
+            generadorNumerosRandom.Siguiente(1, valorMaximo + 1).Returns(1);
+
+            decimal[,] instancia = new InstanciaBuilder(generadorNumerosRandom)
                 .ConCantidadDeAtomos(3)
                 .ConCantidadDeAgentes(3)
-                .ConValorMaximo(1)
+                .ConValorMaximo(valorMaximo)
                 .ConValoracionesDisjuntas(false)
                 .Build();
 
+            generadorNumerosRandom.Received(9).Siguiente(1, valorMaximo + 1);
             Assert.NotEqual(0, instancia[0, 0]);
             Assert.NotEqual(0, instancia[0, 1]);
             Assert.NotEqual(0, instancia[0, 2]);
