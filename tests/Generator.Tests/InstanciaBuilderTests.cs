@@ -16,7 +16,8 @@ namespace Generator.Tests
         [Fact]
         public void Constructor_GeneradorNumerosRandomNull_LanzaArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new InstanciaBuilder(null));
+            var ex = Assert.Throws<ArgumentNullException>(() => new InstanciaBuilder(null));
+            Assert.Contains("generadorNumerosRandom", ex.Message);
         }
 
         [Theory]

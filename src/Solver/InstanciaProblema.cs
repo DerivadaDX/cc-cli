@@ -53,8 +53,7 @@
 
         private static void ValidarMatriz(decimal[,] matrizValoraciones)
         {
-            if (matrizValoraciones == null)
-                throw new ArgumentException("La matriz de valoraciones no puede ser null", nameof(matrizValoraciones));
+            ArgumentNullException.ThrowIfNull(matrizValoraciones, nameof(matrizValoraciones));
 
             int atomos = matrizValoraciones.GetLength(0);
             int agentes = matrizValoraciones.GetLength(1);

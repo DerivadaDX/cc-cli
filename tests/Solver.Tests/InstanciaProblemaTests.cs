@@ -3,10 +3,10 @@
     public class InstanciaProblemaTests
     {
         [Fact]
-        public void CrearDesdeMatrizDeValoraciones_MatrizNull_LanzaArgumentException()
+        public void CrearDesdeMatrizDeValoraciones_MatrizNull_LanzaArgumentNullException()
         {
-            var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(null));
-            Assert.StartsWith("La matriz de valoraciones no puede ser null", ex.Message);
+            var ex = Assert.Throws<ArgumentNullException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(null));
+            Assert.Contains("matrizValoraciones", ex.Message);
         }
 
         [Fact]
