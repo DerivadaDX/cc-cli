@@ -14,7 +14,7 @@ namespace Solver
             _fileSystemHelper = fileSystemHelper;
         }
 
-        internal void LeerInstancia(string rutaArchivo)
+        internal decimal[,] LeerInstancia(string rutaArchivo)
         {
             ArgumentNullException.ThrowIfNull(rutaArchivo, nameof(rutaArchivo));
             if (!_fileSystemHelper.FileExists(rutaArchivo))
@@ -24,6 +24,7 @@ namespace Solver
             ValidarFormatoArchivo(lineas);
 
             decimal[,] instancia = ParsearLineasAInstancia(lineas);
+            return instancia;
         }
 
         private void ValidarFormatoArchivo(string[] lineas)

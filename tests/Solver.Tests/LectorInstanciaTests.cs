@@ -121,5 +121,27 @@ namespace Solver.Tests
             var ex = Assert.Throws<FormatException>(() => _lectorInstancia.LeerInstancia(RutaArchivo));
             Assert.Equal($"Valor inválido '{valorInvalido}' en ({filaConError}, {columnaConError})", ex.Message);
         }
+
+        [Theory]
+        [InlineData("4.4\t5.5\t6.6")]
+        [InlineData("   4.4\t5.5\t6.6   ")]
+        public void LeerInstancia_ArchivoValido_NoArrojaExcepciones(string segundaLinea)
+        {
+            _fileSystemHelper.ReadAllLines(RutaArchivo).Returns([
+                "2 3",
+                "1.1\t2.2\t3.3",
+                segundaLinea
+            ]);
+
+            decimal[,] instancia = _lectorInstancia.LeerInstancia(RutaArchivo);
+            Assert.Equal(2, instancia.GetLength(0));
+            Assert.Equal(3, instancia.GetLength(1));
+            Assert.Equal(1.1m, instancia[0, 0]);
+            Assert.Equal(2.2m, instancia[0, 1]);
+            Assert.Equal(3.3m, instancia[0, 2]);
+            Assert.Equal(4.4m, instancia[1, 0]);
+            Assert.Equal(5.5m, instancia[1, 1]);
+            Assert.Equal(6.6m, instancia[1, 2]);
+        }
     }
 }
