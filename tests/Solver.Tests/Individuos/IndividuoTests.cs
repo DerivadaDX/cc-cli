@@ -114,6 +114,26 @@ namespace Solver.Tests.Individuos
             Assert.StartsWith("Hay porciones asignadas a más de un agente: (2, 3)", ex.Message);
         }
 
+        [Fact]
+        public void Constructor_CromosomaValido_NoLanzaExcepciones()
+        {
+            // Cortes: 1, Asignaciones: 2, 1
+            // - 1ra porción se asigna al agente 2
+            // - 2da Porción se asigna al agente 1
+            var cromosomaValido = new List<int> { 1, 2, 1 };
+
+            // 3 átomos, 2 agentes
+            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 1m, 0m },
+                { 0m, 1m },
+                { 0m, 1m },
+            });
+
+            var ex = Record.Exception(() => new IndividuoStub(cromosomaValido, instanciaProblema));
+            Assert.Null(ex);
+        }
+
         private class IndividuoStub : Individuo
         {
             internal IndividuoStub(List<int> cromosoma, InstanciaProblema problema) : base(cromosoma, problema)
