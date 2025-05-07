@@ -1,15 +1,12 @@
-﻿namespace Solver
+﻿using Solver.Individuos;
+
+namespace Solver
 {
     internal class AlgoritmoGenetico
     {
-        private readonly int _tamañoPoblacion;
-
-        public AlgoritmoGenetico(int tamañoPoblacion)
+        public AlgoritmoGenetico(List<Individuo> poblacion)
         {
-            if (tamañoPoblacion <= 0)
-                throw new ArgumentException($"El tamaño de la población debe ser positivo: {tamañoPoblacion}");
-
-            _tamañoPoblacion = tamañoPoblacion;
+            ArgumentNullException.ThrowIfNull(poblacion, nameof(poblacion));
         }
     }
 }

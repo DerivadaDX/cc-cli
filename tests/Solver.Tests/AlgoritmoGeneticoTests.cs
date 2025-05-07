@@ -2,13 +2,11 @@
 {
     public class AlgoritmoGeneticoTests
     {
-        [Theory]
-        [InlineData(0)]
-        [InlineData(-1)]
-        public void Constructor_TamañoPoblacionInvalido_ArrojaArgumentException(int tamañoPoblacion)
+        [Fact]
+        public void Constructor_PoblacionNull_ArrojaArgumentNullException()
         {
-            var ex = Assert.Throws<ArgumentException>(() => new AlgoritmoGenetico(tamañoPoblacion));
-            Assert.StartsWith($"El tamaño de la población debe ser positivo: {tamañoPoblacion}", ex.Message);
+            var ex = Assert.Throws<ArgumentNullException>(() => new AlgoritmoGenetico(null));
+            Assert.Equal("poblacion", ex.ParamName);
         }
     }
 }
