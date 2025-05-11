@@ -8,7 +8,7 @@ namespace Solver
 
         private readonly FileSystemHelper _fileSystemHelper;
 
-        public LectorArchivoMatrizValoraciones(FileSystemHelper fileSystemHelper)
+        internal LectorArchivoMatrizValoraciones(FileSystemHelper fileSystemHelper)
         {
             ArgumentNullException.ThrowIfNull(fileSystemHelper, nameof(fileSystemHelper));
             _fileSystemHelper = fileSystemHelper;
