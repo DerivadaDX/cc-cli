@@ -7,6 +7,9 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+
+    <!-- Deshabilito CA1822:Mark members as static -->
+    <NoWarn>CA1822</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

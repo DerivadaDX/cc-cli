@@ -22,13 +22,15 @@ namespace Generator.Tests
         [Fact]
         public void Constructor_FileSystemNull_LanzaArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new EscritorInstancia(null));
+            var ex = Assert.Throws<ArgumentNullException>(() => new EscritorInstancia(null));
+            Assert.Contains("fileSystem", ex.Message);
         }
 
         [Fact]
         public void EscribirInstancia_InstanciaNull_LanzaArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => _escritorInstancia.EscribirInstancia(null, NombreArchivoSalida));
+            var ex = Assert.Throws<ArgumentNullException>(() => _escritorInstancia.EscribirInstancia(null, NombreArchivoSalida));
+            Assert.Contains("instancia", ex.Message);
         }
 
         [Theory]
