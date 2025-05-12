@@ -7,6 +7,7 @@
         {
             var ex = Assert.Throws<ArgumentException>(() => new GeneradorNumerosRandom(-1));
             Assert.StartsWith("La semilla no puede ser negativa: -1", ex.Message);
+            Assert.Equal("seed", ex.ParamName);
         }
 
         [Fact]

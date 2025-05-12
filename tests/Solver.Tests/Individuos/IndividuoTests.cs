@@ -9,23 +9,26 @@ namespace Solver.Tests.Individuos
         public void Constructor_CromosomaNull_LanzaArgumentNullException()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,] { { 1 } });
+
             var ex = Assert.Throws<ArgumentNullException>(() => new IndividuoStub(null, instanciaProblema));
-            Assert.Contains("cromosoma", ex.Message);
+            Assert.Equal("cromosoma", ex.ParamName);
         }
 
         [Fact]
         public void Constructor_InstanciaProblemaNull_LanzaArgumentNullException()
         {
             var ex = Assert.Throws<ArgumentNullException>(() => new IndividuoStub([], null));
-            Assert.Contains("problema", ex.Message);
+            Assert.Equal("problema", ex.ParamName);
         }
 
         [Fact]
         public void Constructor_CromosomaVacio_LanzaArgumentException()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,] { { 1 } });
+
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([], instanciaProblema));
             Assert.StartsWith("El cromosoma no puede estar vacío", ex.Message);
+            Assert.Equal("cromosoma", ex.ParamName);
         }
 
         [Fact]
@@ -34,8 +37,10 @@ namespace Solver.Tests.Individuos
             // Para k agentes se esperan k-1 cortes y k asignaciones
             decimal[,] matriz = new decimal[,] { { 1m, 0m }, { 0m, 1m } };
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz);
+
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([1, 2], instanciaProblema));
             Assert.StartsWith("Cantidad de genes inválida. Esperada: 3, recibida: 2", ex.Message);
+            Assert.Equal("cromosoma", ex.ParamName);
         }
 
         [Fact]
@@ -43,8 +48,10 @@ namespace Solver.Tests.Individuos
         {
             decimal[,] matriz = new decimal[,] { { 1m, 0m }, { 0m, 1m } };
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz);
+
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([-1, 2, 1], instanciaProblema));
             Assert.StartsWith($"Posición del primer corte no puede ser negativa: -1", ex.Message);
+            Assert.Equal("cromosoma", ex.ParamName);
         }
 
         [Fact]
@@ -52,8 +59,10 @@ namespace Solver.Tests.Individuos
         {
             decimal[,] matriz = new decimal[,] { { 1m, 0m }, { 0m, 1m } };
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz);
+
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([3, 2, 1], instanciaProblema));
             Assert.StartsWith("Posición del último corte no puede superar a 2: 3", ex.Message);
+            Assert.Equal("cromosoma", ex.ParamName);
         }
 
         [Fact]
@@ -62,8 +71,10 @@ namespace Solver.Tests.Individuos
             // El rango permitido para las asignaciones de k agentes es [1, k]
             decimal[,] matriz = new decimal[,] { { 1m, 0m }, { 0m, 1m } };
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz);
+
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([0, 1, 0], instanciaProblema));
             Assert.StartsWith($"Hay asignaciones fuera del rango [1, 2]: (0)", ex.Message);
+            Assert.Equal("cromosoma", ex.ParamName);
         }
 
         [Fact]
@@ -71,8 +82,10 @@ namespace Solver.Tests.Individuos
         {
             decimal[,] matriz = new decimal[,] { { 1m, 0m }, { 0m, 1m } };
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz);
+
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([0, -1, 5], instanciaProblema));
             Assert.StartsWith("Hay asignaciones fuera del rango [1, 2]: (-1, 5)", ex.Message);
+            Assert.Equal("cromosoma", ex.ParamName);
         }
 
         [Fact]
@@ -86,8 +99,10 @@ namespace Solver.Tests.Individuos
                 { 0m, 0m, 0m, 1m }
             };
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz);
+
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([1, 2, 3, 5, 2, 0, -1], instanciaProblema));
             Assert.StartsWith("Hay asignaciones fuera del rango [1, 4]: (-1, 0, 5)", ex.Message);
+            Assert.Equal("cromosoma", ex.ParamName);
         }
 
         [Fact]
@@ -95,8 +110,10 @@ namespace Solver.Tests.Individuos
         {
             decimal[,] matriz = new decimal[,] { { 1m, 0m }, { 0m, 1m } };
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz);
+
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([0, 1, 1], instanciaProblema));
             Assert.StartsWith("Hay porciones asignadas a más de un agente: (1)", ex.Message);
+            Assert.Equal("cromosoma", ex.ParamName);
         }
 
         [Fact]
@@ -110,8 +127,10 @@ namespace Solver.Tests.Individuos
                 { 0m, 0m, 0m, 1m }
             };
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz);
+
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([0, 0, 4, 2, 2, 3, 3], instanciaProblema));
             Assert.StartsWith("Hay porciones asignadas a más de un agente: (2, 3)", ex.Message);
+            Assert.Equal("cromosoma", ex.ParamName);
         }
 
         [Fact]

@@ -9,6 +9,7 @@
         {
             var ex = Assert.Throws<ArgumentException>(() => new Atomo(posicion, 1));
             Assert.StartsWith($"La posición debe ser positiva: {posicion}", ex.Message);
+            Assert.Equal("posicion", ex.ParamName);
         }
 
         [Fact]
@@ -17,6 +18,7 @@
             decimal valoracion = -0.1m;
             var ex = Assert.Throws<ArgumentException>(() => new Atomo(1, valoracion));
             Assert.StartsWith($"La valoración no puede ser negativa: {valoracion}", ex.Message);
+            Assert.Equal("valoracion", ex.ParamName);
         }
 
         [Fact]

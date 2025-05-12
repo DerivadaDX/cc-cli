@@ -46,18 +46,18 @@ namespace App
                 throw new ArgumentException("El valor máximo debe ser positivo", nameof(valorMaximo));
         }
 
-        private void ValidarRuta(string ruta)
+        private void ValidarRuta(string rutaSalida)
         {
-            if (string.IsNullOrWhiteSpace(ruta))
-                throw new ArgumentException("La ruta no puede estar vacía", nameof(ruta));
+            if (string.IsNullOrWhiteSpace(rutaSalida))
+                throw new ArgumentException("La ruta no puede estar vacía", nameof(rutaSalida));
 
             try
             {
-                _fileSystemHelper.GetFullPath(ruta);
+                _fileSystemHelper.GetFullPath(rutaSalida);
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("Ruta inválida: " + ex.Message, nameof(ruta));
+                throw new ArgumentException("Ruta inválida: " + ex.Message, nameof(rutaSalida));
             }
         }
     }

@@ -24,6 +24,7 @@ namespace Generator.Tests
         {
             var ex = Assert.Throws<ArgumentNullException>(() => new EscritorInstancia(null));
             Assert.Contains("fileSystem", ex.Message);
+            Assert.Equal("fileSystem", ex.ParamName);
         }
 
         [Fact]
@@ -31,6 +32,7 @@ namespace Generator.Tests
         {
             var ex = Assert.Throws<ArgumentNullException>(() => _escritorInstancia.EscribirInstancia(null, NombreArchivoSalida));
             Assert.Contains("instancia", ex.Message);
+            Assert.Equal("instancia", ex.ParamName);
         }
 
         [Theory]
@@ -41,6 +43,7 @@ namespace Generator.Tests
         {
             var ex = Assert.Throws<ArgumentException>(() => _escritorInstancia.EscribirInstancia(_instancia, rutaInvalida));
             Assert.StartsWith("La ruta no puede estar vacía", ex.Message);
+            Assert.Equal("rutaArchivo", ex.ParamName);
         }
 
         [Fact]

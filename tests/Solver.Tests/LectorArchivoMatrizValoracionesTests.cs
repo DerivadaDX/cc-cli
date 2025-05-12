@@ -23,14 +23,14 @@ namespace Solver.Tests
         public void Constructor_FileSystemHelperNull_ArrojaArgumentNullException()
         {
             var ex = Assert.Throws<ArgumentNullException>(() => new LectorArchivoMatrizValoraciones(null));
-            Assert.Contains("fileSystemHelper", ex.Message);
+            Assert.Equal("fileSystemHelper", ex.ParamName);
         }
 
         [Fact]
         public void Leer_RutaNull_ArrojaArgumentNullException()
         {
             var ex = Assert.Throws<ArgumentNullException>(() => _lector.Leer(null));
-            Assert.Contains("rutaArchivo", ex.Message);
+            Assert.Equal("rutaArchivo", ex.ParamName);
         }
 
         [Theory]
@@ -43,6 +43,7 @@ namespace Solver.Tests
 
             var ex = Assert.Throws<ArgumentException>(() => _lector.Leer(rutaArchivo));
             Assert.StartsWith($"No existe el archivo '{rutaArchivo}'", ex.Message);
+            Assert.Equal("rutaArchivo", ex.ParamName);
         }
 
         [Fact]
