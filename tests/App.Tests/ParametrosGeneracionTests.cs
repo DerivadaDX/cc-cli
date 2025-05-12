@@ -17,6 +17,7 @@ namespace App.Tests
         {
             var ex = Assert.Throws<ArgumentException>(() => new ParametrosGeneracion(0, 1, 100, "instancia.dat", false));
             Assert.StartsWith("Se requieren al menos 1 átomo", ex.Message);
+            Assert.Equal("atomos", ex.ParamName);
         }
 
         [Fact]
@@ -24,6 +25,7 @@ namespace App.Tests
         {
             var ex = Assert.Throws<ArgumentException>(() => new ParametrosGeneracion(1, 0, 100, "instancia.dat", false));
             Assert.StartsWith("Se requieren al menos 1 agente", ex.Message);
+            Assert.Equal("agentes", ex.ParamName);
         }
 
         [Theory]
@@ -33,6 +35,7 @@ namespace App.Tests
         {
             var ex = Assert.Throws<ArgumentException>(() => new ParametrosGeneracion(1, 1, valorMaximo, "instancia.dat", false));
             Assert.StartsWith("El valor máximo debe ser positivo", ex.Message);
+            Assert.Equal("valorMaximo", ex.ParamName);
         }
 
         [Theory]
@@ -43,6 +46,7 @@ namespace App.Tests
         {
             var ex = Assert.Throws<ArgumentException>(() => new ParametrosGeneracion(1, 1, 100, rutaSalida, false));
             Assert.StartsWith("La ruta no puede estar vacía", ex.Message);
+            Assert.Equal("rutaSalida", ex.ParamName);
         }
 
         [Fact]
@@ -54,6 +58,7 @@ namespace App.Tests
 
             var ex = Assert.Throws<ArgumentException>(() => new ParametrosGeneracion(1, 1, 100, "¡ruta-inválida!", false));
             Assert.StartsWith($"Ruta inválida: La ruta es inválida", ex.Message);
+            Assert.Equal("rutaSalida", ex.ParamName);
         }
 
         [Fact]
