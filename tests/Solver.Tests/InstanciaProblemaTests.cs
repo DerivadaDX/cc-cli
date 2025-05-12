@@ -6,7 +6,7 @@
         public void CrearDesdeMatrizDeValoraciones_MatrizNull_LanzaArgumentNullException()
         {
             var ex = Assert.Throws<ArgumentNullException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(null));
-            Assert.Contains("matrizValoraciones", ex.Message);
+            Assert.Equal("matrizValoraciones", ex.ParamName);
         }
 
         [Fact]
@@ -15,6 +15,7 @@
             var matriz = new decimal[0, 0];
             var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz));
             Assert.StartsWith("La matriz de valoraciones no puede estar vacía", ex.Message);
+            Assert.Equal("matrizValoraciones", ex.ParamName);
         }
 
         [Fact]
@@ -26,6 +27,7 @@
             };
             var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz));
             Assert.StartsWith("El agente 1 no tiene valoraciones positivas sobre ningún átomo", ex.Message);
+            Assert.Equal("matrizValoraciones", ex.ParamName);
         }
 
         [Fact]
