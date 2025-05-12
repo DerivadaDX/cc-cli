@@ -17,7 +17,7 @@ namespace Generator.Tests
         public void Constructor_GeneradorNumerosRandomNull_LanzaArgumentNullException()
         {
             var ex = Assert.Throws<ArgumentNullException>(() => new InstanciaBuilder(null));
-            Assert.Contains("generadorNumerosRandom", ex.Message);
+            Assert.Equal("generadorNumerosRandom", ex.ParamName);
         }
 
         [Theory]
@@ -27,6 +27,7 @@ namespace Generator.Tests
         {
             var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _instanciaBuilder.ConCantidadDeAtomos(cantidadAtomos));
             Assert.StartsWith($"La cantidad de átomos debe ser mayor a cero: {cantidadAtomos}", ex.Message);
+            Assert.Equal("cantidadAtomos", ex.ParamName);
         }
 
         [Theory]
@@ -36,6 +37,7 @@ namespace Generator.Tests
         {
             var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _instanciaBuilder.ConCantidadDeAgentes(cantidadAgentes));
             Assert.StartsWith($"La cantidad de agentes debe ser mayor a cero: {cantidadAgentes}", ex.Message);
+            Assert.Equal("cantidadAgentes", ex.ParamName);
         }
 
         [Theory]
@@ -45,6 +47,7 @@ namespace Generator.Tests
         {
             var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _instanciaBuilder.ConValorMaximo(valorMaximo));
             Assert.StartsWith($"El valor máximo debe ser positivo: {valorMaximo}", ex.Message);
+            Assert.Equal("valorMaximo", ex.ParamName);
         }
 
         [Fact]
