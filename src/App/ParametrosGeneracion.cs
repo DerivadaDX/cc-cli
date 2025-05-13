@@ -31,19 +31,19 @@ namespace App
         private void ValidarAtomos(int atomos)
         {
             if (atomos <= 0)
-                throw new ArgumentException("Se requieren al menos 1 átomo", nameof(atomos));
+                throw new ArgumentOutOfRangeException(nameof(atomos), "El número de átomos debe ser mayor que cero");
         }
 
         private void ValidarAgentes(int agentes)
         {
             if (agentes <= 0)
-                throw new ArgumentException("Se requieren al menos 1 agente", nameof(agentes));
+                throw new ArgumentOutOfRangeException(nameof(agentes), "El número de agentes debe ser mayor que cero");
         }
 
         private void ValidarValorMaximo(int valorMaximo)
         {
             if (valorMaximo <= 0)
-                throw new ArgumentException("El valor máximo debe ser positivo", nameof(valorMaximo));
+                throw new ArgumentOutOfRangeException(nameof(valorMaximo), "El valor máximo debe ser mayor que cero");
         }
 
         private void ValidarRuta(string rutaSalida)

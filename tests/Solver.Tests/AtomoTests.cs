@@ -5,19 +5,22 @@
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
-        public void Constructor_Posicion_DebeSerPositiva(int posicion)
+        public void Constructor_PosicionMenorAUno_LanzaArgumentOutOfRangeException(int posicion)
         {
-            var ex = Assert.Throws<ArgumentException>(() => new Atomo(posicion, 1));
-            Assert.StartsWith($"La posición debe ser positiva: {posicion}", ex.Message);
+            var excepcion = Record.Exception(() => new Atomo(posicion, 0.5m));
+
+            var ex = Assert.IsType<ArgumentOutOfRangeException>(excepcion);
+            Assert.Contains("debe ser mayor o igual a 1", ex.Message);
             Assert.Equal("posicion", ex.ParamName);
         }
 
         [Fact]
-        public void Constructor_Valoracion_NoPuedeSerNegativa()
+        public void Constructor_ValoracionNegativa_LanzaArgumentOutOfRangeException()
         {
-            decimal valoracion = -0.1m;
-            var ex = Assert.Throws<ArgumentException>(() => new Atomo(1, valoracion));
-            Assert.StartsWith($"La valoración no puede ser negativa: {valoracion}", ex.Message);
+            var excepcion = Record.Exception(() => new Atomo(1, -0.1m));
+
+            var ex = Assert.IsType<ArgumentOutOfRangeException>(excepcion);
+            Assert.Contains("no puede ser negativa", ex.Message);
             Assert.Equal("valoracion", ex.ParamName);
         }
 

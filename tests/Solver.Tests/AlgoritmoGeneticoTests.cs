@@ -23,13 +23,12 @@ namespace Solver.Tests
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
-        public void Constructor_MaxGeneracionesMenorOIgualACero_ArrojaArgumentOutOfRangeException(int maxGeneraciones)
+        public void Constructor_MaxGeneracionesMenorOIgualACero_LanzaArgumentOutOfRangeException(int maxGeneraciones)
         {
-            var poblacion = Substitute.For<Poblacion>();
-            var ex = Assert.Throws<ArgumentOutOfRangeException>(
-                () => new AlgoritmoGenetico(poblacion, maxGeneraciones, _ => true));
+            var excepcion = Record.Exception(() => new AlgoritmoGenetico(new Poblacion(), maxGeneraciones, _ => true));
 
-            Assert.Contains("El número máximo de generaciones debe ser mayor a cero.", ex.Message);
+            var ex = Assert.IsType<ArgumentOutOfRangeException>(excepcion);
+            Assert.Contains("debe ser mayor que cero", ex.Message);
             Assert.Equal("maxGeneraciones", ex.ParamName);
         }
 

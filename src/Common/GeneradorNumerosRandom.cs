@@ -12,7 +12,7 @@
         internal GeneradorNumerosRandom(int seed)
         {
             if (seed < 0)
-                throw new ArgumentException($"La semilla no puede ser negativa: {seed}", nameof(seed));
+                throw new ArgumentOutOfRangeException(nameof(seed), $"La semilla no puede ser negativa (valor: {seed})");
 
             _random = new Random(seed);
         }

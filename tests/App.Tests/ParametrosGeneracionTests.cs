@@ -13,28 +13,34 @@ namespace App.Tests
         }
 
         [Fact]
-        public void Constructor_AtomosInvalido_LanzaArgumentException()
+        public void Constructor_AtomosInvalido_LanzaArgumentOutOfRangeException()
         {
-            var ex = Assert.Throws<ArgumentException>(() => new ParametrosGeneracion(0, 1, 100, "instancia.dat", false));
-            Assert.StartsWith("Se requieren al menos 1 átomo", ex.Message);
+            var excepcion = Record.Exception(() => new ParametrosGeneracion(0, 1, 100, "instancia.dat", false));
+
+            var ex = Assert.IsType<ArgumentOutOfRangeException>(excepcion);
+            Assert.Contains("debe ser mayor que cero", ex.Message);
             Assert.Equal("atomos", ex.ParamName);
         }
 
         [Fact]
-        public void Constructor_AgentesInvalido_LanzaArgumentException()
+        public void Constructor_AgentesInvalido_LanzaArgumentOutOfRangeException()
         {
-            var ex = Assert.Throws<ArgumentException>(() => new ParametrosGeneracion(1, 0, 100, "instancia.dat", false));
-            Assert.StartsWith("Se requieren al menos 1 agente", ex.Message);
+            var excepcion = Record.Exception(() => new ParametrosGeneracion(1, 0, 100, "instancia.dat", false));
+
+            var ex = Assert.IsType<ArgumentOutOfRangeException>(excepcion);
+            Assert.Contains("debe ser mayor que cero", ex.Message);
             Assert.Equal("agentes", ex.ParamName);
         }
 
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
-        public void Constructor_ValorMaximoInvalido_LanzaArgumentException(int valorMaximo)
+        public void Constructor_ValorMaximoInvalido_LanzaArgumentOutOfRangeException(int valorMaximo)
         {
-            var ex = Assert.Throws<ArgumentException>(() => new ParametrosGeneracion(1, 1, valorMaximo, "instancia.dat", false));
-            Assert.StartsWith("El valor máximo debe ser positivo", ex.Message);
+            var excepcion = Record.Exception(() => new ParametrosGeneracion(1, 1, valorMaximo, "instancia.dat", false));
+
+            var ex = Assert.IsType<ArgumentOutOfRangeException>(excepcion);
+            Assert.Contains("debe ser mayor que cero", ex.Message);
             Assert.Equal("valorMaximo", ex.ParamName);
         }
 
