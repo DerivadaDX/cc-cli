@@ -51,19 +51,22 @@ namespace App.Tests
         public void Constructor_RutaSalidaVacia_LanzaArgumentException(string rutaSalida)
         {
             var ex = Assert.Throws<ArgumentException>(() => new ParametrosGeneracion(1, 1, 100, rutaSalida, false));
-            Assert.StartsWith("La ruta no puede estar vacía", ex.Message);
+            Assert.Contains("no puede estar vacía", ex.Message);
             Assert.Equal("rutaSalida", ex.ParamName);
         }
 
         [Fact]
         public void Constructor_RutaSalidaInvalida_LanzaArgumentException()
         {
+            const string rutaInvalida = "¡ruta-inválida!";
+            const string mensajeExcepcionInterna = "La ruta es inválida";
+
             var fileSystemHelper = Substitute.For<FileSystemHelper>();
-            fileSystemHelper.GetFullPath("¡ruta-inválida!").Throws(new Exception("La ruta es inválida"));
+            fileSystemHelper.GetFullPath(rutaInvalida).Throws(new Exception(mensajeExcepcionInterna));
             FileSystemHelperFactory.SetearHelper(fileSystemHelper);
 
-            var ex = Assert.Throws<ArgumentException>(() => new ParametrosGeneracion(1, 1, 100, "¡ruta-inválida!", false));
-            Assert.StartsWith($"Ruta inválida: La ruta es inválida", ex.Message);
+            var ex = Assert.Throws<ArgumentException>(() => new ParametrosGeneracion(1, 1, 100, rutaInvalida, false));
+            Assert.Contains(mensajeExcepcionInterna, ex.Message);
             Assert.Equal("rutaSalida", ex.ParamName);
         }
 

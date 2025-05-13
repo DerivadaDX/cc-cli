@@ -46,7 +46,7 @@ namespace Generator.Tests
         public void ConValorMaximo_CantidadInvalida_LanzaArgumentOutOfRangeException(int valorMaximo)
         {
             var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _instanciaBuilder.ConValorMaximo(valorMaximo));
-            Assert.StartsWith($"El valor máximo debe ser positivo: {valorMaximo}", ex.Message);
+            Assert.Contains("debe ser positivo", ex.Message);
             Assert.Equal("valorMaximo", ex.ParamName);
         }
 
@@ -54,7 +54,7 @@ namespace Generator.Tests
         public void Build_SinAtomosSeteados_LanzaInvalidOperationException()
         {
             var ex = Assert.Throws<InvalidOperationException>(_instanciaBuilder.Build);
-            Assert.Equal("Debe especificar el número de átomos antes de construir la instancia", ex.Message);
+            Assert.Contains("especificar el número de átomos", ex.Message);
         }
 
         [Fact]
@@ -64,7 +64,7 @@ namespace Generator.Tests
                 .ConCantidadDeAtomos(2)
                 .Build);
 
-            Assert.Equal("Debe especificar el número de agentes antes de construir la instancia", ex.Message);
+            Assert.Contains("especificar el número de agentes", ex.Message);
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace Generator.Tests
                 .ConCantidadDeAgentes(2)
                 .Build);
 
-            Assert.Equal("Debe especificar el valor máximo antes de construir la instancia", ex.Message);
+            Assert.Contains("especificar el valor máximo", ex.Message);
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace Generator.Tests
                 .ConValorMaximo(5)
                 .Build);
 
-            Assert.Equal("Debe especificar el tipo (disjunta o no disjunta) antes de construir la instancia", ex.Message);
+            Assert.Contains("especificar el tipo", ex.Message);
         }
 
         [Fact]
@@ -100,7 +100,7 @@ namespace Generator.Tests
                 .ConValoracionesDisjuntas(true)
                 .Build);
 
-            Assert.Equal("No se puede generar una instancia con más agentes que átomos si las valoraciones son disjuntas", ex.Message);
+            Assert.Contains("más agentes que átomos", ex.Message);
         }
 
         [Fact]

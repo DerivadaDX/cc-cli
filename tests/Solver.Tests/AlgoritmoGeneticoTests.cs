@@ -15,8 +15,7 @@ namespace Solver.Tests
         [Fact]
         public void Constructor_EsSolucionOptimaNull_LanzaArgumentNullException()
         {
-            var poblacion = Substitute.For<Poblacion>();
-            var ex = Assert.Throws<ArgumentNullException>(() => new AlgoritmoGenetico(poblacion, 10, null));
+            var ex = Assert.Throws<ArgumentNullException>(() => new AlgoritmoGenetico(new Poblacion(), 10, null));
             Assert.Equal("esSolucionOptima", ex.ParamName);
         }
 
