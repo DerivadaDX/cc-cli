@@ -15,7 +15,7 @@ namespace Solver
 
             if (maxGeneraciones <= 0)
             {
-                string mensaje = "El número máximo de generaciones debe ser mayor a cero.";
+                string mensaje = "El número máximo de generaciones debe ser mayor que cero.";
                 throw new ArgumentOutOfRangeException(nameof(maxGeneraciones), mensaje);
             }
 
