@@ -54,13 +54,14 @@ namespace Solver.Individuos
             List<int> cortes = [.. cromosoma.Take(cantidadCortesEsperada).Order()];
             if (cortes.First() < 0)
             {
-                string mensaje = $"Posición del primer corte no puede ser negativa: {cortes.First()}";
+                string mensaje = $"El primer corte no puede ser negativo: {cortes.First()}";
                 throw new ArgumentException(mensaje, nameof(cromosoma));
             }
 
             if (cortes.Last() > problema.CantidadAtomos)
             {
-                string mensaje = $"Posición del último corte no puede superar a {problema.CantidadAtomos}: {cortes.Last()}";
+                string mensajeTemplate = "El último corte no puede superar la cantidad de átomos ({0}): {1}";
+                string mensaje = string.Format(mensajeTemplate, problema.CantidadAtomos, cortes.Last());
                 throw new ArgumentException(mensaje, nameof(cromosoma));
             }
         }
@@ -71,14 +72,14 @@ namespace Solver.Individuos
             List<int> fueraDeRango = [.. asignaciones.Where(a => a < 1 || a > cantidadAgentes).Distinct().Order()];
             if (fueraDeRango.Count > 0)
             {
-                string mensaje = $"Hay asignaciones fuera del rango [1, {cantidadAgentes}]: ({string.Join(", ", fueraDeRango)})";
+                string mensaje = $"Hay asignaciones fuera de rango [1, {cantidadAgentes}]: ({string.Join(", ", fueraDeRango)})";
                 throw new ArgumentException(mensaje, nameof(cromosoma));
             }
 
             List<int> repetidas = asignaciones.GroupBy(a => a).Where(g => g.Count() > 1).Select(g => g.Key).ToList();
             if (repetidas.Count > 0)
             {
-                string mensaje = $"Hay porciones asignadas a más de un agente: ({string.Join(", ", repetidas)})";
+                string mensaje = $"Hay asignaciones repetidas a agentes: ({string.Join(", ", repetidas)})";
                 throw new ArgumentException(mensaje, nameof(cromosoma));
             }
         }
