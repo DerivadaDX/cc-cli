@@ -5,10 +5,16 @@
         internal Atomo(int posicion, decimal valoracion)
         {
             if (posicion < 1)
-                throw new ArgumentException($"La posición debe ser positiva: {posicion}", nameof(posicion));
+            {
+                string mensaje = $"La posición debe ser mayor o igual a 1 (valor: {posicion})";
+                throw new ArgumentOutOfRangeException(nameof(posicion), mensaje);
+            }
 
             if (valoracion < 0)
-                throw new ArgumentException($"La valoración no puede ser negativa: {valoracion}", nameof(valoracion));
+            {
+                string mensaje = $"La valoración no puede ser negativa (valor: {valoracion})";
+                throw new ArgumentOutOfRangeException(nameof(valoracion), mensaje);
+            }
 
             Posicion = posicion;
             Valoracion = valoracion;
