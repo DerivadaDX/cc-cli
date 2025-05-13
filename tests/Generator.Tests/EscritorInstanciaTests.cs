@@ -22,7 +22,9 @@ namespace Generator.Tests
         [Fact]
         public void Constructor_FileSystemNull_LanzaArgumentNullException()
         {
-            var ex = Assert.Throws<ArgumentNullException>(() => new EscritorInstancia(null));
+            var excepcion = Record.Exception(() => new EscritorInstancia(null));
+
+            var ex = Assert.IsType<ArgumentNullException>(excepcion);
             Assert.Contains("fileSystem", ex.Message);
             Assert.Equal("fileSystem", ex.ParamName);
         }
@@ -30,7 +32,9 @@ namespace Generator.Tests
         [Fact]
         public void EscribirInstancia_InstanciaNull_LanzaArgumentNullException()
         {
-            var ex = Assert.Throws<ArgumentNullException>(() => _escritorInstancia.EscribirInstancia(null, NombreArchivoSalida));
+            var excepcion = Record.Exception(() => _escritorInstancia.EscribirInstancia(null, NombreArchivoSalida));
+
+            var ex = Assert.IsType<ArgumentNullException>(excepcion);
             Assert.Contains("instancia", ex.Message);
             Assert.Equal("instancia", ex.ParamName);
         }
@@ -41,7 +45,9 @@ namespace Generator.Tests
         [InlineData(null)]
         public void EscribirInstancia_RutaVacia_LanzaArgumentException(string rutaInvalida)
         {
-            var ex = Assert.Throws<ArgumentException>(() => _escritorInstancia.EscribirInstancia(_instancia, rutaInvalida));
+            var excepcion = Record.Exception(() => _escritorInstancia.EscribirInstancia(_instancia, rutaInvalida));
+
+            var ex = Assert.IsType<ArgumentException>(excepcion);
             Assert.StartsWith("La ruta no puede estar vacía", ex.Message);
             Assert.Equal("rutaArchivo", ex.ParamName);
         }
@@ -106,7 +112,9 @@ namespace Generator.Tests
                 .When(x => x.WriteAllLines(Arg.Any<string>(), Arg.Any<List<string>>()))
                 .Throw(new IOException("Error de disco"));
 
-            var ex = Assert.Throws<IOException>(() => _escritorInstancia.EscribirInstancia(_instancia, NombreArchivoSalida));
+            var excepcion = Record.Exception(() => _escritorInstancia.EscribirInstancia(_instancia, NombreArchivoSalida));
+
+            var ex = Assert.IsType<IOException>(excepcion);
             Assert.Equal("Error al escribir la instancia: Error de disco", ex.Message);
         }
     }
