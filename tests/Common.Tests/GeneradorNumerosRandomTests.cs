@@ -3,10 +3,12 @@
     public class GeneradorNumerosRandomTests
     {
         [Fact]
-        public void GenerarNumerosRandom_SemillaNegativa_LanzaArgumentException()
+        public void Constructor_SemillaNegativa_LanzaArgumentOutOfRangeException()
         {
-            var ex = Assert.Throws<ArgumentException>(() => new GeneradorNumerosRandom(-1));
-            Assert.StartsWith("La semilla no puede ser negativa: -1", ex.Message);
+            var excepcion = Record.Exception(() => new GeneradorNumerosRandom(-1));
+
+            var ex = Assert.IsType<ArgumentOutOfRangeException>(excepcion);
+            Assert.Contains("no puede ser negativa", ex.Message);
             Assert.Equal("seed", ex.ParamName);
         }
 
