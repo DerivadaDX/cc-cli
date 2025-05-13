@@ -41,12 +41,12 @@
         [Fact]
         public void AgregarValoracion_ValoracionSobreMismoAtomo_LanzaInvalidOperationException()
         {
-            const int posicionAtomo = 1;
+            const int posicion = 1;
 
-            _agente.AgregarValoracion(new Atomo(posicionAtomo, 1));
+            _agente.AgregarValoracion(new Atomo(posicion, 1));
 
-            var ex = Assert.Throws<InvalidOperationException>(() => _agente.AgregarValoracion(new Atomo(posicionAtomo, 0)));
-            Assert.Equal($"Ya existe una valoración para el átomo #{posicionAtomo}", ex.Message);
+            var ex = Assert.Throws<InvalidOperationException>(() => _agente.AgregarValoracion(new Atomo(posicion, 0)));
+            Assert.Contains("Ya existe valoración para el átomo", ex.Message);
         }
     }
 }

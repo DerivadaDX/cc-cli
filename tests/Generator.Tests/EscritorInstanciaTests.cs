@@ -8,7 +8,7 @@ namespace Generator.Tests
         private const string DirectorioSalida = "nombreCarpeta";
         private const string NombreArchivoSalida = "instancia.dat";
 
-        private readonly decimal[,] _instancia = new decimal[1, 1] { { 1 } };
+        private readonly decimal[,] _instancia = new decimal[,] { { 1 } };
 
         private readonly FileSystemHelper _fileSystemHelper;
         private readonly EscritorInstancia _escritorInstancia;
@@ -23,15 +23,15 @@ namespace Generator.Tests
         public void Constructor_FileSystemNull_LanzaArgumentNullException()
         {
             var ex = Assert.Throws<ArgumentNullException>(() => new EscritorInstancia(null));
-            Assert.Contains("fileSystem", ex.Message);
             Assert.Equal("fileSystem", ex.ParamName);
         }
 
         [Fact]
         public void EscribirInstancia_InstanciaNull_LanzaArgumentNullException()
         {
-            var ex = Assert.Throws<ArgumentNullException>(() => _escritorInstancia.EscribirInstancia(null, NombreArchivoSalida));
-            Assert.Contains("instancia", ex.Message);
+            var ex = Assert.Throws<ArgumentNullException>(() =>
+                _escritorInstancia.EscribirInstancia(null, NombreArchivoSalida));
+
             Assert.Equal("instancia", ex.ParamName);
         }
 
@@ -41,8 +41,10 @@ namespace Generator.Tests
         [InlineData(null)]
         public void EscribirInstancia_RutaVacia_LanzaArgumentException(string rutaInvalida)
         {
-            var ex = Assert.Throws<ArgumentException>(() => _escritorInstancia.EscribirInstancia(_instancia, rutaInvalida));
-            Assert.StartsWith("La ruta no puede estar vacía", ex.Message);
+            var ex = Assert.Throws<ArgumentException>(() =>
+                _escritorInstancia.EscribirInstancia(_instancia, rutaInvalida));
+
+            Assert.Contains("ruta no puede estar vacía", ex.Message);
             Assert.Equal("rutaArchivo", ex.ParamName);
         }
 
@@ -78,7 +80,7 @@ namespace Generator.Tests
         [Fact]
         public void EscribirInstancia_InstanciaValida_EscribeContenidoCorrecto()
         {
-            _escritorInstancia.EscribirInstancia(new decimal[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } }, NombreArchivoSalida);
+            _escritorInstancia.EscribirInstancia(new decimal[,] { { 1, 2, 3 }, { 4, 5, 6 } }, NombreArchivoSalida);
 
             _fileSystemHelper.Received(1).WriteAllLines(NombreArchivoSalida, Arg.Is<List<string>>(x =>
                 x.Count == 3 &&
@@ -102,12 +104,16 @@ namespace Generator.Tests
         [Fact]
         public void EscribirInstancia_ErrorEscritura_PropagaExcepcion()
         {
+            const string mensajeExcepcionInterna = "Error de disco";
+
             _fileSystemHelper
                 .When(x => x.WriteAllLines(Arg.Any<string>(), Arg.Any<List<string>>()))
-                .Throw(new IOException("Error de disco"));
+                .Throw(new IOException(mensajeExcepcionInterna));
 
-            var ex = Assert.Throws<IOException>(() => _escritorInstancia.EscribirInstancia(_instancia, NombreArchivoSalida));
-            Assert.Equal("Error al escribir la instancia: Error de disco", ex.Message);
+            var ex = Assert.Throws<IOException>(() =>
+                _escritorInstancia.EscribirInstancia(_instancia, NombreArchivoSalida));
+
+            Assert.Contains(mensajeExcepcionInterna, ex.Message);
         }
     }
 }

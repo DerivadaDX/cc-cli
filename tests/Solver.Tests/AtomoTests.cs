@@ -7,9 +7,7 @@
         [InlineData(-1)]
         public void Constructor_PosicionMenorAUno_LanzaArgumentOutOfRangeException(int posicion)
         {
-            var excepcion = Record.Exception(() => new Atomo(posicion, 0.5m));
-
-            var ex = Assert.IsType<ArgumentOutOfRangeException>(excepcion);
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => new Atomo(posicion, 0.5m));
             Assert.Contains("debe ser mayor o igual a 1", ex.Message);
             Assert.Equal("posicion", ex.ParamName);
         }
@@ -17,9 +15,7 @@
         [Fact]
         public void Constructor_ValoracionNegativa_LanzaArgumentOutOfRangeException()
         {
-            var excepcion = Record.Exception(() => new Atomo(1, -0.1m));
-
-            var ex = Assert.IsType<ArgumentOutOfRangeException>(excepcion);
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => new Atomo(1, -0.1m));
             Assert.Contains("no puede ser negativa", ex.Message);
             Assert.Equal("valoracion", ex.ParamName);
         }

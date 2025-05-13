@@ -5,9 +5,7 @@
         [Fact]
         public void Constructor_SemillaNegativa_LanzaArgumentOutOfRangeException()
         {
-            var excepcion = Record.Exception(() => new GeneradorNumerosRandom(-1));
-
-            var ex = Assert.IsType<ArgumentOutOfRangeException>(excepcion);
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => new GeneradorNumerosRandom(-1));
             Assert.Contains("no puede ser negativa", ex.Message);
             Assert.Equal("seed", ex.ParamName);
         }

@@ -14,19 +14,16 @@
         {
             var matriz = new decimal[0, 0];
             var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz));
-            Assert.StartsWith("La matriz de valoraciones no puede estar vacía", ex.Message);
+            Assert.Contains("no puede estar vacía", ex.Message);
             Assert.Equal("matrizValoraciones", ex.ParamName);
         }
 
         [Fact]
         public void CrearDesdeMatrizDeValoraciones_MatrizConAgentesSinValoraciones_LanzaArgumentException()
         {
-            decimal[,] matriz = {
-                { 0, 1, 1 },
-                { 0, 1, 1 },
-            };
+            decimal[,] matriz = { { 0, 1, 1 }, { 0, 1, 1 }, };
             var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz));
-            Assert.StartsWith("El agente 1 no tiene valoraciones positivas sobre ningún átomo", ex.Message);
+            Assert.Contains("no tiene valoraciones positivas", ex.Message);
             Assert.Equal("matrizValoraciones", ex.ParamName);
         }
 

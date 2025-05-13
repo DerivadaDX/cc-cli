@@ -6,17 +6,16 @@ namespace Solver.Tests
     public class AlgoritmoGeneticoTests
     {
         [Fact]
-        public void Constructor_PoblacionNull_ArrojaArgumentNullException()
+        public void Constructor_PoblacionNull_LanzaArgumentNullException()
         {
             var ex = Assert.Throws<ArgumentNullException>(() => new AlgoritmoGenetico(null, 10, _ => true));
             Assert.Equal("poblacion", ex.ParamName);
         }
 
         [Fact]
-        public void Constructor_EsSolucionOptimaNull_ArrojaArgumentNullException()
+        public void Constructor_EsSolucionOptimaNull_LanzaArgumentNullException()
         {
-            var poblacion = Substitute.For<Poblacion>();
-            var ex = Assert.Throws<ArgumentNullException>(() => new AlgoritmoGenetico(poblacion, 10, null));
+            var ex = Assert.Throws<ArgumentNullException>(() => new AlgoritmoGenetico(new Poblacion(), 10, null));
             Assert.Equal("esSolucionOptima", ex.ParamName);
         }
 
@@ -25,9 +24,9 @@ namespace Solver.Tests
         [InlineData(-1)]
         public void Constructor_MaxGeneracionesMenorOIgualACero_LanzaArgumentOutOfRangeException(int maxGeneraciones)
         {
-            var excepcion = Record.Exception(() => new AlgoritmoGenetico(new Poblacion(), maxGeneraciones, _ => true));
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
+                new AlgoritmoGenetico(new Poblacion(), maxGeneraciones, _ => true));
 
-            var ex = Assert.IsType<ArgumentOutOfRangeException>(excepcion);
             Assert.Contains("debe ser mayor que cero", ex.Message);
             Assert.Equal("maxGeneraciones", ex.ParamName);
         }

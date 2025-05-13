@@ -13,7 +13,7 @@
         internal void AgregarValoracion(Atomo atomo)
         {
             if (Valoraciones.Any(v => v.Posicion == atomo.Posicion))
-                throw new InvalidOperationException($"Ya existe una valoración para el átomo #{atomo.Posicion}");
+                throw new InvalidOperationException($"Ya existe valoración para el átomo #{atomo.Posicion}");
 
             Valoraciones.Add(atomo);
         }
