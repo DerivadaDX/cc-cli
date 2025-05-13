@@ -50,9 +50,7 @@ namespace App.Tests
         [InlineData(null)]
         public void Constructor_RutaSalidaVacia_LanzaArgumentException(string rutaSalida)
         {
-            var excepcion = Record.Exception(() => new ParametrosGeneracion(1, 1, 100, rutaSalida, false));
-
-            var ex = Assert.IsType<ArgumentException>(excepcion);
+            var ex = Assert.Throws<ArgumentException>(() => new ParametrosGeneracion(1, 1, 100, rutaSalida, false));
             Assert.StartsWith("La ruta no puede estar vacía", ex.Message);
             Assert.Equal("rutaSalida", ex.ParamName);
         }
@@ -64,9 +62,7 @@ namespace App.Tests
             fileSystemHelper.GetFullPath("¡ruta-inválida!").Throws(new Exception("La ruta es inválida"));
             FileSystemHelperFactory.SetearHelper(fileSystemHelper);
 
-            var excepcion = Record.Exception(() => new ParametrosGeneracion(1, 1, 100, "¡ruta-inválida!", false));
-
-            var ex = Assert.IsType<ArgumentException>(excepcion);
+            var ex = Assert.Throws<ArgumentException>(() => new ParametrosGeneracion(1, 1, 100, "¡ruta-inválida!", false));
             Assert.StartsWith($"Ruta inválida: La ruta es inválida", ex.Message);
             Assert.Equal("rutaSalida", ex.ParamName);
         }
