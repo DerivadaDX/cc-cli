@@ -21,7 +21,7 @@ namespace Generator
         {
             if (cantidadAtomos <= 0)
             {
-                string mensaje = $"La cantidad de átomos debe ser mayor a cero: {cantidadAtomos}";
+                string mensaje = $"La cantidad de átomos debe ser mayor que cero: {cantidadAtomos}";
                 throw new ArgumentOutOfRangeException(nameof(cantidadAtomos), mensaje);
             }
 
@@ -33,7 +33,7 @@ namespace Generator
         {
             if (cantidadAgentes <= 0)
             {
-                string mensaje = $"La cantidad de agentes debe ser mayor a cero: {cantidadAgentes}";
+                string mensaje = $"La cantidad de agentes debe ser mayor que cero: {cantidadAgentes}";
                 throw new ArgumentOutOfRangeException(nameof(cantidadAgentes), mensaje);
             }
 
