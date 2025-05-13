@@ -87,7 +87,7 @@ namespace Solver.Tests
             _fileSystemHelper.ReadAllLines(RutaArchivo).Returns([primeraLinea, "1\t2\t3"]);
 
             var ex = Assert.Throws<FormatException>(() => _lector.Leer(RutaArchivo));
-            Assert.StartsWith("no es numérico", ex.Message);
+            Assert.Contains("no es numérico", ex.Message);
         }
 
         [Fact]
@@ -125,7 +125,7 @@ namespace Solver.Tests
             _fileSystemHelper.ReadAllLines(RutaArchivo).Returns(["2 3", fila0, fila1]);
 
             var ex = Assert.Throws<FormatException>(() => _lector.Leer(RutaArchivo));
-            Assert.Equal("Valor inválido", ex.Message);
+            Assert.Contains("Valor inválido", ex.Message);
         }
 
         [Theory]

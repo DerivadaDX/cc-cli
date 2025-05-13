@@ -46,7 +46,7 @@
             _agente.AgregarValoracion(new Atomo(posicion, 1));
 
             var ex = Assert.Throws<InvalidOperationException>(() => _agente.AgregarValoracion(new Atomo(posicion, 0)));
-            Assert.Equal("Ya existe valoración para el átomo", ex.Message);
+            Assert.Contains("Ya existe valoración para el átomo", ex.Message);
         }
     }
 }

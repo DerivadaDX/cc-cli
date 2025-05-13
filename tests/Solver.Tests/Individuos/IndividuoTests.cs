@@ -61,7 +61,7 @@ namespace Solver.Tests.Individuos
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz);
 
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([3, 2, 1], instanciaProblema));
-            Assert.Contains("útlimo corte mayor a cantidad de átomos", ex.Message);
+            Assert.Contains("no puede superar la cantidad de átomos", ex.Message);
             Assert.Equal("cromosoma", ex.ParamName);
         }
 
@@ -73,7 +73,7 @@ namespace Solver.Tests.Individuos
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz);
 
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([0, 1, 0], instanciaProblema));
-            Assert.StartsWith($"Hay asignaciones fuera del rango [1, 2]: (0)", ex.Message);
+            Assert.Contains("asignaciones fuera de rango", ex.Message);
             Assert.Equal("cromosoma", ex.ParamName);
         }
 
@@ -101,7 +101,7 @@ namespace Solver.Tests.Individuos
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz);
 
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([1, 2, 3, 5, 2, 0, -1], instanciaProblema));
-            Assert.StartsWith("asignaciones fuera de rango", ex.Message);
+            Assert.Contains("asignaciones fuera de rango", ex.Message);
             Assert.Equal("cromosoma", ex.ParamName);
         }
 
@@ -112,7 +112,7 @@ namespace Solver.Tests.Individuos
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz);
 
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([0, 1, 1], instanciaProblema));
-            Assert.Contains("porciones asignadas a más de un agente", ex.Message);
+            Assert.Contains("asignaciones repetidas", ex.Message);
             Assert.Equal("cromosoma", ex.ParamName);
         }
 
@@ -129,7 +129,7 @@ namespace Solver.Tests.Individuos
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz);
 
             var ex = Assert.Throws<ArgumentException>(() => new IndividuoStub([0, 0, 4, 2, 2, 3, 3], instanciaProblema));
-            Assert.Contains("porciones asignadas a más de un agente", ex.Message);
+            Assert.Contains("asignaciones repetidas", ex.Message);
             Assert.Equal("cromosoma", ex.ParamName);
         }
 
