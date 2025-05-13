@@ -8,7 +8,7 @@ namespace Generator.Tests
         private const string DirectorioSalida = "nombreCarpeta";
         private const string NombreArchivoSalida = "instancia.dat";
 
-        private readonly decimal[,] _instancia = new decimal[1, 1] { { 1 } };
+        private readonly decimal[,] _instancia = new decimal[,] { { 1 } };
 
         private readonly FileSystemHelper _fileSystemHelper;
         private readonly EscritorInstancia _escritorInstancia;
@@ -80,7 +80,7 @@ namespace Generator.Tests
         [Fact]
         public void EscribirInstancia_InstanciaValida_EscribeContenidoCorrecto()
         {
-            _escritorInstancia.EscribirInstancia(new decimal[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } }, NombreArchivoSalida);
+            _escritorInstancia.EscribirInstancia(new decimal[,] { { 1, 2, 3 }, { 4, 5, 6 } }, NombreArchivoSalida);
 
             _fileSystemHelper.Received(1).WriteAllLines(NombreArchivoSalida, Arg.Is<List<string>>(x =>
                 x.Count == 3 &&

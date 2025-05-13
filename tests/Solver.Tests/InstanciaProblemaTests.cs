@@ -21,10 +21,7 @@
         [Fact]
         public void CrearDesdeMatrizDeValoraciones_MatrizConAgentesSinValoraciones_LanzaArgumentException()
         {
-            decimal[,] matriz = {
-                { 0, 1, 1 },
-                { 0, 1, 1 },
-            };
+            decimal[,] matriz = { { 0, 1, 1 }, { 0, 1, 1 }, };
             var ex = Assert.Throws<ArgumentException>(() => InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz));
             Assert.Contains("no tiene valoraciones positivas", ex.Message);
             Assert.Equal("matrizValoraciones", ex.ParamName);
