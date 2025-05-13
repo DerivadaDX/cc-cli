@@ -6,14 +6,14 @@ namespace Solver.Tests
     public class AlgoritmoGeneticoTests
     {
         [Fact]
-        public void Constructor_PoblacionNull_ArrojaArgumentNullException()
+        public void Constructor_PoblacionNull_LanzaArgumentNullException()
         {
             var ex = Assert.Throws<ArgumentNullException>(() => new AlgoritmoGenetico(null, 10, _ => true));
             Assert.Equal("poblacion", ex.ParamName);
         }
 
         [Fact]
-        public void Constructor_EsSolucionOptimaNull_ArrojaArgumentNullException()
+        public void Constructor_EsSolucionOptimaNull_LanzaArgumentNullException()
         {
             var poblacion = Substitute.For<Poblacion>();
             var ex = Assert.Throws<ArgumentNullException>(() => new AlgoritmoGenetico(poblacion, 10, null));

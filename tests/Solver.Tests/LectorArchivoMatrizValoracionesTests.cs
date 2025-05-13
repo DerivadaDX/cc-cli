@@ -20,14 +20,14 @@ namespace Solver.Tests
         }
 
         [Fact]
-        public void Constructor_FileSystemHelperNull_ArrojaArgumentNullException()
+        public void Constructor_FileSystemHelperNull_LanzaArgumentNullException()
         {
             var ex = Assert.Throws<ArgumentNullException>(() => new LectorArchivoMatrizValoraciones(null));
             Assert.Equal("fileSystemHelper", ex.ParamName);
         }
 
         [Fact]
-        public void Leer_RutaNull_ArrojaArgumentNullException()
+        public void Leer_RutaNull_LanzaArgumentNullException()
         {
             var ex = Assert.Throws<ArgumentNullException>(() => _lector.Leer(null));
             Assert.Equal("rutaArchivo", ex.ParamName);
@@ -37,7 +37,7 @@ namespace Solver.Tests
         [InlineData("")]
         [InlineData(" ")]
         [InlineData("rutaArchivo.txt")]
-        public void Leer_ArchivoNoExistente_ArrojaArgumentException(string rutaArchivo)
+        public void Leer_ArchivoNoExistente_LanzaArgumentException(string rutaArchivo)
         {
             _fileSystemHelper.FileExists(rutaArchivo).Returns(false);
 
@@ -47,7 +47,7 @@ namespace Solver.Tests
         }
 
         [Fact]
-        public void Leer_ArchivoVacio_ArrojaFormatException()
+        public void Leer_ArchivoVacio_LanzaFormatException()
         {
             _fileSystemHelper.ReadAllLines(RutaArchivo).Returns([]);
 
@@ -59,7 +59,7 @@ namespace Solver.Tests
         [InlineData("")]
         [InlineData("1")]
         [InlineData("1 2 3")]
-        public void Leer_PrimeraLineaConFormatoIncorrecto_ArrojaFormatException(string primeraLinea)
+        public void Leer_PrimeraLineaConFormatoIncorrecto_LanzaFormatException(string primeraLinea)
         {
             _fileSystemHelper.ReadAllLines(RutaArchivo).Returns([primeraLinea, "1\t2\t3"]);
 
@@ -71,7 +71,7 @@ namespace Solver.Tests
         [InlineData("@ 1", "@")]
         [InlineData("1.1 1", "1.1")]
         [InlineData("Algo 2", "Algo")]
-        public void Leer_CantidadFilasInvalida_ArrojaFormatException(string primeraLinea, string valorFilas)
+        public void Leer_CantidadFilasInvalida_LanzaFormatException(string primeraLinea, string valorFilas)
         {
             _fileSystemHelper.ReadAllLines(RutaArchivo).Returns([primeraLinea, "1\t2\t3"]);
 
@@ -82,7 +82,7 @@ namespace Solver.Tests
         [Theory]
         [InlineData("1 @", "@")]
         [InlineData("2 Algo", "Algo")]
-        public void Leer_CantidadColumnasInvalida_ArrojaFormatException(string primeraLinea, string valorColumnas)
+        public void Leer_CantidadColumnasInvalida_LanzaFormatException(string primeraLinea, string valorColumnas)
         {
             _fileSystemHelper.ReadAllLines(RutaArchivo).Returns([primeraLinea, "1\t2\t3"]);
 
@@ -91,7 +91,7 @@ namespace Solver.Tests
         }
 
         [Fact]
-        public void Leer_NumeroFilasEsperadasNoCoincideConEncontradas_ArrojaFormatException()
+        public void Leer_NumeroFilasEsperadasNoCoincideConEncontradas_LanzaFormatException()
         {
             _fileSystemHelper.ReadAllLines(RutaArchivo).Returns(["1 3", "1\t2\t3", "4\t5\t6"]);
 
@@ -103,7 +103,7 @@ namespace Solver.Tests
         [InlineData("", "4\t5\t6", "7\t8\t9", 0, 1)]
         [InlineData("1\t2\t3", "4\t5", "7\t8\t9", 1, 2)]
         [InlineData("1\t2\t3", "4\t5\t6", "7\t8\t9\t0", 2, 4)]
-        public void Leer_NumeroColumnasEsperadasNoCoincideConEncontradas_ArrojaFormatException(
+        public void Leer_NumeroColumnasEsperadasNoCoincideConEncontradas_LanzaFormatException(
             string fila0, string fila1, string fila2, int filaConError, int columnasEncontradas)
         {
             _fileSystemHelper.ReadAllLines(RutaArchivo).Returns(["3 3", fila0, fila1, fila2]);
@@ -115,7 +115,7 @@ namespace Solver.Tests
         [Theory]
         [InlineData("@\t2\t3", "4\t5\t6", "@", 0, 0)]
         [InlineData("1\t2\t3", "4\t5\tAlgo", "Algo", 1, 2)]
-        public void Leer_CeldaConValorInvalido_ArrojaFormatException(
+        public void Leer_CeldaConValorInvalido_LanzaFormatException(
             string fila0, string fila1, string valorInvalido, int filaConError, int columnaConError)
         {
             _fileSystemHelper.ReadAllLines(RutaArchivo).Returns(["2 3", fila0, fila1]);
@@ -127,7 +127,7 @@ namespace Solver.Tests
         [Theory]
         [InlineData("4.4\t5.5\t6.6")]
         [InlineData("   4.4\t5.5\t6.6   ")]
-        public void Leer_ArchivoValido_NoArrojaExcepciones(string fila1)
+        public void Leer_ArchivoValido_NoLanzaExcepciones(string fila1)
         {
             _fileSystemHelper.ReadAllLines(RutaArchivo).Returns(["2 3", "1.1\t2.2\t3.3", fila1]);
 
