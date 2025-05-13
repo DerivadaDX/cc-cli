@@ -15,9 +15,9 @@ namespace App.Tests
         [Fact]
         public void Constructor_AtomosInvalido_LanzaArgumentOutOfRangeException()
         {
-            var excepcion = Record.Exception(() => new ParametrosGeneracion(0, 1, 100, "instancia.dat", false));
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
+                new ParametrosGeneracion(0, 1, 100, "instancia.dat", false));
 
-            var ex = Assert.IsType<ArgumentOutOfRangeException>(excepcion);
             Assert.Contains("debe ser mayor que cero", ex.Message);
             Assert.Equal("atomos", ex.ParamName);
         }
@@ -25,9 +25,9 @@ namespace App.Tests
         [Fact]
         public void Constructor_AgentesInvalido_LanzaArgumentOutOfRangeException()
         {
-            var excepcion = Record.Exception(() => new ParametrosGeneracion(1, 0, 100, "instancia.dat", false));
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
+                new ParametrosGeneracion(1, 0, 100, "instancia.dat", false));
 
-            var ex = Assert.IsType<ArgumentOutOfRangeException>(excepcion);
             Assert.Contains("debe ser mayor que cero", ex.Message);
             Assert.Equal("agentes", ex.ParamName);
         }
@@ -37,9 +37,9 @@ namespace App.Tests
         [InlineData(-1)]
         public void Constructor_ValorMaximoInvalido_LanzaArgumentOutOfRangeException(int valorMaximo)
         {
-            var excepcion = Record.Exception(() => new ParametrosGeneracion(1, 1, valorMaximo, "instancia.dat", false));
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
+                new ParametrosGeneracion(1, 1, valorMaximo, "instancia.dat", false));
 
-            var ex = Assert.IsType<ArgumentOutOfRangeException>(excepcion);
             Assert.Contains("debe ser mayor que cero", ex.Message);
             Assert.Equal("valorMaximo", ex.ParamName);
         }

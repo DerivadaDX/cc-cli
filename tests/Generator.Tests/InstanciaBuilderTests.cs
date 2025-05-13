@@ -25,9 +25,7 @@ namespace Generator.Tests
         [InlineData(-1)]
         public void ConCantidadDeAtomos_CantidadInvalida_LanzaArgumentOutOfRangeException(int cantidadAtomos)
         {
-            var excepcion = Record.Exception(() => _instanciaBuilder.ConCantidadDeAtomos(cantidadAtomos));
-
-            var ex = Assert.IsType<ArgumentOutOfRangeException>(excepcion);
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _instanciaBuilder.ConCantidadDeAtomos(cantidadAtomos));
             Assert.Contains("debe ser mayor que cero", ex.Message);
             Assert.Equal("cantidadAtomos", ex.ParamName);
         }
@@ -37,9 +35,7 @@ namespace Generator.Tests
         [InlineData(-1)]
         public void ConCantidadDeAgentes_CantidadInvalida_LanzaArgumentOutOfRangeException(int cantidadAgentes)
         {
-            var excepcion = Record.Exception(() => _instanciaBuilder.ConCantidadDeAgentes(cantidadAgentes));
-
-            var ex = Assert.IsType<ArgumentOutOfRangeException>(excepcion);
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _instanciaBuilder.ConCantidadDeAgentes(cantidadAgentes));
             Assert.Contains("debe ser mayor que cero", ex.Message);
             Assert.Equal("cantidadAgentes", ex.ParamName);
         }
