@@ -33,9 +33,10 @@ namespace App
             decimal[,] matrizValoraciones = lector.Leer(parametros.RutaInstancia);
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matrizValoraciones);
 
-            // TODO: crear población
-            // TODO: crear algoritmo genético
+            // TODO: instanciar población
+            // TODO: instanciar algoritmo genético
             // TODO: ejecutar algoritmo genético
+            // TODO: devoler resultado
         }
     }
 }
