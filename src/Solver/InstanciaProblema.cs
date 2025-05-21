@@ -1,6 +1,6 @@
 ﻿namespace Solver
 {
-    internal class InstanciaProblema
+    public class InstanciaProblema
     {
         private InstanciaProblema()
         {
@@ -10,7 +10,7 @@
         internal int CantidadAtomos => AtomosValorados.Count;
         private HashSet<int> AtomosValorados { get; } = [];
 
-        internal static InstanciaProblema CrearDesdeMatrizDeValoraciones(decimal[,] matrizValoraciones)
+        public static InstanciaProblema CrearDesdeMatrizDeValoraciones(decimal[,] matrizValoraciones)
         {
             ValidarMatriz(matrizValoraciones);
 

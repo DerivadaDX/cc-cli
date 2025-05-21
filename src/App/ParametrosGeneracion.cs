@@ -1,20 +1,9 @@
-﻿using Common;
-
-namespace App
+﻿namespace App
 {
     internal class ParametrosGeneracion
     {
-        private readonly FileSystemHelper _fileSystemHelper;
-
         internal ParametrosGeneracion(int atomos, int agentes, int valorMaximo, string rutaSalida, bool valoracionesDisjuntas)
         {
-            _fileSystemHelper = FileSystemHelperFactory.Crear();
-
-            ValidarAtomos(atomos);
-            ValidarAgentes(agentes);
-            ValidarValorMaximo(valorMaximo);
-            ValidarRuta(rutaSalida);
-
             Atomos = atomos;
             Agentes = agentes;
             ValorMaximo = valorMaximo;
@@ -27,38 +16,5 @@ namespace App
         internal int ValorMaximo { get; }
         internal string RutaSalida { get; }
         internal bool ValoracionesDisjuntas { get; }
-
-        private void ValidarAtomos(int atomos)
-        {
-            if (atomos <= 0)
-                throw new ArgumentOutOfRangeException(nameof(atomos), "El número de átomos debe ser mayor que cero");
-        }
-
-        private void ValidarAgentes(int agentes)
-        {
-            if (agentes <= 0)
-                throw new ArgumentOutOfRangeException(nameof(agentes), "El número de agentes debe ser mayor que cero");
-        }
-
-        private void ValidarValorMaximo(int valorMaximo)
-        {
-            if (valorMaximo <= 0)
-                throw new ArgumentOutOfRangeException(nameof(valorMaximo), "El valor máximo debe ser mayor que cero");
-        }
-
-        private void ValidarRuta(string rutaSalida)
-        {
-            if (string.IsNullOrWhiteSpace(rutaSalida))
-                throw new ArgumentException("La ruta no puede estar vacía", nameof(rutaSalida));
-
-            try
-            {
-                _fileSystemHelper.GetFullPath(rutaSalida);
-            }
-            catch (Exception ex)
-            {
-                throw new ArgumentException("Ruta inválida: " + ex.Message, nameof(rutaSalida));
-            }
-        }
     }
 }
