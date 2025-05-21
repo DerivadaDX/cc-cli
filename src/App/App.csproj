@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Generator\Generator.csproj" />
+    <ProjectReference Include="..\Solver\Solver.csproj" />
   </ItemGroup>
 
 </Project>

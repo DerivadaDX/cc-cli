@@ -2,19 +2,19 @@
 
 namespace Solver
 {
-    internal class LectorArchivoMatrizValoraciones
+    public class LectorArchivoMatrizValoraciones
     {
         private const char SeparadorColumnas = '\t';
 
         private readonly FileSystemHelper _fileSystemHelper;
 
-        internal LectorArchivoMatrizValoraciones(FileSystemHelper fileSystemHelper)
+        public LectorArchivoMatrizValoraciones(FileSystemHelper fileSystemHelper)
         {
             ArgumentNullException.ThrowIfNull(fileSystemHelper, nameof(fileSystemHelper));
             _fileSystemHelper = fileSystemHelper;
         }
 
-        internal decimal[,] Leer(string rutaArchivo)
+        public virtual decimal[,] Leer(string rutaArchivo)
         {
             ArgumentNullException.ThrowIfNull(rutaArchivo, nameof(rutaArchivo));
             if (!_fileSystemHelper.FileExists(rutaArchivo))
