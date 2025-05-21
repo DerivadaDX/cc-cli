@@ -17,18 +17,24 @@ namespace App
 
             command.SetHandler((rutaInstancia, maxGeneraciones) =>
             {
-                var fileSystemHelper = FileSystemHelperFactory.Crear();
-                var lectorMatrizValoraciones = new LectorArchivoMatrizValoraciones(fileSystemHelper);
+                var parametros = new ParametrosSolucion
+                {
+                    RutaInstancia = rutaInstancia,
+                    MaxGeneraciones = maxGeneraciones
+                };
 
-                Handler(lectorMatrizValoraciones, rutaInstancia, maxGeneraciones);
+                var fileSystemHelper = FileSystemHelperFactory.Crear();
+                var lector = new LectorArchivoMatrizValoraciones(fileSystemHelper);
+
+                Handler(parametros, lector);
             }, instanciaOption, maxGeneracionesOption);
 
             return command;
         }
 
-        internal static void Handler(LectorArchivoMatrizValoraciones lector, string rutaInstancia, int maxGeneraciones)
+        internal static void Handler(ParametrosSolucion parametros, LectorArchivoMatrizValoraciones lector)
         {
-            decimal[,] matrizValoraciones = lector.Leer(rutaInstancia);
+            decimal[,] matrizValoraciones = lector.Leer(parametros.RutaInstancia);
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matrizValoraciones);
 
             // TODO: crear población
