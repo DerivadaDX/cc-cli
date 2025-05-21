@@ -1,4 +1,7 @@
 ﻿using System.CommandLine;
+using Common;
+using NSubstitute;
+using Solver;
 
 namespace App.Tests
 {
@@ -26,6 +29,18 @@ namespace App.Tests
             int maxGeneraciones = _command.Parse("resolver --instancia instancia.dat").GetValueForOption(maxGeneracionesOption);
 
             Assert.Equal(0, maxGeneraciones);
+        }
+
+        [Fact]
+        public void Handler_MatrizValoraciones_SeLee()
+        {
+            var lector = Substitute.For<LectorArchivoMatrizValoraciones>(Substitute.For<FileSystemHelper>());
+            lector.Leer(Arg.Any<string>()).Returns(new decimal[,] { { 0, 3.9m }, { 1, 1.2m } });
+
+            var parametros = new ParametrosSolucion("instancia.dat", 0);
+            ResolverCommand.Handler(parametros, lector);
+
+            lector.Received(1).Leer(parametros.RutaInstancia);
         }
     }
 }

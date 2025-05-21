@@ -14,7 +14,7 @@ namespace Solver
             _fileSystemHelper = fileSystemHelper;
         }
 
-        public decimal[,] Leer(string rutaArchivo)
+        public virtual decimal[,] Leer(string rutaArchivo)
         {
             ArgumentNullException.ThrowIfNull(rutaArchivo, nameof(rutaArchivo));
             if (!_fileSystemHelper.FileExists(rutaArchivo))
