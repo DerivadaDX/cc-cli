@@ -17,11 +17,7 @@ namespace App
 
             command.SetHandler((rutaInstancia, maxGeneraciones) =>
             {
-                var parametros = new ParametrosSolucion
-                {
-                    RutaInstancia = rutaInstancia,
-                    MaxGeneraciones = maxGeneraciones
-                };
+                var parametros = new ParametrosSolucion(rutaInstancia, maxGeneraciones);
 
                 var fileSystemHelper = FileSystemHelperFactory.Crear();
                 var lector = new LectorArchivoMatrizValoraciones(fileSystemHelper);

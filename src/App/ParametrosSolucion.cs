@@ -2,7 +2,13 @@
 {
     internal class ParametrosSolucion
     {
-        public string RutaInstancia { get; set; }
-        public int MaxGeneraciones { get; set; }
+        internal ParametrosSolucion(string rutaInstancia, int maxGeneraciones)
+        {
+            RutaInstancia = rutaInstancia;
+            MaxGeneraciones = maxGeneraciones;
+        }
+
+        internal string RutaInstancia { get; }
+        internal int MaxGeneraciones { get; }
     }
 }
