@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using Common;
+using NSubstitute;
 using Solver.Individuos;
 
 namespace Solver.Tests
@@ -20,11 +21,11 @@ namespace Solver.Tests
         {
             int tamaño = 3;
 
-            Poblacion poblacion = new(tamaño);
+            var poblacion = new Poblacion(tamaño);
             poblacion.Individuos.AddRange([
-                CrearIndividuoStub(),
-                CrearIndividuoStub(),
-                CrearIndividuoStub()
+                CrearIndividuoFake(),
+                CrearIndividuoFake(),
+                CrearIndividuoFake()
             ]);
 
             Poblacion nuevaGeneracion = poblacion.GenerarNuevaGeneracion();
@@ -32,31 +33,72 @@ namespace Solver.Tests
         }
 
         [Fact]
+        public void GenerarNuevaGeneracion_IncluyeElite()
+        {
+            Individuo mejorIndividuo = CrearIndividuoFake(fitness: 1);
+
+            int tamaño = 3;
+            var poblacion = new Poblacion(tamaño);
+            poblacion.Individuos.AddRange([
+                mejorIndividuo,
+                CrearIndividuoFake(fitness: 5),
+                CrearIndividuoFake(fitness: 15),
+            ]);
+
+            Poblacion nuevaGeneracion = poblacion.GenerarNuevaGeneracion();
+
+            Assert.Contains(mejorIndividuo, nuevaGeneracion.Individuos);
+        }
+
+        [Fact]
+        public void GenerarNuevaGeneracion_HijosSonCruzadosYMutados()
+        {
+            var random = Substitute.For<GeneradorNumerosRandom>();
+            random.Siguiente(Arg.Any<int>(), Arg.Any<int>()).Returns(0, 1);
+            GeneradorNumerosRandomFactory.SetearGenerador(random);
+
+            Individuo padre1 = CrearIndividuoFake(fitness: 5);
+            Individuo padre2 = CrearIndividuoFake(fitness: 10);
+            Individuo hijoMock = CrearIndividuoFake(fitness: 3);
+            padre1.Cruzar(padre2).Returns(hijoMock);
+
+            var poblacion = new Poblacion(tamaño: 2);
+            poblacion.Individuos.AddRange([padre1, padre2]);
+            poblacion.GenerarNuevaGeneracion();
+
+            hijoMock.Received(1).Mutar();
+
+            GeneradorNumerosRandomFactory.SetearGenerador(null);
+        }
+
+        [Fact]
         public void ObtenerMejorIndividuo_RetornaIndividuoConMenorFitness()
         {
             int mejorFitness = 5;
 
-            Poblacion poblacion = new(tamaño: 3);
+            var poblacion = new Poblacion(tamaño: 3);
             poblacion.Individuos.AddRange([
-                CrearIndividuoStub(fitness: 15),
-                CrearIndividuoStub(fitness: mejorFitness),
-                CrearIndividuoStub(fitness: 10)
+                CrearIndividuoFake(fitness: 15),
+                CrearIndividuoFake(fitness: mejorFitness),
+                CrearIndividuoFake(fitness: 10),
             ]);
 
             Individuo mejorIndividuo = poblacion.ObtenerMejorIndividuo();
             Assert.Equal(mejorFitness, mejorIndividuo.Fitness);
         }
 
-        private Individuo CrearIndividuoStub(int fitness = 0)
+        private Individuo CrearIndividuoFake(int fitness = 0)
         {
+            var cromosoma = new List<int> { 1, 1, 2 };
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
                 { 1m, 0m },
                 { 0m, 1m },
                 { 0m, 1m },
             });
-            var individuo = Substitute.For<Individuo>(new List<int> { 1, 1, 2 }, instanciaProblema);
-            individuo.Cruzar(Arg.Any<Individuo>()).Returns(individuo);
+
+            var individuo = Substitute.For<Individuo>(cromosoma, instanciaProblema);
+            individuo.Cruzar(Arg.Any<Individuo>()).Returns(Substitute.For<Individuo>(cromosoma, instanciaProblema));
             individuo.Fitness.Returns(fitness);
             return individuo;
         }
