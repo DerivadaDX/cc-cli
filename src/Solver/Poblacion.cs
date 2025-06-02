@@ -11,7 +11,10 @@ namespace Solver
         public Poblacion(int tamaño)
         {
             if (tamaño <= 0)
-                throw new ArgumentOutOfRangeException(nameof(tamaño), $"El tamaño de la población debe ser mayor a cero: {tamaño}");
+            {
+                string mensaje = $"El tamaño de la población debe ser mayor a cero: {tamaño}";
+                throw new ArgumentOutOfRangeException(nameof(tamaño), mensaje);
+            }
 
             _random = GeneradorNumerosRandomFactory.Crear();
             _tamaño = tamaño;

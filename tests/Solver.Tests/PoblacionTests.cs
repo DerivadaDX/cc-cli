@@ -21,9 +21,11 @@ namespace Solver.Tests
             int tamaño = 3;
 
             Poblacion poblacion = new(tamaño);
-            poblacion.Individuos.Add(CrearIndividuoStub());
-            poblacion.Individuos.Add(CrearIndividuoStub());
-            poblacion.Individuos.Add(CrearIndividuoStub());
+            poblacion.Individuos.AddRange([
+                CrearIndividuoStub(),
+                CrearIndividuoStub(),
+                CrearIndividuoStub()
+            ]);
 
             Poblacion nuevaGeneracion = poblacion.GenerarNuevaGeneracion();
             Assert.Equal(tamaño, nuevaGeneracion.Individuos.Count);
@@ -35,9 +37,11 @@ namespace Solver.Tests
             int mejorFitness = 5;
 
             Poblacion poblacion = new(tamaño: 3);
-            poblacion.Individuos.Add(CrearIndividuoStub(fitness: 15));
-            poblacion.Individuos.Add(CrearIndividuoStub(fitness: mejorFitness));
-            poblacion.Individuos.Add(CrearIndividuoStub(fitness: 10));
+            poblacion.Individuos.AddRange([
+                CrearIndividuoStub(fitness: 15),
+                CrearIndividuoStub(fitness: mejorFitness),
+                CrearIndividuoStub(fitness: 10)
+            ]);
 
             Individuo mejorIndividuo = poblacion.ObtenerMejorIndividuo();
             Assert.Equal(mejorFitness, mejorIndividuo.Fitness);
