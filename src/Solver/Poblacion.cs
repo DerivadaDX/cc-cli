@@ -49,9 +49,9 @@ namespace Solver
 
         private List<Individuo> SeleccionarElite()
         {
-            // The fraction of the population to be selected as elite individuals.
-            // Note: For populations smaller than 100, this calculation will always select at least one elite individual
-            // due to the use of Math.Ceiling. This ensures that the best-performing individual is preserved across generations.
+            // Fracción de la población que se selecciona como individuos élite.
+            // Nota: Para poblaciones menores a 100, este cálculo siempre selecciona al menos un individuo élite
+            // debido al uso de Math.Ceiling. Esto asegura que el individuo con mejor desempeño se conserve entre generaciones.
             const decimal FraccionElite = 0.01M;
             int cantidadElite = (int)Math.Ceiling(Individuos.Count * FraccionElite);
             List<Individuo> elite = [.. Individuos.OrderBy(individuo => individuo.Fitness).Take(cantidadElite)];
