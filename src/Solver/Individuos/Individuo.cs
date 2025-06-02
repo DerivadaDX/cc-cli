@@ -21,7 +21,7 @@ namespace Solver.Individuos
             ValidarCromosoma(cromosoma, problema);
         }
 
-        public int Fitness { get; protected set; }
+        public virtual int Fitness { get; protected set; }
 
         internal abstract void Mutar();
         internal abstract Individuo Cruzar(Individuo otro);
