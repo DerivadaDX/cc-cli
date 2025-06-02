@@ -4,8 +4,14 @@ using Solver.Individuos;
 
 namespace Solver.Tests
 {
-    public class PoblacionTests
+    public class PoblacionTests : IDisposable
     {
+        public void Dispose()
+        {
+            GeneradorNumerosRandomFactory.SetearGenerador(null);
+            GC.SuppressFinalize(this);
+        }
+
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
@@ -51,24 +57,37 @@ namespace Solver.Tests
         }
 
         [Fact]
-        public void GenerarNuevaGeneracion_HijosSonCruzadosYMutados()
+        public void GenerarNuevaGeneracion_Padres_SonCruzados()
+        {
+            int tamaño = 2, indicePadre1 = 0, indicePadre2 = 1;
+
+            var random = Substitute.For<GeneradorNumerosRandom>();
+            random.Siguiente(0, tamaño).Returns(indicePadre1, indicePadre2);
+            GeneradorNumerosRandomFactory.SetearGenerador(random);
+
+            var poblacion = new Poblacion(tamaño);
+            poblacion.Individuos.AddRange([CrearIndividuoFake(), CrearIndividuoFake()]);
+            poblacion.GenerarNuevaGeneracion();
+
+            poblacion.Individuos[indicePadre1].Received(1).Cruzar(poblacion.Individuos[indicePadre2]);
+        }
+
+        [Fact]
+        public void GenerarNuevaGeneracion_Hijos_Mutan()
         {
             var random = Substitute.For<GeneradorNumerosRandom>();
             random.Siguiente(Arg.Any<int>(), Arg.Any<int>()).Returns(0, 1);
             GeneradorNumerosRandomFactory.SetearGenerador(random);
 
-            Individuo padre1 = CrearIndividuoFake(fitness: 5);
-            Individuo padre2 = CrearIndividuoFake(fitness: 10);
+            Individuo padre = CrearIndividuoFake(fitness: 5);
             Individuo hijoMock = CrearIndividuoFake(fitness: 3);
-            padre1.Cruzar(padre2).Returns(hijoMock);
+            padre.Cruzar(Arg.Any<Individuo>()).Returns(hijoMock);
 
             var poblacion = new Poblacion(tamaño: 2);
-            poblacion.Individuos.AddRange([padre1, padre2]);
+            poblacion.Individuos.AddRange([padre, CrearIndividuoFake(fitness: 15)]);
             poblacion.GenerarNuevaGeneracion();
 
             hijoMock.Received(1).Mutar();
-
-            GeneradorNumerosRandomFactory.SetearGenerador(null);
         }
 
         [Fact]

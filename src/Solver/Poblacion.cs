@@ -60,7 +60,7 @@ namespace Solver
             int indice1 = _random.Siguiente(0, Individuos.Count);
             int indice2 = _random.Siguiente(0, Individuos.Count);
 
-            Individuo resultado = Individuos[indice1].Fitness < Individuos[indice2].Fitness
+            Individuo resultado = Individuos[indice1].Fitness <= Individuos[indice2].Fitness
                 ? Individuos[indice1] : Individuos[indice2];
 
             return resultado;
