@@ -3,7 +3,7 @@ using Solver.Individuos;
 
 namespace Solver
 {
-    internal class Poblacion
+    public class Poblacion
     {
         private readonly GeneradorNumerosRandom _random;
         private readonly int _tamaño;
