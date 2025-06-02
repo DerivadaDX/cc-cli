@@ -35,7 +35,7 @@ namespace Solver.Tests
         public void Ejecutar_EncuentraSolucionOptima_RetornaIndividuoOptimo()
         {
             var individuoOptimo = CrearIndividuoStub();
-            var poblacion = CrearPoblacionStub();
+            var poblacion = Substitute.For<Poblacion>(1);
             poblacion.Individuos.Returns([individuoOptimo]);
 
             var algoritmo = new AlgoritmoGenetico(poblacion, 10, _ => true);
