@@ -15,7 +15,7 @@ namespace Solver.Tests
         [Fact]
         public void Constructor_EsSolucionOptimaNull_LanzaArgumentNullException()
         {
-            var ex = Assert.Throws<ArgumentNullException>(() => new AlgoritmoGenetico(new Poblacion(), 10, null));
+            var ex = Assert.Throws<ArgumentNullException>(() => new AlgoritmoGenetico(new Poblacion(1), 10, null));
             Assert.Equal("esSolucionOptima", ex.ParamName);
         }
 
@@ -25,7 +25,7 @@ namespace Solver.Tests
         public void Constructor_MaxGeneracionesMenorOIgualACero_LanzaArgumentOutOfRangeException(int maxGeneraciones)
         {
             var ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new AlgoritmoGenetico(new Poblacion(), maxGeneraciones, _ => true));
+                new AlgoritmoGenetico(new Poblacion(1), maxGeneraciones, _ => true));
 
             Assert.Contains("debe ser mayor que cero", ex.Message);
             Assert.Equal("maxGeneraciones", ex.ParamName);
@@ -35,7 +35,7 @@ namespace Solver.Tests
         public void Ejecutar_EncuentraSolucionOptima_RetornaIndividuoOptimo()
         {
             var individuoOptimo = CrearIndividuoStub();
-            var poblacion = Substitute.For<Poblacion>();
+            var poblacion = Substitute.For<Poblacion>(1);
             poblacion.Individuos.Returns([individuoOptimo]);
 
             var algoritmo = new AlgoritmoGenetico(poblacion, 10, _ => true);
@@ -48,7 +48,7 @@ namespace Solver.Tests
         public void Ejecutar_EncuentraSolucionOptima_NoGeneraMasPoblaciones()
         {
             var individuoOptimo = CrearIndividuoStub();
-            var poblacion = Substitute.For<Poblacion>();
+            var poblacion = Substitute.For<Poblacion>(1);
             poblacion.Individuos.Returns([individuoOptimo]);
 
             var algoritmo = new AlgoritmoGenetico(poblacion, 10, _ => true);
@@ -61,7 +61,7 @@ namespace Solver.Tests
         public void Ejecutar_EncuentraSolucionOptima_NoObtieneElMejorIndividuo()
         {
             var individuoOptimo = CrearIndividuoStub();
-            var poblacion = Substitute.For<Poblacion>();
+            var poblacion = Substitute.For<Poblacion>(1);
             poblacion.Individuos.Returns([individuoOptimo]);
 
             var algoritmo = new AlgoritmoGenetico(poblacion, 10, _ => true);
@@ -74,7 +74,7 @@ namespace Solver.Tests
         public void Ejecutar_NoEncuentraSolucionOptima_RetornaMejorIndividuo()
         {
             Individuo mejorIndividuo = CrearIndividuoStub();
-            var poblacion = Substitute.For<Poblacion>();
+            var poblacion = Substitute.For<Poblacion>(1);
             poblacion.Individuos.Returns([mejorIndividuo]);
             poblacion.GenerarNuevaGeneracion().Returns(poblacion);
             poblacion.ObtenerMejorIndividuo().Returns(mejorIndividuo);
@@ -89,12 +89,13 @@ namespace Solver.Tests
         [Fact]
         public void Ejecutar_GeneraNuevasGeneraciones_Correctamente()
         {
-            var poblacion = Substitute.For<Poblacion>();
+            var poblacion = Substitute.For<Poblacion>(1);
             poblacion.Individuos.Returns([CrearIndividuoStub()]);
 
-            var nuevaPoblacion = Substitute.For<Poblacion>();
+            var nuevaPoblacion = Substitute.For<Poblacion>(1);
             nuevaPoblacion.Individuos.Returns([CrearIndividuoStub()]);
             poblacion.GenerarNuevaGeneracion().Returns(nuevaPoblacion);
+            nuevaPoblacion.GenerarNuevaGeneracion().Returns(nuevaPoblacion);
 
             var algoritmo = new AlgoritmoGenetico(poblacion, 2, _ => false);
             algoritmo.Ejecutar();
@@ -112,12 +113,13 @@ namespace Solver.Tests
             var esSolucionOptima = Substitute.For<Func<Individuo, bool>>();
             esSolucionOptima(Arg.Any<Individuo>()).Returns(false);
 
-            var poblacion = Substitute.For<Poblacion>();
+            var poblacion = Substitute.For<Poblacion>(1);
             poblacion.Individuos.Returns([individuo1, individuo2]);
 
-            var nuevaPoblacion = Substitute.For<Poblacion>();
+            var nuevaPoblacion = Substitute.For<Poblacion>(1);
             nuevaPoblacion.Individuos.Returns([individuo1, individuo2]);
             poblacion.GenerarNuevaGeneracion().Returns(nuevaPoblacion);
+            nuevaPoblacion.GenerarNuevaGeneracion().Returns(nuevaPoblacion);
 
             var algoritmo = new AlgoritmoGenetico(poblacion, 2, esSolucionOptima);
             algoritmo.Ejecutar();
