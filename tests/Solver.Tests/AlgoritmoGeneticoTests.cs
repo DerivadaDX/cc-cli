@@ -34,7 +34,7 @@ namespace Solver.Tests
         [Fact]
         public void Ejecutar_EncuentraSolucionOptima_RetornaIndividuoOptimo()
         {
-            var individuoOptimo = CrearIndividuoStub();
+            var individuoOptimo = CrearIndividuoFake();
             var poblacion = Substitute.For<Poblacion>(1);
             poblacion.Individuos.Returns([individuoOptimo]);
 
@@ -47,7 +47,7 @@ namespace Solver.Tests
         [Fact]
         public void Ejecutar_EncuentraSolucionOptima_NoGeneraMasPoblaciones()
         {
-            var individuoOptimo = CrearIndividuoStub();
+            var individuoOptimo = CrearIndividuoFake();
             var poblacion = Substitute.For<Poblacion>(1);
             poblacion.Individuos.Returns([individuoOptimo]);
 
@@ -60,7 +60,7 @@ namespace Solver.Tests
         [Fact]
         public void Ejecutar_EncuentraSolucionOptima_NoObtieneElMejorIndividuo()
         {
-            var individuoOptimo = CrearIndividuoStub();
+            var individuoOptimo = CrearIndividuoFake();
             var poblacion = Substitute.For<Poblacion>(1);
             poblacion.Individuos.Returns([individuoOptimo]);
 
@@ -73,7 +73,7 @@ namespace Solver.Tests
         [Fact]
         public void Ejecutar_NoEncuentraSolucionOptima_RetornaMejorIndividuo()
         {
-            Individuo mejorIndividuo = CrearIndividuoStub();
+            Individuo mejorIndividuo = CrearIndividuoFake();
             var poblacion = Substitute.For<Poblacion>(1);
             poblacion.Individuos.Returns([mejorIndividuo]);
             poblacion.GenerarNuevaGeneracion().Returns(poblacion);
@@ -90,10 +90,10 @@ namespace Solver.Tests
         public void Ejecutar_GeneraNuevasGeneraciones_Correctamente()
         {
             var poblacion = Substitute.For<Poblacion>(1);
-            poblacion.Individuos.Returns([CrearIndividuoStub()]);
+            poblacion.Individuos.Returns([CrearIndividuoFake()]);
 
             var nuevaPoblacion = Substitute.For<Poblacion>(1);
-            nuevaPoblacion.Individuos.Returns([CrearIndividuoStub()]);
+            nuevaPoblacion.Individuos.Returns([CrearIndividuoFake()]);
             poblacion.GenerarNuevaGeneracion().Returns(nuevaPoblacion);
             nuevaPoblacion.GenerarNuevaGeneracion().Returns(nuevaPoblacion);
 
@@ -107,16 +107,16 @@ namespace Solver.Tests
         [Fact]
         public void Ejecutar_EvaluaTodosLosIndividuosEnCadaGeneracion()
         {
-            Individuo individuo1 = CrearIndividuoStub();
-            Individuo individuo2 = CrearIndividuoStub();
+            Individuo individuo1 = CrearIndividuoFake();
+            Individuo individuo2 = CrearIndividuoFake();
 
             var esSolucionOptima = Substitute.For<Func<Individuo, bool>>();
             esSolucionOptima(Arg.Any<Individuo>()).Returns(false);
 
-            var poblacion = Substitute.For<Poblacion>(1);
+            var poblacion = Substitute.For<Poblacion>(2);
             poblacion.Individuos.Returns([individuo1, individuo2]);
 
-            var nuevaPoblacion = Substitute.For<Poblacion>(1);
+            var nuevaPoblacion = Substitute.For<Poblacion>(2);
             nuevaPoblacion.Individuos.Returns([individuo1, individuo2]);
             poblacion.GenerarNuevaGeneracion().Returns(nuevaPoblacion);
             nuevaPoblacion.GenerarNuevaGeneracion().Returns(nuevaPoblacion);
@@ -128,7 +128,7 @@ namespace Solver.Tests
             esSolucionOptima.Received(2).Invoke(individuo2);
         }
 
-        private Individuo CrearIndividuoStub()
+        private Individuo CrearIndividuoFake()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
