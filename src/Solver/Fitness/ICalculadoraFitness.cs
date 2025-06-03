@@ -4,6 +4,6 @@ namespace Solver.Fitness
 {
     internal interface ICalculadoraFitness
     {
-        int CalcularFitness(Individuo individuo, InstanciaProblema instanciaProblema);
+        decimal CalcularFitness(Individuo individuo, InstanciaProblema instanciaProblema);
     }
 }

@@ -153,6 +153,125 @@ namespace Solver.Tests.Individuos
             Assert.Null(ex);
         }
 
+        [Fact]
+        public void ExtraerAsignacion_AsignacionEstandar_DevuelveAtomosCorrectos()
+        {
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 1m, 0m },
+                { 0m, 1m },
+                { 0m, 1m },
+            });
+            var cromosoma = new List<int> { 2, 1, 2 };
+            var individuo = new IndividuoStub(cromosoma, problema);
+
+            List<Agente> agentes = individuo.ExtraerAsignacion();
+
+            Agente agente1 = agentes.First(a => a.Id == 1);
+            Assert.Equal([1, 2], agente1.Valoraciones.Select(v => v.Posicion));
+
+            Agente agente2 = agentes.First(a => a.Id == 2);
+            Assert.Equal([3], agente2.Valoraciones.Select(v => v.Posicion));
+        }
+
+        [Fact]
+        public void ExtraerAsignacion_AtomosNoValorados_IncluyeConValorCero()
+        {
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 1m, 0m },
+                { 0m, 1m },
+            });
+            var cromosoma = new List<int> { 1, 2, 1 };
+            var individuo = new IndividuoStub(cromosoma, problema);
+
+            List<Agente> agentes = individuo.ExtraerAsignacion();
+
+            Agente agente1 = agentes.First(a => a.Id == 1);
+            Assert.Single(agente1.Valoraciones);
+            Assert.Equal(2, agente1.Valoraciones[0].Posicion);
+            Assert.Equal(0m, agente1.Valoraciones[0].Valoracion);
+
+            Agente agente2 = agentes.First(a => a.Id == 2);
+            Assert.Single(agente2.Valoraciones);
+            Assert.Equal(1, agente2.Valoraciones[0].Posicion);
+            Assert.Equal(0m, agente2.Valoraciones[0].Valoracion);
+        }
+
+
+        [Fact]
+        public void ExtraerAsignacion_TodosValorados_AsignacionCompleta()
+        {
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 1m, 1m },
+                { 1m, 1m },
+                { 1m, 1m },
+                { 1m, 1m },
+            });
+            var cromosoma = new List<int> { 2, 2, 1 };
+            var individuo = new IndividuoStub(cromosoma, problema);
+
+            List<Agente> agentes = individuo.ExtraerAsignacion();
+
+            Agente agente1 = agentes.First(a => a.Id == 1);
+            Assert.Equal([3, 4], agente1.Valoraciones.Select(v => v.Posicion));
+
+            Agente agente2 = agentes.First(a => a.Id == 2);
+            Assert.Equal([1, 2], agente2.Valoraciones.Select(v => v.Posicion));
+        }
+
+        [Fact]
+        public void ExtraerAsignacion_AgenteSinAtomos_ListaValoracionesVacia()
+        {
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 1m, 0m, 0m },
+                { 0m, 1m, 0m },
+                { 0m, 0m, 1m },
+            });
+            var cromosoma = new List<int> { 3, 3, 1, 2, 3 };
+            var individuo = new IndividuoStub(cromosoma, problema);
+
+            List<Agente> agentes = individuo.ExtraerAsignacion();
+
+            Agente agente1 = agentes.First(a => a.Id == 1);
+            Assert.Equal([1, 2, 3], agente1.Valoraciones.Select(v => v.Posicion));
+
+            Agente agente2 = agentes.First(a => a.Id == 2);
+            Assert.Empty(agente2.Valoraciones);
+
+            Agente agente3 = agentes.First(a => a.Id == 3);
+            Assert.Empty(agente3.Valoraciones);
+        }
+
+        [Fact]
+        public void ExtraerAsignacion_CortesConsecutivos_PorcionesUnitarias()
+        {
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 1m, 1m, 1m },
+                { 1m, 1m, 1m },
+                { 1m, 1m, 1m },
+            });
+            var cromosoma = new List<int> { 1, 2, 1, 2, 3 };
+            var individuo = new IndividuoStub(cromosoma, problema);
+
+            List<Agente> agentes = individuo.ExtraerAsignacion();
+
+            Agente agente1 = agentes.First(a => a.Id == 1);
+            Assert.Single(agente1.Valoraciones);
+            Assert.Equal(1, agente1.Valoraciones[0].Posicion);
+
+            Agente agente2 = agentes.First(a => a.Id == 2);
+            Assert.Single(agente2.Valoraciones);
+            Assert.Equal(2, agente2.Valoraciones[0].Posicion);
+
+            Agente agente3 = agentes.First(a => a.Id == 3);
+            Assert.Single(agente3.Valoraciones);
+            Assert.Equal(3, agente3.Valoraciones[0].Posicion);
+        }
+
         private class IndividuoStub : Individuo
         {
             internal IndividuoStub(List<int> cromosoma, InstanciaProblema problema) : base(cromosoma, problema)
