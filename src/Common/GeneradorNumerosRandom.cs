@@ -22,6 +22,11 @@
             return _random.Next();
         }
 
+        public virtual int Siguiente(int maximo)
+        {
+            return _random.Next(maximo);
+        }
+
         public virtual int Siguiente(int minimo, int maximo)
         {
             return _random.Next(minimo, maximo);
