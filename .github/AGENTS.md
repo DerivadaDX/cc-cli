@@ -21,6 +21,8 @@
   - `ci(ámbito):` Cambios en CI/CD
 
 - Descripciones en estructura impersonal, igual que los commits.
+- La descripción debe iniciar con `En este PR...` seguida de los cambios realizados.
+- No se debe incluir el enlace a la task de Codex.
 
 ## Nombres de ramas
 
