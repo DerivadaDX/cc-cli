@@ -76,9 +76,15 @@ namespace Solver
             if (cantidadfilasInvalida)
                 throw new FormatException($"El valor indicado para filas no es numérico: {partes[0]}");
 
+            if (filas <= 0)
+                throw new FormatException($"El número de filas debe ser mayor a cero: {filas}");
+
             bool cantidadcolumnasInvalida = !int.TryParse(partes[1], out int columnas);
             if (cantidadcolumnasInvalida)
                 throw new FormatException($"El valor indicado para columnas no es numérico: {partes[1]}");
+
+            if (columnas <= 0)
+                throw new FormatException($"El número de columnas debe ser mayor a cero: {columnas}");
 
             return (filas, columnas);
         }
