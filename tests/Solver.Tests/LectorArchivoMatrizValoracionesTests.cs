@@ -80,6 +80,17 @@ namespace Solver.Tests
         }
 
         [Theory]
+        [InlineData("0 2")]
+        [InlineData("-1 2")]
+        public void Leer_CantidadFilasNoPositiva_LanzaFormatException(string primeraLinea)
+        {
+            _fileSystemHelper.ReadAllLines(RutaArchivo).Returns([primeraLinea, "1\t2\t3"]);
+
+            var ex = Assert.Throws<FormatException>(() => _lector.Leer(RutaArchivo));
+            Assert.Contains("mayor a cero", ex.Message);
+        }
+
+        [Theory]
         [InlineData("1 @", "@")]
         [InlineData("2 Algo", "Algo")]
         public void Leer_CantidadColumnasInvalida_LanzaFormatException(string primeraLinea, string valorColumnas)
@@ -88,6 +99,17 @@ namespace Solver.Tests
 
             var ex = Assert.Throws<FormatException>(() => _lector.Leer(RutaArchivo));
             Assert.Contains("no es numérico", ex.Message);
+        }
+
+        [Theory]
+        [InlineData("2 0")]
+        [InlineData("2 -1")]
+        public void Leer_CantidadColumnasNoPositiva_LanzaFormatException(string primeraLinea)
+        {
+            _fileSystemHelper.ReadAllLines(RutaArchivo).Returns([primeraLinea, "1\t2\t3"]);
+
+            var ex = Assert.Throws<FormatException>(() => _lector.Leer(RutaArchivo));
+            Assert.Contains("mayor a cero", ex.Message);
         }
 
         [Fact]
