@@ -62,7 +62,7 @@ namespace Solver.Tests
             int tamaño = 2, indicePadre1 = 0, indicePadre2 = 1;
 
             var random = Substitute.For<GeneradorNumerosRandom>();
-            random.Siguiente(0, tamaño).Returns(indicePadre1, indicePadre2);
+            random.Siguiente(tamaño).Returns(indicePadre1, indicePadre2);
             GeneradorNumerosRandomFactory.SetearGenerador(random);
 
             var poblacion = new Poblacion(tamaño);
@@ -76,7 +76,7 @@ namespace Solver.Tests
         public void GenerarNuevaGeneracion_Hijos_Mutan()
         {
             var random = Substitute.For<GeneradorNumerosRandom>();
-            random.Siguiente(Arg.Any<int>(), Arg.Any<int>()).Returns(0, 1);
+            random.Siguiente(Arg.Any<int>()).Returns(0, 1);
             GeneradorNumerosRandomFactory.SetearGenerador(random);
 
             Individuo padre = CrearIndividuoFake(fitness: 5);
