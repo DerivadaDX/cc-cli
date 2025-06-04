@@ -88,6 +88,10 @@ namespace Solver.Individuos
         private void ValidarCortes(List<int> cromosoma, InstanciaProblema problema, int cantidadCortesEsperada)
         {
             List<int> cortes = [.. cromosoma.Take(cantidadCortesEsperada).Order()];
+
+            if (cantidadCortesEsperada == 0 || cortes.Count == 0)
+                return;
+
             if (cortes.First() < 0)
             {
                 string mensaje = $"El primer corte no puede ser negativo: {cortes.First()}";
