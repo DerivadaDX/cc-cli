@@ -144,6 +144,7 @@ namespace Generator.Tests
         public void Build_ValoracionesDisjuntas_CadaFilaTieneUnSoloValorPositivo()
         {
             var generadorNumerosRandom = Substitute.For<GeneradorNumerosRandom>();
+            generadorNumerosRandom.Siguiente(Arg.Any<int>()).Returns(0);
             generadorNumerosRandom.Siguiente(Arg.Any<int>(), Arg.Any<int>()).Returns(1, 2, 3, 4);
 
             decimal[,] instancia = new InstanciaBuilder(generadorNumerosRandom)
@@ -174,6 +175,7 @@ namespace Generator.Tests
         public void Build_UnSoloAgenteValoracionesDisjuntas_AsignaTodaLaColumnaAlAgente()
         {
             var generadorNumerosRandom = Substitute.For<GeneradorNumerosRandom>();
+            generadorNumerosRandom.Siguiente(Arg.Any<int>()).Returns(0);
             generadorNumerosRandom.Siguiente(Arg.Any<int>(), Arg.Any<int>()).Returns(1, 2, 3);
 
             decimal[,] instancia = new InstanciaBuilder(generadorNumerosRandom)
