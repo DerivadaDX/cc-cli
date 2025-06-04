@@ -37,7 +37,7 @@ namespace App
             var poblacion = new Poblacion(parametros.TamañoPoblacion);
             // TODO: instanciar algoritmo genético
             // TODO: ejecutar algoritmo genético
-            // TODO: devoler resultado
+            // TODO: devolver resultado
         }
     }
 }
