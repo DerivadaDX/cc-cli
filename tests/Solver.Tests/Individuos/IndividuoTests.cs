@@ -154,6 +154,20 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
+        public void Constructor_CromosomaValidoParaUnAgente_NoLanzaExcepciones()
+        {
+            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 1m }
+            });
+
+            var cromosoma = new List<int> { 1 };
+
+            var ex = Record.Exception(() => new IndividuoStub(cromosoma, instanciaProblema));
+            Assert.Null(ex);
+        }
+
+        [Fact]
         public void ExtraerAsignacion_AsignacionEstandar_DevuelveAtomosCorrectos()
         {
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
