@@ -41,5 +41,13 @@
             int numero = generador.Siguiente(1, 100);
             Assert.InRange(numero, 1, 99);
         }
+
+        [Fact]
+        public void Siguiente_ConMaximo_DevuelveNumeroEnRango()
+        {
+            var generador = new GeneradorNumerosRandom();
+            int numero = generador.Siguiente(100);
+            Assert.InRange(numero, 0, 99);
+        }
     }
 }

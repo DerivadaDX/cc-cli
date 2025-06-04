@@ -95,8 +95,8 @@ namespace Generator
 
             while (agentesDisponibles.Count > 0)
             {
-                int indiceAtomo = _generadorNumerosRandom.Siguiente(0, atomosDisponibles.Count);
-                int indiceAgente = _generadorNumerosRandom.Siguiente(0, agentesDisponibles.Count);
+                int indiceAtomo = _generadorNumerosRandom.Siguiente(atomosDisponibles.Count);
+                int indiceAgente = _generadorNumerosRandom.Siguiente(agentesDisponibles.Count);
 
                 int atomoElegido = atomosDisponibles[indiceAtomo];
                 int agenteElegido = agentesDisponibles[indiceAgente];
@@ -108,8 +108,8 @@ namespace Generator
 
             while (atomosDisponibles.Count > 0)
             {
-                int indiceAtomo = _generadorNumerosRandom.Siguiente(0, atomosDisponibles.Count);
-                int agenteElegido = _generadorNumerosRandom.Siguiente(0, _cantidadAgentes);
+                int indiceAtomo = _generadorNumerosRandom.Siguiente(atomosDisponibles.Count);
+                int agenteElegido = _generadorNumerosRandom.Siguiente(_cantidadAgentes);
                 int atomoElegido = atomosDisponibles[indiceAtomo];
 
                 instancia[atomoElegido, agenteElegido] = _generadorNumerosRandom.Siguiente(1, _valorMaximo + 1);
