@@ -77,7 +77,7 @@ cc-cli.exe generar --atomos 8 --agentes 2 --valor-maximo 100
 cc-cli.exe generar --atomos 8 --agentes 2 --output datos/instancia1.txt
 
 # Ejemplo completo
-cc-cli.exe generar --atomos 5 --agentes 3 --disjuntas --valor-maximo 500 -output instancia.txt
+cc-cli.exe generar --atomos 5 --agentes 3 --disjuntas --valor-maximo 500 --output instancia.txt
 ```
 
 **Notas:**
