@@ -1,4 +1,3 @@
-﻿using Solver.Fitness;
 using Solver.Individuos;
 
 namespace Solver.Tests.Individuos
@@ -287,7 +286,8 @@ namespace Solver.Tests.Individuos
 
         private class IndividuoStub : Individuo
         {
-            internal IndividuoStub(List<int> cromosoma, InstanciaProblema problema) : base(cromosoma, problema)
+            internal IndividuoStub(List<int> cromosoma, InstanciaProblema problema)
+                : base(cromosoma, problema, new CalculadoraFitness())
             {
             }
 
@@ -301,10 +301,6 @@ namespace Solver.Tests.Individuos
                 throw new NotImplementedException();
             }
 
-            internal override void CalcularFitness(ICalculadoraFitness calculadoraFitness)
-            {
-                throw new NotImplementedException();
-            }
         }
     }
 }

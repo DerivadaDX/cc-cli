@@ -116,8 +116,8 @@ namespace Solver.Tests
                 { 0m, 1m },
             });
 
-            var individuo = Substitute.For<Individuo>(cromosoma, instanciaProblema);
-            individuo.Cruzar(Arg.Any<Individuo>()).Returns(Substitute.For<Individuo>(cromosoma, instanciaProblema));
+            var individuo = Substitute.For<Individuo>(cromosoma, instanciaProblema, new CalculadoraFitness());
+            individuo.Cruzar(Arg.Any<Individuo>()).Returns(Substitute.For<Individuo>(cromosoma, instanciaProblema, new CalculadoraFitness()));
             individuo.Fitness.Returns(fitness);
             return individuo;
         }
