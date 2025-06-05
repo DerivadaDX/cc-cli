@@ -26,21 +26,11 @@ namespace Solver
 
         internal Individuo Ejecutar()
         {
-            if (_maxGeneraciones == 0)
-            {
-                while (true)
-                {
-                    foreach (Individuo individuo in _poblacion.Individuos)
-                    {
-                        if (_esSolucionOptima(individuo))
-                            return individuo;
-                    }
+            int generacion = 0;
+            bool ejecutarHastaEncontrarSolucion = _maxGeneraciones == 0;
+            bool generacionLimiteNoAlcanzada = generacion < _maxGeneraciones;
 
-                    _poblacion = _poblacion.GenerarNuevaGeneracion();
-                }
-            }
-
-            for (int generacion = 0; generacion < _maxGeneraciones; generacion++)
+            while (ejecutarHastaEncontrarSolucion || generacionLimiteNoAlcanzada)
             {
                 foreach (Individuo individuo in _poblacion.Individuos)
                 {
@@ -49,6 +39,7 @@ namespace Solver
                 }
 
                 _poblacion = _poblacion.GenerarNuevaGeneracion();
+                generacionLimiteNoAlcanzada = ++generacion < _maxGeneraciones;
             }
 
             Individuo mejorIndividuo = _poblacion.ObtenerMejorIndividuo();
