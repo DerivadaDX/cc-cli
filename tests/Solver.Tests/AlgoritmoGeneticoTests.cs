@@ -155,7 +155,7 @@ namespace Solver.Tests
                 { 0m, 1m },
                 { 0m, 1m },
             });
-            var individuo = Substitute.For<Individuo>(new List<int> { 1, 1, 2 }, instanciaProblema);
+            var individuo = Substitute.For<Individuo>(new List<int> { 1, 1, 2 }, instanciaProblema, new CalculadoraFitness());
             return individuo;
         }
     }
