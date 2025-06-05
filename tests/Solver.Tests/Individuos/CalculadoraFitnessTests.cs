@@ -1,11 +1,10 @@
-﻿using Solver.Fitness;
 using Solver.Individuos;
 
-namespace Solver.Tests.Fitness
+namespace Solver.Tests.Individuos
 {
-    public class CalculadorEnvyFreenessTests
+    public class CalculadoraFitnessTests
     {
-        private readonly CalculadorEnvyFreeness _calculador = new();
+        private readonly CalculadoraFitness _calculadora = new();
 
         [Fact]
         public void CalcularFitness_AsignacionSinEnvidia_RetornaCero()
@@ -18,7 +17,7 @@ namespace Solver.Tests.Fitness
             var cromosoma = new List<int> { 1, 1, 2 };
             var individuo = new IndividuoStub(cromosoma, problema);
 
-            decimal fitness = _calculador.CalcularFitness(individuo, problema);
+            decimal fitness = _calculadora.CalcularFitness(individuo, problema);
             Assert.Equal(0, fitness);
         }
 
@@ -33,7 +32,7 @@ namespace Solver.Tests.Fitness
             var cromosoma = new List<int> { 1, 2, 1 };
             var individuo = new IndividuoStub(cromosoma, problema);
 
-            decimal fitness = _calculador.CalcularFitness(individuo, problema);
+            decimal fitness = _calculadora.CalcularFitness(individuo, problema);
             Assert.True(fitness > 0);
         }
 
@@ -49,13 +48,14 @@ namespace Solver.Tests.Fitness
             var cromosoma = new List<int> { 1, 1, 2 };
             var individuo = new IndividuoStub(cromosoma, problema);
 
-            decimal fitness = _calculador.CalcularFitness(individuo, problema);
+            decimal fitness = _calculadora.CalcularFitness(individuo, problema);
             Assert.Equal(0, fitness);
         }
 
         private class IndividuoStub : Individuo
         {
-            internal IndividuoStub(List<int> cromosoma, InstanciaProblema problema) : base(cromosoma, problema)
+            internal IndividuoStub(List<int> cromosoma, InstanciaProblema problema)
+                : base(cromosoma, problema, new CalculadoraFitness())
             {
             }
 
@@ -69,10 +69,6 @@ namespace Solver.Tests.Fitness
                 throw new NotImplementedException();
             }
 
-            internal override void CalcularFitness(ICalculadoraFitness calculadoraFitness)
-            {
-                throw new NotImplementedException();
-            }
         }
     }
 }
