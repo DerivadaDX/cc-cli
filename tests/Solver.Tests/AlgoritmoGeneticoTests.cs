@@ -20,14 +20,13 @@ namespace Solver.Tests
         }
 
         [Theory]
-        [InlineData(0)]
         [InlineData(-1)]
-        public void Constructor_MaxGeneracionesMenorOIgualACero_LanzaArgumentOutOfRangeException(int maxGeneraciones)
+        public void Constructor_MaxGeneracionesNegativo_LanzaArgumentOutOfRangeException(int maxGeneraciones)
         {
             var ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
                 new AlgoritmoGenetico(new Poblacion(1), maxGeneraciones, _ => true));
 
-            Assert.Contains("debe ser mayor que cero", ex.Message);
+            Assert.Contains("no puede ser negativo", ex.Message);
             Assert.Equal("maxGeneraciones", ex.ParamName);
         }
 
@@ -102,6 +101,26 @@ namespace Solver.Tests
 
             poblacion.Received(1).GenerarNuevaGeneracion();
             nuevaPoblacion.Received(1).GenerarNuevaGeneracion();
+        }
+
+        [Fact]
+        public void Ejecutar_MaxGeneracionesCero_EjecutaHastaEncontrarSolucion()
+        {
+            Individuo individuoOptimo = CrearIndividuoFake();
+
+            var poblacionInicial = Substitute.For<Poblacion>(1);
+            poblacionInicial.Individuos.Returns([CrearIndividuoFake()]);
+
+            var poblacionSiguiente = Substitute.For<Poblacion>(1);
+            poblacionSiguiente.Individuos.Returns([individuoOptimo]);
+            poblacionInicial.GenerarNuevaGeneracion().Returns(poblacionSiguiente);
+
+            var algoritmo = new AlgoritmoGenetico(poblacionInicial, 0, i => i == individuoOptimo);
+            Individuo resultado = algoritmo.Ejecutar();
+
+            Assert.Same(individuoOptimo, resultado);
+            poblacionInicial.Received(1).GenerarNuevaGeneracion();
+            poblacionSiguiente.DidNotReceive().GenerarNuevaGeneracion();
         }
 
         [Fact]

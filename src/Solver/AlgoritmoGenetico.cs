@@ -13,9 +13,9 @@ namespace Solver
             ArgumentNullException.ThrowIfNull(poblacion, nameof(poblacion));
             ArgumentNullException.ThrowIfNull(esSolucionOptima, nameof(esSolucionOptima));
 
-            if (maxGeneraciones <= 0)
+            if (maxGeneraciones < 0)
             {
-                string mensaje = "El número máximo de generaciones debe ser mayor que cero.";
+                string mensaje = "El número máximo de generaciones no puede ser negativo.";
                 throw new ArgumentOutOfRangeException(nameof(maxGeneraciones), mensaje);
             }
 
@@ -26,7 +26,11 @@ namespace Solver
 
         internal Individuo Ejecutar()
         {
-            for (int generacion = 0; generacion < _maxGeneraciones; generacion++)
+            int generacion = 0;
+            bool ejecutarHastaEncontrarSolucion = _maxGeneraciones == 0;
+            bool generacionLimiteNoAlcanzada = generacion < _maxGeneraciones;
+
+            while (ejecutarHastaEncontrarSolucion || generacionLimiteNoAlcanzada)
             {
                 foreach (Individuo individuo in _poblacion.Individuos)
                 {
@@ -35,6 +39,7 @@ namespace Solver
                 }
 
                 _poblacion = _poblacion.GenerarNuevaGeneracion();
+                generacionLimiteNoAlcanzada = ++generacion < _maxGeneraciones;
             }
 
             Individuo mejorIndividuo = _poblacion.ObtenerMejorIndividuo();
