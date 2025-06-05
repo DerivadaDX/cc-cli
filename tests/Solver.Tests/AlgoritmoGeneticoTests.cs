@@ -106,16 +106,14 @@ namespace Solver.Tests
         [Fact]
         public void Ejecutar_MaxGeneracionesCero_EjecutaHastaEncontrarSolucion()
         {
-            var individuoNoOptimo = CrearIndividuoFake();
-            var individuoOptimo = CrearIndividuoFake();
+            Individuo individuoOptimo = CrearIndividuoFake();
 
             var poblacionInicial = Substitute.For<Poblacion>(1);
+            poblacionInicial.Individuos.Returns([CrearIndividuoFake()]);
+
             var poblacionSiguiente = Substitute.For<Poblacion>(1);
-
-            poblacionInicial.Individuos.Returns([individuoNoOptimo]);
-            poblacionInicial.GenerarNuevaGeneracion().Returns(poblacionSiguiente);
-
             poblacionSiguiente.Individuos.Returns([individuoOptimo]);
+            poblacionInicial.GenerarNuevaGeneracion().Returns(poblacionSiguiente);
 
             var algoritmo = new AlgoritmoGenetico(poblacionInicial, 0, i => i == individuoOptimo);
             Individuo resultado = algoritmo.Ejecutar();
