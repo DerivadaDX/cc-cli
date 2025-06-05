@@ -1,19 +1,20 @@
-﻿using Solver.Fitness;
-
 namespace Solver.Individuos
 {
     internal abstract class Individuo
     {
         protected readonly List<int> _cromosoma;
         protected readonly InstanciaProblema _problema;
+        protected readonly CalculadoraFitness _calculadoraFitness;
 
-        protected Individuo(List<int> cromosoma, InstanciaProblema problema)
+        protected Individuo(List<int> cromosoma, InstanciaProblema problema, CalculadoraFitness calculadoraFitness)
         {
             ArgumentNullException.ThrowIfNull(cromosoma, nameof(cromosoma));
             ArgumentNullException.ThrowIfNull(problema, nameof(problema));
+            ArgumentNullException.ThrowIfNull(calculadoraFitness, nameof(calculadoraFitness));
 
             _cromosoma = cromosoma;
             _problema = problema;
+            _calculadoraFitness = calculadoraFitness;
 
             if (cromosoma.Count == 0)
                 throw new ArgumentException("El cromosoma no puede estar vacío", nameof(cromosoma));
@@ -25,7 +26,6 @@ namespace Solver.Individuos
 
         internal abstract void Mutar();
         internal abstract Individuo Cruzar(Individuo otro);
-        internal abstract void CalcularFitness(ICalculadoraFitness calculadoraFitness);
 
         internal List<Agente> ExtraerAsignacion()
         {
