@@ -32,6 +32,40 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
     }
 
     [Fact]
+    public void Mutar_CambioEnCorteSaleDeRangoPorIzquierda_ComportamientoCiclicoPorDerecha()
+    {
+        var random = Substitute.For<GeneradorNumerosRandom>();
+        random.SiguienteDouble().Returns(0.0, 1.0); // Mutan los cortes, las asignaciones no
+        random.Siguiente(2).Returns(0);
+        GeneradorNumerosRandomFactory.SetearGenerador(random);
+
+        var cromosomaOriginal = new List<int> { 0, 1, 2 };
+        var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,] { { 1m, 0m }, { 0m, 1m } });
+        var individuo = new IndividuoIntercambioAsignaciones([.. cromosomaOriginal], problema, new CalculadoraFitness());
+
+        individuo.Mutar();
+
+        Assert.Equal(2, individuo.Cromosoma[0]);
+    }
+
+    [Fact]
+    public void Mutar_CambioEnCorteSaleDeRangoPorDerecha_ComportamientoCiclicoPorIzquierda()
+    {
+        var random = Substitute.For<GeneradorNumerosRandom>();
+        random.SiguienteDouble().Returns(0.0, 1.0); // Mutan los cortes, las asignaciones no
+        random.Siguiente(2).Returns(1);
+        GeneradorNumerosRandomFactory.SetearGenerador(random);
+
+        var cromosomaOriginal = new List<int> { 2, 1, 2 };
+        var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,] { { 1m, 0m }, { 0m, 1m } });
+        var individuo = new IndividuoIntercambioAsignaciones([.. cromosomaOriginal], problema, new CalculadoraFitness());
+
+        individuo.Mutar();
+
+        Assert.Equal(0, individuo.Cromosoma[0]);
+    }
+
+    [Fact]
     public void Mutar_UnSoloAgente_NoCambiaAsignaciones()
     {
         var random = Substitute.For<GeneradorNumerosRandom>();

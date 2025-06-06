@@ -35,6 +35,7 @@ internal class IndividuoIntercambioAsignaciones : Individuo
     private void MutarCortes()
     {
         int cantidadCortes = _problema.Agentes.Count - 1;
+        int rango = _problema.CantidadAtomos + 1;
         int L = Cromosoma.Count;
 
         for (int i = 0; i < cantidadCortes; i++)
@@ -43,8 +44,7 @@ internal class IndividuoIntercambioAsignaciones : Individuo
             if (probabilidadMutacion < 1.0 / L)
             {
                 int direccion = _random.Siguiente(2) == 0 ? -1 : 1;
-                int nuevoValor = Cromosoma[i] + direccion;
-                nuevoValor = Math.Clamp(nuevoValor, 0, _problema.CantidadAtomos);
+                int nuevoValor = (Cromosoma[i] + direccion + rango) % rango;
                 Cromosoma[i] = nuevoValor;
             }
         }
