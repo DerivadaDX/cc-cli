@@ -101,6 +101,25 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
     }
 
     [Fact]
+    public void Cruzar_PadresConDistintaCantidadDeCromosomas_LanzaExcepcion()
+    {
+        var problema1 = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+        {
+            { 1m, 0m, 0m, 0m },
+            { 0m, 1m, 0m, 0m },
+            { 0m, 0m, 1m, 0m },
+            { 0m, 0m, 0m, 1m },
+        });
+        var padre1 = new IndividuoIntercambioAsignaciones([1, 2, 3, 1, 2, 3, 4], problema1, new CalculadoraFitness());
+
+        var problema2 = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,] { { 1m } });
+        var padre2 = new IndividuoIntercambioAsignaciones([1], problema2, new CalculadoraFitness());
+
+        var ex = Assert.Throws<ArgumentException>(() => padre1.Cruzar(padre2));
+        Assert.Contains("misma cantidad de cromosomas", ex.Message);
+    }
+
+    [Fact]
     public void Cruzar_SeccionDeCortes_AplicaCruceDeUnPunto()
     {
         var random = Substitute.For<GeneradorNumerosRandom>();

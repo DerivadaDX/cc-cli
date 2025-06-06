@@ -21,6 +21,9 @@ internal class IndividuoIntercambioAsignaciones : Individuo
 
     internal override Individuo Cruzar(Individuo otro)
     {
+        if (Cromosoma.Count != otro.Cromosoma.Count)
+            throw new ArgumentException("Los padres deben tener la misma cantidad de cromosomas para poder cruzarlos.");
+
         List<int> cortesHijo = CruzaCortes(otro);
         List<int> asignacionesHijo = CruzaAsignaciones(otro);
 
