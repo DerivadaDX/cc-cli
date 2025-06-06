@@ -33,7 +33,7 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
     {
         var random = Substitute.For<GeneradorNumerosRandom>();
         random.SiguienteDouble().Returns(0.0, 1.0); // Solo el primero muta
-        random.Siguiente(2).Returns(1); // Direcci髇 +1
+        random.Siguiente(2).Returns(1); // Direcci贸n +1
         GeneradorNumerosRandomFactory.SetearGenerador(random);
 
         var cromosomaOriginal = new List<int> { 0, 1, 2 };
@@ -86,7 +86,7 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
     {
         var random = Substitute.For<GeneradorNumerosRandom>();
         random.SiguienteDouble().Returns(1.0, 0.0, 1.0); // Cortes no mutan, asignaciones solo la primera
-        random.Siguiente(1, 3).Returns(2); // Intercambia con la posici髇 2
+        random.Siguiente(1, 3).Returns(2); // Intercambia con la posici贸n 2
         GeneradorNumerosRandomFactory.SetearGenerador(random);
 
         var cromosomaOriginal = new List<int> { 0, 1, 2 };
@@ -136,7 +136,7 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
     public void Cruzar_SeccionDeCortesPuntoDeCruceAlInicio_QuedanCortesDePadre2()
     {
         var random = Substitute.For<GeneradorNumerosRandom>();
-        random.Siguiente(1, 3).Returns(0); // Punto de corte en la posici髇 0
+        random.Siguiente(1, 3).Returns(0); // Punto de corte en la posici贸n 0
         GeneradorNumerosRandomFactory.SetearGenerador(random);
 
         var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
@@ -158,7 +158,7 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
     public void Cruzar_SeccionDeCortesPuntoDeCruceAlMedio_PrimeraParteDePadre1RestoDePadre2()
     {
         var random = Substitute.For<GeneradorNumerosRandom>();
-        random.Siguiente(1, 3).Returns(1); // Punto de corte en la posici髇 1
+        random.Siguiente(1, 3).Returns(1); // Punto de corte en la posici贸n 1
         GeneradorNumerosRandomFactory.SetearGenerador(random);
 
         var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
@@ -180,7 +180,7 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
     public void Cruzar_SeccionDeCortesPuntoDeCruceAlFinal_QuedanCortesDePadre1()
     {
         var random = Substitute.For<GeneradorNumerosRandom>();
-        random.Siguiente(1, 3).Returns(2); // Punto de corte en la posici髇 2
+        random.Siguiente(1, 3).Returns(2); // Punto de corte en la posici贸n 2
         GeneradorNumerosRandomFactory.SetearGenerador(random);
 
         var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
@@ -202,8 +202,8 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
     public void Cruzar_SeccionDeAsignacionesSegmentoAlInicio_CompletaElFinal()
     {
         var random = Substitute.For<GeneradorNumerosRandom>();
-        random.Siguiente(4).Returns(0); // Inicio del segmento en la posici髇 0
-        random.Siguiente(0, 4).Returns(0); // Fin del segmento en la posici髇 0
+        random.Siguiente(4).Returns(0); // Inicio del segmento en la posici贸n 0
+        random.Siguiente(0, 4).Returns(0); // Fin del segmento en la posici贸n 0
         GeneradorNumerosRandomFactory.SetearGenerador(random);
 
         var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
@@ -225,8 +225,8 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
     public void Cruzar_SeccionDeAsignacionesSegmentoAlMedio_CompletaInicioYFinal()
     {
         var random = Substitute.For<GeneradorNumerosRandom>();
-        random.Siguiente(4).Returns(1); // Inicio del segmento en la posici髇 1
-        random.Siguiente(1, 4).Returns(2); // Fin del segmento en la posici髇 2
+        random.Siguiente(4).Returns(1); // Inicio del segmento en la posici贸n 1
+        random.Siguiente(1, 4).Returns(2); // Fin del segmento en la posici贸n 2
         GeneradorNumerosRandomFactory.SetearGenerador(random);
 
         var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
@@ -248,8 +248,8 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
     public void Cruzar_SeccionDeAsignacionesSegmentoAlFinal_CompletaElInicio()
     {
         var random = Substitute.For<GeneradorNumerosRandom>();
-        random.Siguiente(4).Returns(3); // Inicio del segmento en la posici髇 3
-        random.Siguiente(3, 4).Returns(3); // Fin del segmento en la posici髇 3
+        random.Siguiente(4).Returns(3); // Inicio del segmento en la posici贸n 3
+        random.Siguiente(3, 4).Returns(3); // Fin del segmento en la posici贸n 3
         GeneradorNumerosRandomFactory.SetearGenerador(random);
 
         var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
@@ -271,8 +271,8 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
     public void Cruzar_SeccionDeAsignacionesSegmentoCompleto_QuedaTodoPadre1()
     {
         var random = Substitute.For<GeneradorNumerosRandom>();
-        random.Siguiente(4).Returns(0); // Inicio del segmento en la posici髇 0
-        random.Siguiente(0, 4).Returns(3); // Fin del segmento en la posici髇 3
+        random.Siguiente(4).Returns(0); // Inicio del segmento en la posici贸n 0
+        random.Siguiente(0, 4).Returns(3); // Fin del segmento en la posici贸n 3
         GeneradorNumerosRandomFactory.SetearGenerador(random);
 
         var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
