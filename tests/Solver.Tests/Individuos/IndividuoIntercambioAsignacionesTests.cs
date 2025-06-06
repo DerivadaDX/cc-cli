@@ -13,6 +13,60 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
     }
 
     [Fact]
+    public void Mutar_Cromosoma_CambiaCuandoProbabilidadLoPermite()
+    {
+        var random = Substitute.For<GeneradorNumerosRandom>();
+        random.SiguienteDouble().Returns(0.0, 1.0); // Solo el primero muta
+        random.Siguiente(2).Returns(1); // Dirección +1
+        GeneradorNumerosRandomFactory.SetearGenerador(random);
+
+        var cromosomaOriginal = new List<int> { 0, 1, 2 };
+        var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,] { { 1m, 0m }, { 0m, 1m } });
+        var individuo = new IndividuoIntercambioAsignaciones([.. cromosomaOriginal], problema, new CalculadoraFitness());
+
+        individuo.Mutar();
+
+        Assert.NotEqual(cromosomaOriginal[0], individuo.Cromosoma[0]);
+        Assert.Equal(cromosomaOriginal[1], individuo.Cromosoma[1]);
+        Assert.Equal(cromosomaOriginal[2], individuo.Cromosoma[2]);
+    }
+
+    [Fact]
+    public void Mutar_UnSoloAgente_NoCambiaAsignaciones()
+    {
+        var random = Substitute.For<GeneradorNumerosRandom>();
+        random.SiguienteDouble().Returns(0.0);
+        GeneradorNumerosRandomFactory.SetearGenerador(random);
+
+        var cromosomaOriginal = new List<int> { 1 };
+        var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,] { { 1m } });
+        var individuo = new IndividuoIntercambioAsignaciones([.. cromosomaOriginal], problema, new CalculadoraFitness());
+
+        individuo.Mutar();
+
+        Assert.Equal(cromosomaOriginal, individuo.Cromosoma);
+    }
+
+    [Fact]
+    public void Mutar_Asignaciones_CambianCuandoProbabilidadLoPermite()
+    {
+        var random = Substitute.For<GeneradorNumerosRandom>();
+        random.SiguienteDouble().Returns(1.0, 0.0, 1.0); // Cortes no mutan, asignaciones solo la primera
+        random.Siguiente(1, 3).Returns(2); // Intercambia con la posición 2
+        GeneradorNumerosRandomFactory.SetearGenerador(random);
+
+        var cromosomaOriginal = new List<int> { 0, 1, 2 };
+        var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,] { { 1m, 0m }, { 0m, 1m } });
+        var individuo = new IndividuoIntercambioAsignaciones([.. cromosomaOriginal], problema, new CalculadoraFitness());
+
+        individuo.Mutar();
+
+        Assert.Equal(cromosomaOriginal[0], individuo.Cromosoma[0]);
+        Assert.Equal(cromosomaOriginal[2], individuo.Cromosoma[1]);
+        Assert.Equal(cromosomaOriginal[1], individuo.Cromosoma[2]);
+    }
+
+    [Fact]
     public void Cruzar_PuntoDeCorteInicial_CortesCombinados()
     {
         var random = Substitute.For<GeneradorNumerosRandom>();

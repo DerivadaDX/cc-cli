@@ -39,7 +39,8 @@ internal class IndividuoIntercambioAsignaciones : Individuo
 
         for (int i = 0; i < cantidadCortes; i++)
         {
-            if (_random.SiguienteDouble() < 1.0 / L)
+            double probabilidadMutacion = _random.SiguienteDouble();
+            if (probabilidadMutacion < 1.0 / L)
             {
                 int direccion = _random.Siguiente(2) == 0 ? -1 : 1;
                 int nuevoValor = Cromosoma[i] + direccion;
@@ -60,9 +61,10 @@ internal class IndividuoIntercambioAsignaciones : Individuo
 
         for (int idxActual = cantidadCortes; idxActual < L; idxActual++)
         {
-            if (_random.SiguienteDouble() < 1.0 / L)
+            double probabilidadMutacion = _random.SiguienteDouble();
+            if (probabilidadMutacion < 1.0 / L)
             {
-                int idxDestino = _random.Siguiente(cantidadAsignaciones) + cantidadCortes;
+                int idxDestino = _random.Siguiente(cantidadCortes, L);
                 (Cromosoma[idxDestino], Cromosoma[idxActual]) = (Cromosoma[idxActual], Cromosoma[idxDestino]);
             }
         }
