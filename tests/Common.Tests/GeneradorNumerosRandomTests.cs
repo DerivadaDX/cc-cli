@@ -49,5 +49,25 @@
             int numero = generador.Siguiente(100);
             Assert.InRange(numero, 0, 99);
         }
+
+        [Fact]
+        public void SiguienteDouble_ConSemillaFija_DevuelveMismosValores()
+        {
+            var generador1 = new GeneradorNumerosRandom(123);
+            var generador2 = new GeneradorNumerosRandom(123);
+
+            double valor1 = generador1.SiguienteDouble();
+            double valor2 = generador2.SiguienteDouble();
+
+            Assert.Equal(valor1, valor2);
+        }
+
+        [Fact]
+        public void SiguienteDouble_ValorDevuelto_EntreCeroYUno()
+        {
+            var generador = new GeneradorNumerosRandom();
+            double valor = generador.SiguienteDouble();
+            Assert.InRange(valor, 0, 1);
+        }
     }
 }
