@@ -120,6 +120,19 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
     }
 
     [Fact]
+    public void Cruzar_PadresConUnSoloCromosoma_CreaHijoConUnSoloCromosoma()
+    {
+        var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,] { { 1m } });
+        var padre1 = new IndividuoIntercambioAsignaciones([1], problema, new CalculadoraFitness());
+        var padre2 = new IndividuoIntercambioAsignaciones([1], problema, new CalculadoraFitness());
+
+        Individuo hijo = padre1.Cruzar(padre2);
+
+        Assert.Single(hijo.Cromosoma);
+        Assert.Equal(1, hijo.Cromosoma[0]);
+    }
+
+    [Fact]
     public void Cruzar_SeccionDeCortes_AplicaCruceDeUnPunto()
     {
         var random = Substitute.For<GeneradorNumerosRandom>();
