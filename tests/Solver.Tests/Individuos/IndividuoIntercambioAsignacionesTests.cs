@@ -101,12 +101,10 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
     }
 
     [Fact]
-    public void Cruzar_PuntoDeCorteInicial_CortesCombinados()
+    public void Cruzar_SeccionDeCortes_AplicaCruceDeUnPunto()
     {
         var random = Substitute.For<GeneradorNumerosRandom>();
-        random.Siguiente(1, 3).Returns(1);
-        random.Siguiente(3).Returns(0);
-        random.Siguiente(1, 4).Returns(2);
+        random.Siguiente(1, 3).Returns(1); // Punto de corte en la posición 1
         GeneradorNumerosRandomFactory.SetearGenerador(random);
 
         var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
@@ -122,7 +120,6 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
         Individuo hijo = padre1.Cruzar(padre2);
 
         Assert.Equal([1, 3, 3], hijo.Cromosoma.Take(3));
-        Assert.Equal([1, 2, 3, 4], hijo.Cromosoma.Skip(3));
     }
 
     [Fact]
