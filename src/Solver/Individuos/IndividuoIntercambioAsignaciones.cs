@@ -21,10 +21,8 @@ internal class IndividuoIntercambioAsignaciones : Individuo
 
     internal override Individuo Cruzar(Individuo otro)
     {
-        var otroIndividuo = (IndividuoIntercambioAsignaciones)otro;
-
-        List<int> cortesHijo = CruzaCortes(otroIndividuo);
-        List<int> asignacionesHijo = CruzaAsignaciones(otroIndividuo);
+        List<int> cortesHijo = CruzaCortes(otro);
+        List<int> asignacionesHijo = CruzaAsignaciones(otro);
 
         List<int> cromosomaHijo = [];
         cromosomaHijo.AddRange(cortesHijo);
@@ -37,16 +35,16 @@ internal class IndividuoIntercambioAsignaciones : Individuo
     private void MutarCortes()
     {
         int cantidadCortes = _problema.Agentes.Count - 1;
-        int L = _cromosoma.Count;
+        int L = Cromosoma.Count;
 
         for (int i = 0; i < cantidadCortes; i++)
         {
             if (_random.SiguienteDouble() < 1.0 / L)
             {
                 int direccion = _random.Siguiente(2) == 0 ? -1 : 1;
-                int nuevoValor = _cromosoma[i] + direccion;
+                int nuevoValor = Cromosoma[i] + direccion;
                 nuevoValor = Math.Clamp(nuevoValor, 0, _problema.CantidadAtomos);
-                _cromosoma[i] = nuevoValor;
+                Cromosoma[i] = nuevoValor;
             }
         }
     }
@@ -55,7 +53,7 @@ internal class IndividuoIntercambioAsignaciones : Individuo
     {
         int cantidadCortes = _problema.Agentes.Count - 1;
         int cantidadAsignaciones = _problema.Agentes.Count;
-        int L = _cromosoma.Count;
+        int L = Cromosoma.Count;
 
         if (cantidadAsignaciones <= 1)
             return;
@@ -65,16 +63,16 @@ internal class IndividuoIntercambioAsignaciones : Individuo
             if (_random.SiguienteDouble() < 1.0 / L)
             {
                 int idxDestino = _random.Siguiente(cantidadAsignaciones) + cantidadCortes;
-                (_cromosoma[idxDestino], _cromosoma[idxActual]) = (_cromosoma[idxActual], _cromosoma[idxDestino]);
+                (Cromosoma[idxDestino], Cromosoma[idxActual]) = (Cromosoma[idxActual], Cromosoma[idxDestino]);
             }
         }
     }
 
-    private List<int> CruzaCortes(IndividuoIntercambioAsignaciones otro)
+    private List<int> CruzaCortes(Individuo otro)
     {
         int cantidadCortes = _problema.Agentes.Count - 1;
-        var cortesPadre1 = _cromosoma.Take(cantidadCortes).ToList<int>();
-        var cortesPadre2 = otro._cromosoma.Take(cantidadCortes).ToList<int>();
+        var cortesPadre1 = Cromosoma.Take(cantidadCortes).ToList<int>();
+        var cortesPadre2 = otro.Cromosoma.Take(cantidadCortes).ToList<int>();
 
         if (cantidadCortes == 0)
             return [];
@@ -85,13 +83,13 @@ internal class IndividuoIntercambioAsignaciones : Individuo
         return cortesHijo;
     }
 
-    private List<int> CruzaAsignaciones(IndividuoIntercambioAsignaciones otro)
+    private List<int> CruzaAsignaciones(Individuo otro)
     {
         int cantidadCortes = _problema.Agentes.Count - 1;
         int cantidadAsignaciones = _problema.Agentes.Count;
 
-        var asignacionesPadre1 = _cromosoma.Skip(cantidadCortes).ToList<int>();
-        var asignacionesPadre2 = otro._cromosoma.Skip(cantidadCortes).ToList<int>();
+        var asignacionesPadre1 = Cromosoma.Skip(cantidadCortes).ToList<int>();
+        var asignacionesPadre2 = otro.Cromosoma.Skip(cantidadCortes).ToList<int>();
 
         if (cantidadAsignaciones <= 1)
             return [.. asignacionesPadre1];
