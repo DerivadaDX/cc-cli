@@ -290,4 +290,3 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
         Assert.Equal([1, 2, 3, 4], hijo.Cromosoma.Skip(3));
     }
 }
-

@@ -121,4 +121,3 @@ internal class IndividuoIntercambioAsignaciones : Individuo
         return asignacionesHijo;
     }
 }
-
