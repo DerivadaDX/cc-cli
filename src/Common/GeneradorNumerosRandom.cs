@@ -31,5 +31,10 @@
         {
             return _random.Next(minimo, maximo);
         }
+
+        public virtual double SiguienteDouble()
+        {
+            return _random.NextDouble();
+        }
     }
 }

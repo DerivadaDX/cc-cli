@@ -2,7 +2,6 @@ namespace Solver.Individuos
 {
     internal abstract class Individuo
     {
-        protected readonly List<int> _cromosoma;
         protected readonly InstanciaProblema _problema;
         protected readonly CalculadoraFitness _calculadoraFitness;
 
@@ -12,7 +11,7 @@ namespace Solver.Individuos
             ArgumentNullException.ThrowIfNull(problema, nameof(problema));
             ArgumentNullException.ThrowIfNull(calculadoraFitness, nameof(calculadoraFitness));
 
-            _cromosoma = cromosoma;
+            Cromosoma = cromosoma;
             _problema = problema;
             _calculadoraFitness = calculadoraFitness;
 
@@ -22,7 +21,8 @@ namespace Solver.Individuos
             ValidarCromosoma(cromosoma, problema);
         }
 
-        public virtual int Fitness { get; protected set; }
+        internal virtual List<int> Cromosoma { get; }
+        internal virtual int Fitness { get; set; }
 
         internal abstract void Mutar();
         internal abstract Individuo Cruzar(Individuo otro);
@@ -32,8 +32,8 @@ namespace Solver.Individuos
             int cantidadAgentes = _problema.Agentes.Count;
             int cantidadCortes = cantidadAgentes - 1;
 
-            var cortes = _cromosoma.Take(cantidadCortes).ToList<int>();
-            var asignaciones = _cromosoma.Skip(cantidadCortes).ToList<int>();
+            var cortes = Cromosoma.Take(cantidadCortes).ToList<int>();
+            var asignaciones = Cromosoma.Skip(cantidadCortes).ToList<int>();
             cortes.Sort();
 
             Dictionary<int, Agente> agentesClonados = _problema.Agentes
