@@ -13,7 +13,23 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
     }
 
     [Fact]
-    public void Mutar_Cromosoma_CambiaCuandoProbabilidadLoPermite()
+    public void Mutar_CromosomaConUnSoloGen_NoMuta()
+    {
+        var random = Substitute.For<GeneradorNumerosRandom>();
+        random.SiguienteDouble().Returns(0.0);
+        GeneradorNumerosRandomFactory.SetearGenerador(random);
+
+        var cromosomaOriginal = new List<int> { 1 };
+        var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,] { { 1m } });
+        var individuo = new IndividuoIntercambioAsignaciones([.. cromosomaOriginal], problema, new CalculadoraFitness());
+
+        individuo.Mutar();
+
+        Assert.Equal(cromosomaOriginal, individuo.Cromosoma);
+    }
+
+    [Fact]
+    public void Mutar_Cromosoma_MutaCuandoProbabilidadLoPermite()
     {
         var random = Substitute.For<GeneradorNumerosRandom>();
         random.SiguienteDouble().Returns(0.0, 1.0); // Solo el primero muta
@@ -32,7 +48,7 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
     }
 
     [Fact]
-    public void Mutar_CambioEnCorteSaleDeRangoPorIzquierda_ComportamientoCiclicoPorDerecha()
+    public void Mutar_MutacionEnCorteSaleDeRangoPorIzquierda_ComportamientoCiclicoPorDerecha()
     {
         var random = Substitute.For<GeneradorNumerosRandom>();
         random.SiguienteDouble().Returns(0.0, 1.0); // Mutan los cortes, las asignaciones no
@@ -49,7 +65,7 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
     }
 
     [Fact]
-    public void Mutar_CambioEnCorteSaleDeRangoPorDerecha_ComportamientoCiclicoPorIzquierda()
+    public void Mutar_MutacionEnCorteSaleDeRangoPorDerecha_ComportamientoCiclicoPorIzquierda()
     {
         var random = Substitute.For<GeneradorNumerosRandom>();
         random.SiguienteDouble().Returns(0.0, 1.0); // Mutan los cortes, las asignaciones no
@@ -66,23 +82,7 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
     }
 
     [Fact]
-    public void Mutar_UnSoloAgente_NoCambiaAsignaciones()
-    {
-        var random = Substitute.For<GeneradorNumerosRandom>();
-        random.SiguienteDouble().Returns(0.0);
-        GeneradorNumerosRandomFactory.SetearGenerador(random);
-
-        var cromosomaOriginal = new List<int> { 1 };
-        var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,] { { 1m } });
-        var individuo = new IndividuoIntercambioAsignaciones([.. cromosomaOriginal], problema, new CalculadoraFitness());
-
-        individuo.Mutar();
-
-        Assert.Equal(cromosomaOriginal, individuo.Cromosoma);
-    }
-
-    [Fact]
-    public void Mutar_Asignaciones_CambianCuandoProbabilidadLoPermite()
+    public void Mutar_Asignaciones_MutanCuandoProbabilidadLoPermite()
     {
         var random = Substitute.For<GeneradorNumerosRandom>();
         random.SiguienteDouble().Returns(1.0, 0.0, 1.0); // Cortes no mutan, asignaciones solo la primera
