@@ -23,60 +23,8 @@ internal class IndividuoIntercambioAsignaciones : Individuo
     {
         var otroIndividuo = (IndividuoIntercambioAsignaciones)otro;
 
-        int cantidadCortes = _problema.Agentes.Count - 1;
-        int cantidadAsignaciones = _problema.Agentes.Count;
-
-        var cortesPadre1 = _cromosoma.Take(cantidadCortes).ToList<int>();
-        var cortesPadre2 = otroIndividuo._cromosoma.Take(cantidadCortes).ToList<int>();
-
-        List<int> cortesHijo = [];
-        if (cantidadCortes > 0)
-        {
-            int p = cantidadCortes > 1 ? _random.Siguiente(1, cantidadCortes) : cantidadCortes;
-            cortesHijo.AddRange(cortesPadre1.Take(p));
-            cortesHijo.AddRange(cortesPadre2.Skip(p));
-        }
-
-        var asignacionesPadre1 = _cromosoma.Skip(cantidadCortes).ToList<int>();
-        var asignacionesPadre2 = otroIndividuo._cromosoma.Skip(cantidadCortes).ToList<int>();
-        List<int> asignacionesHijo = [];
-
-        if (cantidadAsignaciones > 0)
-        {
-            if (cantidadAsignaciones > 1)
-            {
-                int a = _random.Siguiente(cantidadAsignaciones);
-                int b = _random.Siguiente(a + 1, cantidadAsignaciones);
-                asignacionesHijo = Enumerable.Repeat(0, cantidadAsignaciones).ToList();
-
-                var usados = new HashSet<int>();
-                for (int i = a; i <= b; i++)
-                {
-                    asignacionesHijo[i] = asignacionesPadre1[i];
-                    usados.Add(asignacionesPadre1[i]);
-                }
-
-                int indiceDestino = (b + 1) % cantidadAsignaciones;
-                int indiceFuente = (b + 1) % cantidadAsignaciones;
-
-                while (usados.Count < cantidadAsignaciones)
-                {
-                    int elemento = asignacionesPadre2[indiceFuente];
-                    if (!usados.Contains(elemento))
-                    {
-                        asignacionesHijo[indiceDestino] = elemento;
-                        usados.Add(elemento);
-                        indiceDestino = (indiceDestino + 1) % cantidadAsignaciones;
-                    }
-
-                    indiceFuente = (indiceFuente + 1) % cantidadAsignaciones;
-                }
-            }
-            else
-            {
-                asignacionesHijo.AddRange(asignacionesPadre1);
-            }
-        }
+        List<int> cortesHijo = CruzaCortes(otroIndividuo);
+        List<int> asignacionesHijo = CruzaAsignaciones(otroIndividuo);
 
         List<int> cromosomaHijo = [];
         cromosomaHijo.AddRange(cortesHijo);
@@ -120,6 +68,54 @@ internal class IndividuoIntercambioAsignaciones : Individuo
                 (_cromosoma[idxDestino], _cromosoma[idxActual]) = (_cromosoma[idxActual], _cromosoma[idxDestino]);
             }
         }
+    }
+
+    private List<int> CruzaCortes(IndividuoIntercambioAsignaciones otro)
+    {
+        int cantidadCortes = _problema.Agentes.Count - 1;
+        var cortesPadre1 = _cromosoma.Take(cantidadCortes).ToList<int>();
+        var cortesPadre2 = otro._cromosoma.Take(cantidadCortes).ToList<int>();
+
+        if (cantidadCortes == 0)
+            return [];
+
+        int indiceCorte = cantidadCortes > 1 ? _random.Siguiente(1, cantidadCortes) : cantidadCortes;
+        var cortesHijo = cortesPadre1.Take(indiceCorte).ToList<int>();
+        cortesHijo.AddRange(cortesPadre2.Skip(indiceCorte));
+        return cortesHijo;
+    }
+
+    private List<int> CruzaAsignaciones(IndividuoIntercambioAsignaciones otro)
+    {
+        int cantidadCortes = _problema.Agentes.Count - 1;
+        int cantidadAsignaciones = _problema.Agentes.Count;
+
+        var asignacionesPadre1 = _cromosoma.Skip(cantidadCortes).ToList<int>();
+        var asignacionesPadre2 = otro._cromosoma.Skip(cantidadCortes).ToList<int>();
+
+        if (cantidadAsignaciones <= 1)
+            return [.. asignacionesPadre1];
+
+        var asignacionesHijo = Enumerable.Repeat(-1, cantidadAsignaciones).ToList();
+        int indiceInicioSegmento = _random.Siguiente(cantidadAsignaciones - 1);
+        int indiceFinSegmento = _random.Siguiente(indiceInicioSegmento + 1, cantidadAsignaciones);
+
+        for (int i = indiceInicioSegmento; i <= indiceFinSegmento; i++)
+            asignacionesHijo[i] = asignacionesPadre1[i];
+
+        int indicePadre2 = 0;
+        int indiceHijo = (indiceFinSegmento + 1) % cantidadAsignaciones;
+        while (asignacionesHijo.Contains(-1))
+        {
+            int candidato = asignacionesPadre2[indicePadre2++];
+            if (!asignacionesHijo.Contains(candidato))
+            {
+                asignacionesHijo[indiceHijo] = candidato;
+                indiceHijo = (indiceHijo + 1) % cantidadAsignaciones;
+            }
+        }
+
+        return asignacionesHijo;
     }
 }
 
