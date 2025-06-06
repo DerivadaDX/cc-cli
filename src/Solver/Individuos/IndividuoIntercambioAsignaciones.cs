@@ -100,8 +100,10 @@ internal class IndividuoIntercambioAsignaciones : Individuo
             return [.. asignacionesPadre1];
 
         var asignacionesHijo = Enumerable.Repeat(-1, cantidadAsignaciones).ToList();
-        int indiceInicioSegmento = _random.Siguiente(cantidadCortes, Cromosoma.Count);
-        int indiceFinSegmento = _random.Siguiente(indiceInicioSegmento + 1, Cromosoma.Count);
+        int indiceInicioSegmento = _random.Siguiente(cantidadAsignaciones);
+        int indiceFinSegmento = indiceInicioSegmento + 1 < cantidadAsignaciones
+            ? _random.Siguiente(indiceInicioSegmento + 1, cantidadAsignaciones)
+            : indiceInicioSegmento;
 
         for (int i = indiceInicioSegmento; i <= indiceFinSegmento; i++)
             asignacionesHijo[i] = asignacionesPadre1[i];

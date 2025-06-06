@@ -197,5 +197,74 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
 
         Assert.Equal([1, 2, 3], hijo.Cromosoma.Take(3));
     }
+
+    [Fact]
+    public void Cruzar_SeccionDeAsignacionesSegmentoAlInicio_CompletaElFinal()
+    {
+        var random = Substitute.For<GeneradorNumerosRandom>();
+        random.Siguiente(4).Returns(0); // Inicio del segmento en la posición 0
+        random.Siguiente(1, 4).Returns(1); // Fin del segmento en la posición 1
+        GeneradorNumerosRandomFactory.SetearGenerador(random);
+
+        var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+        {
+            { 1m, 0m, 0m, 0m },
+            { 0m, 1m, 0m, 0m },
+            { 0m, 0m, 1m, 0m },
+            { 0m, 0m, 0m, 1m },
+        });
+        var padre1 = new IndividuoIntercambioAsignaciones([1, 2, 3, 1, 2, 3, 4], problema, new CalculadoraFitness());
+        var padre2 = new IndividuoIntercambioAsignaciones([3, 3, 3, 4, 3, 2, 1], problema, new CalculadoraFitness());
+
+        Individuo hijo = padre1.Cruzar(padre2);
+
+        Assert.Equal([1, 2, 4, 3], hijo.Cromosoma.Skip(3));
+    }
+
+    [Fact]
+    public void Cruzar_SeccionDeAsignacionesSegmentoAlMedio_CompletaInicioYFinal()
+    {
+        var random = Substitute.For<GeneradorNumerosRandom>();
+        random.Siguiente(4).Returns(1); // Inicio del segmento en la posición 1
+        random.Siguiente(2, 4).Returns(2); // Fin del segmento en la posición 2
+        GeneradorNumerosRandomFactory.SetearGenerador(random);
+
+        var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+        {
+            { 1m, 0m, 0m, 0m },
+            { 0m, 1m, 0m, 0m },
+            { 0m, 0m, 1m, 0m },
+            { 0m, 0m, 0m, 1m },
+        });
+        var padre1 = new IndividuoIntercambioAsignaciones([1, 2, 3, 1, 2, 3, 4], problema, new CalculadoraFitness());
+        var padre2 = new IndividuoIntercambioAsignaciones([3, 3, 3, 4, 3, 2, 1], problema, new CalculadoraFitness());
+
+        Individuo hijo = padre1.Cruzar(padre2);
+
+        Assert.Equal([1, 2, 3, 4], hijo.Cromosoma.Skip(3));
+    }
+
+    [Fact]
+    public void Cruzar_SeccionDeAsignacionesSegmentoAlFinal_CompletaElInicio()
+    {
+        var random = Substitute.For<GeneradorNumerosRandom>();
+        random.Siguiente(4).Returns(3); // Inicio del segmento en la posición 3
+        random.Siguiente(4, 4).Returns(4); // Fin del segmento en la posición 4
+        GeneradorNumerosRandomFactory.SetearGenerador(random);
+
+        var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+        {
+            { 1m, 0m, 0m, 0m },
+            { 0m, 1m, 0m, 0m },
+            { 0m, 0m, 1m, 0m },
+            { 0m, 0m, 0m, 1m },
+        });
+        var padre1 = new IndividuoIntercambioAsignaciones([1, 2, 3, 1, 2, 3, 4], problema, new CalculadoraFitness());
+        var padre2 = new IndividuoIntercambioAsignaciones([3, 3, 3, 4, 3, 2, 1], problema, new CalculadoraFitness());
+
+        Individuo hijo = padre1.Cruzar(padre2);
+
+        Assert.Equal([3, 2, 1, 4], hijo.Cromosoma.Skip(3));
+    }
 }
 
