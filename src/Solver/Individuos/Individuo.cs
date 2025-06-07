@@ -27,42 +27,6 @@ namespace Solver.Individuos
         internal abstract void Mutar();
         internal abstract Individuo Cruzar(Individuo otro);
 
-        internal List<Agente> ExtraerAsignacion()
-        {
-            int cantidadAgentes = _problema.Agentes.Count;
-            int cantidadCortes = cantidadAgentes - 1;
-
-            var cortes = Cromosoma.Take(cantidadCortes).ToList<int>();
-            var asignaciones = Cromosoma.Skip(cantidadCortes).ToList<int>();
-            cortes.Sort();
-
-            Dictionary<int, Agente> agentesClonados = _problema.Agentes
-                .Select(a => new Agente(a.Id))
-                .ToDictionary(a => a.Id);
-
-            int atomoInicio = 1;
-            for (int i = 0; i < cantidadAgentes; i++)
-            {
-                int atomoFin = (i < cortes.Count) ? cortes[i] : _problema.CantidadAtomos;
-                int idAgente = asignaciones[i];
-
-                Agente agente = agentesClonados[idAgente];
-                for (int pos = atomoInicio; pos <= atomoFin; pos++)
-                {
-                    Atomo atomoValorado = _problema.Agentes
-                        .First(a => a.Id == idAgente).Valoraciones
-                        .FirstOrDefault(v => v.Posicion == pos);
-
-                    decimal valoracion = atomoValorado?.Valoracion ?? 0;
-                    agente.AgregarValoracion(new Atomo(pos, valoracion));
-                }
-                atomoInicio = atomoFin + 1;
-            }
-
-            var resultado = agentesClonados.Values.ToList<Agente>();
-            return resultado;
-        }
-
         private void ValidarCromosoma(List<int> cromosoma, InstanciaProblema problema)
         {
             int cantidadAgentes = problema.Agentes.Count;
