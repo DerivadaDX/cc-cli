@@ -6,12 +6,10 @@ namespace Solver
     {
         private Poblacion _poblacion;
         private readonly int _maxGeneraciones;
-        private readonly Func<Individuo, bool> _esSolucionOptima;
 
-        internal AlgoritmoGenetico(Poblacion poblacion, int maxGeneraciones, Func<Individuo, bool> esSolucionOptima)
+        internal AlgoritmoGenetico(Poblacion poblacion, int maxGeneraciones)
         {
             ArgumentNullException.ThrowIfNull(poblacion, nameof(poblacion));
-            ArgumentNullException.ThrowIfNull(esSolucionOptima, nameof(esSolucionOptima));
 
             if (maxGeneraciones < 0)
             {
@@ -21,7 +19,6 @@ namespace Solver
 
             _poblacion = poblacion;
             _maxGeneraciones = maxGeneraciones;
-            _esSolucionOptima = esSolucionOptima;
         }
 
         internal Individuo Ejecutar()
@@ -34,7 +31,8 @@ namespace Solver
             {
                 foreach (Individuo individuo in _poblacion.Individuos)
                 {
-                    if (_esSolucionOptima(individuo))
+                    bool esSolucionOptima = individuo.Fitness == 0;
+                    if (esSolucionOptima)
                         return individuo;
                 }
 
