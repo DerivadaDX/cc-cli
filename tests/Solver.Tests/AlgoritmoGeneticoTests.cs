@@ -23,9 +23,7 @@ namespace Solver.Tests
         [Fact]
         public void Ejecutar_EncuentraSolucionOptima_RetornaIndividuoOptimo()
         {
-            Individuo individuoOptimo = CrearIndividuoFake();
-            individuoOptimo.Fitness.Returns(0);
-
+            Individuo individuoOptimo = CrearIndividuoOptimoFake();
             var poblacion = Substitute.For<Poblacion>(1);
             poblacion.Individuos.Returns([individuoOptimo]);
 
@@ -38,9 +36,7 @@ namespace Solver.Tests
         [Fact]
         public void Ejecutar_EncuentraSolucionOptima_NoGeneraMasPoblaciones()
         {
-            Individuo individuoOptimo = CrearIndividuoFake();
-            individuoOptimo.Fitness.Returns(0);
-
+            Individuo individuoOptimo = CrearIndividuoOptimoFake();
             var poblacion = Substitute.For<Poblacion>(1);
             poblacion.Individuos.Returns([individuoOptimo]);
 
@@ -53,9 +49,7 @@ namespace Solver.Tests
         [Fact]
         public void Ejecutar_EncuentraSolucionOptima_NoObtieneElMejorIndividuo()
         {
-            Individuo individuoOptimo = CrearIndividuoFake();
-            individuoOptimo.Fitness.Returns(0);
-
+            Individuo individuoOptimo = CrearIndividuoOptimoFake();
             var poblacion = Substitute.For<Poblacion>(1);
             poblacion.Individuos.Returns([individuoOptimo]);
 
@@ -68,8 +62,7 @@ namespace Solver.Tests
         [Fact]
         public void Ejecutar_NoEncuentraSolucionOptima_RetornaMejorIndividuo()
         {
-            Individuo mejorIndividuo = CrearIndividuoFake();
-            mejorIndividuo.Fitness.Returns(1);
+            Individuo mejorIndividuo = CrearIndividuoNoOptimoFake();
 
             var poblacion = Substitute.For<Poblacion>(1);
             poblacion.Individuos.Returns([mejorIndividuo]);
@@ -87,13 +80,11 @@ namespace Solver.Tests
         public void Ejecutar_GeneraNuevasGeneraciones_Correctamente()
         {
             var poblacion = Substitute.For<Poblacion>(1);
-            Individuo individuoInicial = CrearIndividuoFake();
-            individuoInicial.Fitness.Returns(1);
+            Individuo individuoInicial = CrearIndividuoNoOptimoFake();
             poblacion.Individuos.Returns([individuoInicial]);
 
             var nuevaPoblacion = Substitute.For<Poblacion>(1);
-            Individuo individuoSiguiente = CrearIndividuoFake();
-            individuoSiguiente.Fitness.Returns(1);
+            Individuo individuoSiguiente = CrearIndividuoNoOptimoFake();
             nuevaPoblacion.Individuos.Returns([individuoSiguiente]);
             poblacion.GenerarNuevaGeneracion().Returns(nuevaPoblacion);
             nuevaPoblacion.GenerarNuevaGeneracion().Returns(nuevaPoblacion);
@@ -108,12 +99,10 @@ namespace Solver.Tests
         [Fact]
         public void Ejecutar_MaxGeneracionesCero_EjecutaHastaEncontrarSolucion()
         {
-            Individuo individuoOptimo = CrearIndividuoFake();
-            individuoOptimo.Fitness.Returns(0);
+            Individuo individuoOptimo = CrearIndividuoOptimoFake();
 
             var poblacionInicial = Substitute.For<Poblacion>(1);
-            Individuo individuoInicial = CrearIndividuoFake();
-            individuoInicial.Fitness.Returns(1);
+            Individuo individuoInicial = CrearIndividuoNoOptimoFake();
             poblacionInicial.Individuos.Returns([individuoInicial]);
 
             var poblacionSiguiente = Substitute.For<Poblacion>(1);
@@ -126,6 +115,20 @@ namespace Solver.Tests
             Assert.Same(individuoOptimo, resultado);
             poblacionInicial.Received(1).GenerarNuevaGeneracion();
             poblacionSiguiente.DidNotReceive().GenerarNuevaGeneracion();
+        }
+
+        private Individuo CrearIndividuoOptimoFake()
+        {
+            Individuo individuo = CrearIndividuoFake();
+            individuo.Fitness.Returns(0);
+            return individuo;
+        }
+
+        private Individuo CrearIndividuoNoOptimoFake()
+        {
+            Individuo individuo = CrearIndividuoFake();
+            individuo.Fitness.Returns(1);
+            return individuo;
         }
 
         private Individuo CrearIndividuoFake()
