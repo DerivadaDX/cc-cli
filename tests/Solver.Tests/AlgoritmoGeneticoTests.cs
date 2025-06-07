@@ -12,13 +12,10 @@ namespace Solver.Tests
             Assert.Equal("poblacion", ex.ParamName);
         }
 
-        [Theory]
-        [InlineData(-1)]
-        public void Constructor_MaxGeneracionesNegativo_LanzaArgumentOutOfRangeException(int maxGeneraciones)
+        [Fact]
+        public void Constructor_MaxGeneracionesNegativo_LanzaArgumentOutOfRangeException()
         {
-            var ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new AlgoritmoGenetico(new Poblacion(1), maxGeneraciones));
-
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => new AlgoritmoGenetico(new Poblacion(1), -1));
             Assert.Contains("no puede ser negativo", ex.Message);
             Assert.Equal("maxGeneraciones", ex.ParamName);
         }
