@@ -15,7 +15,7 @@ namespace Solver.Tests.Individuos
                 { 0m, 1m }
             });
             var cromosoma = new List<int> { 1, 1, 2 };
-            var individuo = new IndividuoStub(cromosoma, problema);
+            var individuo = new IndividuoFake(cromosoma, problema);
 
             decimal fitness = _calculadora.CalcularFitness(individuo, problema);
             Assert.Equal(0, fitness);
@@ -30,7 +30,7 @@ namespace Solver.Tests.Individuos
                 { 0m, .5m },
             });
             var cromosoma = new List<int> { 1, 2, 1 };
-            var individuo = new IndividuoStub(cromosoma, problema);
+            var individuo = new IndividuoFake(cromosoma, problema);
 
             decimal fitness = _calculadora.CalcularFitness(individuo, problema);
             Assert.True(fitness > 0);
@@ -46,15 +46,15 @@ namespace Solver.Tests.Individuos
             });
 
             var cromosoma = new List<int> { 1, 1, 2 };
-            var individuo = new IndividuoStub(cromosoma, problema);
+            var individuo = new IndividuoFake(cromosoma, problema);
 
             decimal fitness = _calculadora.CalcularFitness(individuo, problema);
             Assert.Equal(0, fitness);
         }
 
-        private class IndividuoStub : Individuo
+        private class IndividuoFake : Individuo
         {
-            internal IndividuoStub(List<int> cromosoma, InstanciaProblema problema)
+            internal IndividuoFake(List<int> cromosoma, InstanciaProblema problema)
                 : base(cromosoma, problema, new CalculadoraFitness())
             {
             }
@@ -68,7 +68,6 @@ namespace Solver.Tests.Individuos
             {
                 throw new NotImplementedException();
             }
-
         }
     }
 }
