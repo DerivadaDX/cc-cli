@@ -6,7 +6,7 @@ namespace Solver
     {
         private static Poblacion _poblacion;
 
-        public static Poblacion CrearInicial(int tamaño, IIndividuoFactory individuoFactory)
+        public static Poblacion Crear(int tamaño, IIndividuoFactory individuoFactory)
         {
             ArgumentNullException.ThrowIfNull(individuoFactory, nameof(individuoFactory));
 

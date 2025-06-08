@@ -12,9 +12,9 @@ namespace Solver.Tests
         }
 
         [Fact]
-        public void CrearInicial_IndividuoFactory_Null_Excepcion()
+        public void Crear_IndividuoFactory_Null_Excepcion()
         {
-            var ex = Assert.Throws<ArgumentNullException>(() => PoblacionFactory.CrearInicial(5, null));
+            var ex = Assert.Throws<ArgumentNullException>(() => PoblacionFactory.Crear(5, null));
             Assert.Equal("individuoFactory", ex.ParamName);
         }
 
@@ -23,7 +23,7 @@ namespace Solver.Tests
         {
             int tamaño = 5;
 
-            var poblacion = PoblacionFactory.CrearInicial(tamaño, Substitute.For<IIndividuoFactory>());
+            var poblacion = PoblacionFactory.Crear(tamaño, Substitute.For<IIndividuoFactory>());
 
             Assert.NotNull(poblacion);
             Assert.IsType<Poblacion>(poblacion);
@@ -36,7 +36,7 @@ namespace Solver.Tests
             var instancia1 = new Poblacion(1);
             PoblacionFactory.SetearPoblacion(instancia1);
 
-            var instancia2 = PoblacionFactory.CrearInicial(1, Substitute.For<IIndividuoFactory>());
+            var instancia2 = PoblacionFactory.Crear(1, Substitute.For<IIndividuoFactory>());
 
             Assert.Same(instancia1, instancia2);
         }
