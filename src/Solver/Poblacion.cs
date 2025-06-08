@@ -22,6 +22,17 @@ namespace Solver
 
         internal virtual List<Individuo> Individuos { get; private set; } = [];
 
+        internal virtual void Inicializar(IIndividuoFactory individuoFactory)
+        {
+            ArgumentNullException.ThrowIfNull(individuoFactory, nameof(individuoFactory));
+
+            for (int i = 0; i < _tamaño; i++)
+            {
+                Individuo individuo = individuoFactory.CrearAleatorio();
+                Individuos.Add(individuo);
+            }
+        }
+
         internal virtual Poblacion GenerarNuevaGeneracion()
         {
             var nuevaGeneracion = new Poblacion(_tamaño);

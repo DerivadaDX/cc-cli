@@ -23,6 +23,27 @@ namespace Solver.Tests
         }
 
         [Fact]
+        public void Inicializar_NullFactory_LanzaArgumentNullException()
+        {
+            var poblacion = new Poblacion(tamaño: 1);
+            var ex = Assert.Throws<ArgumentNullException>(() => poblacion.Inicializar(null));
+            Assert.Equal("individuoFactory", ex.ParamName);
+        }
+
+        [Fact]
+        public void Inicializar_Individuos_GeneraCantidadCorrecta()
+        {
+            int tamaño = 3;
+
+            var poblacion = new Poblacion(tamaño);
+            var factory = Substitute.For<IIndividuoFactory>();
+            poblacion.Inicializar(factory);
+
+            factory.Received(tamaño).CrearAleatorio();
+            Assert.Equal(tamaño, poblacion.Individuos.Count);
+        }
+
+        [Fact]
         public void GenerarNuevaGeneracion_NuevaPoblacion_ConTamañoCorrecto()
         {
             int tamaño = 3;
