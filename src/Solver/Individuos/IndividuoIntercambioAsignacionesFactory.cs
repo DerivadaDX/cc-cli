@@ -20,11 +20,10 @@ internal class IndividuoIntercambioAsignacionesFactory : IIndividuoFactory
     public Individuo CrearAleatorio()
     {
         int cantidadAgentes = _problema.Agentes.Count;
-
         List<int> cortes = GenerarCortes(cantidadAgentes - 1);
         List<int> asignaciones = GenerarAsignaciones(cantidadAgentes);
-        List<int> cromosoma = cortes.Concat(asignaciones).ToList();
 
+        var cromosoma = cortes.Concat(asignaciones).ToList<int>();
         var individuo = new IndividuoIntercambioAsignaciones(cromosoma, _problema, _calculadoraFitness);
         return individuo;
     }
@@ -48,9 +47,10 @@ internal class IndividuoIntercambioAsignacionesFactory : IIndividuoFactory
         // Fisher–Yates shuffle
         for (int i = asignaciones.Count - 1; i > 0; i--)
         {
-            int j = _random.Siguiente(i + 1); // Random index in range [0, i]
-            (asignaciones[i], asignaciones[j]) = (asignaciones[j], asignaciones[i]); // Swap
+            int j = _random.Siguiente(i + 1);
+            (asignaciones[i], asignaciones[j]) = (asignaciones[j], asignaciones[i]);
         }
+
         return asignaciones;
     }
 }
