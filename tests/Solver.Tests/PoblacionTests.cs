@@ -91,7 +91,7 @@ namespace Solver.Tests
         }
 
         [Fact]
-        public void ObtenerMejorIndividuo_RetornaIndividuoConMenorFitness()
+        public void ObtenerMejorIndividuo_Resultado_EsIndividuoConMenorFitness()
         {
             int mejorFitness = 5;
 
@@ -103,7 +103,7 @@ namespace Solver.Tests
             ]);
 
             Individuo mejorIndividuo = poblacion.ObtenerMejorIndividuo();
-            Assert.Equal(mejorFitness, mejorIndividuo.Fitness);
+            Assert.Equal(mejorFitness, mejorIndividuo.Fitness());
         }
 
         private Individuo CrearIndividuoFake(int fitness = 0)
@@ -117,8 +117,9 @@ namespace Solver.Tests
             });
 
             var individuo = Substitute.For<Individuo>(cromosoma, instanciaProblema, new CalculadoraFitness());
-            individuo.Cruzar(Arg.Any<Individuo>()).Returns(Substitute.For<Individuo>(cromosoma, instanciaProblema, new CalculadoraFitness()));
-            individuo.Fitness.Returns(fitness);
+            var otroIndividuo = Substitute.For<Individuo>(cromosoma, instanciaProblema, new CalculadoraFitness());
+            individuo.Cruzar(Arg.Any<Individuo>()).Returns(otroIndividuo);
+            individuo.Fitness().Returns(fitness);
             return individuo;
         }
     }
