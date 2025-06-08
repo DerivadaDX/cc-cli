@@ -26,6 +26,13 @@ namespace Solver.Individuos
 
         internal virtual List<int> Cromosoma { get; }
 
+        public override string ToString()
+        {
+            string cromosomaStr = string.Join(", ", Cromosoma);
+            decimal fitness = Fitness();
+            return $"Cromosoma: [{cromosomaStr}], Fitness: {fitness}";
+        }
+
         internal virtual decimal Fitness()
         {
             decimal fitness = _calculadoraFitness.CalcularFitness(this, _problema);
