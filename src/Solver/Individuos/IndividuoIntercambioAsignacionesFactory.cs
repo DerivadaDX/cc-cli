@@ -23,7 +23,7 @@ internal class IndividuoIntercambioAsignacionesFactory : IIndividuoFactory
 
         List<int> cortes = GenerarCortes(cantidadAgentes - 1);
         List<int> asignaciones = GenerarAsignaciones(cantidadAgentes);
-        List<int> cromosoma = [.. cortes, .. asignaciones];
+        List<int> cromosoma = cortes.Concat(asignaciones).ToList();
 
         var individuo = new IndividuoIntercambioAsignaciones(cromosoma, _problema, _calculadoraFitness);
         return individuo;
