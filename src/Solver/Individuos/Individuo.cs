@@ -1,6 +1,6 @@
 namespace Solver.Individuos
 {
-    internal abstract class Individuo
+    public abstract class Individuo
     {
         protected readonly InstanciaProblema _problema;
         protected readonly CalculadoraFitness _calculadoraFitness;

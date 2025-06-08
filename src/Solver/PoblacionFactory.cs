@@ -2,7 +2,7 @@
 
 namespace Solver
 {
-    internal class PoblacionFactory
+    public class PoblacionFactory
     {
         private static Poblacion _poblacion;
 
