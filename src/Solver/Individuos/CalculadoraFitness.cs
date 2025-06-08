@@ -1,6 +1,6 @@
 namespace Solver.Individuos
 {
-    internal class CalculadoraFitness
+    public class CalculadoraFitness
     {
         public decimal CalcularFitness(Individuo individuo, InstanciaProblema problema)
         {

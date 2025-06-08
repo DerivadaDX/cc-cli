@@ -2,12 +2,12 @@
 
 namespace Solver
 {
-    internal class AlgoritmoGenetico
+    public class AlgoritmoGenetico
     {
         private Poblacion _poblacion;
         private readonly int _maxGeneraciones;
 
-        internal AlgoritmoGenetico(Poblacion poblacion, int maxGeneraciones)
+        public AlgoritmoGenetico(Poblacion poblacion, int maxGeneraciones)
         {
             ArgumentNullException.ThrowIfNull(poblacion, nameof(poblacion));
 
@@ -21,7 +21,7 @@ namespace Solver
             _maxGeneraciones = maxGeneraciones;
         }
 
-        internal Individuo Ejecutar()
+        public Individuo Ejecutar()
         {
             int generacion = 0;
             bool ejecutarHastaEncontrarSolucion = _maxGeneraciones == 0;

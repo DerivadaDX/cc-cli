@@ -165,11 +165,33 @@ namespace Solver.Tests.Individuos
             Assert.Null(ex);
         }
 
+        [Fact]
+        public void ToString_DevuelveCromosomaYFitness()
+        {
+            var cromosoma = new List<int> { 1, 2, 1 };
+            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 1m, 0m },
+                { 0m, 1m },
+                { 0m, 1m },
+            });
+
+            var individuo = new IndividuoFake(cromosoma, instanciaProblema);
+            string resultado = individuo.ToString();
+
+            Assert.Equal("Cromosoma: [1, 2, 1], Fitness: 1.0", resultado);
+        }
+
         private class IndividuoFake : Individuo
         {
             internal IndividuoFake(List<int> cromosoma, InstanciaProblema problema)
                 : base(cromosoma, problema, new CalculadoraFitness())
             {
+            }
+
+            internal override decimal Fitness()
+            {
+                return 1.0m;
             }
 
             internal override void Mutar()

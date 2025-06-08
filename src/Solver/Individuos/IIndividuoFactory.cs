@@ -1,6 +1,6 @@
 namespace Solver.Individuos;
 
-internal interface IIndividuoFactory
+public interface IIndividuoFactory
 {
     Individuo CrearAleatorio();
 }
