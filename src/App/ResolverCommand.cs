@@ -1,6 +1,7 @@
 ﻿using System.CommandLine;
 using Common;
 using Solver;
+using Solver.Individuos;
 
 namespace App
 {
@@ -34,10 +35,12 @@ namespace App
         {
             decimal[,] matrizValoraciones = lector.Leer(parametros.RutaInstancia);
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matrizValoraciones);
-            var poblacion = new Poblacion(parametros.TamañoPoblacion);
-            // TODO: instanciar algoritmo genético
-            // TODO: ejecutar algoritmo genético
-            // TODO: devolver resultado
+            var individuoFactory = new IndividuoIntercambioAsignacionesFactory(instanciaProblema);
+            var poblacion = PoblacionFactory.Crear(parametros.TamañoPoblacion, individuoFactory);
+            var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.MaxGeneraciones);
+
+            Individuo resultado = algoritmoGenetico.Ejecutar();
+            Console.WriteLine($"Mejor individuo encontrado: {resultado}");
         }
     }
 }

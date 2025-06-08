@@ -1,6 +1,8 @@
+using System.Globalization;
+
 namespace Solver.Individuos
 {
-    internal abstract class Individuo
+    public abstract class Individuo
     {
         protected readonly InstanciaProblema _problema;
         protected readonly CalculadoraFitness _calculadoraFitness;
@@ -25,6 +27,13 @@ namespace Solver.Individuos
         internal abstract Individuo Cruzar(Individuo otro);
 
         internal virtual List<int> Cromosoma { get; }
+
+        public override string ToString()
+        {
+            string cromosomaStr = string.Join(", ", Cromosoma);
+            decimal fitness = Fitness();
+            return $"Cromosoma: [{cromosomaStr}], Fitness: {fitness.ToString(CultureInfo.InvariantCulture)}";
+        }
 
         internal virtual decimal Fitness()
         {

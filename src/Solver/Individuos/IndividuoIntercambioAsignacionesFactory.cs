@@ -2,13 +2,13 @@ using Common;
 
 namespace Solver.Individuos;
 
-internal class IndividuoIntercambioAsignacionesFactory : IIndividuoFactory
+public class IndividuoIntercambioAsignacionesFactory : IIndividuoFactory
 {
     private readonly InstanciaProblema _problema;
     private readonly GeneradorNumerosRandom _random;
     private readonly CalculadoraFitness _calculadoraFitness;
 
-    internal IndividuoIntercambioAsignacionesFactory(InstanciaProblema problema)
+    public IndividuoIntercambioAsignacionesFactory(InstanciaProblema problema)
     {
         ArgumentNullException.ThrowIfNull(problema, nameof(problema));
 
