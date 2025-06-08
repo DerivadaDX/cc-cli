@@ -43,7 +43,7 @@ namespace Solver
 
         internal virtual Individuo ObtenerMejorIndividuo()
         {
-            Individuo resultado = Individuos.OrderBy(individuo => individuo.Fitness).FirstOrDefault();
+            Individuo resultado = Individuos.OrderBy(individuo => individuo.Fitness()).FirstOrDefault();
             return resultado;
         }
 
@@ -54,18 +54,19 @@ namespace Solver
             // debido al uso de Math.Ceiling. Esto asegura que el individuo con mejor desempeño se conserve entre generaciones.
             const decimal FraccionElite = 0.01M;
             int cantidadElite = (int)Math.Ceiling(Individuos.Count * FraccionElite);
-            List<Individuo> elite = [.. Individuos.OrderBy(individuo => individuo.Fitness).Take(cantidadElite)];
+            List<Individuo> elite = [.. Individuos.OrderBy(individuo => individuo.Fitness()).Take(cantidadElite)];
             return elite;
         }
 
         private Individuo SeleccionarIndividuoPorTorneo()
         {
             int indice1 = _random.Siguiente(Individuos.Count);
+            Individuo individuo1 = Individuos[indice1];
+
             int indice2 = _random.Siguiente(Individuos.Count);
+            Individuo individuo2 = Individuos[indice2];
 
-            Individuo resultado = Individuos[indice1].Fitness <= Individuos[indice2].Fitness
-                ? Individuos[indice1] : Individuos[indice2];
-
+            Individuo resultado = individuo1.Fitness() <= individuo2.Fitness() ? individuo1 : individuo2;
             return resultado;
         }
     }
