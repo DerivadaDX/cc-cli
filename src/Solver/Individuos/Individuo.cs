@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Solver.Individuos
 {
     public abstract class Individuo
@@ -30,7 +32,7 @@ namespace Solver.Individuos
         {
             string cromosomaStr = string.Join(", ", Cromosoma);
             decimal fitness = Fitness();
-            return $"Cromosoma: [{cromosomaStr}], Fitness: {fitness}";
+            return $"Cromosoma: [{cromosomaStr}], Fitness: {fitness.ToString(CultureInfo.InvariantCulture)}";
         }
 
         internal virtual decimal Fitness()
