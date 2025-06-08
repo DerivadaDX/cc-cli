@@ -43,10 +43,14 @@ internal class IndividuoIntercambioAsignacionesFactory : IIndividuoFactory
 
     private List<int> GenerarAsignaciones(int cantidadAgentes)
     {
-        var asignaciones = Enumerable.Range(1, cantidadAgentes)
-            .OrderBy(_ => _random.SiguienteDouble())
-            .ToList<int>();
+        var asignaciones = Enumerable.Range(1, cantidadAgentes).ToList();
 
+        // Fisher–Yates shuffle
+        for (int i = asignaciones.Count - 1; i > 0; i--)
+        {
+            int j = _random.Siguiente(i + 1); // Random index in range [0, i]
+            (asignaciones[i], asignaciones[j]) = (asignaciones[j], asignaciones[i]); // Swap
+        }
         return asignaciones;
     }
 }
