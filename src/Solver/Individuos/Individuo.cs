@@ -21,11 +21,16 @@ namespace Solver.Individuos
             ValidarCromosoma(cromosoma, problema);
         }
 
-        internal virtual List<int> Cromosoma { get; }
-        internal virtual int Fitness { get; set; }
-
         internal abstract void Mutar();
         internal abstract Individuo Cruzar(Individuo otro);
+
+        internal virtual List<int> Cromosoma { get; }
+
+        internal virtual decimal Fitness()
+        {
+            decimal fitness = _calculadoraFitness.CalcularFitness(this, _problema);
+            return fitness;
+        }
 
         private void ValidarCromosoma(List<int> cromosoma, InstanciaProblema problema)
         {

@@ -102,17 +102,38 @@ namespace Solver.Tests
             poblacionSiguiente.DidNotReceive().GenerarNuevaGeneracion();
         }
 
+        [Fact]
+        public void Ejecutar_Generaciones_SeEvaluanTodosLosIndividuos()
+        {
+            Individuo individuo1 = CrearIndividuoNoOptimoFake();
+            Individuo individuo2 = CrearIndividuoNoOptimoFake();
+
+            var poblacionInicial = Substitute.For<Poblacion>(2);
+            poblacionInicial.Individuos.Returns([individuo1, individuo2]);
+
+            var poblacionSiguiente = Substitute.For<Poblacion>(2);
+            poblacionSiguiente.Individuos.Returns([individuo1, individuo2]);
+            poblacionInicial.GenerarNuevaGeneracion().Returns(poblacionSiguiente);
+            poblacionSiguiente.GenerarNuevaGeneracion().Returns(poblacionSiguiente);
+
+            var algoritmo = new AlgoritmoGenetico(poblacionInicial, 2);
+            algoritmo.Ejecutar();
+
+            individuo1.Received(2).Fitness();
+            individuo2.Received(2).Fitness();
+        }
+
         private Individuo CrearIndividuoOptimoFake()
         {
             Individuo individuo = CrearIndividuoFake();
-            individuo.Fitness.Returns(0);
+            individuo.Fitness().Returns(0);
             return individuo;
         }
 
         private Individuo CrearIndividuoNoOptimoFake()
         {
             Individuo individuo = CrearIndividuoFake();
-            individuo.Fitness.Returns(1);
+            individuo.Fitness().Returns(1);
             return individuo;
         }
 

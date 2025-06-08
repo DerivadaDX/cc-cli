@@ -31,7 +31,7 @@ namespace Solver
             {
                 foreach (Individuo individuo in _poblacion.Individuos)
                 {
-                    bool esSolucionOptima = individuo.Fitness == 0;
+                    bool esSolucionOptima = individuo.Fitness() == 0;
                     if (esSolucionOptima)
                         return individuo;
                 }
