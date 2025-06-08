@@ -80,11 +80,49 @@ cc-cli.exe generar --atomos 8 --agentes 2 --output datos/instancia1.txt
 cc-cli.exe generar --atomos 5 --agentes 3 --disjuntas --valor-maximo 500 --output instancia.txt
 ```
 
-**Notas:**
-
 - El archivo de salida se sobrescribe sin confirmación.
 
-#### 2. Otros comandos
+#### 2. Resolver instancias
+
+Resuelve una instancia del problema de cake-cutting utilizando un algoritmo genético para encontrar una asignación
+libre de envidia.
+
+**Sintaxis**:
+
+```bash
+cc-cli.exe resolver [opciones]
+```
+
+**Opciones principales**:
+
+| Opción        | Descripción                          | Valores aceptados   |
+| ------------- | ------------------------------------ | ------------------- |
+| `--instancia` | Ruta y nombre del archivo de entrada | Un path (requerido) |
+
+**Opciones secundarias**:
+
+| Opción               | Descripción                            | Valores aceptados              |
+| -------------------- | -------------------------------------- | ------------------------------ |
+| `--max-generaciones` | Generaciones a computar (0 = infinito) | Entero positivo (default: 0)   |
+| `--tamaño-poblacion` | Tamaño de población a utilizar         | Entero positivo (default: 100) |
+
+**Ejemplos**:
+
+```bash
+# Resolver una instancia (corre indefinidamente con tamaño de poblacion = 100)
+cc-cli.exe resolver --instancia instancia.dat
+
+# Especificando máximo de generaciones
+cc-cli.exe resolver --instancia instancia.dat --max-generaciones 1000
+
+# Especificando tamaño de población
+cc-cli.exe resolver --instancia instancia.dat --tamaño-poblacion 5000
+
+# Ejemplo completo
+cc-cli.exe resolver --instancia instancia.dat --max-generaciones 1000 --tamaño-poblacion 5000
+```
+
+#### 3. Otros comandos
 
 **Mostrar versión:**
 
@@ -97,6 +135,7 @@ cc-cli.exe --version
 ```bash
 cc-cli.exe --help
 cc-cli.exe generar --help
+cc-cli.exe resolver --help
 ```
 
 ## Referencias
