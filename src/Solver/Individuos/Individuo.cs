@@ -12,15 +12,11 @@ namespace Solver.Individuos
             ArgumentNullException.ThrowIfNull(cromosoma, nameof(cromosoma));
             ArgumentNullException.ThrowIfNull(problema, nameof(problema));
             ArgumentNullException.ThrowIfNull(calculadoraFitness, nameof(calculadoraFitness));
+            ValidarCromosoma(cromosoma, problema);
 
             Cromosoma = cromosoma;
             _problema = problema;
             _calculadoraFitness = calculadoraFitness;
-
-            if (cromosoma.Count == 0)
-                throw new ArgumentException("El cromosoma no puede estar vacío", nameof(cromosoma));
-
-            ValidarCromosoma(cromosoma, problema);
         }
 
         internal abstract void Mutar();
@@ -30,9 +26,12 @@ namespace Solver.Individuos
 
         public override string ToString()
         {
-            string cromosomaStr = string.Join(", ", Cromosoma);
+            List<int> cromosomaOrdenado = OrdenarCortes(Cromosoma, _problema);
+            string cromosoma = string.Join(", ", cromosomaOrdenado);
             decimal fitness = Fitness();
-            return $"Cromosoma: [{cromosomaStr}], Fitness: {fitness.ToString(CultureInfo.InvariantCulture)}";
+
+            string resultado = $"Cromosoma: [{cromosoma}], Fitness: {fitness.ToString(CultureInfo.InvariantCulture)}";
+            return resultado;
         }
 
         internal virtual decimal Fitness()
@@ -43,6 +42,9 @@ namespace Solver.Individuos
 
         private void ValidarCromosoma(List<int> cromosoma, InstanciaProblema problema)
         {
+            if (cromosoma.Count == 0)
+                throw new ArgumentException("El cromosoma no puede estar vacío", nameof(cromosoma));
+
             int cantidadAgentes = problema.Agentes.Count;
             int cantidadCortesEsperada = cantidadAgentes - 1;
 
@@ -100,6 +102,19 @@ namespace Solver.Individuos
                 string mensaje = $"Hay asignaciones repetidas a agentes: ({string.Join(", ", repetidas)})";
                 throw new ArgumentException(mensaje, nameof(cromosoma));
             }
+        }
+
+        private List<int> OrdenarCortes(List<int> cromosoma, InstanciaProblema problema)
+        {
+            int cantidadCortes = problema.Agentes.Count - 1;
+            if (cantidadCortes == 0)
+                return cromosoma;
+
+            var cortesOrdenados = cromosoma.Take(cantidadCortes).OrderBy(x => x).ToList<int>();
+            var asignaciones = cromosoma.Skip(cantidadCortes).ToList<int>();
+            var cromosomaOrdenado = cortesOrdenados.Concat(asignaciones).ToList<int>();
+
+            return cromosomaOrdenado;
         }
     }
 }

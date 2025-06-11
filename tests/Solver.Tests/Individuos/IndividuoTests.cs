@@ -95,7 +95,7 @@ namespace Solver.Tests.Individuos
                 { 1m, 0m, 0m, 0m },
                 { 0m, 1m, 0m, 0m },
                 { 0m, 0m, 1m, 0m },
-                { 0m, 0m, 0m, 1m }
+                { 0m, 0m, 0m, 1m },
             };
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz);
 
@@ -123,7 +123,7 @@ namespace Solver.Tests.Individuos
                 { 1m, 0m, 0m, 0m },
                 { 0m, 1m, 0m, 0m },
                 { 0m, 0m, 1m, 0m },
-                { 0m, 0m, 0m, 1m }
+                { 0m, 0m, 0m, 1m },
             };
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz);
 
@@ -166,20 +166,21 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void ToString_DevuelveCromosomaYFitness()
+        public void ToString_Resultado_CromosomaCortesOrdenadoYFitness()
         {
-            var cromosoma = new List<int> { 1, 2, 1 };
+            var cromosoma = new List<int> { 4, 1, 2, 1, 4, 3, 2 };
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
-                { 1m, 0m },
-                { 0m, 1m },
-                { 0m, 1m },
+                { 1m, 0m, 0m, 0m },
+                { 0m, 1m, 0m, 0m },
+                { 0m, 0m, 1m, 0m },
+                { 0m, 0m, 0m, 1m },
             });
 
             var individuo = new IndividuoFake(cromosoma, instanciaProblema);
             string resultado = individuo.ToString();
 
-            Assert.Equal("Cromosoma: [1, 2, 1], Fitness: 1.0", resultado);
+            Assert.Equal("Cromosoma: [1, 2, 4, 1, 4, 3, 2], Fitness: 1.0", resultado);
         }
 
         private class IndividuoFake : Individuo
