@@ -72,7 +72,7 @@ namespace Solver.Tests
         }
 
         [Fact]
-        public void Ejecutar_GeneraNuevasGeneraciones_Correctamente()
+        public void Ejecutar_CantidadGeneracionesGeneradas_EsMaxGeneraciones()
         {
             Poblacion poblacionInicial = CrearPoblacionFakeConIndividuo(CrearIndividuoNoOptimoFake());
             Poblacion poblacionSiguiente = CrearPoblacionFakeConIndividuo(CrearIndividuoNoOptimoFake());
