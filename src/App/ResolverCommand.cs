@@ -39,8 +39,8 @@ namespace App
             var poblacion = PoblacionFactory.Crear(parametros.TamañoPoblacion, individuoFactory);
             var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.MaxGeneraciones);
 
-            Individuo resultado = algoritmoGenetico.Ejecutar();
-            Console.WriteLine($"Mejor individuo encontrado: {resultado}");
+            (Individuo mejorIndividuo, int generaciones) = algoritmoGenetico.Ejecutar();
+            Console.WriteLine($"Mejor individuo encontrado en {generaciones} generaciones: {mejorIndividuo}");
         }
     }
 }

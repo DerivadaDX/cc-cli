@@ -27,9 +27,9 @@ namespace Solver.Tests
             Poblacion poblacion = CrearPoblacionFakeConIndividuo(individuoOptimo);
 
             var algoritmo = new AlgoritmoGenetico(poblacion, 10);
-            Individuo resultado = algoritmo.Ejecutar();
+            (Individuo mejorIndividuo, int generaciones) = algoritmo.Ejecutar();
 
-            Assert.Same(individuoOptimo, resultado);
+            Assert.Same(individuoOptimo, mejorIndividuo);
         }
 
         [Fact]
@@ -65,10 +65,10 @@ namespace Solver.Tests
             poblacion.ObtenerMejorIndividuo().Returns(mejorIndividuo);
 
             var algoritmo = new AlgoritmoGenetico(poblacion, 1);
-            Individuo resultado = algoritmo.Ejecutar();
+            (Individuo mejorIndividuoEncontrado, int generaciones) = algoritmo.Ejecutar();
 
             poblacion.Received(1).ObtenerMejorIndividuo();
-            Assert.Same(mejorIndividuo, resultado);
+            Assert.Same(mejorIndividuo, mejorIndividuoEncontrado);
         }
 
         [Fact]
@@ -95,9 +95,9 @@ namespace Solver.Tests
             poblacionInicial.GenerarNuevaGeneracion().Returns(poblacionSiguiente);
 
             var algoritmo = new AlgoritmoGenetico(poblacionInicial, 0);
-            Individuo resultado = algoritmo.Ejecutar();
+            (Individuo mejorIndividuo, int generaciones) = algoritmo.Ejecutar();
 
-            Assert.Same(individuoOptimo, resultado);
+            Assert.Same(individuoOptimo, mejorIndividuo);
             poblacionInicial.Received(1).GenerarNuevaGeneracion();
             poblacionSiguiente.DidNotReceive().GenerarNuevaGeneracion();
         }
