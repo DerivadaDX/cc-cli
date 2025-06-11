@@ -12,10 +12,9 @@ namespace Solver.Individuos
             ArgumentNullException.ThrowIfNull(cromosoma, nameof(cromosoma));
             ArgumentNullException.ThrowIfNull(problema, nameof(problema));
             ArgumentNullException.ThrowIfNull(calculadoraFitness, nameof(calculadoraFitness));
-
             ValidarCromosoma(cromosoma, problema);
-            Cromosoma = OrdenarCortes(cromosoma, problema);
 
+            Cromosoma = cromosoma;
             _problema = problema;
             _calculadoraFitness = calculadoraFitness;
         }
@@ -27,9 +26,12 @@ namespace Solver.Individuos
 
         public override string ToString()
         {
-            string cromosomaStr = string.Join(", ", Cromosoma);
+            List<int> cromosomaOrdenado = OrdenarCortes(Cromosoma, _problema);
+            string cromosoma = string.Join(", ", cromosomaOrdenado);
             decimal fitness = Fitness();
-            return $"Cromosoma: [{cromosomaStr}], Fitness: {fitness.ToString(CultureInfo.InvariantCulture)}";
+
+            string resultado = $"Cromosoma: [{cromosoma}], Fitness: {fitness.ToString(CultureInfo.InvariantCulture)}";
+            return resultado;
         }
 
         internal virtual decimal Fitness()
