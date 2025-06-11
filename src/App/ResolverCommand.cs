@@ -40,7 +40,7 @@ namespace App
             var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.MaxGeneraciones);
 
             (Individuo mejorIndividuo, int generaciones) = algoritmoGenetico.Ejecutar();
-            Console.WriteLine($"Mejor individuo encontrado en {generaciones} generaciones: {mejorIndividuo}");
+            Console.WriteLine($"Mejor individuo encontrado después de {generaciones} generaciones:\n{mejorIndividuo}.");
         }
     }
 }
