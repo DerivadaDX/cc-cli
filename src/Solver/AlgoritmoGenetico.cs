@@ -21,7 +21,7 @@ namespace Solver
             _maxGeneraciones = maxGeneraciones;
         }
 
-        public Individuo Ejecutar()
+        public (Individuo mejorIndividuo, int generaciones) Ejecutar()
         {
             int generacion = 0;
             bool ejecutarHastaEncontrarSolucion = _maxGeneraciones == 0;
@@ -33,7 +33,7 @@ namespace Solver
                 {
                     bool esSolucionOptima = individuo.Fitness() == 0;
                     if (esSolucionOptima)
-                        return individuo;
+                        return (individuo, generacion);
                 }
 
                 _poblacion = _poblacion.GenerarNuevaGeneracion();
@@ -41,7 +41,7 @@ namespace Solver
             }
 
             Individuo mejorIndividuo = _poblacion.ObtenerMejorIndividuo();
-            return mejorIndividuo;
+            return (mejorIndividuo, generacion);
         }
     }
 }

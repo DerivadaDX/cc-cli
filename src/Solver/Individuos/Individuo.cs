@@ -30,7 +30,7 @@ namespace Solver.Individuos
             string cromosoma = string.Join(", ", cromosomaOrdenado);
             decimal fitness = Fitness();
 
-            string resultado = $"Cromosoma: [{cromosoma}], Fitness: {fitness.ToString(CultureInfo.InvariantCulture)}";
+            string resultado = $"Cromosoma=[{cromosoma}], Fitness={fitness.ToString(CultureInfo.InvariantCulture)}";
             return resultado;
         }
 
