@@ -45,7 +45,7 @@ namespace App
             stopwatch.Stop();
 
             Console.WriteLine($"Resultado encontrado después de {generaciones} generaciones.");
-            Console.WriteLine($"{mejorIndividuo}.");
+            Console.WriteLine($"Resultado obtendio: {mejorIndividuo}.");
             Console.WriteLine($"Tiempo de ejecución: {stopwatch.ElapsedMilliseconds} ms.");
         }
     }
