@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using System.Diagnostics;
 using Common;
 using Solver;
 using Solver.Individuos;
@@ -39,8 +40,13 @@ namespace App
             var poblacion = PoblacionFactory.Crear(parametros.TamañoPoblacion, individuoFactory);
             var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.MaxGeneraciones);
 
-            Individuo resultado = algoritmoGenetico.Ejecutar();
-            Console.WriteLine($"Mejor individuo encontrado: {resultado}");
+            var stopwatch = Stopwatch.StartNew();
+            (Individuo mejorIndividuo, int generaciones) = algoritmoGenetico.Ejecutar();
+            stopwatch.Stop();
+
+            Console.WriteLine($"Resultado encontrado después de {generaciones} generaciones.");
+            Console.WriteLine($"Resultado obtendio: {mejorIndividuo}.");
+            Console.WriteLine($"Tiempo de ejecución: {stopwatch.ElapsedMilliseconds} ms.");
         }
     }
 }
