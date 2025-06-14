@@ -40,6 +40,8 @@ Genera matrices de valoración para el problema. Las instancias generadas usan e
 ...
 ```
 
+El archivo de salida se sobrescribe sin confirmación.
+
 **Sintaxis**:
 
 ```bash
@@ -80,12 +82,12 @@ cc-cli.exe generar --atomos 8 --agentes 2 --output datos/instancia1.txt
 cc-cli.exe generar --atomos 5 --agentes 3 --disjuntas --valor-maximo 500 --output instancia.txt
 ```
 
-- El archivo de salida se sobrescribe sin confirmación.
-
 #### 2. Resolver instancias
 
 Resuelve una instancia del problema de cake-cutting utilizando un algoritmo genético para encontrar una asignación
 libre de envidia.
+Durante la ejecución se puede presionar `Ctrl+C` para finalizar el algoritmo.
+En ese caso se muestra el mejor individuo encontrado hasta el momento.
 
 **Sintaxis**:
 

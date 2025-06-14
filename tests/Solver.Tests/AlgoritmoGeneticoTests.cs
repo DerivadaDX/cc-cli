@@ -1,5 +1,6 @@
-﻿using NSubstitute;
+using NSubstitute;
 using Solver.Individuos;
+using System.Threading;
 
 namespace Solver.Tests
 {
@@ -135,6 +136,23 @@ namespace Solver.Tests
             (Individuo _, int generaciones) = algoritmo.Ejecutar();
 
             Assert.Equal(1, generaciones);
+        }
+
+        [Fact]
+        public void Ejecutar_EjecucionCancelada_RetornaMejorIndividuoActual()
+        {
+            Individuo mejorIndividuo = CrearIndividuoNoOptimoFake();
+            Poblacion poblacion = CrearPoblacionFakeConIndividuo(mejorIndividuo);
+            poblacion.ObtenerMejorIndividuo().Returns(mejorIndividuo);
+
+            var algoritmo = new AlgoritmoGenetico(poblacion, 10);
+            using var cts = new CancellationTokenSource();
+            cts.Cancel();
+
+            (Individuo individuo, int generaciones) = algoritmo.Ejecutar(cts.Token);
+
+            Assert.Same(mejorIndividuo, individuo);
+            Assert.Equal(0, generaciones);
         }
 
         private Individuo CrearIndividuoOptimoFake()
