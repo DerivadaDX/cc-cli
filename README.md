@@ -101,10 +101,10 @@ cc-cli.exe resolver [opciones]
 
 **Opciones secundarias**:
 
-| Opción               | Descripción                            | Valores aceptados              |
-| -------------------- | -------------------------------------- | ------------------------------ |
-| `--max-generaciones` | Generaciones a computar (0 = infinito) | Entero positivo (default: 0)   |
-| `--tamaño-poblacion` | Tamaño de población a utilizar         | Entero positivo (default: 100) |
+| Opción                  | Descripción                            | Valores aceptados              |
+| ----------------------- | -------------------------------------- | ------------------------------ |
+| `--limite-generaciones` | Generaciones a computar (0 = infinito) | Entero positivo (default: 0)   |
+| `--cantidad-individuos` | Cantidad de individuos por generación  | Entero positivo (default: 100) |
 
 **Ejemplos**:
 
@@ -113,13 +113,13 @@ cc-cli.exe resolver [opciones]
 cc-cli.exe resolver --instancia instancia.dat
 
 # Especificando máximo de generaciones
-cc-cli.exe resolver --instancia instancia.dat --max-generaciones 1000
+cc-cli.exe resolver --instancia instancia.dat --limite-generaciones 1000
 
 # Especificando tamaño de población
-cc-cli.exe resolver --instancia instancia.dat --tamaño-poblacion 5000
+cc-cli.exe resolver --instancia instancia.dat --cantidad-individuos 5000
 
 # Ejemplo completo
-cc-cli.exe resolver --instancia instancia.dat --max-generaciones 1000 --tamaño-poblacion 5000
+cc-cli.exe resolver --instancia instancia.dat --limite-generaciones 1000 --cantidad-individuos 5000
 ```
 
 #### 3. Otros comandos
