@@ -13,11 +13,11 @@ namespace Solver.Tests
         }
 
         [Fact]
-        public void Constructor_MaxGeneracionesNegativo_LanzaArgumentOutOfRangeException()
+        public void Constructor_LimiteGeneracionesNegativo_LanzaArgumentOutOfRangeException()
         {
             var ex = Assert.Throws<ArgumentOutOfRangeException>(() => new AlgoritmoGenetico(new Poblacion(1), -1));
             Assert.Contains("no puede ser negativo", ex.Message);
-            Assert.Equal("maxGeneraciones", ex.ParamName);
+            Assert.Equal("limiteGeneraciones", ex.ParamName);
         }
 
         [Fact]
@@ -72,14 +72,14 @@ namespace Solver.Tests
         }
 
         [Fact]
-        public void Ejecutar_CantidadGeneracionesGeneradas_EsMaxGeneraciones()
+        public void Ejecutar_ConLimiteDeGeneraciones_GeneraCantidadEsperadaDeGeneraciones()
         {
             Poblacion poblacionInicial = CrearPoblacionFakeConIndividuo(CrearIndividuoNoOptimoFake());
             Poblacion poblacionSiguiente = CrearPoblacionFakeConIndividuo(CrearIndividuoNoOptimoFake());
             poblacionInicial.GenerarNuevaGeneracion().Returns(poblacionSiguiente);
             poblacionSiguiente.GenerarNuevaGeneracion().Returns(poblacionSiguiente);
 
-            var algoritmo = new AlgoritmoGenetico(poblacionInicial, 2);
+            var algoritmo = new AlgoritmoGenetico(poblacionInicial, limiteGeneraciones: 2);
             algoritmo.Ejecutar();
 
             poblacionInicial.Received(1).GenerarNuevaGeneracion();
@@ -87,14 +87,14 @@ namespace Solver.Tests
         }
 
         [Fact]
-        public void Ejecutar_MaxGeneracionesCero_EjecutaHastaEncontrarSolucion()
+        public void Ejecutar_SinLimiteDeGeneraciones_EjecutaHastaEncontrarSolucionOptima()
         {
             Individuo individuoOptimo = CrearIndividuoOptimoFake();
             Poblacion poblacionInicial = CrearPoblacionFakeConIndividuo(CrearIndividuoNoOptimoFake());
             Poblacion poblacionSiguiente = CrearPoblacionFakeConIndividuo(individuoOptimo);
             poblacionInicial.GenerarNuevaGeneracion().Returns(poblacionSiguiente);
 
-            var algoritmo = new AlgoritmoGenetico(poblacionInicial, 0);
+            var algoritmo = new AlgoritmoGenetico(poblacionInicial, limiteGeneraciones: 0);
             (Individuo mejorIndividuo, int _) = algoritmo.Ejecutar();
 
             Assert.Same(individuoOptimo, mejorIndividuo);
