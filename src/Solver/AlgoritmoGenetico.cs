@@ -1,4 +1,5 @@
-﻿using Solver.Individuos;
+using Solver.Individuos;
+using System.Threading;
 
 namespace Solver
 {
@@ -21,7 +22,7 @@ namespace Solver
             _limiteGeneraciones = limiteGeneraciones;
         }
 
-        public (Individuo mejorIndividuo, int generaciones) Ejecutar()
+        public (Individuo mejorIndividuo, int generaciones) Ejecutar(CancellationToken cancellationToken = default)
         {
             int generacion = 0;
             bool ejecutarHastaEncontrarSolucion = _limiteGeneraciones == 0;
@@ -29,6 +30,9 @@ namespace Solver
 
             while (ejecutarHastaEncontrarSolucion || generacionLimiteNoAlcanzada)
             {
+                if (cancellationToken.IsCancellationRequested)
+                    break;
+
                 foreach (Individuo individuo in _poblacion.Individuos)
                 {
                     bool esSolucionOptima = individuo.Fitness() == 0;
