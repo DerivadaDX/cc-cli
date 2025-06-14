@@ -5,27 +5,27 @@ namespace Solver
     public class AlgoritmoGenetico
     {
         private Poblacion _poblacion;
-        private readonly int _maxGeneraciones;
+        private readonly int _limiteGeneraciones;
 
-        public AlgoritmoGenetico(Poblacion poblacion, int maxGeneraciones)
+        public AlgoritmoGenetico(Poblacion poblacion, int limiteGeneraciones)
         {
             ArgumentNullException.ThrowIfNull(poblacion, nameof(poblacion));
 
-            if (maxGeneraciones < 0)
+            if (limiteGeneraciones < 0)
             {
-                string mensaje = "El número máximo de generaciones no puede ser negativo.";
-                throw new ArgumentOutOfRangeException(nameof(maxGeneraciones), mensaje);
+                string mensaje = "El límite de generaciones no puede ser negativo.";
+                throw new ArgumentOutOfRangeException(nameof(limiteGeneraciones), mensaje);
             }
 
             _poblacion = poblacion;
-            _maxGeneraciones = maxGeneraciones;
+            _limiteGeneraciones = limiteGeneraciones;
         }
 
         public (Individuo mejorIndividuo, int generaciones) Ejecutar()
         {
             int generacion = 0;
-            bool ejecutarHastaEncontrarSolucion = _maxGeneraciones == 0;
-            bool generacionLimiteNoAlcanzada = generacion < _maxGeneraciones;
+            bool ejecutarHastaEncontrarSolucion = _limiteGeneraciones == 0;
+            bool generacionLimiteNoAlcanzada = generacion < _limiteGeneraciones;
 
             while (ejecutarHastaEncontrarSolucion || generacionLimiteNoAlcanzada)
             {
@@ -37,7 +37,7 @@ namespace Solver
                 }
 
                 _poblacion = _poblacion.GenerarNuevaGeneracion();
-                generacionLimiteNoAlcanzada = ++generacion < _maxGeneraciones;
+                generacionLimiteNoAlcanzada = ++generacion < _limiteGeneraciones;
             }
 
             Individuo mejorIndividuo = _poblacion.ObtenerMejorIndividuo();

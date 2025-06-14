@@ -2,15 +2,15 @@
 {
     internal class ParametrosSolucion
     {
-        internal ParametrosSolucion(string rutaInstancia, int maxGeneraciones, int tamañoPoblacion)
+        internal ParametrosSolucion(string rutaInstancia, int limiteGeneraciones, int cantidadIndividuos)
         {
             RutaInstancia = rutaInstancia;
-            MaxGeneraciones = maxGeneraciones;
-            TamañoPoblacion = tamañoPoblacion;
+            LimiteGeneraciones = limiteGeneraciones;
+            CantidadIndividuos = cantidadIndividuos;
         }
 
         internal string RutaInstancia { get; }
-        internal int MaxGeneraciones { get; }
-        internal int TamañoPoblacion { get; }
+        internal int LimiteGeneraciones { get; }
+        internal int CantidadIndividuos { get; }
     }
 }
