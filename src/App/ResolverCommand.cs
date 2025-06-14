@@ -1,4 +1,4 @@
-﻿using System.CommandLine;
+using System.CommandLine;
 using System.Diagnostics;
 using Common;
 using Solver;
@@ -40,8 +40,16 @@ namespace App
             var poblacion = PoblacionFactory.Crear(parametros.CantidadIndividuos, individuoFactory);
             var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.LimiteGeneraciones);
 
+            using var cts = new CancellationTokenSource();
+            Console.CancelKeyPress += (_, e) =>
+            {
+                Console.WriteLine("Cancelación solicitada por el usuario");
+                e.Cancel = true;
+                cts.Cancel();
+            };
+
             var stopwatch = Stopwatch.StartNew();
-            (Individuo mejorIndividuo, int generaciones) = algoritmoGenetico.Ejecutar();
+            (Individuo mejorIndividuo, int generaciones) = algoritmoGenetico.Ejecutar(cts.Token);
             stopwatch.Stop();
 
             Console.WriteLine($"Resultado encontrado después de {generaciones} generaciones.");
