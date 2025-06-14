@@ -19,26 +19,26 @@ namespace App.Tests
         {
             Assert.Equal("resolver", _command.Name);
             Assert.Contains(_command.Options, o => o.Name == "instancia");
-            Assert.Contains(_command.Options, o => o.Name == "max-generaciones");
-            Assert.Contains(_command.Options, o => o.Name == "tamaño-poblacion");
+            Assert.Contains(_command.Options, o => o.Name == "limite-generaciones");
+            Assert.Contains(_command.Options, o => o.Name == "cantidad-individuos");
         }
 
         [Fact]
-        public void Create_MaxGeneracionesNoEspecificado_UsaValorPorDefecto()
+        public void Create_LimiteGeneracionesNoEspecificado_UsaValorPorDefecto()
         {
-            var maxGeneracionesOption = (Option<int>)_command.Options.First(o => o.Name == "max-generaciones");
-            int maxGeneraciones = _command.Parse("resolver --instancia instancia.dat").GetValueForOption(maxGeneracionesOption);
+            var limiteGeneracionesOption = (Option<int>)_command.Options.First(o => o.Name == "limite-generaciones");
+            int limiteGeneraciones = _command.Parse("resolver --instancia instancia.dat").GetValueForOption(limiteGeneracionesOption);
 
-            Assert.Equal(0, maxGeneraciones);
+            Assert.Equal(0, limiteGeneraciones);
         }
 
         [Fact]
-        public void Create_TamañoPoblacionNoEspecificado_UsaValorPorDefecto()
+        public void Create_CantidadIndividuosNoEspecificado_UsaValorPorDefecto()
         {
-            var tamañoPoblacionOption = (Option<int>)_command.Options.First(o => o.Name == "tamaño-poblacion");
-            int tamañoPoblacion = _command.Parse("resolver --instancia instancia.dat").GetValueForOption(tamañoPoblacionOption);
+            var cantidadIndividuosOption = (Option<int>)_command.Options.First(o => o.Name == "cantidad-individuos");
+            int cantidadIndividuos = _command.Parse("resolver --instancia instancia.dat").GetValueForOption(cantidadIndividuosOption);
 
-            Assert.Equal(100, tamañoPoblacion);
+            Assert.Equal(100, cantidadIndividuos);
         }
 
         [Fact]

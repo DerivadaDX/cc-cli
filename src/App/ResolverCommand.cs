@@ -12,22 +12,22 @@ namespace App
         {
             var command = new Command("resolver", "Resuelve una instancia");
             var instanciaOption = new Option<string>("--instancia") { IsRequired = true };
-            var maxGeneracionesOption = new Option<int>("--max-generaciones", () => 0);
-            var tamañoPoblacionOption = new Option<int>("--tamaño-poblacion", () => 100);
+            var limiteGeneracionesOption = new Option<int>("--limite-generaciones", () => 0);
+            var cantidadIndividuosOption = new Option<int>("--cantidad-individuos", () => 100);
 
             command.AddOption(instanciaOption);
-            command.AddOption(maxGeneracionesOption);
-            command.AddOption(tamañoPoblacionOption);
+            command.AddOption(limiteGeneracionesOption);
+            command.AddOption(cantidadIndividuosOption);
 
-            command.SetHandler((rutaInstancia, maxGeneraciones, tamañoPoblacion) =>
+            command.SetHandler((rutaInstancia, limiteGeneraciones, cantidadIndividuos) =>
             {
-                var parametros = new ParametrosSolucion(rutaInstancia, maxGeneraciones, tamañoPoblacion);
+                var parametros = new ParametrosSolucion(rutaInstancia, limiteGeneraciones, cantidadIndividuos);
 
                 var fileSystemHelper = FileSystemHelperFactory.Crear();
                 var lector = new LectorArchivoMatrizValoraciones(fileSystemHelper);
 
                 Handler(parametros, lector);
-            }, instanciaOption, maxGeneracionesOption, tamañoPoblacionOption);
+            }, instanciaOption, limiteGeneracionesOption, cantidadIndividuosOption);
 
             return command;
         }
@@ -37,8 +37,8 @@ namespace App
             decimal[,] matrizValoraciones = lector.Leer(parametros.RutaInstancia);
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matrizValoraciones);
             var individuoFactory = new IndividuoIntercambioAsignacionesFactory(instanciaProblema);
-            var poblacion = PoblacionFactory.Crear(parametros.TamañoPoblacion, individuoFactory);
-            var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.MaxGeneraciones);
+            var poblacion = PoblacionFactory.Crear(parametros.CantidadIndividuos, individuoFactory);
+            var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.LimiteGeneraciones);
 
             var stopwatch = Stopwatch.StartNew();
             (Individuo mejorIndividuo, int generaciones) = algoritmoGenetico.Ejecutar();
