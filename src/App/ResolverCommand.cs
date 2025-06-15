@@ -27,6 +27,11 @@ namespace App
                 var lector = new LectorArchivoMatrizValoraciones(fileSystemHelper);
 
                 Handler(parametros, lector);
+
+#if DEBUG
+                Console.WriteLine("Presioná una tecla para salir...");
+                Console.ReadKey();
+#endif
             }, instanciaOption, limiteGeneracionesOption, cantidadIndividuosOption);
 
             return command;
@@ -60,11 +65,6 @@ namespace App
             Console.WriteLine($"\nResultado encontrado después de {generaciones} generaciones.");
             Console.WriteLine($"Resultado obtendio: {mejorIndividuo}.");
             Console.WriteLine($"Tiempo de ejecución: {stopwatch.ElapsedMilliseconds} ms.");
-
-#if DEBUG
-            Console.WriteLine("Presioná una tecla para salir...");
-            Console.ReadKey();
-#endif
         }
     }
 }

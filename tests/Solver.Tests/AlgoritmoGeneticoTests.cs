@@ -158,84 +158,55 @@ namespace Solver.Tests
         [Fact]
         public void Ejecutar_GeneracionProcesada_NotificaConGeneracionCorrecta()
         {
-            Individuo mejorIndividuo = CrearIndividuoNoOptimoFake();
-            Poblacion poblacion = CrearPoblacionFakeConIndividuo(mejorIndividuo);
-            poblacion.GenerarNuevaGeneracion().Returns(poblacion);
-            poblacion.ObtenerMejorIndividuo().Returns(mejorIndividuo);
-
-            var algoritmo = new AlgoritmoGenetico(poblacion, 2);
             var generacionesNotificadas = new List<int>();
 
-            algoritmo.GeneracionProcesada += generacion => generacionesNotificadas.Add(generacion);
-
-            // Act
-            (Individuo _, int _) = algoritmo.Ejecutar();
-
-            // Assert
-            Assert.Equal(new List<int> { 1, 2 }, generacionesNotificadas);
-        }
-
-        [Fact]
-        public void Ejecutar_GeneracionProcesada_EventoNoEsDisparadoSiNoHaySubscriptores()
-        {
-            // Arrange
             Individuo mejorIndividuo = CrearIndividuoNoOptimoFake();
             Poblacion poblacion = CrearPoblacionFakeConIndividuo(mejorIndividuo);
             poblacion.GenerarNuevaGeneracion().Returns(poblacion);
             poblacion.ObtenerMejorIndividuo().Returns(mejorIndividuo);
 
             var algoritmo = new AlgoritmoGenetico(poblacion, 2);
+            algoritmo.GeneracionProcesada += generacionesNotificadas.Add;
 
-            // Act & Assert (no exception should be thrown)
             algoritmo.Ejecutar();
+
+            Assert.Equal([1, 2], generacionesNotificadas);
         }
 
         [Fact]
         public void Ejecutar_EncuentraSolucionOptima_NotificaSoloGeneracionesHastaSolucion()
         {
-            // Arrange
+            var generacionesNotificadas = new List<int>();
+
             Individuo individuoOptimo = CrearIndividuoOptimoFake();
-
-            // Primera población con individuos no óptimos
             Poblacion poblacionInicial = CrearPoblacionFakeConIndividuo(CrearIndividuoNoOptimoFake());
-
-            // Segunda población con individuo óptimo
             Poblacion poblacionSiguiente = CrearPoblacionFakeConIndividuo(individuoOptimo);
-
             poblacionInicial.GenerarNuevaGeneracion().Returns(poblacionSiguiente);
 
             var algoritmo = new AlgoritmoGenetico(poblacionInicial, 5);
-            var generacionesNotificadas = new List<int>();
+            algoritmo.GeneracionProcesada += generacionesNotificadas.Add;
 
-            algoritmo.GeneracionProcesada += generacion => generacionesNotificadas.Add(generacion);
-
-            // Act
             algoritmo.Ejecutar();
 
-            // Assert
-            Assert.Equal(new List<int> { 1 }, generacionesNotificadas);
+            Assert.Equal([1], generacionesNotificadas);
         }
 
         [Fact]
         public void Ejecutar_EjecucionCancelada_NoNotificaGeneraciones()
         {
-            // Arrange
+            var generacionesNotificadas = new List<int>();
+
             Individuo mejorIndividuo = CrearIndividuoNoOptimoFake();
             Poblacion poblacion = CrearPoblacionFakeConIndividuo(mejorIndividuo);
             poblacion.ObtenerMejorIndividuo().Returns(mejorIndividuo);
 
             var algoritmo = new AlgoritmoGenetico(poblacion, 10);
-            var generacionesNotificadas = new List<int>();
-
-            algoritmo.GeneracionProcesada += generacion => generacionesNotificadas.Add(generacion);
+            algoritmo.GeneracionProcesada += generacionesNotificadas.Add;
 
             using var cts = new CancellationTokenSource();
             cts.Cancel();
-
-            // Act
             algoritmo.Ejecutar(cts.Token);
 
-            // Assert
             Assert.Empty(generacionesNotificadas);
         }
 
