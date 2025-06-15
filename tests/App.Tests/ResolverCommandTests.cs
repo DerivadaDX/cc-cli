@@ -47,7 +47,7 @@ namespace App.Tests
             var lector = Substitute.For<LectorArchivoMatrizValoraciones>(Substitute.For<FileSystemHelper>());
             lector.Leer(Arg.Any<string>()).Returns(new decimal[,] { { 0, 3.9m }, { 1, 1.2m } });
 
-            var parametros = new ParametrosSolucion("instancia.dat", 0, 2);
+            var parametros = new ParametrosSolucion("instancia.dat", 1, 2);
             ResolverCommand.Handler(parametros, lector);
 
             lector.Received(1).Leer(parametros.RutaInstancia);

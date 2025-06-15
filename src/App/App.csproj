@@ -5,7 +5,8 @@
     <TargetFramework>net8.0</TargetFramework>
 
     <AssemblyName>cc-cli</AssemblyName>
-    <Version>1.0.0-beta</Version>
+    <Title>CakeCuttingCLI</Title>
+    <Version>1.0.0</Version>
 
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
