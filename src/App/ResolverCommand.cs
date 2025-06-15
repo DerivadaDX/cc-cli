@@ -27,6 +27,11 @@ namespace App
                 var lector = new LectorArchivoMatrizValoraciones(fileSystemHelper);
 
                 Handler(parametros, lector);
+
+#if DEBUG
+                Console.WriteLine("Presioná una tecla para salir...");
+                Console.ReadKey();
+#endif
             }, instanciaOption, limiteGeneracionesOption, cantidadIndividuosOption);
 
             return command;
@@ -38,12 +43,17 @@ namespace App
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matrizValoraciones);
             var individuoFactory = new IndividuoIntercambioAsignacionesFactory(instanciaProblema);
             var poblacion = PoblacionFactory.Crear(parametros.CantidadIndividuos, individuoFactory);
+
             var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.LimiteGeneraciones);
+            algoritmoGenetico.GeneracionProcesada += generacion =>
+            {
+                Console.Write($"\rProcesando generación #{generacion}.");
+            };
 
             using var cts = new CancellationTokenSource();
             Console.CancelKeyPress += (_, e) =>
             {
-                Console.WriteLine("Cancelación solicitada por el usuario");
+                Console.WriteLine("\rCancelación solicitada por el usuario.");
                 e.Cancel = true;
                 cts.Cancel();
             };
@@ -52,7 +62,7 @@ namespace App
             (Individuo mejorIndividuo, int generaciones) = algoritmoGenetico.Ejecutar(cts.Token);
             stopwatch.Stop();
 
-            Console.WriteLine($"Resultado encontrado después de {generaciones} generaciones.");
+            Console.WriteLine($"\nResultado encontrado después de {generaciones} generaciones.");
             Console.WriteLine($"Resultado obtendio: {mejorIndividuo}.");
             Console.WriteLine($"Tiempo de ejecución: {stopwatch.ElapsedMilliseconds} ms.");
         }

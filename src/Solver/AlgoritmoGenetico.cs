@@ -1,12 +1,15 @@
 using Solver.Individuos;
-using System.Threading;
 
 namespace Solver
 {
+    public delegate void GeneracionProcesadaEventHandler(int generacion);
+
     public class AlgoritmoGenetico
     {
         private Poblacion _poblacion;
         private readonly int _limiteGeneraciones;
+
+        public event GeneracionProcesadaEventHandler GeneracionProcesada;
 
         public AlgoritmoGenetico(Poblacion poblacion, int limiteGeneraciones)
         {
@@ -24,9 +27,9 @@ namespace Solver
 
         public (Individuo mejorIndividuo, int generaciones) Ejecutar(CancellationToken cancellationToken = default)
         {
-            int generacion = 0;
+            int cantidadGeneracionesProcesadas = 0;
             bool ejecutarHastaEncontrarSolucion = _limiteGeneraciones == 0;
-            bool generacionLimiteNoAlcanzada = generacion < _limiteGeneraciones;
+            bool generacionLimiteNoAlcanzada = cantidadGeneracionesProcesadas < _limiteGeneraciones;
 
             while (ejecutarHastaEncontrarSolucion || generacionLimiteNoAlcanzada)
             {
@@ -37,15 +40,18 @@ namespace Solver
                 {
                     bool esSolucionOptima = individuo.Fitness() == 0;
                     if (esSolucionOptima)
-                        return (individuo, generacion);
+                        return (individuo, cantidadGeneracionesProcesadas);
                 }
 
+                cantidadGeneracionesProcesadas++;
                 _poblacion = _poblacion.GenerarNuevaGeneracion();
-                generacionLimiteNoAlcanzada = ++generacion < _limiteGeneraciones;
+                generacionLimiteNoAlcanzada = cantidadGeneracionesProcesadas < _limiteGeneraciones;
+
+                GeneracionProcesada?.Invoke(cantidadGeneracionesProcesadas);
             }
 
             Individuo mejorIndividuo = _poblacion.ObtenerMejorIndividuo();
-            return (mejorIndividuo, generacion);
+            return (mejorIndividuo, cantidadGeneracionesProcesadas);
         }
     }
 }
