@@ -13,9 +13,7 @@ namespace App
 
         internal void MostrarInfo(string mensaje)
         {
-            _consola.ForegroundColor(ConsoleColor.White);
-            _consola.WriteLine(mensaje);
-            _consola.ResetColor();
+            MostrarMensajeConColor(mensaje, ConsoleColor.White);
         }
 
         internal void MostrarProgreso(string mensaje)
@@ -27,7 +25,12 @@ namespace App
 
         internal void MostrarAdvertencia(string mensaje)
         {
-            _consola.ForegroundColor(ConsoleColor.Yellow);
+            MostrarMensajeConColor(mensaje, ConsoleColor.Yellow);
+        }
+
+        private void MostrarMensajeConColor(string mensaje, ConsoleColor color)
+        {
+            _consola.ForegroundColor(color);
             _consola.WriteLine(mensaje);
             _consola.ResetColor();
         }
