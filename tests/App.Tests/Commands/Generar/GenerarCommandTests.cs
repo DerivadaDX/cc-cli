@@ -1,10 +1,11 @@
 using System.CommandLine;
 using System.CommandLine.Parsing;
+using App.Commands.Generar;
 using Common;
 using Generator;
 using NSubstitute;
 
-namespace App.Tests
+namespace App.Tests.Commands.Generar
 {
     public class GenerarCommandTests
     {
@@ -12,11 +13,11 @@ namespace App.Tests
 
         public GenerarCommandTests()
         {
-            _command = GenerarCommand.Create();
+            _command = GenerarCommand.Crear();
         }
 
         [Fact]
-        public void Create_NombreYOpciones_ConfiguradasCorrectamente()
+        public void Crear_NombreYOpciones_ConfiguradasCorrectamente()
         {
             Assert.Equal("generar", _command.Name);
             Assert.Contains(_command.Options, o => o.Name == "atomos");
@@ -27,7 +28,7 @@ namespace App.Tests
         }
 
         [Fact]
-        public void Create_ValorMaximoNoEspecificado_UsaValorPorDefecto()
+        public void Crear_ValorMaximoNoEspecificado_UsaValorPorDefecto()
         {
             var valorMaximoOption = (Option<int>)_command.Options.First(o => o.Name == "valor-maximo");
             int valorMaximo = _command.Parse("generar --atomos 5 --agentes 3").GetValueForOption(valorMaximoOption);
@@ -36,7 +37,7 @@ namespace App.Tests
         }
 
         [Fact]
-        public void Create_OutputNoEspecificada_UsaValorPorDefecto()
+        public void Crear_OutputNoEspecificada_UsaValorPorDefecto()
         {
             var outputOption = (Option<string>)_command.Options.First(o => o.Name == "output");
             string output = _command.Parse("generar --atomos 5 --agentes 3").GetValueForOption(outputOption);
@@ -45,7 +46,7 @@ namespace App.Tests
         }
 
         [Fact]
-        public void Create_DisjuntasNoEspecificada_UsaFalse()
+        public void Crear_DisjuntasNoEspecificada_UsaFalse()
         {
             var disjuntasOption = (Option<bool>)_command.Options.First(o => o.Name == "disjuntas");
             bool disjuntas = _command.Parse("generar --atomos 5 --agentes 3").GetValueForOption(disjuntasOption);
@@ -54,7 +55,7 @@ namespace App.Tests
         }
 
         [Fact]
-        public void Handler_ConParametrosValidos_GeneraYEscribeInstancia()
+        public void EjecutarGeneracion_ConParametrosValidos_GeneraYEscribeInstancia()
         {
             var instanciaMock = new decimal[1, 1];
 
@@ -75,7 +76,7 @@ namespace App.Tests
                 rutaSalida: "instancia.dat",
                 valoracionesDisjuntas: true);
 
-            GenerarCommand.Handler(parametros, builder, escritor, presentador);
+            GenerarCommand.EjecutarGeneracion(parametros, builder, escritor, presentador);
 
             builder.Received(1).ConCantidadDeAtomos(5);
             builder.Received(1).ConCantidadDeAgentes(3);

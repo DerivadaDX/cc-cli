@@ -9,14 +9,14 @@ namespace Solver.Tests.Individuos
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,] { { 1 } });
 
-            var ex = Assert.Throws<ArgumentNullException>(() => new IndividuoFake(null, instanciaProblema));
+            var ex = Assert.Throws<ArgumentNullException>(() => new IndividuoFake(null!, instanciaProblema));
             Assert.Equal("cromosoma", ex.ParamName);
         }
 
         [Fact]
         public void Constructor_InstanciaProblemaNull_LanzaArgumentNullException()
         {
-            var ex = Assert.Throws<ArgumentNullException>(() => new IndividuoFake([], null));
+            var ex = Assert.Throws<ArgumentNullException>(() => new IndividuoFake([], null!));
             Assert.Equal("problema", ex.ParamName);
         }
 

@@ -2,14 +2,14 @@
 using Common;
 using Generator;
 
-namespace App
+namespace App.Commands.Generar
 {
     internal static class GenerarCommand
     {
         internal const int ValorMaximoPorDefecto = 1000;
         internal const string RutaSalidaPorDefecto = "instancia.dat";
 
-        internal static Command Create()
+        internal static Command Crear()
         {
             var command = new Command("generar", "Genera una nueva instancia");
 
@@ -55,13 +55,13 @@ namespace App
                 var consola = ConsoleProxyFactory.Crear();
                 var presentador = new Presentador(consola);
 
-                Handler(parametros, builder, escritor, presentador);
+                EjecutarGeneracion(parametros, builder, escritor, presentador);
             }, atomosOption, agentesOption, valorMaximoOption, outputOption, disjuntasOption);
 
             return command;
         }
 
-        internal static void Handler(
+        internal static void EjecutarGeneracion(
             ParametrosGeneracion parametros, InstanciaBuilder builder, EscritorInstancia escritor, Presentador presentador)
         {
             try

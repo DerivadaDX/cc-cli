@@ -166,7 +166,7 @@ namespace Solver.Tests
             poblacion.ObtenerMejorIndividuo().Returns(mejorIndividuo);
 
             var algoritmo = new AlgoritmoGenetico(poblacion, 2);
-            algoritmo.GeneracionProcesada += generacionesNotificadas.Add;
+            algoritmo.GeneracionProcesada += (generacion, _) => generacionesNotificadas.Add(generacion);
 
             algoritmo.Ejecutar();
 
@@ -184,7 +184,7 @@ namespace Solver.Tests
             poblacionInicial.GenerarNuevaGeneracion().Returns(poblacionSiguiente);
 
             var algoritmo = new AlgoritmoGenetico(poblacionInicial, 5);
-            algoritmo.GeneracionProcesada += generacionesNotificadas.Add;
+            algoritmo.GeneracionProcesada += (generacion, _) => generacionesNotificadas.Add(generacion);
 
             algoritmo.Ejecutar();
 
@@ -201,7 +201,7 @@ namespace Solver.Tests
             poblacion.ObtenerMejorIndividuo().Returns(mejorIndividuo);
 
             var algoritmo = new AlgoritmoGenetico(poblacion, 10);
-            algoritmo.GeneracionProcesada += generacionesNotificadas.Add;
+            algoritmo.GeneracionProcesada += (generacion, _) => generacionesNotificadas.Add(generacion);
 
             using var cts = new CancellationTokenSource();
             cts.Cancel();
