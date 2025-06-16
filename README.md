@@ -50,18 +50,18 @@ cc-cli.exe generar [opciones]
 
 **Opciones principales**:
 
-| Opción      | Descripción       | Valores aceptados           |
-| ----------- | ----------------- | --------------------------- |
-| `--atomos`  | Número de átomos  | Entero positivo (requerido) |
-| `--agentes` | Número de agentes | Entero positivo (requerido) |
+| Opción      | Descripción         | Valores aceptados           |
+| ----------- | ------------------- | --------------------------- |
+| `--atomos`  | Cantidad de átomos  | Entero positivo (requerido) |
+| `--agentes` | Cantidad de agentes | Entero positivo (requerido) |
 
 **Opciones secundarias**:
 
 | Opción           | Descripción                              | Valores aceptados                  |
 | ---------------- | ---------------------------------------- | ---------------------------------- |
-| `--valor-maximo` | Valor máximo para las valoraciones       | Entero positivo (default: 1000)    |
-| `--disjuntas`    | Flag para generar valoraciones disjuntas |                                    |
-| `--output`       | Ruta y nombre del archivo de salida      | Un path (default: `instancia.dat`) |
+| `--valor-maximo` | Valor máximo para cada valoración        | Entero positivo (default: 1000)    |
+| `--output`       | Ruta donde guardar la instancia generada | Un path (default: `instancia.dat`) |
+| `--disjuntas`    | Indica si las valoraciones son disjuntas |                                    |
 
 **Ejemplos**:
 
@@ -97,16 +97,16 @@ cc-cli.exe resolver [opciones]
 
 **Opciones principales**:
 
-| Opción        | Descripción                          | Valores aceptados   |
-| ------------- | ------------------------------------ | ------------------- |
-| `--instancia` | Ruta y nombre del archivo de entrada | Un path (requerido) |
+| Opción        | Descripción                     | Valores aceptados   |
+| ------------- | ------------------------------- | ------------------- |
+| `--instancia` | Ruta de la instancia a resolver | Un path (requerido) |
 
 **Opciones secundarias**:
 
-| Opción                  | Descripción                            | Valores aceptados              |
-| ----------------------- | -------------------------------------- | ------------------------------ |
-| `--limite-generaciones` | Generaciones a computar (0 = infinito) | Entero positivo (default: 0)   |
-| `--cantidad-individuos` | Cantidad de individuos por generación  | Entero positivo (default: 100) |
+| Opción                  | Descripón                                        | Valores aceptados              |
+| ----------------------- | ------------------------------------------------ | ------------------------------ |
+| `--limite-generaciones` | Límite de generaciones a computar (0 = infinito) | Entero positivo (default: 0)   |
+| `--cantidad-individuos` | Cantidad de individuos por generación            | Entero positivo (default: 100) |
 
 **Ejemplos**:
 
