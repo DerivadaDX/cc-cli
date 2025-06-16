@@ -15,25 +15,25 @@ namespace App
 
             var atomosOption = new Option<int>("--atomos")
             {
+                Description = "Cantidad de átomos",
                 IsRequired = true,
-                Description = "Numero de atomos a generar"
             };
             var agentesOption = new Option<int>("--agentes")
             {
+                Description = "Cantidad de agentes",
                 IsRequired = true,
-                Description = "Numero de agentes"
             };
             var valorMaximoOption = new Option<int>("--valor-maximo", () => ValorMaximoPorDefecto)
             {
-                Description = "Valor maximo para cada valoracion"
+                Description = "Valor máximo para cada valoración",
             };
             var outputOption = new Option<string>("--output", () => RutaSalidaPorDefecto)
             {
-                Description = "Ruta del archivo de salida"
+                Description = "Ruta donde guardar la instancia generada",
             };
             var disjuntasOption = new Option<bool>("--disjuntas")
             {
-                Description = "Indica si las valoraciones son disjuntas"
+                Description = "Indica si las valoraciones son disjuntas",
             };
 
             command.AddOption(atomosOption);
