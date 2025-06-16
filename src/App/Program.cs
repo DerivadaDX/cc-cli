@@ -9,10 +9,16 @@ namespace App
         {
             Console.OutputEncoding = Encoding.UTF8;
 
-            var rootCommand = new RootCommand("Herramienta CLI para Generación/Resolución de Instancias de Cake Cutting");
-            rootCommand.SetHandler(() => Console.WriteLine("Use un subcomando (generar/resolver). Ver ayuda con --help."));
+            var rootCommand = new RootCommand("Herramienta CLI para Generación/Resolución de instancias de Cake Cutting");
             rootCommand.AddCommand(GenerarCommand.Create());
             rootCommand.AddCommand(ResolverCommand.Create());
+
+            if (args.Length == 0)
+            {
+                Console.WriteLine("Use un subcomando (generar/resolver). Ver ayuda con --help.");
+                Console.WriteLine();
+                return await rootCommand.InvokeAsync("--help");
+            }
 
             int exitCode = await rootCommand.InvokeAsync(args);
             return exitCode;
