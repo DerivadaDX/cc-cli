@@ -59,51 +59,6 @@ namespace App.Tests
         }
 
         [Fact]
-        public void MostrarProgreso_Color_EsBlanco()
-        {
-            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
-
-            presentador.MostrarProgreso(MensajeDePrueba);
-
-            consola.Received(1).ForegroundColor(ConsoleColor.White);
-        }
-
-        [Fact]
-        public void MostrarProgreso_Mensaje_SeEscribe()
-        {
-            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
-
-            presentador.MostrarProgreso(MensajeDePrueba);
-
-            consola.Received(1).Write("\rMensaje de prueba");
-        }
-
-        [Fact]
-        public void MostrarProgreso_Color_SeResetea()
-        {
-            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
-
-            presentador.MostrarProgreso(MensajeDePrueba);
-
-            consola.Received(1).ResetColor();
-        }
-
-        [Fact]
-        public void MostrarProgreso_OrdenLlamadas_EsCorrecto()
-        {
-            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
-
-            presentador.MostrarProgreso(MensajeDePrueba);
-
-            Received.InOrder(() =>
-            {
-                consola.ForegroundColor(Arg.Any<ConsoleColor>());
-                consola.Write(Arg.Any<string>());
-                consola.ResetColor();
-            });
-        }
-
-        [Fact]
         public void MostrarAdvertencia_Color_EsAmarillo()
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
@@ -189,6 +144,51 @@ namespace App.Tests
             {
                 consola.ForegroundColor(Arg.Any<ConsoleColor>());
                 consola.WriteLine(Arg.Any<string>());
+                consola.ResetColor();
+            });
+        }
+
+        [Fact]
+        public void MostrarProgreso_Color_EsBlanco()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarProgreso(MensajeDePrueba);
+
+            consola.Received(1).ForegroundColor(ConsoleColor.White);
+        }
+
+        [Fact]
+        public void MostrarProgreso_Mensaje_SeEscribe()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarProgreso(MensajeDePrueba);
+
+            consola.Received(1).Write("\rMensaje de prueba");
+        }
+
+        [Fact]
+        public void MostrarProgreso_Color_SeResetea()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarProgreso(MensajeDePrueba);
+
+            consola.Received(1).ResetColor();
+        }
+
+        [Fact]
+        public void MostrarProgreso_OrdenLlamadas_EsCorrecto()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarProgreso(MensajeDePrueba);
+
+            Received.InOrder(() =>
+            {
+                consola.ForegroundColor(Arg.Any<ConsoleColor>());
+                consola.Write(Arg.Any<string>());
                 consola.ResetColor();
             });
         }

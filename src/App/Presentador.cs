@@ -16,13 +16,6 @@ namespace App
             MostrarMensajeConColor(mensaje, ConsoleColor.White);
         }
 
-        internal void MostrarProgreso(string mensaje)
-        {
-            _consola.ForegroundColor(ConsoleColor.White);
-            _consola.Write($"\r{mensaje}");
-            _consola.ResetColor();
-        }
-
         internal void MostrarAdvertencia(string mensaje)
         {
             MostrarMensajeConColor(mensaje, ConsoleColor.Yellow);
@@ -31,6 +24,13 @@ namespace App
         internal void MostrarError(string mensaje)
         {
             MostrarMensajeConColor(mensaje, ConsoleColor.Red);
+        }
+
+        internal void MostrarProgreso(string mensaje)
+        {
+            _consola.ForegroundColor(ConsoleColor.White);
+            _consola.Write($"\r{mensaje}");
+            _consola.ResetColor();
         }
 
         private void MostrarMensajeConColor(string mensaje, ConsoleColor color)
