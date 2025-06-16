@@ -55,13 +55,13 @@ namespace App.Commands.Generar
                 var consola = ConsoleProxyFactory.Crear();
                 var presentador = new Presentador(consola);
 
-                Handler(parametros, builder, escritor, presentador);
+                EjecutarGeneracion(parametros, builder, escritor, presentador);
             }, atomosOption, agentesOption, valorMaximoOption, outputOption, disjuntasOption);
 
             return command;
         }
 
-        internal static void Handler(
+        internal static void EjecutarGeneracion(
             ParametrosGeneracion parametros, InstanciaBuilder builder, EscritorInstancia escritor, Presentador presentador)
         {
             try

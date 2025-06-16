@@ -55,7 +55,7 @@ namespace App.Tests.Commands.Generar
         }
 
         [Fact]
-        public void Handler_ConParametrosValidos_GeneraYEscribeInstancia()
+        public void EjecutarGeneracion_ConParametrosValidos_GeneraYEscribeInstancia()
         {
             var instanciaMock = new decimal[1, 1];
 
@@ -76,7 +76,7 @@ namespace App.Tests.Commands.Generar
                 rutaSalida: "instancia.dat",
                 valoracionesDisjuntas: true);
 
-            GenerarCommand.Handler(parametros, builder, escritor, presentador);
+            GenerarCommand.EjecutarGeneracion(parametros, builder, escritor, presentador);
 
             builder.Received(1).ConCantidadDeAtomos(5);
             builder.Received(1).ConCantidadDeAgentes(3);

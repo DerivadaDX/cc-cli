@@ -43,13 +43,13 @@ namespace App.Tests.Commands.Resolver
         }
 
         [Fact]
-        public void Handler_MatrizValoraciones_SeLee()
+        public void EjecutarResolucion_MatrizValoraciones_SeLee()
         {
             var lector = Substitute.For<LectorArchivoMatrizValoraciones>(Substitute.For<FileSystemHelper>());
             lector.Leer(Arg.Any<string>()).Returns(new decimal[,] { { 0, 3.9m }, { 1, 1.2m } });
 
             var parametros = new ParametrosSolucion("instancia.dat", 1, 2);
-            ResolverCommand.Handler(parametros, lector, Substitute.For<Presentador>(Substitute.For<ConsoleProxy>()));
+            ResolverCommand.EjecutarResolucion(parametros, lector, Substitute.For<Presentador>(Substitute.For<ConsoleProxy>()));
 
             lector.Received(1).Leer(parametros.RutaInstancia);
         }

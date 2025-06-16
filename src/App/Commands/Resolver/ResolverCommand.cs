@@ -39,7 +39,7 @@ namespace App.Commands.Resolver
                 var consola = ConsoleProxyFactory.Crear();
                 var presentador = new Presentador(consola);
 
-                Handler(parametros, lector, presentador);
+                EjecutarResolucion(parametros, lector, presentador);
 
 #if DEBUG
                 Console.WriteLine("Presioná una tecla para salir...");
@@ -50,7 +50,7 @@ namespace App.Commands.Resolver
             return command;
         }
 
-        internal static void Handler(
+        internal static void EjecutarResolucion(
             ParametrosSolucion parametros, LectorArchivoMatrizValoraciones lector, Presentador presentador)
         {
             using var cts = new CancellationTokenSource();
