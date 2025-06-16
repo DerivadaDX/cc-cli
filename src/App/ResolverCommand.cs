@@ -49,62 +49,83 @@ namespace App
 
         internal static void Handler(ParametrosSolucion parametros, LectorArchivoMatrizValoraciones lector)
         {
+            using var cts = new CancellationTokenSource();
+            ConfigurarCancelacion(cts);
+
             try
             {
-                using var cts = new CancellationTokenSource();
-                Console.CancelKeyPress += (_, e) =>
-                {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.Write("\r" + new string(' ', Console.BufferWidth - 1));
-                    Console.WriteLine("\rCancelación solicitada por el usuario.");
-                    Console.ResetColor();
-                    e.Cancel = true;
-                    cts.Cancel();
-                };
-
-                decimal[,] matrizValoraciones = lector.Leer(parametros.RutaInstancia);
+                var matrizValoraciones = lector.Leer(parametros.RutaInstancia);
                 var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matrizValoraciones);
                 var individuoFactory = new IndividuoIntercambioAsignacionesFactory(instanciaProblema);
                 var poblacion = PoblacionFactory.Crear(parametros.CantidadIndividuos, individuoFactory);
 
                 var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.LimiteGeneraciones);
-                if (parametros.LimiteGeneraciones > 0)
-                {
-                    const int tamañoBarraProgreso = 50;
-                    algoritmoGenetico.GeneracionProcesada += generacion =>
-                    {
-                        if (cts.IsCancellationRequested) return;
-
-                        int progreso = generacion * tamañoBarraProgreso / parametros.LimiteGeneraciones;
-                        string barra = new string('#', progreso).PadRight(tamañoBarraProgreso, '-');
-                        Console.Write($"\r[{barra}] {generacion}/{parametros.LimiteGeneraciones}");
-                    };
-                }
-                else
-                {
-                    algoritmoGenetico.GeneracionProcesada += generacion =>
-                    {
-                        if (cts.IsCancellationRequested) return;
-                        Console.Write($"\rProcesando generación #{generacion}.");
-                    };
-                }
+                ConfigurarProgreso(algoritmoGenetico, parametros, cts);
 
                 var stopwatch = Stopwatch.StartNew();
-                (Individuo mejorIndividuo, int generaciones) = algoritmoGenetico.Ejecutar(cts.Token);
+                var (mejorIndividuo, generaciones) = algoritmoGenetico.Ejecutar(cts.Token);
                 stopwatch.Stop();
 
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"Resultado encontrado después de {generaciones} generaciones.");
-                Console.WriteLine($"Resultado obtendio: {mejorIndividuo}.");
-                Console.WriteLine($"Tiempo de ejecución: {stopwatch.ElapsedMilliseconds} ms.");
-                Console.ResetColor();
+                MostrarResultado(mejorIndividuo, generaciones, stopwatch.ElapsedMilliseconds);
             }
             catch (Exception ex)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"\nSe produjo un error: {ex.Message}");
-                Console.ResetColor();
+                MostrarError(ex.Message);
             }
+        }
+
+        private static void ConfigurarCancelacion(CancellationTokenSource cts)
+        {
+            Console.CancelKeyPress += (_, e) =>
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("\r" + new string(' ', Console.BufferWidth - 1));
+                Console.WriteLine("\rCancelación solicitada por el usuario.");
+                Console.ResetColor();
+                e.Cancel = true;
+                cts.Cancel();
+            };
+        }
+
+        private static void ConfigurarProgreso(
+            AlgoritmoGenetico algoritmoGenetico, ParametrosSolucion parametros, CancellationTokenSource cts)
+        {
+            if (parametros.LimiteGeneraciones > 0)
+            {
+                const int tamañoBarraProgreso = 50;
+                algoritmoGenetico.GeneracionProcesada += generacion =>
+                {
+                    if (cts.IsCancellationRequested) return;
+
+                    int progreso = generacion * tamañoBarraProgreso / parametros.LimiteGeneraciones;
+                    string barraProgreso = new string('#', progreso).PadRight(tamañoBarraProgreso, '-');
+                    Console.Write($"\r[{barraProgreso}] {generacion}/{parametros.LimiteGeneraciones}");
+                };
+            }
+            else
+            {
+                algoritmoGenetico.GeneracionProcesada += generacion =>
+                {
+                    if (cts.IsCancellationRequested) return;
+                    Console.Write($"\rProcesando generación #{generacion}.");
+                };
+            }
+        }
+
+        private static void MostrarResultado(Individuo mejorIndividuo, int generaciones, long tiempoMs)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"Resultado encontrado después de {generaciones} generaciones.");
+            Console.WriteLine($"Resultado obtendio: {mejorIndividuo}.");
+            Console.WriteLine($"Tiempo de ejecución: {tiempoMs} ms.");
+            Console.ResetColor();
+        }
+
+        private static void MostrarError(string mensaje)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"\nSe produjo un error: {mensaje}");
+            Console.ResetColor();
         }
     }
 }
