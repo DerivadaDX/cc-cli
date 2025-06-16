@@ -66,6 +66,7 @@ namespace App.Tests
             builder.Build().Returns(instanciaMock);
 
             var escritor = Substitute.For<EscritorInstancia>(Substitute.For<FileSystemHelper>());
+            var presentador = Substitute.For<Presentador>(Substitute.For<ConsoleProxy>());
 
             var parametros = new ParametrosGeneracion(
                 atomos: 5,
@@ -74,7 +75,7 @@ namespace App.Tests
                 rutaSalida: "instancia.dat",
                 valoracionesDisjuntas: true);
 
-            GenerarCommand.Handler(parametros, builder, escritor);
+            GenerarCommand.Handler(parametros, builder, escritor, presentador);
 
             builder.Received(1).ConCantidadDeAtomos(5);
             builder.Received(1).ConCantidadDeAgentes(3);

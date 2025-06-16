@@ -52,21 +52,34 @@ namespace App
                 var fileSystemHelper = FileSystemHelperFactory.Crear();
                 var escritor = new EscritorInstancia(fileSystemHelper);
 
-                Handler(parametros, builder, escritor);
+                var consola = ConsoleProxyFactory.Crear();
+                var presentador = new Presentador(consola);
+
+                Handler(parametros, builder, escritor, presentador);
             }, atomosOption, agentesOption, valorMaximoOption, outputOption, disjuntasOption);
 
             return command;
         }
 
-        internal static void Handler(ParametrosGeneracion parametros, InstanciaBuilder builder, EscritorInstancia escritor)
+        internal static void Handler(
+            ParametrosGeneracion parametros, InstanciaBuilder builder, EscritorInstancia escritor, Presentador presentador)
         {
-            builder
-                .ConCantidadDeAtomos(parametros.Atomos)
-                .ConCantidadDeAgentes(parametros.Agentes)
-                .ConValorMaximo(parametros.ValorMaximo)
-                .ConValoracionesDisjuntas(parametros.ValoracionesDisjuntas);
+            try
+            {
+                decimal[,] instancia = builder
+                    .ConCantidadDeAtomos(parametros.Atomos)
+                    .ConCantidadDeAgentes(parametros.Agentes)
+                    .ConValorMaximo(parametros.ValorMaximo)
+                    .ConValoracionesDisjuntas(parametros.ValoracionesDisjuntas)
+                    .Build();
 
-            escritor.EscribirInstancia(builder.Build(), parametros.RutaSalida);
+                escritor.EscribirInstancia(instancia, parametros.RutaSalida);
+                presentador.MostrarExito($"Instancia generada correctamente en '{parametros.RutaSalida}'.");
+            }
+            catch (Exception ex)
+            {
+                presentador.MostrarError($"Error al generar la instancia: {ex.Message}");
+            }
         }
     }
 }
