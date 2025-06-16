@@ -1,10 +1,11 @@
 using System.CommandLine;
 using System.CommandLine.Parsing;
+using App.Commands.Generar;
 using Common;
 using Generator;
 using NSubstitute;
 
-namespace App.Tests
+namespace App.Tests.Commands.Generar
 {
     public class GenerarCommandTests
     {

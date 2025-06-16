@@ -1,9 +1,10 @@
 ﻿using System.CommandLine;
+using App.Commands.Resolver;
 using Common;
 using NSubstitute;
 using Solver;
 
-namespace App.Tests
+namespace App.Tests.Commands.Resolver
 {
     public class ResolverCommandTests
     {

@@ -2,7 +2,7 @@
 using Common;
 using Generator;
 
-namespace App
+namespace App.Commands.Generar
 {
     internal static class GenerarCommand
     {

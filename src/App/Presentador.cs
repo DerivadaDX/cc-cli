@@ -1,5 +1,4 @@
-﻿
-namespace App
+﻿namespace App
 {
     internal class Presentador
     {

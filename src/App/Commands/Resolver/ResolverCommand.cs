@@ -4,7 +4,7 @@ using Common;
 using Solver;
 using Solver.Individuos;
 
-namespace App
+namespace App.Commands.Resolver
 {
     internal class ResolverCommand
     {

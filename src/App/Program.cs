@@ -1,5 +1,7 @@
 ﻿using System.CommandLine;
 using System.Text;
+using App.Commands.Generar;
+using App.Commands.Resolver;
 
 namespace App
 {
