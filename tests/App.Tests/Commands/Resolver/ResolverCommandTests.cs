@@ -12,11 +12,11 @@ namespace App.Tests.Commands.Resolver
 
         public ResolverCommandTests()
         {
-            _command = ResolverCommand.Create();
+            _command = ResolverCommand.Crear();
         }
 
         [Fact]
-        public void Create_NombreYOpciones_ConfiguradasCorrectamente()
+        public void Crear_NombreYOpciones_ConfiguradasCorrectamente()
         {
             Assert.Equal("resolver", _command.Name);
             Assert.Contains(_command.Options, o => o.Name == "instancia");
@@ -25,7 +25,7 @@ namespace App.Tests.Commands.Resolver
         }
 
         [Fact]
-        public void Create_LimiteGeneracionesNoEspecificado_UsaValorPorDefecto()
+        public void Crear_LimiteGeneracionesNoEspecificado_UsaValorPorDefecto()
         {
             var limiteGeneracionesOption = (Option<int>)_command.Options.First(o => o.Name == "limite-generaciones");
             int limiteGeneraciones = _command.Parse("resolver --instancia instancia.dat").GetValueForOption(limiteGeneracionesOption);
@@ -34,7 +34,7 @@ namespace App.Tests.Commands.Resolver
         }
 
         [Fact]
-        public void Create_CantidadIndividuosNoEspecificado_UsaValorPorDefecto()
+        public void Crear_CantidadIndividuosNoEspecificado_UsaValorPorDefecto()
         {
             var cantidadIndividuosOption = (Option<int>)_command.Options.First(o => o.Name == "cantidad-individuos");
             int cantidadIndividuos = _command.Parse("resolver --instancia instancia.dat").GetValueForOption(cantidadIndividuosOption);

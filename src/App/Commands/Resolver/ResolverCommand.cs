@@ -8,7 +8,7 @@ namespace App.Commands.Resolver
 {
     internal class ResolverCommand
     {
-        internal static Command Create()
+        internal static Command Crear()
         {
             var command = new Command("resolver", "Resuelve una instancia");
             var instanciaOption = new Option<string>("--instancia")

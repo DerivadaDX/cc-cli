@@ -9,7 +9,7 @@ namespace App.Commands.Generar
         internal const int ValorMaximoPorDefecto = 1000;
         internal const string RutaSalidaPorDefecto = "instancia.dat";
 
-        internal static Command Create()
+        internal static Command Crear()
         {
             var command = new Command("generar", "Genera una nueva instancia");
 
