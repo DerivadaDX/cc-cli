@@ -49,11 +49,11 @@ namespace App
                 var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.LimiteGeneraciones);
                 if (parametros.LimiteGeneraciones > 0)
                 {
-                    const int tamanoBarra = 20;
+                    const int tamañoBarra = 50;
                     algoritmoGenetico.GeneracionProcesada += generacion =>
                     {
-                        int progreso = (int)((generacion * tamanoBarra) / parametros.LimiteGeneraciones);
-                        string barra = new string('#', progreso).PadRight(tamanoBarra, '-');
+                        int progreso = generacion * tamañoBarra / parametros.LimiteGeneraciones;
+                        string barra = new string('#', progreso).PadRight(tamañoBarra, '-');
                         Console.Write($"\r[{barra}] {generacion}/{parametros.LimiteGeneraciones}");
                     };
                 }
