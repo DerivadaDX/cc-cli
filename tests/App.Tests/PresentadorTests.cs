@@ -59,6 +59,51 @@ namespace App.Tests
         }
 
         [Fact]
+        public void MostrarExito_Color_EsVerde()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarExito(MensajeDePrueba);
+
+            consola.Received(1).ForegroundColor(ConsoleColor.Green);
+        }
+
+        [Fact]
+        public void MostrarExito_Mensaje_SeEscribe()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarExito(MensajeDePrueba);
+
+            consola.Received(1).WriteLine(MensajeDePrueba);
+        }
+
+        [Fact]
+        public void MostrarExito_Color_SeResetea()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarExito(MensajeDePrueba);
+
+            consola.Received(1).ResetColor();
+        }
+
+        [Fact]
+        public void MostrarExito_OrdenLlamadas_EsCorrecto()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarExito(MensajeDePrueba);
+
+            Received.InOrder(() =>
+            {
+                consola.ForegroundColor(Arg.Any<ConsoleColor>());
+                consola.WriteLine(Arg.Any<string>());
+                consola.ResetColor();
+            });
+        }
+
+        [Fact]
         public void MostrarAdvertencia_Color_EsAmarillo()
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();

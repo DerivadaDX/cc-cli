@@ -16,6 +16,11 @@ namespace App
             MostrarMensajeConColor(mensaje, ConsoleColor.White);
         }
 
+        internal void MostrarExito(string mensaje)
+        {
+            MostrarMensajeConColor(mensaje, ConsoleColor.Green);
+        }
+
         internal void MostrarAdvertencia(string mensaje)
         {
             MostrarMensajeConColor(mensaje, ConsoleColor.Yellow);
