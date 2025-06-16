@@ -11,9 +11,19 @@ namespace App
         internal static Command Create()
         {
             var command = new Command("resolver", "Resuelve una instancia");
-            var instanciaOption = new Option<string>("--instancia") { IsRequired = true };
-            var limiteGeneracionesOption = new Option<int>("--limite-generaciones", () => 0);
-            var cantidadIndividuosOption = new Option<int>("--cantidad-individuos", () => 100);
+            var instanciaOption = new Option<string>("--instancia")
+            {
+                IsRequired = true,
+                Description = "Ruta de la instancia a resolver"
+            };
+            var limiteGeneracionesOption = new Option<int>("--limite-generaciones", () => 0)
+            {
+                Description = "Limite de generaciones"
+            };
+            var cantidadIndividuosOption = new Option<int>("--cantidad-individuos", () => 100)
+            {
+                Description = "Cantidad de individuos"
+            };
 
             command.AddOption(instanciaOption);
             command.AddOption(limiteGeneracionesOption);
