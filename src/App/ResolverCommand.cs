@@ -118,7 +118,7 @@ namespace App
         private static void MostrarResultado(Individuo mejorIndividuo, int generaciones, long tiempoMs, Presentador presentador)
         {
             presentador.MostrarExito($"\nResultado encontrado después de {generaciones} generaciones.");
-            presentador.MostrarExito($"Resultado obtendio: {mejorIndividuo}.");
+            presentador.MostrarExito($"Resultado obtenido: {mejorIndividuo}.");
             presentador.MostrarExito($"Tiempo de ejecución: {tiempoMs} ms.");
         }
 
