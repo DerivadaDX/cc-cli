@@ -24,5 +24,12 @@ namespace App
             _consola.Write($"\r{mensaje}");
             _consola.ResetColor();
         }
+
+        internal void MostrarAdvertencia(string mensaje)
+        {
+            _consola.ForegroundColor(ConsoleColor.Yellow);
+            _consola.WriteLine(mensaje);
+            _consola.ResetColor();
+        }
     }
 }
