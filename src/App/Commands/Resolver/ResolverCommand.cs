@@ -50,7 +50,8 @@ namespace App.Commands.Resolver
             return command;
         }
 
-        internal static void Handler(ParametrosSolucion parametros, LectorArchivoMatrizValoraciones lector, Presentador presentador)
+        internal static void Handler(
+            ParametrosSolucion parametros, LectorArchivoMatrizValoraciones lector, Presentador presentador)
         {
             using var cts = new CancellationTokenSource();
             ConfigurarCancelacion(cts, presentador);
@@ -115,7 +116,8 @@ namespace App.Commands.Resolver
             }
         }
 
-        private static void MostrarResultado(Individuo mejorIndividuo, int generaciones, long tiempoMs, Presentador presentador)
+        private static void MostrarResultado(
+            Individuo mejorIndividuo, int generaciones, long tiempoMs, Presentador presentador)
         {
             presentador.MostrarExito($"\nResultado encontrado después de {generaciones} generaciones.");
             presentador.MostrarExito($"Resultado obtenido: {mejorIndividuo}.");
