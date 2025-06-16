@@ -51,6 +51,17 @@ namespace App
         {
             try
             {
+                using var cts = new CancellationTokenSource();
+                Console.CancelKeyPress += (_, e) =>
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write("\r" + new string(' ', Console.BufferWidth - 1));
+                    Console.WriteLine("\rCancelación solicitada por el usuario.");
+                    Console.ResetColor();
+                    e.Cancel = true;
+                    cts.Cancel();
+                };
+
                 decimal[,] matrizValoraciones = lector.Leer(parametros.RutaInstancia);
                 var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matrizValoraciones);
                 var individuoFactory = new IndividuoIntercambioAsignacionesFactory(instanciaProblema);
@@ -59,11 +70,13 @@ namespace App
                 var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.LimiteGeneraciones);
                 if (parametros.LimiteGeneraciones > 0)
                 {
-                    const int tamañoBarra = 50;
+                    const int tamañoBarraProgreso = 50;
                     algoritmoGenetico.GeneracionProcesada += generacion =>
                     {
-                        int progreso = generacion * tamañoBarra / parametros.LimiteGeneraciones;
-                        string barra = new string('#', progreso).PadRight(tamañoBarra, '-');
+                        if (cts.IsCancellationRequested) return;
+
+                        int progreso = generacion * tamañoBarraProgreso / parametros.LimiteGeneraciones;
+                        string barra = new string('#', progreso).PadRight(tamañoBarraProgreso, '-');
                         Console.Write($"\r[{barra}] {generacion}/{parametros.LimiteGeneraciones}");
                     };
                 }
@@ -71,26 +84,17 @@ namespace App
                 {
                     algoritmoGenetico.GeneracionProcesada += generacion =>
                     {
+                        if (cts.IsCancellationRequested) return;
                         Console.Write($"\rProcesando generación #{generacion}.");
                     };
                 }
-
-                using var cts = new CancellationTokenSource();
-                Console.CancelKeyPress += (_, e) =>
-                {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("\rCancelación solicitada por el usuario.");
-                    Console.ResetColor();
-                    e.Cancel = true;
-                    cts.Cancel();
-                };
 
                 var stopwatch = Stopwatch.StartNew();
                 (Individuo mejorIndividuo, int generaciones) = algoritmoGenetico.Ejecutar(cts.Token);
                 stopwatch.Stop();
 
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"\nResultado encontrado después de {generaciones} generaciones.");
+                Console.WriteLine($"Resultado encontrado después de {generaciones} generaciones.");
                 Console.WriteLine($"Resultado obtendio: {mejorIndividuo}.");
                 Console.WriteLine($"Tiempo de ejecución: {stopwatch.ElapsedMilliseconds} ms.");
                 Console.ResetColor();
