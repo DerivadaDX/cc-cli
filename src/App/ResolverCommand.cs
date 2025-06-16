@@ -63,7 +63,7 @@ namespace App
                 var poblacion = PoblacionFactory.Crear(parametros.CantidadIndividuos, individuoFactory);
 
                 var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.LimiteGeneraciones);
-                ConfigurarProgreso(algoritmoGenetico, parametros, cts, presentador);
+                ConfigurarProgreso(parametros, algoritmoGenetico, presentador);
 
                 var stopwatch = Stopwatch.StartNew();
                 var (mejorIndividuo, generaciones) = algoritmoGenetico.Ejecutar(cts.Token);
@@ -88,14 +88,14 @@ namespace App
         }
 
         private static void ConfigurarProgreso(
-            AlgoritmoGenetico algoritmoGenetico, ParametrosSolucion parametros, CancellationTokenSource cts, Presentador presentador)
+            ParametrosSolucion parametros, AlgoritmoGenetico algoritmoGenetico, Presentador presentador)
         {
             if (parametros.LimiteGeneraciones > 0)
             {
                 const int tamañoBarraProgreso = 50;
-                algoritmoGenetico.GeneracionProcesada += generacion =>
+                algoritmoGenetico.GeneracionProcesada += (generacion, cancellationToken) =>
                 {
-                    if (cts.IsCancellationRequested) return;
+                    if (cancellationToken.IsCancellationRequested) return;
 
                     int progreso = generacion * tamañoBarraProgreso / parametros.LimiteGeneraciones;
                     string barraProgreso = new string('#', progreso).PadRight(tamañoBarraProgreso, '-');
@@ -105,9 +105,9 @@ namespace App
             }
             else
             {
-                algoritmoGenetico.GeneracionProcesada += generacion =>
+                algoritmoGenetico.GeneracionProcesada += (generacion, cancellationToken) =>
                 {
-                    if (cts.IsCancellationRequested) return;
+                    if (cancellationToken.IsCancellationRequested) return;
 
                     string mensaje = $"Procesando generación #{generacion}.";
                     presentador.MostrarProgreso(mensaje);

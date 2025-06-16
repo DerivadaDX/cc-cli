@@ -2,7 +2,7 @@ using Solver.Individuos;
 
 namespace Solver
 {
-    public delegate void GeneracionProcesadaEventHandler(int generacion);
+    public delegate void GeneracionProcesadaEventHandler(int generacion, CancellationToken cancellationToken);
 
     public class AlgoritmoGenetico
     {
@@ -47,7 +47,7 @@ namespace Solver
                 _poblacion = _poblacion.GenerarNuevaGeneracion();
                 generacionLimiteNoAlcanzada = cantidadGeneracionesProcesadas < _limiteGeneraciones;
 
-                GeneracionProcesada?.Invoke(cantidadGeneracionesProcesadas);
+                GeneracionProcesada?.Invoke(cantidadGeneracionesProcesadas, cancellationToken);
             }
 
             Individuo mejorIndividuo = _poblacion.ObtenerMejorIndividuo();
