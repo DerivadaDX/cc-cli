@@ -28,6 +28,11 @@ namespace App
             MostrarMensajeConColor(mensaje, ConsoleColor.Yellow);
         }
 
+        internal void MostrarError(string mensaje)
+        {
+            MostrarMensajeConColor(mensaje, ConsoleColor.Red);
+        }
+
         private void MostrarMensajeConColor(string mensaje, ConsoleColor color)
         {
             _consola.ForegroundColor(color);
