@@ -14,8 +14,7 @@ namespace App.Tests
         [Fact]
         public void MostrarInfo_Color_EsBlanco()
         {
-            var consola = Substitute.For<ConsoleProxy>();
-            var presentador = new Presentador(consola);
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
 
             presentador.MostrarInfo("Mensaje de prueba");
 
@@ -25,8 +24,7 @@ namespace App.Tests
         [Fact]
         public void MostrarInfo_Mensaje_SeEscribe()
         {
-            var consola = Substitute.For<ConsoleProxy>();
-            var presentador = new Presentador(consola);
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
 
             presentador.MostrarInfo("Mensaje de prueba");
 
@@ -36,8 +34,7 @@ namespace App.Tests
         [Fact]
         public void MostrarInfo_Color_SeResetea()
         {
-            var consola = Substitute.For<ConsoleProxy>();
-            var presentador = new Presentador(consola);
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
 
             presentador.MostrarInfo("Mensaje de prueba");
 
@@ -47,8 +44,7 @@ namespace App.Tests
         [Fact]
         public void MostrarInfo_OrdenLlamadas_EsCorrecto()
         {
-            var consola = Substitute.For<ConsoleProxy>();
-            var presentador = new Presentador(consola);
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
 
             presentador.MostrarInfo("Mensaje de prueba");
 
@@ -58,6 +54,13 @@ namespace App.Tests
                 consola.WriteLine("Mensaje de prueba");
                 consola.ResetColor();
             });
+        }
+
+        private (Presentador presentador, ConsoleProxy consola) CrearPresentadorConConsolaFake()
+        {
+            var consola = Substitute.For<ConsoleProxy>();
+            var presentador = new Presentador(consola);
+            return (presentador, consola);
         }
     }
 }
