@@ -39,32 +39,58 @@ namespace App
 
         internal static void Handler(ParametrosSolucion parametros, LectorArchivoMatrizValoraciones lector)
         {
-            decimal[,] matrizValoraciones = lector.Leer(parametros.RutaInstancia);
-            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matrizValoraciones);
-            var individuoFactory = new IndividuoIntercambioAsignacionesFactory(instanciaProblema);
-            var poblacion = PoblacionFactory.Crear(parametros.CantidadIndividuos, individuoFactory);
-
-            var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.LimiteGeneraciones);
-            algoritmoGenetico.GeneracionProcesada += generacion =>
+            try
             {
-                Console.Write($"\rProcesando generación #{generacion}.");
-            };
+                decimal[,] matrizValoraciones = lector.Leer(parametros.RutaInstancia);
+                var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matrizValoraciones);
+                var individuoFactory = new IndividuoIntercambioAsignacionesFactory(instanciaProblema);
+                var poblacion = PoblacionFactory.Crear(parametros.CantidadIndividuos, individuoFactory);
 
-            using var cts = new CancellationTokenSource();
-            Console.CancelKeyPress += (_, e) =>
+                var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.LimiteGeneraciones);
+                if (parametros.LimiteGeneraciones > 0)
+                {
+                    const int tamanoBarra = 20;
+                    algoritmoGenetico.GeneracionProcesada += generacion =>
+                    {
+                        int progreso = (int)((generacion * tamanoBarra) / parametros.LimiteGeneraciones);
+                        string barra = new string('#', progreso).PadRight(tamanoBarra, '-');
+                        Console.Write($"\r[{barra}] {generacion}/{parametros.LimiteGeneraciones}");
+                    };
+                }
+                else
+                {
+                    algoritmoGenetico.GeneracionProcesada += generacion =>
+                    {
+                        Console.Write($"\rProcesando generación #{generacion}.");
+                    };
+                }
+
+                using var cts = new CancellationTokenSource();
+                Console.CancelKeyPress += (_, e) =>
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("\rCancelación solicitada por el usuario.");
+                    Console.ResetColor();
+                    e.Cancel = true;
+                    cts.Cancel();
+                };
+
+                var stopwatch = Stopwatch.StartNew();
+                (Individuo mejorIndividuo, int generaciones) = algoritmoGenetico.Ejecutar(cts.Token);
+                stopwatch.Stop();
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"\nResultado encontrado después de {generaciones} generaciones.");
+                Console.WriteLine($"Resultado obtendio: {mejorIndividuo}.");
+                Console.WriteLine($"Tiempo de ejecución: {stopwatch.ElapsedMilliseconds} ms.");
+                Console.ResetColor();
+            }
+            catch (Exception ex)
             {
-                Console.WriteLine("\rCancelación solicitada por el usuario.");
-                e.Cancel = true;
-                cts.Cancel();
-            };
-
-            var stopwatch = Stopwatch.StartNew();
-            (Individuo mejorIndividuo, int generaciones) = algoritmoGenetico.Ejecutar(cts.Token);
-            stopwatch.Stop();
-
-            Console.WriteLine($"\nResultado encontrado después de {generaciones} generaciones.");
-            Console.WriteLine($"Resultado obtendio: {mejorIndividuo}.");
-            Console.WriteLine($"Tiempo de ejecución: {stopwatch.ElapsedMilliseconds} ms.");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"\nSe produjo un error: {ex.Message}");
+                Console.ResetColor();
+            }
         }
     }
 }
