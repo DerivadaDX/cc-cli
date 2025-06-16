@@ -36,7 +36,10 @@ namespace App
                 var fileSystemHelper = FileSystemHelperFactory.Crear();
                 var lector = new LectorArchivoMatrizValoraciones(fileSystemHelper);
 
-                Handler(parametros, lector);
+                var consola = ConsoleProxyFactory.Crear();
+                var presentador = new Presentador(consola);
+
+                Handler(parametros, lector, presentador);
 
 #if DEBUG
                 Console.WriteLine("Presioná una tecla para salir...");
@@ -47,10 +50,10 @@ namespace App
             return command;
         }
 
-        internal static void Handler(ParametrosSolucion parametros, LectorArchivoMatrizValoraciones lector)
+        internal static void Handler(ParametrosSolucion parametros, LectorArchivoMatrizValoraciones lector, Presentador presentador)
         {
             using var cts = new CancellationTokenSource();
-            ConfigurarCancelacion(cts);
+            ConfigurarCancelacion(cts, presentador);
 
             try
             {
@@ -60,35 +63,32 @@ namespace App
                 var poblacion = PoblacionFactory.Crear(parametros.CantidadIndividuos, individuoFactory);
 
                 var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.LimiteGeneraciones);
-                ConfigurarProgreso(algoritmoGenetico, parametros, cts);
+                ConfigurarProgreso(algoritmoGenetico, parametros, cts, presentador);
 
                 var stopwatch = Stopwatch.StartNew();
                 var (mejorIndividuo, generaciones) = algoritmoGenetico.Ejecutar(cts.Token);
                 stopwatch.Stop();
 
-                MostrarResultado(mejorIndividuo, generaciones, stopwatch.ElapsedMilliseconds);
+                MostrarResultado(mejorIndividuo, generaciones, stopwatch.ElapsedMilliseconds, presentador);
             }
             catch (Exception ex)
             {
-                MostrarError(ex.Message);
+                MostrarError(ex.Message, presentador);
             }
         }
 
-        private static void ConfigurarCancelacion(CancellationTokenSource cts)
+        private static void ConfigurarCancelacion(CancellationTokenSource cts, Presentador presentador)
         {
             Console.CancelKeyPress += (_, e) =>
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write("\r" + new string(' ', Console.BufferWidth - 1));
-                Console.WriteLine("\rCancelación solicitada por el usuario.");
-                Console.ResetColor();
+                presentador.MostrarAdvertencia("\nCancelación solicitada por el usuario.");
                 e.Cancel = true;
                 cts.Cancel();
             };
         }
 
         private static void ConfigurarProgreso(
-            AlgoritmoGenetico algoritmoGenetico, ParametrosSolucion parametros, CancellationTokenSource cts)
+            AlgoritmoGenetico algoritmoGenetico, ParametrosSolucion parametros, CancellationTokenSource cts, Presentador presentador)
         {
             if (parametros.LimiteGeneraciones > 0)
             {
@@ -99,7 +99,8 @@ namespace App
 
                     int progreso = generacion * tamañoBarraProgreso / parametros.LimiteGeneraciones;
                     string barraProgreso = new string('#', progreso).PadRight(tamañoBarraProgreso, '-');
-                    Console.Write($"\r[{barraProgreso}] {generacion}/{parametros.LimiteGeneraciones}");
+                    string mensaje = $"[{barraProgreso}] {generacion}/{parametros.LimiteGeneraciones}";
+                    presentador.MostrarProgreso(mensaje);
                 };
             }
             else
@@ -107,25 +108,23 @@ namespace App
                 algoritmoGenetico.GeneracionProcesada += generacion =>
                 {
                     if (cts.IsCancellationRequested) return;
-                    Console.Write($"\rProcesando generación #{generacion}.");
+
+                    string mensaje = $"Procesando generación #{generacion}.";
+                    presentador.MostrarProgreso(mensaje);
                 };
             }
         }
 
-        private static void MostrarResultado(Individuo mejorIndividuo, int generaciones, long tiempoMs)
+        private static void MostrarResultado(Individuo mejorIndividuo, int generaciones, long tiempoMs, Presentador presentador)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"Resultado encontrado después de {generaciones} generaciones.");
-            Console.WriteLine($"Resultado obtendio: {mejorIndividuo}.");
-            Console.WriteLine($"Tiempo de ejecución: {tiempoMs} ms.");
-            Console.ResetColor();
+            presentador.MostrarExito($"\nResultado encontrado después de {generaciones} generaciones.");
+            presentador.MostrarExito($"Resultado obtenido: {mejorIndividuo}.");
+            presentador.MostrarExito($"Tiempo de ejecución: {tiempoMs} ms.");
         }
 
-        private static void MostrarError(string mensaje)
+        private static void MostrarError(string mensaje, Presentador presentador)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"\nSe produjo un error: {mensaje}");
-            Console.ResetColor();
+            presentador.MostrarError($"\nSe produjo un error: {mensaje}");
         }
     }
 }
