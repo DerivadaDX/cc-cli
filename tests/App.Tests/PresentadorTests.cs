@@ -4,6 +4,8 @@ namespace App.Tests
 {
     public class PresentadorTests
     {
+        private const string MensajeDePrueba = "Mensaje de prueba";
+
         [Fact]
         public void Constructor_ConsoleProxyNull_LanzaArgumentNullException()
         {
@@ -16,7 +18,7 @@ namespace App.Tests
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
 
-            presentador.MostrarInfo("Mensaje de prueba");
+            presentador.MostrarInfo(MensajeDePrueba);
 
             consola.Received(1).ForegroundColor(ConsoleColor.White);
         }
@@ -26,9 +28,9 @@ namespace App.Tests
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
 
-            presentador.MostrarInfo("Mensaje de prueba");
+            presentador.MostrarInfo(MensajeDePrueba);
 
-            consola.Received(1).WriteLine("Mensaje de prueba");
+            consola.Received(1).WriteLine(MensajeDePrueba);
         }
 
         [Fact]
@@ -36,7 +38,7 @@ namespace App.Tests
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
 
-            presentador.MostrarInfo("Mensaje de prueba");
+            presentador.MostrarInfo(MensajeDePrueba);
 
             consola.Received(1).ResetColor();
         }
@@ -46,7 +48,7 @@ namespace App.Tests
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
 
-            presentador.MostrarInfo("Mensaje de prueba");
+            presentador.MostrarInfo(MensajeDePrueba);
 
             Received.InOrder(() =>
             {
@@ -61,7 +63,7 @@ namespace App.Tests
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
 
-            presentador.MostrarProgreso("Mensaje de prueba");
+            presentador.MostrarProgreso(MensajeDePrueba);
 
             consola.Received(1).ForegroundColor(ConsoleColor.White);
         }
@@ -71,7 +73,7 @@ namespace App.Tests
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
 
-            presentador.MostrarProgreso("Mensaje de prueba");
+            presentador.MostrarProgreso(MensajeDePrueba);
 
             consola.Received(1).Write("\rMensaje de prueba");
         }
@@ -81,7 +83,7 @@ namespace App.Tests
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
 
-            presentador.MostrarProgreso("Mensaje de prueba");
+            presentador.MostrarProgreso(MensajeDePrueba);
 
             consola.Received(1).ResetColor();
         }
@@ -91,7 +93,7 @@ namespace App.Tests
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
 
-            presentador.MostrarProgreso("Mensaje de prueba");
+            presentador.MostrarProgreso(MensajeDePrueba);
 
             Received.InOrder(() =>
             {
@@ -106,7 +108,7 @@ namespace App.Tests
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
 
-            presentador.MostrarAdvertencia("Mensaje de prueba");
+            presentador.MostrarAdvertencia(MensajeDePrueba);
 
             consola.Received(1).ForegroundColor(ConsoleColor.Yellow);
         }
@@ -116,9 +118,9 @@ namespace App.Tests
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
 
-            presentador.MostrarAdvertencia("Mensaje de prueba");
+            presentador.MostrarAdvertencia(MensajeDePrueba);
 
-            consola.Received(1).WriteLine("Mensaje de prueba");
+            consola.Received(1).WriteLine(MensajeDePrueba);
         }
 
         [Fact]
@@ -126,7 +128,7 @@ namespace App.Tests
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
 
-            presentador.MostrarAdvertencia("Mensaje de prueba");
+            presentador.MostrarAdvertencia(MensajeDePrueba);
 
             consola.Received(1).ResetColor();
         }
@@ -136,7 +138,7 @@ namespace App.Tests
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
 
-            presentador.MostrarAdvertencia("Mensaje de prueba");
+            presentador.MostrarAdvertencia(MensajeDePrueba);
 
             Received.InOrder(() =>
             {
@@ -151,7 +153,7 @@ namespace App.Tests
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
 
-            presentador.MostrarError("Mensaje de prueba");
+            presentador.MostrarError(MensajeDePrueba);
 
             consola.Received(1).ForegroundColor(ConsoleColor.Red);
         }
@@ -161,9 +163,9 @@ namespace App.Tests
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
 
-            presentador.MostrarError("Mensaje de prueba");
+            presentador.MostrarError(MensajeDePrueba);
 
-            consola.Received(1).WriteLine("Mensaje de prueba");
+            consola.Received(1).WriteLine(MensajeDePrueba);
         }
 
         [Fact]
@@ -171,7 +173,7 @@ namespace App.Tests
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
 
-            presentador.MostrarError("Mensaje de prueba");
+            presentador.MostrarError(MensajeDePrueba);
 
             consola.Received(1).ResetColor();
         }
@@ -181,7 +183,7 @@ namespace App.Tests
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
 
-            presentador.MostrarError("Mensaje de prueba");
+            presentador.MostrarError(MensajeDePrueba);
 
             Received.InOrder(() =>
             {
