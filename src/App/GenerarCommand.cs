@@ -66,13 +66,14 @@ namespace App
         {
             try
             {
-                builder
+                decimal[,] instancia = builder
                     .ConCantidadDeAtomos(parametros.Atomos)
                     .ConCantidadDeAgentes(parametros.Agentes)
                     .ConValorMaximo(parametros.ValorMaximo)
-                    .ConValoracionesDisjuntas(parametros.ValoracionesDisjuntas);
+                    .ConValoracionesDisjuntas(parametros.ValoracionesDisjuntas)
+                    .Build();
 
-                escritor.EscribirInstancia(builder.Build(), parametros.RutaSalida);
+                escritor.EscribirInstancia(instancia, parametros.RutaSalida);
                 presentador.MostrarExito($"Instancia generada correctamente en '{parametros.RutaSalida}'.");
             }
             catch (Exception ex)
