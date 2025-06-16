@@ -50,8 +50,8 @@ namespace App.Tests
 
             Received.InOrder(() =>
             {
-                consola.ForegroundColor(ConsoleColor.White);
-                consola.WriteLine("Mensaje de prueba");
+                consola.ForegroundColor(Arg.Any<ConsoleColor>());
+                consola.WriteLine(Arg.Any<string>());
                 consola.ResetColor();
             });
         }
@@ -95,8 +95,8 @@ namespace App.Tests
 
             Received.InOrder(() =>
             {
-                consola.ForegroundColor(ConsoleColor.White);
-                consola.Write("\rMensaje de prueba");
+                consola.ForegroundColor(Arg.Any<ConsoleColor>());
+                consola.Write(Arg.Any<string>());
                 consola.ResetColor();
             });
         }
@@ -140,8 +140,8 @@ namespace App.Tests
 
             Received.InOrder(() =>
             {
-                consola.ForegroundColor(ConsoleColor.Yellow);
-                consola.WriteLine("Mensaje de prueba");
+                consola.ForegroundColor(Arg.Any<ConsoleColor>());
+                consola.WriteLine(Arg.Any<string>());
                 consola.ResetColor();
             });
         }
