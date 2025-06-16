@@ -1,5 +1,7 @@
 ﻿using System.CommandLine;
 using System.Text;
+using App.Commands.Generar;
+using App.Commands.Resolver;
 
 namespace App
 {
@@ -9,9 +11,11 @@ namespace App
         {
             Console.OutputEncoding = Encoding.UTF8;
 
-            var rootCommand = new RootCommand("Herramienta CLI para Generación/Resolución de instancias de Cake Cutting");
-            rootCommand.AddCommand(GenerarCommand.Create());
-            rootCommand.AddCommand(ResolverCommand.Create());
+            RootCommand rootCommand = new("Herramienta CLI para Generación/Resolución de instancias de Cake Cutting");
+            Command generarCommand = GenerarCommand.Crear();
+            Command resolverCommand = ResolverCommand.Crear();
+            rootCommand.AddCommand(generarCommand);
+            rootCommand.AddCommand(resolverCommand);
 
             if (args.Length == 0)
             {

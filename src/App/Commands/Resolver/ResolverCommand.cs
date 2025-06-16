@@ -4,11 +4,11 @@ using Common;
 using Solver;
 using Solver.Individuos;
 
-namespace App
+namespace App.Commands.Resolver
 {
     internal class ResolverCommand
     {
-        internal static Command Create()
+        internal static Command Crear()
         {
             var command = new Command("resolver", "Resuelve una instancia");
             var instanciaOption = new Option<string>("--instancia")
@@ -39,7 +39,7 @@ namespace App
                 var consola = ConsoleProxyFactory.Crear();
                 var presentador = new Presentador(consola);
 
-                Handler(parametros, lector, presentador);
+                EjecutarResolucion(parametros, lector, presentador);
 
 #if DEBUG
                 Console.WriteLine("Presioná una tecla para salir...");
@@ -50,7 +50,8 @@ namespace App
             return command;
         }
 
-        internal static void Handler(ParametrosSolucion parametros, LectorArchivoMatrizValoraciones lector, Presentador presentador)
+        internal static void EjecutarResolucion(
+            ParametrosSolucion parametros, LectorArchivoMatrizValoraciones lector, Presentador presentador)
         {
             using var cts = new CancellationTokenSource();
             ConfigurarCancelacion(cts, presentador);
@@ -63,7 +64,7 @@ namespace App
                 var poblacion = PoblacionFactory.Crear(parametros.CantidadIndividuos, individuoFactory);
 
                 var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.LimiteGeneraciones);
-                ConfigurarProgreso(algoritmoGenetico, parametros, cts, presentador);
+                ConfigurarProgreso(parametros, algoritmoGenetico, presentador);
 
                 var stopwatch = Stopwatch.StartNew();
                 var (mejorIndividuo, generaciones) = algoritmoGenetico.Ejecutar(cts.Token);
@@ -88,14 +89,14 @@ namespace App
         }
 
         private static void ConfigurarProgreso(
-            AlgoritmoGenetico algoritmoGenetico, ParametrosSolucion parametros, CancellationTokenSource cts, Presentador presentador)
+            ParametrosSolucion parametros, AlgoritmoGenetico algoritmoGenetico, Presentador presentador)
         {
             if (parametros.LimiteGeneraciones > 0)
             {
                 const int tamañoBarraProgreso = 50;
-                algoritmoGenetico.GeneracionProcesada += generacion =>
+                algoritmoGenetico.GeneracionProcesada += (generacion, cancellationToken) =>
                 {
-                    if (cts.IsCancellationRequested) return;
+                    if (cancellationToken.IsCancellationRequested) return;
 
                     int progreso = generacion * tamañoBarraProgreso / parametros.LimiteGeneraciones;
                     string barraProgreso = new string('#', progreso).PadRight(tamañoBarraProgreso, '-');
@@ -105,9 +106,9 @@ namespace App
             }
             else
             {
-                algoritmoGenetico.GeneracionProcesada += generacion =>
+                algoritmoGenetico.GeneracionProcesada += (generacion, cancellationToken) =>
                 {
-                    if (cts.IsCancellationRequested) return;
+                    if (cancellationToken.IsCancellationRequested) return;
 
                     string mensaje = $"Procesando generación #{generacion}.";
                     presentador.MostrarProgreso(mensaje);
@@ -115,7 +116,8 @@ namespace App
             }
         }
 
-        private static void MostrarResultado(Individuo mejorIndividuo, int generaciones, long tiempoMs, Presentador presentador)
+        private static void MostrarResultado(
+            Individuo mejorIndividuo, int generaciones, long tiempoMs, Presentador presentador)
         {
             presentador.MostrarExito($"\nResultado encontrado después de {generaciones} generaciones.");
             presentador.MostrarExito($"Resultado obtenido: {mejorIndividuo}.");

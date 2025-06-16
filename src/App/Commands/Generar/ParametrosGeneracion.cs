@@ -1,4 +1,4 @@
-﻿namespace App
+﻿namespace App.Commands.Generar
 {
     internal class ParametrosGeneracion
     {

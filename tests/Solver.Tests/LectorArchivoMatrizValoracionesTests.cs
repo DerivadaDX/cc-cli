@@ -68,10 +68,10 @@ namespace Solver.Tests
         }
 
         [Theory]
-        [InlineData("@ 1", "@")]
-        [InlineData("1.1 1", "1.1")]
-        [InlineData("Algo 2", "Algo")]
-        public void Leer_CantidadFilasInvalida_LanzaFormatException(string primeraLinea, string valorFilas)
+        [InlineData("@ 1")]
+        [InlineData("1.1 1")]
+        [InlineData("Algo 2")]
+        public void Leer_CantidadFilasInvalida_LanzaFormatException(string primeraLinea)
         {
             _fileSystemHelper.ReadAllLines(RutaArchivo).Returns([primeraLinea, "1\t2\t3"]);
 
@@ -91,9 +91,9 @@ namespace Solver.Tests
         }
 
         [Theory]
-        [InlineData("1 @", "@")]
-        [InlineData("2 Algo", "Algo")]
-        public void Leer_CantidadColumnasInvalida_LanzaFormatException(string primeraLinea, string valorColumnas)
+        [InlineData("1 @")]
+        [InlineData("2 Algo")]
+        public void Leer_CantidadColumnasInvalida_LanzaFormatException(string primeraLinea)
         {
             _fileSystemHelper.ReadAllLines(RutaArchivo).Returns([primeraLinea, "1\t2\t3"]);
 
