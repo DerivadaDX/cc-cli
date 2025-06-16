@@ -11,6 +11,12 @@ namespace App
             rootCommand.AddCommand(GenerarCommand.Create());
             rootCommand.AddCommand(ResolverCommand.Create());
 
+            if (args.Length == 0)
+            {
+                Console.WriteLine("Use un subcomando (generar/resolver). Ver ayuda con --help.");
+                return await rootCommand.InvokeAsync("--help");
+            }
+
             int exitCode = await rootCommand.InvokeAsync(args);
             return exitCode;
         }
