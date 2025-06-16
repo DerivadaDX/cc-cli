@@ -56,6 +56,51 @@ namespace App.Tests
             });
         }
 
+        [Fact]
+        public void MostrarProgreso_Color_EsBlanco()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarProgreso("Mensaje de prueba");
+
+            consola.Received(1).ForegroundColor(ConsoleColor.White);
+        }
+
+        [Fact]
+        public void MostrarProgreso_Mensaje_SeEscribe()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarProgreso("Mensaje de prueba");
+
+            consola.Received(1).Write("\rMensaje de prueba");
+        }
+
+        [Fact]
+        public void MostrarProgreso_Color_SeResetea()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarProgreso("Mensaje de prueba");
+
+            consola.Received(1).ResetColor();
+        }
+
+        [Fact]
+        public void MostrarProgreso_OrdenLlamadas_EsCorrecto()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarProgreso("Mensaje de prueba");
+
+            Received.InOrder(() =>
+            {
+                consola.ForegroundColor(ConsoleColor.White);
+                consola.Write("\rMensaje de prueba");
+                consola.ResetColor();
+            });
+        }
+
         private (Presentador presentador, ConsoleProxy consola) CrearPresentadorConConsolaFake()
         {
             var consola = Substitute.For<ConsoleProxy>();

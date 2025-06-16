@@ -1,6 +1,7 @@
 ﻿
 
 
+
 namespace App
 {
     internal class ConsoleProxy
@@ -8,6 +9,11 @@ namespace App
         internal virtual void WriteLine(string value)
         {
             Console.WriteLine(value);
+        }
+
+        internal virtual void Write(string value)
+        {
+            Console.Write(value);
         }
 
         internal virtual void ForegroundColor(ConsoleColor color)
