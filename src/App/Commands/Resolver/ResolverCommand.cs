@@ -68,7 +68,7 @@ namespace App.Commands.Resolver
                 var individuoFactory = new IndividuoIntercambioAsignacionesFactory(instanciaProblema);
                 var poblacion = PoblacionFactory.Crear(parametros.CantidadIndividuos, individuoFactory);
 
-                var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.LimiteGeneraciones);
+                var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.LimiteGeneraciones, parametros.LimiteEstancamiento);
                 ConfigurarProgreso(parametros, algoritmoGenetico, presentador);
 
                 var stopwatch = Stopwatch.StartNew();

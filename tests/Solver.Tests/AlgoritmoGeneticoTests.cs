@@ -1,6 +1,5 @@
 using NSubstitute;
 using Solver.Individuos;
-using System.Threading;
 
 namespace Solver.Tests
 {
@@ -9,27 +8,35 @@ namespace Solver.Tests
         [Fact]
         public void Constructor_PoblacionNull_LanzaArgumentNullException()
         {
-            var ex = Assert.Throws<ArgumentNullException>(() => new AlgoritmoGenetico(null, 10));
+            var ex = Assert.Throws<ArgumentNullException>(() => new AlgoritmoGenetico(null, 10, 0));
             Assert.Equal("poblacion", ex.ParamName);
         }
 
         [Fact]
         public void Constructor_LimiteGeneracionesNegativo_LanzaArgumentOutOfRangeException()
         {
-            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => new AlgoritmoGenetico(new Poblacion(1), -1));
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => new AlgoritmoGenetico(new Poblacion(1), -1, 0));
             Assert.Contains("no puede ser negativo", ex.Message);
             Assert.Equal("limiteGeneraciones", ex.ParamName);
         }
 
         [Fact]
-        public void Ejecutar_SinLimiteDeGeneraciones_EjecutaHastaEncontrarSolucionOptima()
+        public void Constructor_LimiteGeneracionesSinMejoraNegativo_LanzaArgumentOutOfRangeException()
+        {
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => new AlgoritmoGenetico(new Poblacion(1), 1, -1));
+            Assert.Contains("no puede ser negativo", ex.Message);
+            Assert.Equal("limiteGeneracionesSinMejora", ex.ParamName);
+        }
+
+        [Fact]
+        public void Ejecutar_SinLimitesDeGeneraciones_EjecutaHastaEncontrarSolucionOptima()
         {
             Individuo individuoOptimo = CrearIndividuoOptimoFake();
             Poblacion poblacionInicial = CrearPoblacionFakeConIndividuo(CrearIndividuoNoOptimoFake());
             Poblacion poblacionSiguiente = CrearPoblacionFakeConIndividuo(individuoOptimo);
             poblacionInicial.GenerarNuevaGeneracion().Returns(poblacionSiguiente);
 
-            var algoritmo = new AlgoritmoGenetico(poblacionInicial, limiteGeneraciones: 0);
+            var algoritmo = new AlgoritmoGenetico(poblacionInicial, limiteGeneraciones: 0, limiteGeneracionesSinMejora: 0);
             (Individuo mejorIndividuo, int _) = algoritmo.Ejecutar();
 
             Assert.Same(individuoOptimo, mejorIndividuo);
@@ -43,7 +50,7 @@ namespace Solver.Tests
             Individuo individuoOptimo = CrearIndividuoOptimoFake();
             Poblacion poblacion = CrearPoblacionFakeConIndividuo(individuoOptimo);
 
-            var algoritmo = new AlgoritmoGenetico(poblacion, 10);
+            var algoritmo = new AlgoritmoGenetico(poblacion, 10, 0);
             (Individuo mejorIndividuo, int _) = algoritmo.Ejecutar();
 
             Assert.Same(individuoOptimo, mejorIndividuo);
@@ -55,7 +62,7 @@ namespace Solver.Tests
             Individuo individuoOptimo = CrearIndividuoOptimoFake();
             Poblacion poblacion = CrearPoblacionFakeConIndividuo(individuoOptimo);
 
-            var algoritmo = new AlgoritmoGenetico(poblacion, 10);
+            var algoritmo = new AlgoritmoGenetico(poblacion, 10, 0);
             _ = algoritmo.Ejecutar();
 
             poblacion.DidNotReceive().GenerarNuevaGeneracion();
@@ -67,7 +74,7 @@ namespace Solver.Tests
             Individuo individuoOptimo = CrearIndividuoOptimoFake();
             Poblacion poblacion = CrearPoblacionFakeConIndividuo(individuoOptimo);
 
-            var algoritmo = new AlgoritmoGenetico(poblacion, 10);
+            var algoritmo = new AlgoritmoGenetico(poblacion, 10, 0);
             _ = algoritmo.Ejecutar();
 
             poblacion.DidNotReceive().ObtenerMejorIndividuo();
@@ -87,7 +94,7 @@ namespace Solver.Tests
             poblacionInicial.GenerarNuevaGeneracion().Returns(poblacionSiguiente);
             poblacionSiguiente.GenerarNuevaGeneracion().Returns(poblacionSiguiente);
 
-            var algoritmo = new AlgoritmoGenetico(poblacionInicial, 2);
+            var algoritmo = new AlgoritmoGenetico(poblacionInicial, 2, 0);
             algoritmo.Ejecutar();
 
             individuo1.Received(2).Fitness();
@@ -102,7 +109,7 @@ namespace Solver.Tests
             poblacionInicial.GenerarNuevaGeneracion().Returns(poblacionSiguiente);
             poblacionSiguiente.GenerarNuevaGeneracion().Returns(poblacionSiguiente);
 
-            var algoritmo = new AlgoritmoGenetico(poblacionInicial, limiteGeneraciones: 2);
+            var algoritmo = new AlgoritmoGenetico(poblacionInicial, limiteGeneraciones: 2, 0);
             algoritmo.Ejecutar();
 
             poblacionInicial.Received(1).GenerarNuevaGeneracion();
@@ -117,11 +124,27 @@ namespace Solver.Tests
             poblacion.GenerarNuevaGeneracion().Returns(poblacion);
             poblacion.ObtenerMejorIndividuo().Returns(mejorIndividuo);
 
-            var algoritmo = new AlgoritmoGenetico(poblacion, limiteGeneraciones: 1);
+            var algoritmo = new AlgoritmoGenetico(poblacion, limiteGeneraciones: 1, 0);
             (Individuo mejorIndividuoEncontrado, int _) = algoritmo.Ejecutar();
 
             poblacion.Received(1).ObtenerMejorIndividuo();
             Assert.Same(mejorIndividuo, mejorIndividuoEncontrado);
+        }
+
+        [Fact]
+        public void Ejecutar_HayEstancamiento_RetornaMejorIndividuo()
+        {
+            Individuo mejorIndividuo = CrearIndividuoNoOptimoFake();
+            Poblacion poblacion = CrearPoblacionFakeConIndividuo(mejorIndividuo);
+            poblacion.GenerarNuevaGeneracion().Returns(poblacion);
+            poblacion.ObtenerMejorIndividuo().Returns(mejorIndividuo);
+
+            var algoritmo = new AlgoritmoGenetico(poblacion, limiteGeneraciones: 100, limiteGeneracionesSinMejora: 2);
+            (Individuo individuo, int generaciones) = algoritmo.Ejecutar();
+
+            Assert.Same(mejorIndividuo, individuo);
+            Assert.Equal(2, generaciones);
+            poblacion.Received(2).GenerarNuevaGeneracion();
         }
 
         [Fact]
@@ -132,7 +155,7 @@ namespace Solver.Tests
             poblacion.GenerarNuevaGeneracion().Returns(poblacion);
             poblacion.ObtenerMejorIndividuo().Returns(mejorIndividuo);
 
-            var algoritmo = new AlgoritmoGenetico(poblacion, 1);
+            var algoritmo = new AlgoritmoGenetico(poblacion, 1, 0);
             (Individuo _, int generaciones) = algoritmo.Ejecutar();
 
             Assert.Equal(1, generaciones);
@@ -145,7 +168,7 @@ namespace Solver.Tests
             Poblacion poblacion = CrearPoblacionFakeConIndividuo(mejorIndividuo);
             poblacion.ObtenerMejorIndividuo().Returns(mejorIndividuo);
 
-            var algoritmo = new AlgoritmoGenetico(poblacion, 10);
+            var algoritmo = new AlgoritmoGenetico(poblacion, 10, 0);
             using var cts = new CancellationTokenSource();
             cts.Cancel();
 
@@ -165,7 +188,7 @@ namespace Solver.Tests
             poblacion.GenerarNuevaGeneracion().Returns(poblacion);
             poblacion.ObtenerMejorIndividuo().Returns(mejorIndividuo);
 
-            var algoritmo = new AlgoritmoGenetico(poblacion, 2);
+            var algoritmo = new AlgoritmoGenetico(poblacion, 2, 0);
             algoritmo.GeneracionProcesada += (generacion, _) => generacionesNotificadas.Add(generacion);
 
             algoritmo.Ejecutar();
@@ -183,7 +206,7 @@ namespace Solver.Tests
             Poblacion poblacionSiguiente = CrearPoblacionFakeConIndividuo(individuoOptimo);
             poblacionInicial.GenerarNuevaGeneracion().Returns(poblacionSiguiente);
 
-            var algoritmo = new AlgoritmoGenetico(poblacionInicial, 5);
+            var algoritmo = new AlgoritmoGenetico(poblacionInicial, 5, 0);
             algoritmo.GeneracionProcesada += (generacion, _) => generacionesNotificadas.Add(generacion);
 
             algoritmo.Ejecutar();
@@ -200,7 +223,7 @@ namespace Solver.Tests
             Poblacion poblacion = CrearPoblacionFakeConIndividuo(mejorIndividuo);
             poblacion.ObtenerMejorIndividuo().Returns(mejorIndividuo);
 
-            var algoritmo = new AlgoritmoGenetico(poblacion, 10);
+            var algoritmo = new AlgoritmoGenetico(poblacion, 10, 0);
             algoritmo.GeneracionProcesada += (generacion, _) => generacionesNotificadas.Add(generacion);
 
             using var cts = new CancellationTokenSource();
