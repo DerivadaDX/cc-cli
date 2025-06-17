@@ -103,10 +103,11 @@ cc-cli.exe resolver [opciones]
 
 **Opciones secundarias**:
 
-| Opción                  | Descripón                                        | Valores aceptados              |
-| ----------------------- | ------------------------------------------------ | ------------------------------ |
-| `--limite-generaciones` | Límite de generaciones a computar (0 = infinito) | Entero positivo (default: 0)   |
-| `--cantidad-individuos` | Cantidad de individuos por generación            | Entero positivo (default: 100) |
+| Opción                   | Descripón                                        | Valores aceptados               |
+| ------------------------ | ------------------------------------------------ | ------------------------------- |
+| `--limite-generaciones`  | Límite de generaciones a computar (0 = infinito) | Entero positivo (default: 0)    |
+| `--cantidad-individuos`  | Cantidad de individuos por generación            | Entero positivo (default: 100)  |
+| `--limite-estancamiento` | Límite de generaciones sin mejora (0 = infinito) | Entero positivo (default: 1000) |
 
 **Ejemplos**:
 
@@ -114,14 +115,17 @@ cc-cli.exe resolver [opciones]
 # Resolver una instancia (corre indefinidamente con tamaño de poblacion = 100)
 cc-cli.exe resolver --instancia instancia.dat
 
-# Especificando máximo de generaciones
+# Especificando límite de generaciones
 cc-cli.exe resolver --instancia instancia.dat --limite-generaciones 1000
 
-# Especificando tamaño de población
-cc-cli.exe resolver --instancia instancia.dat --cantidad-individuos 5000
+# Especificando cantidad de individuos
+cc-cli.exe resolver --instancia instancia.dat --cantidad-individuos 500
+
+# Especificando límite de estancamiento
+cc-cli.exe resolver --instancia instancia.dat --limite-estancamiento 500
 
 # Ejemplo completo
-cc-cli.exe resolver --instancia instancia.dat --limite-generaciones 1000 --cantidad-individuos 5000
+cc-cli.exe resolver --instancia instancia.dat --cantidad-individuos 500 --limite-generaciones 1000 --limite-estancamiento 500
 ```
 
 #### 3. Otros comandos

@@ -24,14 +24,19 @@ namespace App.Commands.Resolver
             {
                 Description = "Cantidad de individuos por generación",
             };
+            var limiteEstancamientoOption = new Option<int>("--limite-estancamiento", () => 1000)
+            {
+                Description = "Límite de generaciones sin mejora (0 = infinito)",
+            };
 
             command.AddOption(instanciaOption);
             command.AddOption(limiteGeneracionesOption);
             command.AddOption(cantidadIndividuosOption);
+            command.AddOption(limiteEstancamientoOption);
 
-            command.SetHandler((rutaInstancia, limiteGeneraciones, cantidadIndividuos) =>
+            command.SetHandler((rutaInstancia, limiteGeneraciones, cantidadIndividuos, limiteEstancamiento) =>
             {
-                var parametros = new ParametrosSolucion(rutaInstancia, limiteGeneraciones, cantidadIndividuos);
+                var parametros = new ParametrosSolucion(rutaInstancia, limiteGeneraciones, cantidadIndividuos, limiteEstancamiento);
 
                 var fileSystemHelper = FileSystemHelperFactory.Crear();
                 var lector = new LectorArchivoMatrizValoraciones(fileSystemHelper);
@@ -45,7 +50,7 @@ namespace App.Commands.Resolver
                 Console.WriteLine("Presioná una tecla para salir...");
                 Console.ReadKey();
 #endif
-            }, instanciaOption, limiteGeneracionesOption, cantidadIndividuosOption);
+            }, instanciaOption, limiteGeneracionesOption, cantidadIndividuosOption, limiteEstancamientoOption);
 
             return command;
         }
