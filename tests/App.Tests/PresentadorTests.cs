@@ -59,6 +59,28 @@ namespace App.Tests
         }
 
         [Fact]
+        public void MostrarInfo_SinLineaEnCurso_NoAgregaSaltosDeLinea()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarInfo(MensajeDePrueba);
+
+            consola.DidNotReceive().WriteLine(string.Empty);
+        }
+
+        [Fact]
+        public void MostrarInfo_LineaEnCurso_AgregaSaltoDeLinea()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarProgreso(MensajeDePrueba);
+            presentador.MostrarInfo(MensajeDePrueba);
+
+            consola.Received(1).WriteLine(string.Empty);
+            consola.Received(1).WriteLine(MensajeDePrueba);
+        }
+
+        [Fact]
         public void MostrarExito_Color_EsVerde()
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
@@ -101,6 +123,28 @@ namespace App.Tests
                 consola.WriteLine(Arg.Any<string>());
                 consola.ResetColor();
             });
+        }
+
+        [Fact]
+        public void MostrarExito_SinLineaEnCurso_NoAgregaSaltosDeLinea()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarExito(MensajeDePrueba);
+
+            consola.DidNotReceive().WriteLine(string.Empty);
+        }
+
+        [Fact]
+        public void MostrarExito_LineaEnCurso_AgregaSaltoDeLinea()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarProgreso(MensajeDePrueba);
+            presentador.MostrarExito(MensajeDePrueba);
+
+            consola.Received(1).WriteLine(string.Empty);
+            consola.Received(1).WriteLine(MensajeDePrueba);
         }
 
         [Fact]
@@ -149,6 +193,28 @@ namespace App.Tests
         }
 
         [Fact]
+        public void MostrarAdvertencia_SinLineaEnCurso_NoAgregaSaltosDeLinea()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarAdvertencia(MensajeDePrueba);
+
+            consola.DidNotReceive().WriteLine(string.Empty);
+        }
+
+        [Fact]
+        public void MostrarAdvertencia_LineaEnCurso_AgregaSaltoDeLinea()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarProgreso(MensajeDePrueba);
+            presentador.MostrarAdvertencia(MensajeDePrueba);
+
+            consola.Received(1).WriteLine(string.Empty);
+            consola.Received(1).WriteLine(MensajeDePrueba);
+        }
+
+        [Fact]
         public void MostrarError_Color_EsRojo()
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
@@ -194,6 +260,28 @@ namespace App.Tests
         }
 
         [Fact]
+        public void MostrarError_SinLineaEnCurso_NoAgregaSaltosDeLinea()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarError(MensajeDePrueba);
+
+            consola.DidNotReceive().WriteLine(string.Empty);
+        }
+
+        [Fact]
+        public void MostrarError_LineaEnCurso_AgregaSaltoDeLinea()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarProgreso(MensajeDePrueba);
+            presentador.MostrarError(MensajeDePrueba);
+
+            consola.Received(1).WriteLine(string.Empty);
+            consola.Received(1).WriteLine(MensajeDePrueba);
+        }
+
+        [Fact]
         public void MostrarProgreso_Color_EsBlanco()
         {
             (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
@@ -236,6 +324,17 @@ namespace App.Tests
                 consola.Write(Arg.Any<string>());
                 consola.ResetColor();
             });
+        }
+
+        [Fact]
+        public void MostrarProgreso_LlamadoConsecutivo_NoAgregaSaltoDeLinea()
+        {
+            (Presentador presentador, ConsoleProxy consola) = CrearPresentadorConConsolaFake();
+
+            presentador.MostrarProgreso(MensajeDePrueba);
+            presentador.MostrarProgreso(MensajeDePrueba);
+
+            consola.DidNotReceive().WriteLine(string.Empty);
         }
 
         private (Presentador presentador, ConsoleProxy consola) CrearPresentadorConConsolaFake()
