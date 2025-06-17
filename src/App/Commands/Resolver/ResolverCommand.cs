@@ -96,7 +96,8 @@ namespace App.Commands.Resolver
                 const int tamañoBarraProgreso = 50;
                 algoritmoGenetico.GeneracionProcesada += (generacion, cancellationToken) =>
                 {
-                    if (cancellationToken.IsCancellationRequested) return;
+                    if (cancellationToken.IsCancellationRequested)
+                        return;
 
                     int progreso = generacion * tamañoBarraProgreso / parametros.LimiteGeneraciones;
                     string barraProgreso = new string('#', progreso).PadRight(tamañoBarraProgreso, '-');
@@ -108,7 +109,8 @@ namespace App.Commands.Resolver
             {
                 algoritmoGenetico.GeneracionProcesada += (generacion, cancellationToken) =>
                 {
-                    if (cancellationToken.IsCancellationRequested) return;
+                    if (cancellationToken.IsCancellationRequested)
+                        return;
 
                     string mensaje = $"Procesando generación #{generacion}.";
                     presentador.MostrarProgreso(mensaje);
