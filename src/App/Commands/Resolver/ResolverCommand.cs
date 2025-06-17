@@ -82,7 +82,7 @@ namespace App.Commands.Resolver
         {
             Console.CancelKeyPress += (_, e) =>
             {
-                presentador.MostrarAdvertencia("\nCancelación solicitada por el usuario.");
+                presentador.MostrarAdvertencia("Cancelación solicitada por el usuario.");
                 e.Cancel = true;
                 cts.Cancel();
             };
@@ -121,14 +121,14 @@ namespace App.Commands.Resolver
         private static void MostrarResultado(
             Individuo mejorIndividuo, int generaciones, long tiempoMs, Presentador presentador)
         {
-            presentador.MostrarExito($"\nResultado encontrado después de {generaciones} generaciones.");
+            presentador.MostrarExito($"Resultado encontrado después de {generaciones} generaciones.");
             presentador.MostrarExito($"Resultado obtenido: {mejorIndividuo}.");
             presentador.MostrarExito($"Tiempo de ejecución: {tiempoMs} ms.");
         }
 
         private static void MostrarError(string mensaje, Presentador presentador)
         {
-            presentador.MostrarError($"\nSe produjo un error: {mensaje}");
+            presentador.MostrarError($"Se produjo un error: {mensaje}");
         }
     }
 }
