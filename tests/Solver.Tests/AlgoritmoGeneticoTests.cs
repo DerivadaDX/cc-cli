@@ -102,7 +102,6 @@ namespace Solver.Tests
             Individuo mejorIndividuo = CrearIndividuoNoOptimoFake();
             Poblacion poblacion = CrearPoblacionFakeConIndividuo(mejorIndividuo);
             poblacion.GenerarNuevaGeneracion().Returns(poblacion);
-            poblacion.ObtenerMejorIndividuo().Returns(mejorIndividuo);
 
             var algoritmo = new AlgoritmoGenetico(poblacion, limiteGeneraciones: 100, limiteGeneracionesSinMejora: 2);
             (Individuo individuo, int generaciones) = algoritmo.Ejecutar();
@@ -118,7 +117,6 @@ namespace Solver.Tests
             Individuo mejorIndividuo = CrearIndividuoNoOptimoFake();
             Poblacion poblacion = CrearPoblacionFakeConIndividuo(mejorIndividuo);
             poblacion.GenerarNuevaGeneracion().Returns(poblacion);
-            poblacion.ObtenerMejorIndividuo().Returns(mejorIndividuo);
 
             var algoritmo = new AlgoritmoGenetico(poblacion, 1, 0);
             (Individuo _, int generaciones) = algoritmo.Ejecutar();
@@ -131,7 +129,6 @@ namespace Solver.Tests
         {
             Individuo mejorIndividuo = CrearIndividuoNoOptimoFake();
             Poblacion poblacion = CrearPoblacionFakeConIndividuo(mejorIndividuo);
-            poblacion.ObtenerMejorIndividuo().Returns(mejorIndividuo);
 
             var algoritmo = new AlgoritmoGenetico(poblacion, 10, 0);
             using var cts = new CancellationTokenSource();
@@ -151,7 +148,6 @@ namespace Solver.Tests
             Individuo mejorIndividuo = CrearIndividuoNoOptimoFake();
             Poblacion poblacion = CrearPoblacionFakeConIndividuo(mejorIndividuo);
             poblacion.GenerarNuevaGeneracion().Returns(poblacion);
-            poblacion.ObtenerMejorIndividuo().Returns(mejorIndividuo);
 
             var algoritmo = new AlgoritmoGenetico(poblacion, 2, 0);
             algoritmo.GeneracionProcesada += (generacion, _) => generacionesNotificadas.Add(generacion);
@@ -186,7 +182,6 @@ namespace Solver.Tests
 
             Individuo mejorIndividuo = CrearIndividuoNoOptimoFake();
             Poblacion poblacion = CrearPoblacionFakeConIndividuo(mejorIndividuo);
-            poblacion.ObtenerMejorIndividuo().Returns(mejorIndividuo);
 
             var algoritmo = new AlgoritmoGenetico(poblacion, 10, 0);
             algoritmo.GeneracionProcesada += (generacion, _) => generacionesNotificadas.Add(generacion);
