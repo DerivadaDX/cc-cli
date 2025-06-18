@@ -22,6 +22,7 @@ namespace App.Tests.Commands.Resolver
             Assert.Contains(_command.Options, o => o.Name == "instancia");
             Assert.Contains(_command.Options, o => o.Name == "limite-generaciones");
             Assert.Contains(_command.Options, o => o.Name == "cantidad-individuos");
+            Assert.Contains(_command.Options, o => o.Name == "limite-estancamiento");
         }
 
         [Fact]
@@ -43,12 +44,21 @@ namespace App.Tests.Commands.Resolver
         }
 
         [Fact]
+        public void Crear_LimiteEstancamientoNoEspecificado_UsaValorPorDefecto()
+        {
+            var limiteEstancamientoOption = (Option<int>)_command.Options.First(o => o.Name == "limite-estancamiento");
+            int limiteEstancamiento = _command.Parse("resolver --instancia instancia.dat").GetValueForOption(limiteEstancamientoOption);
+
+            Assert.Equal(1000, limiteEstancamiento);
+        }
+
+        [Fact]
         public void EjecutarResolucion_MatrizValoraciones_SeLee()
         {
             var lector = Substitute.For<LectorArchivoMatrizValoraciones>(Substitute.For<FileSystemHelper>());
             lector.Leer(Arg.Any<string>()).Returns(new decimal[,] { { 0, 3.9m }, { 1, 1.2m } });
 
-            var parametros = new ParametrosSolucion("instancia.dat", 1, 2);
+            var parametros = new ParametrosSolucion("instancia.dat", 1, 2, 3);
             ResolverCommand.EjecutarResolucion(parametros, lector, Substitute.For<Presentador>(Substitute.For<ConsoleProxy>()));
 
             lector.Received(1).Leer(parametros.RutaInstancia);
