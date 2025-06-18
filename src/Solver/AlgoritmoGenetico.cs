@@ -8,6 +8,7 @@ namespace Solver
     {
         private Poblacion _poblacion;
         private readonly int _limiteGeneraciones;
+        private readonly bool _validarLimiteGeneraciones;
         private readonly int _limiteGeneracionesSinMejora;
         private readonly bool _validarEstancamiento;
 
@@ -31,27 +32,29 @@ namespace Solver
 
             _poblacion = poblacion;
             _limiteGeneraciones = limiteGeneraciones;
+            _validarLimiteGeneraciones = limiteGeneraciones > 0;
             _limiteGeneracionesSinMejora = limiteGeneracionesSinMejora;
             _validarEstancamiento = limiteGeneracionesSinMejora > 0;
         }
 
         public (Individuo mejorIndividuo, int generaciones) Ejecutar(CancellationToken cancellationToken = default)
         {
-            int generacionActual = 0;
-            bool ejecutarHastaEncontrarSolucion = _limiteGeneraciones == 0;
-            bool generacionLimiteNoAlcanzada = generacionActual < _limiteGeneraciones;
-
             Individuo mejorIndividuo = _poblacion.ObtenerMejorIndividuo();
             decimal mejorFitness = mejorIndividuo.Fitness();
             int ultimaGeneracionConMejora = 0;
+            int generacionActual = 0;
 
-            while (ejecutarHastaEncontrarSolucion || generacionLimiteNoAlcanzada)
+            while (true)
             {
+                Individuo mejorIndividuoDeGeneracion = _poblacion.ObtenerMejorIndividuo();
+                decimal mejorFitnessDeGeneracion = mejorIndividuoDeGeneracion.Fitness();
+
                 if (cancellationToken.IsCancellationRequested)
                     break;
 
-                Individuo mejorIndividuoDeGeneracion = _poblacion.ObtenerMejorIndividuo();
-                decimal mejorFitnessDeGeneracion = mejorIndividuoDeGeneracion.Fitness();
+                bool limiteGeneracionesAlcanzado = _validarLimiteGeneraciones && generacionActual >= _limiteGeneraciones;
+                if (limiteGeneracionesAlcanzado)
+                    break;
 
                 bool esSolucionOptima = mejorFitnessDeGeneracion == 0;
                 if (esSolucionOptima)
@@ -67,8 +70,7 @@ namespace Solver
                     break;
                 }
 
-                bool hayNuevoMejorFitness = mejorFitnessDeGeneracion < mejorFitness;
-                if (hayNuevoMejorFitness)
+                if (mejorFitnessDeGeneracion < mejorFitness)
                 {
                     ultimaGeneracionConMejora = generacionActual;
                     mejorFitness = mejorFitnessDeGeneracion;
@@ -76,8 +78,6 @@ namespace Solver
 
                 generacionActual++;
                 _poblacion = _poblacion.GenerarNuevaGeneracion();
-                generacionLimiteNoAlcanzada = generacionActual < _limiteGeneraciones;
-
                 GeneracionProcesada?.Invoke(generacionActual, cancellationToken);
             }
 
