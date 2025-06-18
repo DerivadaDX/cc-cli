@@ -41,8 +41,9 @@ namespace Solver
             bool ejecutarHastaEncontrarSolucion = _limiteGeneraciones == 0;
             bool generacionLimiteNoAlcanzada = generacionActual < _limiteGeneraciones;
 
-            decimal mejorFitness = decimal.MaxValue;
-            int ultimaGeneracionConMejora = int.MaxValue;
+            Individuo mejorIndividuo = _poblacion.ObtenerMejorIndividuo();
+            decimal mejorFitness = mejorIndividuo.Fitness();
+            int ultimaGeneracionConMejora = 0;
 
             while (ejecutarHastaEncontrarSolucion || generacionLimiteNoAlcanzada)
             {
@@ -54,11 +55,17 @@ namespace Solver
 
                 bool esSolucionOptima = mejorFitnessDeGeneracion == 0;
                 if (esSolucionOptima)
-                    return (mejorIndividuoDeGeneracion, generacionActual);
+                {
+                    mejorIndividuo = mejorIndividuoDeGeneracion;
+                    break;
+                }
 
                 bool hayEstancamiento = HayEstancamiento(ultimaGeneracionConMejora, generacionActual);
                 if (hayEstancamiento)
-                    return (mejorIndividuoDeGeneracion, generacionActual);
+                {
+                    mejorIndividuo = mejorIndividuoDeGeneracion;
+                    break;
+                }
 
                 bool hayNuevoMejorFitness = mejorFitnessDeGeneracion < mejorFitness;
                 if (hayNuevoMejorFitness)
@@ -74,7 +81,6 @@ namespace Solver
                 GeneracionProcesada?.Invoke(generacionActual, cancellationToken);
             }
 
-            Individuo mejorIndividuo = _poblacion.ObtenerMejorIndividuo();
             return (mejorIndividuo, generacionActual);
         }
 
