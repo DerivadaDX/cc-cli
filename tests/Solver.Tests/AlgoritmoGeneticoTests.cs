@@ -69,39 +69,6 @@ namespace Solver.Tests
         }
 
         [Fact]
-        public void Ejecutar_EncuentraSolucionOptima_NoObtieneElMejorIndividuo()
-        {
-            Individuo individuoOptimo = CrearIndividuoOptimoFake();
-            Poblacion poblacion = CrearPoblacionFakeConIndividuo(individuoOptimo);
-
-            var algoritmo = new AlgoritmoGenetico(poblacion, 10, 0);
-            _ = algoritmo.Ejecutar();
-
-            poblacion.DidNotReceive().ObtenerMejorIndividuo();
-        }
-
-        [Fact]
-        public void Ejecutar_Generaciones_SeEvaluanTodosLosIndividuos()
-        {
-            Individuo individuo1 = CrearIndividuoNoOptimoFake();
-            Individuo individuo2 = CrearIndividuoNoOptimoFake();
-
-            var poblacionInicial = Substitute.For<Poblacion>(2);
-            poblacionInicial.Individuos.Returns([individuo1, individuo2]);
-
-            var poblacionSiguiente = Substitute.For<Poblacion>(2);
-            poblacionSiguiente.Individuos.Returns([individuo1, individuo2]);
-            poblacionInicial.GenerarNuevaGeneracion().Returns(poblacionSiguiente);
-            poblacionSiguiente.GenerarNuevaGeneracion().Returns(poblacionSiguiente);
-
-            var algoritmo = new AlgoritmoGenetico(poblacionInicial, 2, 0);
-            algoritmo.Ejecutar();
-
-            individuo1.Received(2).Fitness();
-            individuo2.Received(2).Fitness();
-        }
-
-        [Fact]
         public void Ejecutar_ConLimiteDeGeneraciones_GeneraCantidadEsperadaDeGeneraciones()
         {
             Poblacion poblacionInicial = CrearPoblacionFakeConIndividuo(CrearIndividuoNoOptimoFake());
@@ -122,12 +89,10 @@ namespace Solver.Tests
             Individuo mejorIndividuo = CrearIndividuoNoOptimoFake();
             Poblacion poblacion = CrearPoblacionFakeConIndividuo(mejorIndividuo);
             poblacion.GenerarNuevaGeneracion().Returns(poblacion);
-            poblacion.ObtenerMejorIndividuo().Returns(mejorIndividuo);
 
             var algoritmo = new AlgoritmoGenetico(poblacion, limiteGeneraciones: 1, 0);
             (Individuo mejorIndividuoEncontrado, int _) = algoritmo.Ejecutar();
 
-            poblacion.Received(1).ObtenerMejorIndividuo();
             Assert.Same(mejorIndividuo, mejorIndividuoEncontrado);
         }
 
@@ -262,7 +227,7 @@ namespace Solver.Tests
         private Poblacion CrearPoblacionFakeConIndividuo(Individuo individuo)
         {
             var poblacion = Substitute.For<Poblacion>(1);
-            poblacion.Individuos.Returns([individuo]);
+            poblacion.ObtenerMejorIndividuo().Returns(individuo);
             return poblacion;
         }
     }

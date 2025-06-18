@@ -37,57 +37,53 @@ namespace Solver
 
         public (Individuo mejorIndividuo, int generaciones) Ejecutar(CancellationToken cancellationToken = default)
         {
-            int cantidadGeneracionesProcesadas = 0;
+            int generacionActual = 0;
             bool ejecutarHastaEncontrarSolucion = _limiteGeneraciones == 0;
-            bool generacionLimiteNoAlcanzada = cantidadGeneracionesProcesadas < _limiteGeneraciones;
+            bool generacionLimiteNoAlcanzada = generacionActual < _limiteGeneraciones;
 
-            int generacionesSinMejora = 0;
             decimal mejorFitness = decimal.MaxValue;
+            int ultimaGeneracionConMejora = int.MaxValue;
 
             while (ejecutarHastaEncontrarSolucion || generacionLimiteNoAlcanzada)
             {
                 if (cancellationToken.IsCancellationRequested)
                     break;
 
-                decimal mejorFitnessDeGeneracion = decimal.MaxValue;
+                Individuo mejorIndividuoDeGeneracion = _poblacion.ObtenerMejorIndividuo();
+                decimal mejorFitnessDeGeneracion = mejorIndividuoDeGeneracion.Fitness();
 
-                foreach (Individuo individuo in _poblacion.Individuos)
+                bool esSolucionOptima = mejorFitnessDeGeneracion == 0;
+                if (esSolucionOptima)
+                    return (mejorIndividuoDeGeneracion, generacionActual);
+
+                bool hayEstancamiento = HayEstancamiento(ultimaGeneracionConMejora, generacionActual);
+                if (hayEstancamiento)
+                    return (mejorIndividuoDeGeneracion, generacionActual);
+
+                bool hayNuevoMejorFitness = mejorFitnessDeGeneracion < mejorFitness;
+                if (hayNuevoMejorFitness)
                 {
-                    decimal fitnessIndividuoActual = individuo.Fitness();
-
-                    bool esSolucionOptima = fitnessIndividuoActual == 0;
-                    if (esSolucionOptima)
-                        return (individuo, cantidadGeneracionesProcesadas);
-
-                    bool esMejorFitnessDeGeneracion = fitnessIndividuoActual < mejorFitnessDeGeneracion;
-                    if (esMejorFitnessDeGeneracion)
-                        mejorFitnessDeGeneracion = fitnessIndividuoActual;
-                }
-
-                bool esGeneracionSinMejora = mejorFitnessDeGeneracion >= mejorFitness;
-                if (esGeneracionSinMejora)
-                {
-                    generacionesSinMejora++;
-
-                    bool limiteGeneracionesSinMejoraAlcanzado = generacionesSinMejora >= _limiteGeneracionesSinMejora;
-                    if (_validarEstancamiento && limiteGeneracionesSinMejoraAlcanzado)
-                        break;
-                }
-                else
-                {
-                    generacionesSinMejora = 0;
+                    ultimaGeneracionConMejora = generacionActual;
                     mejorFitness = mejorFitnessDeGeneracion;
                 }
 
-                cantidadGeneracionesProcesadas++;
+                generacionActual++;
                 _poblacion = _poblacion.GenerarNuevaGeneracion();
-                generacionLimiteNoAlcanzada = cantidadGeneracionesProcesadas < _limiteGeneraciones;
+                generacionLimiteNoAlcanzada = generacionActual < _limiteGeneraciones;
 
-                GeneracionProcesada?.Invoke(cantidadGeneracionesProcesadas, cancellationToken);
+                GeneracionProcesada?.Invoke(generacionActual, cancellationToken);
             }
 
             Individuo mejorIndividuo = _poblacion.ObtenerMejorIndividuo();
-            return (mejorIndividuo, cantidadGeneracionesProcesadas);
+            return (mejorIndividuo, generacionActual);
+        }
+
+        private bool HayEstancamiento(int ultimaGeneracionConMejora, int generacionActual)
+        {
+            int cantidadGeneracionesSinMejora = generacionActual - ultimaGeneracionConMejora;
+            bool limiteGeneracionesSinMejoraAlcanzado = cantidadGeneracionesSinMejora >= _limiteGeneracionesSinMejora;
+            bool hayEstancamiento = _validarEstancamiento && limiteGeneracionesSinMejoraAlcanzado;
+            return hayEstancamiento;
         }
     }
 }
