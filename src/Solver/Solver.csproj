@@ -13,4 +13,8 @@
     <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="HungarianAlgorithm" Version="2.3.3" />
+  </ItemGroup>
+
 </Project>
