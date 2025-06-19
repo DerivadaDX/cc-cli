@@ -99,10 +99,10 @@ public class IndividuoOptimizacionAsignacionesTests : IDisposable
 
         individuo.Mutar();
 
-        Assert.Equal(1, individuo.Cromosoma[4]);
-        Assert.Equal(2, individuo.Cromosoma[5]);
-        Assert.Equal(3, individuo.Cromosoma[6]);
-        Assert.Equal(4, individuo.Cromosoma[7]);
+        Assert.Equal(1, individuo.Cromosoma[3]);
+        Assert.Equal(2, individuo.Cromosoma[4]);
+        Assert.Equal(3, individuo.Cromosoma[5]);
+        Assert.Equal(4, individuo.Cromosoma[6]);
     }
 
     [Fact]
