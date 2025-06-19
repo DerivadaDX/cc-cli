@@ -28,15 +28,21 @@ namespace App.Commands.Resolver
             {
                 Description = "Límite de generaciones sin mejora (0 = infinito)",
             };
+            var tipoIndividuoOption = new Option<string>("--tipo-individuo", () => "intercambio")
+            {
+                Description = "Tipo de individuo a utilizar (intercambio|optimizacion)",
+            };
 
             command.AddOption(instanciaOption);
             command.AddOption(limiteGeneracionesOption);
             command.AddOption(cantidadIndividuosOption);
             command.AddOption(limiteEstancamientoOption);
+            command.AddOption(tipoIndividuoOption);
 
-            command.SetHandler((rutaInstancia, limiteGeneraciones, cantidadIndividuos, limiteEstancamiento) =>
+            command.SetHandler((rutaInstancia, limiteGeneraciones, cantidadIndividuos, limiteEstancamiento, tipoIndividuoStr) =>
             {
-                var parametros = new ParametrosSolucion(rutaInstancia, limiteGeneraciones, cantidadIndividuos, limiteEstancamiento);
+                var tipoIndividuo = TipoIndividuoHelper.Parse(tipoIndividuoStr);
+                var parametros = new ParametrosSolucion(rutaInstancia, limiteGeneraciones, cantidadIndividuos, limiteEstancamiento, tipoIndividuo);
 
                 var fileSystemHelper = FileSystemHelperFactory.Crear();
                 var lector = new LectorArchivoMatrizValoraciones(fileSystemHelper);
@@ -50,7 +56,7 @@ namespace App.Commands.Resolver
                 Console.WriteLine("Presioná una tecla para salir...");
                 Console.ReadKey();
 #endif
-            }, instanciaOption, limiteGeneracionesOption, cantidadIndividuosOption, limiteEstancamientoOption);
+            }, instanciaOption, limiteGeneracionesOption, cantidadIndividuosOption, limiteEstancamientoOption, tipoIndividuoOption);
 
             return command;
         }
@@ -63,9 +69,10 @@ namespace App.Commands.Resolver
 
             try
             {
-                var matrizValoraciones = lector.Leer(parametros.RutaInstancia);
+                decimal[,] matrizValoraciones = lector.Leer(parametros.RutaInstancia);
                 var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matrizValoraciones);
-                var individuoFactory = new IndividuoIntercambioAsignacionesFactory(instanciaProblema);
+                IIndividuoFactory individuoFactory = ObtenerIndividuoFactory(parametros, presentador, instanciaProblema);
+
                 var poblacion = PoblacionFactory.Crear(parametros.CantidadIndividuos, individuoFactory);
 
                 var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.LimiteGeneraciones, parametros.LimiteEstancamiento);
@@ -81,6 +88,20 @@ namespace App.Commands.Resolver
             {
                 MostrarError(ex.Message, presentador);
             }
+        }
+
+        private static IIndividuoFactory ObtenerIndividuoFactory(
+            ParametrosSolucion parametros, Presentador presentador, InstanciaProblema instanciaProblema)
+        {
+            IIndividuoFactory individuoFactory = parametros.TipoIndividuo switch
+            {
+                TipoIndividuo.Intercambio => new IndividuoIntercambioAsignacionesFactory(instanciaProblema),
+                TipoIndividuo.Optimizacion => new IndividuoOptimizacionAsignacionesFactory(instanciaProblema),
+                _ => throw new ArgumentException($"Tipo de individuo no soportado: {parametros.TipoIndividuo}")
+            };
+
+            presentador.MostrarInfo($"Utilizando individuos de tipo: {parametros.TipoIndividuo}");
+            return individuoFactory;
         }
 
         private static void ConfigurarCancelacion(CancellationTokenSource cts, Presentador presentador)
