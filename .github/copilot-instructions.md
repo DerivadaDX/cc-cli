@@ -1,4 +1,7 @@
-# Convenciones y buenas prácticas
+# Copilot instructions
+
+Estas instrucciones deben ser seguidas por GitHub Copilot para generar branches, código, commits y pull requests
+coherentes con las convenciones del proyecto.
 
 ## Nombres de ramas
 
