@@ -60,7 +60,7 @@ internal class IndividuoOptimizacionAsignaciones : Individuo
             return;
 
         List<int> cortes = ObtenerCortesOrdenados();
-        decimal[,] matrizValoraciones = CalcularValoracionesPorPorcionYAgente(cortes, cantidadAsignaciones);
+        decimal[,] matrizValoraciones = CalcularValoracionesPorPorcionYAgente(cortes);
         int[,] matrizCostos = ConvertirValoracionesACostos(matrizValoraciones);
         int[] asignacionesOptimas = HungarianAlgorithm.HungarianAlgorithm.FindAssignments(matrizCostos);
 
@@ -74,8 +74,9 @@ internal class IndividuoOptimizacionAsignaciones : Individuo
         return cortes;
     }
 
-    private decimal[,] CalcularValoracionesPorPorcionYAgente(List<int> cortes, int cantidadAgentes)
+    private decimal[,] CalcularValoracionesPorPorcionYAgente(List<int> cortes)
     {
+        int cantidadAgentes = _problema.Agentes.Count;
         decimal[,] valoraciones = new decimal[cantidadAgentes, cantidadAgentes];
 
         for (int porcion = 0; porcion < cantidadAgentes; porcion++)
@@ -107,18 +108,18 @@ internal class IndividuoOptimizacionAsignaciones : Individuo
 
     private int[,] ConvertirValoracionesACostos(decimal[,] valoraciones)
     {
-        int dimension = valoraciones.GetLength(0);
         decimal valorMaximo = ObtenerValorMaximo(valoraciones);
+        int porciones = valoraciones.GetLength(0);
+        int agentes = valoraciones.GetLength(1);
 
-        int[,] costos = new int[dimension, dimension];
-        for (int i = 0; i < dimension; i++)
+        int[,] costos = new int[porciones, agentes];
+        for (int porcion = 0; porcion < porciones; porcion++)
         {
-            for (int j = 0; j < dimension; j++)
+            for (int agente = 0; agente < agentes; agente++)
             {
                 // Convertir el problema de maximización a minimización
-                // multiplicamos por 1000 para mantener la precisión al convertir a entero
-                decimal costo = (valorMaximo - valoraciones[i, j]) * 1000m;
-                costos[i, j] = (int)Math.Round(costo);
+                decimal costo = (valorMaximo - valoraciones[porcion, agente]) * 1000m;
+                costos[porcion, agente] = (int)Math.Round(costo);
             }
         }
 
@@ -127,15 +128,17 @@ internal class IndividuoOptimizacionAsignaciones : Individuo
 
     private decimal ObtenerValorMaximo(decimal[,] matriz)
     {
-        int dimension = matriz.GetLength(0);
-        decimal valorMaximo = decimal.MinValue;
+        int porciones = matriz.GetLength(0);
+        int agentes = matriz.GetLength(1);
 
-        for (int i = 0; i < dimension; i++)
+        var valorMaximo = decimal.MinValue;
+        for (int porcion = 0; porcion < porciones; porcion++)
         {
-            for (int j = 0; j < dimension; j++)
+            for (int agente = 0; agente < agentes; agente++)
             {
-                if (matriz[i, j] > valorMaximo)
-                    valorMaximo = matriz[i, j];
+                decimal valorActual = matriz[porcion, agente];
+                if (valorActual > valorMaximo)
+                    valorMaximo = valorActual;
             }
         }
 
@@ -147,8 +150,8 @@ internal class IndividuoOptimizacionAsignaciones : Individuo
         int cantidadAsignaciones = _problema.Agentes.Count;
         int cantidadCortes = _problema.Agentes.Count - 1;
 
-        for (int i = 0; i < cantidadAsignaciones; i++)
-            Cromosoma[cantidadCortes + i] = asignacionesOptimas[i] + 1;
+        for (int porcion = 0; porcion < cantidadAsignaciones; porcion++)
+            Cromosoma[cantidadCortes + porcion] = asignacionesOptimas[porcion] + 1;
     }
 
     private List<int> CruzaCortes(Individuo otro)
