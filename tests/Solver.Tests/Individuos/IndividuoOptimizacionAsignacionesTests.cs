@@ -266,8 +266,8 @@ public class IndividuoOptimizacionAsignacionesTests : IDisposable
             { 0m, 0m, 1m, 0m },
             { 0m, 0m, 0m, 1m },
         });
-        var padre1 = new IndividuoIntercambioAsignaciones([1, 2, 3, 1, 2, 3, 4], problema, new CalculadoraFitness());
-        var padre2 = new IndividuoIntercambioAsignaciones([3, 3, 3, 4, 3, 2, 1], problema, new CalculadoraFitness());
+        var padre1 = new IndividuoOptimizacionAsignaciones([1, 2, 3, 1, 2, 3, 4], problema, new CalculadoraFitness());
+        var padre2 = new IndividuoOptimizacionAsignaciones([3, 3, 3, 4, 3, 2, 1], problema, new CalculadoraFitness());
 
         Individuo hijo = padre1.Cruzar(padre2);
 
