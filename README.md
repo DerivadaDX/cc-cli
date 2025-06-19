@@ -103,11 +103,12 @@ cc-cli.exe resolver [opciones]
 
 **Opciones secundarias**:
 
-| Opción                   | Descripón                                        | Valores aceptados               |
-| ------------------------ | ------------------------------------------------ | ------------------------------- |
-| `--limite-generaciones`  | Límite de generaciones a computar (0 = infinito) | Entero positivo (default: 0)    |
-| `--cantidad-individuos`  | Cantidad de individuos por generación            | Entero positivo (default: 100)  |
-| `--limite-estancamiento` | Límite de generaciones sin mejora (0 = infinito) | Entero positivo (default: 1000) |
+| Opción                   | Descripón                                        | Valores aceptados                                       |
+| ------------------------ | ------------------------------------------------ | ------------------------------------------------------- |
+| `--limite-generaciones`  | Límite de generaciones a computar (0 = infinito) | Entero positivo (default: 0)                            |
+| `--cantidad-individuos`  | Cantidad de individuos por generación            | Entero positivo (default: 100)                          |
+| `--limite-estancamiento` | Límite de generaciones sin mejora (0 = infinito) | Entero positivo (default: 1000)                         |
+| `--tipo-individuo`       | Tipo de individuo a utilizar                     | "intercambio" u "optimizacion" (default: "intercambio") |
 
 **Ejemplos**:
 
@@ -124,8 +125,11 @@ cc-cli.exe resolver --instancia instancia.dat --cantidad-individuos 500
 # Especificando límite de estancamiento
 cc-cli.exe resolver --instancia instancia.dat --limite-estancamiento 500
 
+# Especificando tipo de individuo
+cc-cli.exe resolver --instancia instancia.dat --tipo-individuo optimizacion
+
 # Ejemplo completo
-cc-cli.exe resolver --instancia instancia.dat --cantidad-individuos 500 --limite-generaciones 1000 --limite-estancamiento 500
+cc-cli.exe resolver --instancia instancia.dat --cantidad-individuos 500 --limite-generaciones 1000 --limite-estancamiento 500 --tipo-individuo intercambio
 ```
 
 #### 3. Otros comandos
