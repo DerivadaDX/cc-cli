@@ -1,9 +1,31 @@
-# Convenciones y buenas prácticas
+# Copilot instructions
+
+Estas instrucciones deben ser seguidas por GitHub Copilot para generar branches, código, commits y pull requests
+coherentes con las convenciones del proyecto.
+
+## Nombres de ramas
+
+- Formatos válidos:
+  - `tipo/nombre-de-feature`
+  - `tipo/ámbito/nombre-de-feature`
+- No usar tildes ni caracteres con acentos.
+
+## Código
+
+- Código siempre en español.
+
+## Tests
+
+- Formato para nombres de tests:
+  - `MetodoBajoPrueba_CasoOEstadoBajoPrueba_ComportamientoEsperado`
+  - `MetodoBajoPrueba_ComportamientoEsperado`
+- Solo se testean métodos públicos. Métodos privados se cubren indirectamente a través de los públicos.
+- No incluir comentarios `arrange`, `act`, `assert`.
 
 ## Commits
 
 - Mensajes en español, usando estructura impersonal y pretérito perfecto simple. No se debe usar verbos en infinitivo.
-  Ejemplo: `se agregó función para validar usuarios`, `se eliminó archivo obsoleto`.
+  Ejemplos: `se agregó función para validar usuarios`, `se eliminó archivo obsoleto`.
 
 ## Pull Requests
 
@@ -23,7 +45,7 @@
 - La "descripción" del título debe estar escrita en español, usando estructura impersonal y pretérito perfecto
   simple, igual que los mensajes de commit. No usar infinitivo.
 
-Ejemplo: `feat(usuario): se agregó validación de email`
+Ejemplo: `feat(usuario): se implementó validación de email del usuario`
 
 ### Ámbito
 
@@ -43,24 +65,3 @@ Ejemplo: `feat(usuario): se agregó validación de email`
   En este PR se implementó la validación de email del usuario.
   Se agregó una nueva clase `ValidadorEmail` que verifica el formato del email ingresado.
   ```
-
-## Nombres de ramas
-
-- Formatos válidos:
-  - `tipo/nombre-de-feature`
-  - `tipo/ámbito/nombre-de-feature`
-- No usar tildes ni caracteres con acentos.
-
-## Código
-
-- Código siempre en español.
-- No lanzar excepciones desde constructores.
-- Controladores: sin lógica, solo pasamanos.
-
-## Tests
-
-- Nombres de tests:
-  - `MetodoBajoPrueba_CasoOEstadoBajoPrueba_ComportamientoEsperado`
-  - `MetodoBajoPrueba_ComportamientoEsperado`
-- Solo se testean métodos públicos. Métodos privados se cubren indirectamente a través de los públicos.
-- No incluir comentarios `arrange`, `act`, `assert`.
