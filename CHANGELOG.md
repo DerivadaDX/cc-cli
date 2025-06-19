@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/DerivadaDX/cc-cli/compare/v1.0.0...v2.0.0) (2025-06-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* **resolver-command:** cambio de nombre de parámetros `--tamaño-poblacion` y `--max-generaciones` (#48)
+
+### Features
+
+* **app:** agregado de descripción en opciones ([#51](https://github.com/DerivadaDX/cc-cli/issues/51)) ([5add16b](https://github.com/DerivadaDX/cc-cli/commit/5add16b9d61a8cd590b11e3f142bbc8ce74df310))
+* **app:** extracción de lógica para presentación de información al usuario a una clase propia ([#54](https://github.com/DerivadaDX/cc-cli/issues/54)) ([89e9129](https://github.com/DerivadaDX/cc-cli/commit/89e9129142bea6958d9859377897a78ab6c00be3))
+* **app:** mejoras en la representación del resultado al resolver instancias ([#47](https://github.com/DerivadaDX/cc-cli/issues/47)) ([492e7ac](https://github.com/DerivadaDX/cc-cli/commit/492e7ac24f2ebe5385430646bcd94ec04af70007))
+* **individuos:** implementación de nuevo individuo `IndividuoOptimizacionAsignaciones` ([#58](https://github.com/DerivadaDX/cc-cli/issues/58)) ([74cf494](https://github.com/DerivadaDX/cc-cli/commit/74cf49458c8d9a7ed42fd464a8c3a52a0064578a))
+* **individuos:** se muestran ordenadas las posiciones de los cortes en `ToString` del `Individuo` ([#46](https://github.com/DerivadaDX/cc-cli/issues/46)) ([fbb8606](https://github.com/DerivadaDX/cc-cli/commit/fbb8606dd7e17e56fdeab709edd2fbead10e352a))
+* **resolver-command:** cambio de nombre de parámetros `--tamaño-poblacion` y `--max-generaciones` ([#48](https://github.com/DerivadaDX/cc-cli/issues/48)) ([52155c5](https://github.com/DerivadaDX/cc-cli/commit/52155c5b65090ac3e8bedc4d23e65a483e9e9b1a))
+* **resolver-command:** implementación de barra de progreso y colores ([#53](https://github.com/DerivadaDX/cc-cli/issues/53)) ([31672db](https://github.com/DerivadaDX/cc-cli/commit/31672dbbed12b24560cd31d57d5212d103f21003))
+* **resolver-command:** implementación de límite de estancamiento ([#57](https://github.com/DerivadaDX/cc-cli/issues/57)) ([269a1f0](https://github.com/DerivadaDX/cc-cli/commit/269a1f054240a54bb1ebd092b386ad49be6c7ba6))
+* **resolver-command:** incorporación de parámetro para indicar tipo de individuo a utilizar ([#59](https://github.com/DerivadaDX/cc-cli/issues/59)) ([03a8533](https://github.com/DerivadaDX/cc-cli/commit/03a8533ec05958b9aae19a1d954cdd6511188679))
+* **resolver-command:** incorporación de soporte de cancelación para obtención de resultado parcial ([#49](https://github.com/DerivadaDX/cc-cli/issues/49)) ([75ee94b](https://github.com/DerivadaDX/cc-cli/commit/75ee94b37b1f6e45afbb0bd2c8f0203f699ba273))
+* **resolver-command:** notificación de procesamiento de generaciones en tiempo real ([#50](https://github.com/DerivadaDX/cc-cli/issues/50)) ([e22f7c4](https://github.com/DerivadaDX/cc-cli/commit/e22f7c4cdce87481325cf950bea326bd1170f302))
+
+### Bug Fixes
+
+* **app:** despliegue de ayuda cuando se invoca la cli sin argumentos ([#52](https://github.com/DerivadaDX/cc-cli/issues/52)) ([8b36ee7](https://github.com/DerivadaDX/cc-cli/commit/8b36ee70b6c95f6eb83aded184ac9c64fa12bc23))
+* **resolver-command:** se evita línea en blanco innecesaria tras cancelación ([#56](https://github.com/DerivadaDX/cc-cli/issues/56)) ([32a3c83](https://github.com/DerivadaDX/cc-cli/commit/32a3c83f8b2b64ddfad4820787159fc6690cb583))
+
 ## [1.0.0](https://github.com/DerivadaDX/cc-cli/compare/v1.0.0-beta.1...v1.0.0) (2025-06-11)
 
 ### ⚠ BREAKING CHANGES
