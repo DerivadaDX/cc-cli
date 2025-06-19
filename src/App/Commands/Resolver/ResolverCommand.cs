@@ -97,7 +97,7 @@ namespace App.Commands.Resolver
             {
                 TipoIndividuo.Intercambio => new IndividuoIntercambioAsignacionesFactory(instanciaProblema),
                 TipoIndividuo.Optimizacion => new IndividuoOptimizacionAsignacionesFactory(instanciaProblema),
-                _ => throw new ArgumentException($"Tipo de individuo no soportado: {parametros.TipoIndividuo}")
+                _ => throw new ArgumentException($"Tipo de individuo no soportado: {parametros.TipoIndividuo}", nameof(parametros))
             };
 
             presentador.MostrarInfo($"Utilizando individuos de tipo: {parametros.TipoIndividuo}");
