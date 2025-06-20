@@ -77,6 +77,7 @@ namespace App.Commands.Resolver
 
                 var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.LimiteGeneraciones, parametros.LimiteEstancamiento);
                 ConfigurarProgreso(parametros, algoritmoGenetico, presentador);
+                ConfigurarEstancamiento(algoritmoGenetico, presentador);
 
                 var stopwatch = Stopwatch.StartNew();
                 var (mejorIndividuo, generaciones) = algoritmoGenetico.Ejecutar(cts.Token);
@@ -88,6 +89,16 @@ namespace App.Commands.Resolver
             {
                 MostrarError(ex.Message, presentador);
             }
+        }
+
+        private static void ConfigurarCancelacion(CancellationTokenSource cts, Presentador presentador)
+        {
+            Console.CancelKeyPress += (_, e) =>
+            {
+                presentador.MostrarAdvertencia("Cancelación solicitada por el usuario.");
+                e.Cancel = true;
+                cts.Cancel();
+            };
         }
 
         private static IIndividuoFactory ObtenerIndividuoFactory(
@@ -102,16 +113,6 @@ namespace App.Commands.Resolver
 
             presentador.MostrarInfo($"Utilizando individuos de tipo: {parametros.TipoIndividuo}");
             return individuoFactory;
-        }
-
-        private static void ConfigurarCancelacion(CancellationTokenSource cts, Presentador presentador)
-        {
-            Console.CancelKeyPress += (_, e) =>
-            {
-                presentador.MostrarAdvertencia("Cancelación solicitada por el usuario.");
-                e.Cancel = true;
-                cts.Cancel();
-            };
         }
 
         private static void ConfigurarProgreso(
@@ -142,6 +143,14 @@ namespace App.Commands.Resolver
                     presentador.MostrarProgreso(mensaje);
                 };
             }
+        }
+
+        private static void ConfigurarEstancamiento(AlgoritmoGenetico algoritmoGenetico, Presentador presentador)
+        {
+            algoritmoGenetico.EstancamientoDetectado += () =>
+            {
+                presentador.MostrarAdvertencia("Procesamiento detenido por estancamiento.");
+            };
         }
 
         private static void MostrarResultado(
