@@ -98,6 +98,21 @@ namespace Solver.Tests
         }
 
         [Fact]
+        public void Ejecutar_HayEstancamiento_NotificaDetencion()
+        {
+            bool notificado = false;
+
+            (Poblacion poblacion, _) = CrearPoblacionFakeConIndividuoNoOptimo();
+            poblacion.GenerarNuevaGeneracion().Returns(poblacion);
+
+            var algoritmo = new AlgoritmoGenetico(poblacion, limiteGeneraciones: 0, limiteGeneracionesSinMejora: 5);
+            algoritmo.EstancamientoDetectado += () => notificado = true;
+            algoritmo.Ejecutar();
+
+            Assert.True(notificado);
+        }
+
+        [Fact]
         public void Ejecutar_ConLimiteDeGeneraciones_ProcesaCantidadEsperadaDeGeneraciones()
         {
             (Poblacion poblacion, _) = CrearPoblacionFakeConIndividuoNoOptimo();

@@ -3,6 +3,7 @@ using Solver.Individuos;
 namespace Solver
 {
     public delegate void GeneracionProcesadaEventHandler(int generacion, CancellationToken cancellationToken);
+    public delegate void EstancamientoDetectadoEventHandler();
 
     public class AlgoritmoGenetico
     {
@@ -13,6 +14,7 @@ namespace Solver
         private readonly bool _validarEstancamiento;
 
         public event GeneracionProcesadaEventHandler GeneracionProcesada;
+        public event EstancamientoDetectadoEventHandler EstancamientoDetectado;
 
         public AlgoritmoGenetico(Poblacion poblacion, int limiteGeneraciones, int limiteGeneracionesSinMejora)
         {
@@ -67,6 +69,7 @@ namespace Solver
                 if (hayEstancamiento)
                 {
                     mejorIndividuo = mejorIndividuoDeGeneracion;
+                    EstancamientoDetectado?.Invoke();
                     break;
                 }
 
