@@ -2,9 +2,7 @@ namespace Solver.Individuos;
 
 internal class IndividuoIntercambioAsignaciones : Individuo
 {
-    internal IndividuoIntercambioAsignaciones(
-        List<int> cromosoma, InstanciaProblema problema, CalculadoraFitness calculadoraFitness)
-        : base(cromosoma, problema, calculadoraFitness)
+    internal IndividuoIntercambioAsignaciones(List<int> cromosoma, InstanciaProblema problema) : base(cromosoma, problema)
     {
     }
 
@@ -30,7 +28,7 @@ internal class IndividuoIntercambioAsignaciones : Individuo
 
     protected override Individuo CrearNuevoIndividuo(List<int> cromosoma)
     {
-        var individuo = new IndividuoIntercambioAsignaciones(cromosoma, _problema, _calculadoraFitness);
+        var individuo = new IndividuoIntercambioAsignaciones(cromosoma, _problema);
         return individuo;
     }
 }
