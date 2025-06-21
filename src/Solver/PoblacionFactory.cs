@@ -6,15 +6,14 @@ namespace Solver
     {
         private static Poblacion _poblacion;
 
-        public static Poblacion Crear(int tamaño, IIndividuoFactory individuoFactory)
+        public static Poblacion Crear(int tamaño, InstanciaProblema problema, TipoIndividuo tipoIndividuo)
         {
-            ArgumentNullException.ThrowIfNull(individuoFactory, nameof(individuoFactory));
-
+            ArgumentNullException.ThrowIfNull(problema, nameof(problema));
             var poblacion = _poblacion ?? new Poblacion(tamaño);
 
             for (int i = 0; i < tamaño; i++)
             {
-                Individuo individuo = individuoFactory.CrearAleatorio();
+                Individuo individuo = IndividuoFactory.CrearAleatorio(problema, tipoIndividuo);
                 poblacion.Individuos.Add(individuo);
             }
 

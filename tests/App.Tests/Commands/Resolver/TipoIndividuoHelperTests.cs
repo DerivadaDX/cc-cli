@@ -1,4 +1,5 @@
 using App.Commands.Resolver;
+using Solver.Individuos;
 
 namespace App.Tests.Commands.Resolver
 {

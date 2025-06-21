@@ -3,6 +3,7 @@ using App.Commands.Resolver;
 using Common;
 using NSubstitute;
 using Solver;
+using Solver.Individuos;
 
 namespace App.Tests.Commands.Resolver
 {

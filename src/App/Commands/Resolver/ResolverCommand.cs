@@ -71,9 +71,7 @@ namespace App.Commands.Resolver
             {
                 decimal[,] matrizValoraciones = lector.Leer(parametros.RutaInstancia);
                 var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matrizValoraciones);
-                IIndividuoFactory individuoFactory = ObtenerIndividuoFactory(parametros, presentador, instanciaProblema);
-
-                var poblacion = PoblacionFactory.Crear(parametros.CantidadIndividuos, individuoFactory);
+                var poblacion = PoblacionFactory.Crear(parametros.CantidadIndividuos, instanciaProblema, parametros.TipoIndividuo);
 
                 var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.LimiteGeneraciones, parametros.LimiteEstancamiento);
                 ConfigurarProgreso(parametros, algoritmoGenetico, presentador);
@@ -99,20 +97,6 @@ namespace App.Commands.Resolver
                 e.Cancel = true;
                 cts.Cancel();
             };
-        }
-
-        private static IIndividuoFactory ObtenerIndividuoFactory(
-            ParametrosSolucion parametros, Presentador presentador, InstanciaProblema instanciaProblema)
-        {
-            IIndividuoFactory individuoFactory = parametros.TipoIndividuo switch
-            {
-                TipoIndividuo.Intercambio => new IndividuoIntercambioAsignacionesFactory(instanciaProblema),
-                TipoIndividuo.Optimizacion => new IndividuoOptimizacionAsignacionesFactory(instanciaProblema),
-                _ => throw new ArgumentException($"Tipo de individuo no soportado: {parametros.TipoIndividuo}", nameof(parametros))
-            };
-
-            presentador.MostrarInfo($"Utilizando individuos de tipo: {parametros.TipoIndividuo}");
-            return individuoFactory;
         }
 
         private static void ConfigurarProgreso(

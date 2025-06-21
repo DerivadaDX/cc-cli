@@ -1,4 +1,6 @@
-﻿namespace App.Commands.Resolver
+﻿using Solver.Individuos;
+
+namespace App.Commands.Resolver
 {
     internal static class TipoIndividuoHelper
     {
