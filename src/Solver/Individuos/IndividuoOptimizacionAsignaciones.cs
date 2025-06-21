@@ -2,9 +2,7 @@ namespace Solver.Individuos;
 
 internal class IndividuoOptimizacionAsignaciones : Individuo
 {
-    internal IndividuoOptimizacionAsignaciones(
-        List<int> cromosoma, InstanciaProblema problema, CalculadoraFitness calculadoraFitness)
-        : base(cromosoma, problema, calculadoraFitness)
+    internal IndividuoOptimizacionAsignaciones(List<int> cromosoma, InstanciaProblema problema) : base(cromosoma, problema)
     {
     }
 
@@ -24,7 +22,7 @@ internal class IndividuoOptimizacionAsignaciones : Individuo
 
     protected override Individuo CrearNuevoIndividuo(List<int> cromosoma)
     {
-        var individuo = new IndividuoOptimizacionAsignaciones(cromosoma, _problema, _calculadoraFitness);
+        var individuo = new IndividuoOptimizacionAsignaciones(cromosoma, _problema);
         return individuo;
     }
 

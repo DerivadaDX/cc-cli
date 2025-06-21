@@ -6,20 +6,19 @@ namespace Solver.Individuos
     public abstract class Individuo
     {
         protected readonly InstanciaProblema _problema;
-        protected readonly CalculadoraFitness _calculadoraFitness;
         protected readonly GeneradorNumerosRandom _random;
+        protected readonly CalculadoraFitness _calculadoraFitness;
 
-        protected Individuo(List<int> cromosoma, InstanciaProblema problema, CalculadoraFitness calculadoraFitness)
+        protected Individuo(List<int> cromosoma, InstanciaProblema problema)
         {
             ArgumentNullException.ThrowIfNull(cromosoma, nameof(cromosoma));
             ArgumentNullException.ThrowIfNull(problema, nameof(problema));
-            ArgumentNullException.ThrowIfNull(calculadoraFitness, nameof(calculadoraFitness));
             ValidarCromosoma(cromosoma, problema);
 
             Cromosoma = cromosoma;
             _problema = problema;
-            _calculadoraFitness = calculadoraFitness;
             _random = GeneradorNumerosRandomFactory.Crear();
+            _calculadoraFitness = CalculadoraFitnessFactory.Crear();
         }
 
         internal virtual void Mutar()
@@ -121,7 +120,7 @@ namespace Solver.Individuos
                 throw new ArgumentException(mensaje, nameof(cromosoma));
             }
 
-            List<int> repetidas = asignaciones.GroupBy(a => a).Where(g => g.Count() > 1).Select(g => g.Key).ToList();
+            List<int> repetidas = [.. asignaciones.GroupBy(a => a).Where(g => g.Count() > 1).Select(g => g.Key)];
             if (repetidas.Count > 0)
             {
                 string mensaje = $"Hay asignaciones repetidas a agentes: ({string.Join(", ", repetidas)})";
