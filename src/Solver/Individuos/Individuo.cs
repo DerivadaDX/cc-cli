@@ -40,7 +40,7 @@ namespace Solver.Individuos
             cromosomaHijo.AddRange(cortesHijo);
             cromosomaHijo.AddRange(asignacionesHijo);
 
-            var hijo = CrearNuevoIndividuo(cromosomaHijo);
+            Individuo hijo = CrearNuevoIndividuo(cromosomaHijo);
             return hijo;
         }
 
@@ -129,20 +129,7 @@ namespace Solver.Individuos
             }
         }
 
-        private List<int> OrdenarCortes(List<int> cromosoma, InstanciaProblema problema)
-        {
-            int cantidadCortes = problema.Agentes.Count - 1;
-            if (cantidadCortes == 0)
-                return cromosoma;
-
-            var cortesOrdenados = cromosoma.Take(cantidadCortes).OrderBy(x => x).ToList<int>();
-            var asignaciones = cromosoma.Skip(cantidadCortes).ToList<int>();
-            var cromosomaOrdenado = cortesOrdenados.Concat(asignaciones).ToList<int>();
-
-            return cromosomaOrdenado;
-        }
-
-        protected void MutarCortes()
+        private void MutarCortes()
         {
             int cantidadCortes = _problema.Agentes.Count - 1;
             int rango = _problema.CantidadAtomos + 1;
@@ -160,7 +147,7 @@ namespace Solver.Individuos
             }
         }
 
-        protected List<int> CruzaCortes(Individuo otro)
+        private List<int> CruzaCortes(Individuo otro)
         {
             int cantidadCortes = _problema.Agentes.Count - 1;
             var cortesPadre1 = Cromosoma.Take(cantidadCortes).ToList<int>();
@@ -175,7 +162,7 @@ namespace Solver.Individuos
             return cortesHijo;
         }
 
-        protected List<int> CruzaAsignaciones(Individuo otro)
+        private List<int> CruzaAsignaciones(Individuo otro)
         {
             int cantidadCortes = _problema.Agentes.Count - 1;
             int cantidadAsignaciones = _problema.Agentes.Count;
@@ -206,6 +193,19 @@ namespace Solver.Individuos
             }
 
             return asignacionesHijo;
+        }
+
+        private List<int> OrdenarCortes(List<int> cromosoma, InstanciaProblema problema)
+        {
+            int cantidadCortes = problema.Agentes.Count - 1;
+            if (cantidadCortes == 0)
+                return cromosoma;
+
+            var cortesOrdenados = cromosoma.Take(cantidadCortes).OrderBy(x => x).ToList<int>();
+            var asignaciones = cromosoma.Skip(cantidadCortes).ToList<int>();
+            var cromosomaOrdenado = cortesOrdenados.Concat(asignaciones).ToList<int>();
+
+            return cromosomaOrdenado;
         }
     }
 }

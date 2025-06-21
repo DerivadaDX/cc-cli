@@ -1,5 +1,3 @@
-using Common;
-
 namespace Solver.Individuos;
 
 internal class IndividuoOptimizacionAsignaciones : Individuo
@@ -22,6 +20,12 @@ internal class IndividuoOptimizacionAsignaciones : Individuo
         int[] asignacionesOptimas = HungarianAlgorithm.HungarianAlgorithm.FindAssignments(matrizCostos);
 
         ActualizarCromosomaConAsignaciones(asignacionesOptimas);
+    }
+
+    protected override Individuo CrearNuevoIndividuo(List<int> cromosoma)
+    {
+        var individuo = new IndividuoOptimizacionAsignaciones(cromosoma, _problema, _calculadoraFitness);
+        return individuo;
     }
 
     private List<int> ObtenerCortesOrdenados()
@@ -109,10 +113,5 @@ internal class IndividuoOptimizacionAsignaciones : Individuo
 
         for (int porcion = 0; porcion < cantidadAsignaciones; porcion++)
             Cromosoma[cantidadCortes + porcion] = asignacionesOptimas[porcion] + 1;
-    }
-
-    protected override Individuo CrearNuevoIndividuo(List<int> cromosoma)
-    {
-        return new IndividuoOptimizacionAsignaciones(cromosoma, _problema, _calculadoraFitness);
     }
 }

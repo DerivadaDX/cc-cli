@@ -1,5 +1,3 @@
-using Common;
-
 namespace Solver.Individuos;
 
 internal class IndividuoIntercambioAsignaciones : Individuo
@@ -32,6 +30,7 @@ internal class IndividuoIntercambioAsignaciones : Individuo
 
     protected override Individuo CrearNuevoIndividuo(List<int> cromosoma)
     {
-        return new IndividuoIntercambioAsignaciones(cromosoma, _problema, _calculadoraFitness);
+        var individuo = new IndividuoIntercambioAsignaciones(cromosoma, _problema, _calculadoraFitness);
+        return individuo;
     }
 }
