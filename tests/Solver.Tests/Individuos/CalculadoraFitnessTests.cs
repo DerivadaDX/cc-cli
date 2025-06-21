@@ -59,12 +59,12 @@ namespace Solver.Tests.Individuos
             {
             }
 
-            internal override void Mutar()
+            protected override void MutarAsignaciones()
             {
                 throw new NotImplementedException();
             }
 
-            internal override Individuo Cruzar(Individuo otro)
+            protected override Individuo CrearNuevoIndividuo(List<int> cromosoma)
             {
                 throw new NotImplementedException();
             }
