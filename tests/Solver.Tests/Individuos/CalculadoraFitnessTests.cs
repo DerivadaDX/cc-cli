@@ -54,8 +54,7 @@ namespace Solver.Tests.Individuos
 
         private class IndividuoFake : Individuo
         {
-            internal IndividuoFake(List<int> cromosoma, InstanciaProblema problema)
-                : base(cromosoma, problema, new CalculadoraFitness())
+            internal IndividuoFake(List<int> cromosoma, InstanciaProblema problema) : base(cromosoma, problema)
             {
             }
 

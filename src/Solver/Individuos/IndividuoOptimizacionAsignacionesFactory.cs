@@ -6,7 +6,6 @@ public class IndividuoOptimizacionAsignacionesFactory : IIndividuoFactory
 {
     private readonly InstanciaProblema _problema;
     private readonly GeneradorNumerosRandom _random;
-    private readonly CalculadoraFitness _calculadoraFitness;
 
     public IndividuoOptimizacionAsignacionesFactory(InstanciaProblema problema)
     {
@@ -14,7 +13,6 @@ public class IndividuoOptimizacionAsignacionesFactory : IIndividuoFactory
 
         _problema = problema;
         _random = GeneradorNumerosRandomFactory.Crear();
-        _calculadoraFitness = CalculadoraFitnessFactory.Crear();
     }
 
     public Individuo CrearAleatorio()
@@ -24,7 +22,7 @@ public class IndividuoOptimizacionAsignacionesFactory : IIndividuoFactory
         List<int> asignaciones = GenerarAsignaciones(cantidadAgentes);
 
         var cromosoma = cortes.Concat(asignaciones).ToList<int>();
-        var individuo = new IndividuoOptimizacionAsignaciones(cromosoma, _problema, _calculadoraFitness);
+        var individuo = new IndividuoOptimizacionAsignaciones(cromosoma, _problema);
         return individuo;
     }
 

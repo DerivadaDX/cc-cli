@@ -22,7 +22,7 @@ public class IndividuoIntercambioAsignacionesTests : IDisposable
 
         var cromosomaOriginal = new List<int> { 0, 1, 2 };
         var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,] { { 1m, 0m }, { 0m, 1m } });
-        var individuo = new IndividuoIntercambioAsignaciones([.. cromosomaOriginal], problema, new CalculadoraFitness());
+        var individuo = new IndividuoIntercambioAsignaciones([.. cromosomaOriginal], problema);
 
         individuo.Mutar();
 
