@@ -9,10 +9,7 @@ namespace Solver.Individuos
             ArgumentNullException.ThrowIfNull(problema, nameof(problema));
 
             var random = GeneradorNumerosRandomFactory.Crear();
-            int cantidadAgentes = problema.Agentes.Count;
-            List<int> cortes = GenerarCortes(random, problema, cantidadAgentes - 1);
-            List<int> asignaciones = GenerarAsignaciones(random, cantidadAgentes);
-            var cromosoma = cortes.Concat(asignaciones).ToList<int>();
+            List<int> cromosoma = GenerarCromosoma(problema, random);
 
             Individuo individuo = tipoIndividuo switch
             {
@@ -24,26 +21,40 @@ namespace Solver.Individuos
             return individuo;
         }
 
-        private static List<int> GenerarCortes(GeneradorNumerosRandom random, InstanciaProblema problema, int cantidadCortes)
+        private static List<int> GenerarCromosoma(InstanciaProblema problema, GeneradorNumerosRandom random)
         {
+            List<int> cortes = GenerarCortes(problema, random);
+            List<int> asignaciones = GenerarAsignaciones(problema, random);
+
+            var cromosoma = cortes.Concat(asignaciones).ToList<int>();
+            return cromosoma;
+        }
+
+        private static List<int> GenerarCortes(InstanciaProblema problema, GeneradorNumerosRandom random)
+        {
+            int cantidadCortes = problema.Agentes.Count - 1;
+
             var cortes = new List<int>();
             for (int i = 0; i < cantidadCortes; i++)
             {
                 int corte = random.Siguiente(problema.CantidadAtomos + 1);
                 cortes.Add(corte);
             }
+
             return cortes;
         }
 
-        private static List<int> GenerarAsignaciones(GeneradorNumerosRandom random, int cantidadAgentes)
+        private static List<int> GenerarAsignaciones(InstanciaProblema problema, GeneradorNumerosRandom random)
         {
-            var asignaciones = Enumerable.Range(1, cantidadAgentes).ToList();
-            // Fisher–Yates shuffle
+            int cantidadAgentes = problema.Agentes.Count;
+
+            var asignaciones = Enumerable.Range(1, cantidadAgentes).ToList<int>();
             for (int i = asignaciones.Count - 1; i > 0; i--)
             {
                 int j = random.Siguiente(i + 1);
                 (asignaciones[i], asignaciones[j]) = (asignaciones[j], asignaciones[i]);
             }
+
             return asignaciones;
         }
     }

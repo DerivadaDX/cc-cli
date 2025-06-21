@@ -9,8 +9,8 @@ namespace Solver
         public static Poblacion Crear(int tamaño, InstanciaProblema problema, TipoIndividuo tipoIndividuo)
         {
             ArgumentNullException.ThrowIfNull(problema, nameof(problema));
-            var poblacion = _poblacion ?? new Poblacion(tamaño);
 
+            var poblacion = _poblacion ?? new Poblacion(tamaño);
             for (int i = 0; i < tamaño; i++)
             {
                 Individuo individuo = IndividuoFactory.CrearAleatorio(problema, tipoIndividuo);
