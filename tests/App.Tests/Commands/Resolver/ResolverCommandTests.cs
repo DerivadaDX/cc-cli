@@ -9,29 +9,25 @@ namespace App.Tests.Commands.Resolver
 {
     public class ResolverCommandTests
     {
-        private readonly Command _command;
-
-        public ResolverCommandTests()
-        {
-            _command = ResolverCommand.Crear();
-        }
-
         [Fact]
         public void Crear_NombreYOpciones_ConfiguradasCorrectamente()
         {
-            Assert.Equal("resolver", _command.Name);
-            Assert.Contains(_command.Options, o => o.Name == "instancia");
-            Assert.Contains(_command.Options, o => o.Name == "limite-generaciones");
-            Assert.Contains(_command.Options, o => o.Name == "cantidad-individuos");
-            Assert.Contains(_command.Options, o => o.Name == "limite-estancamiento");
-            Assert.Contains(_command.Options, o => o.Name == "tipo-individuo");
+            var comandoResolver = ResolverCommand.Crear();
+
+            Assert.Equal("resolver", comandoResolver.Name);
+            Assert.Contains(comandoResolver.Options, o => o.Name == "instancia");
+            Assert.Contains(comandoResolver.Options, o => o.Name == "limite-generaciones");
+            Assert.Contains(comandoResolver.Options, o => o.Name == "cantidad-individuos");
+            Assert.Contains(comandoResolver.Options, o => o.Name == "limite-estancamiento");
+            Assert.Contains(comandoResolver.Options, o => o.Name == "tipo-individuo");
         }
 
         [Fact]
         public void Crear_LimiteGeneracionesNoEspecificado_UsaValorPorDefecto()
         {
-            var limiteGeneracionesOption = (Option<int>)_command.Options.First(o => o.Name == "limite-generaciones");
-            int limiteGeneraciones = _command.Parse("resolver --instancia instancia.dat").GetValueForOption(limiteGeneracionesOption);
+            var comandoResolver = ResolverCommand.Crear();
+            var limiteGeneracionesOption = (Option<int>)comandoResolver.Options.First(o => o.Name == "limite-generaciones");
+            int limiteGeneraciones = comandoResolver.Parse("resolver --instancia instancia.dat").GetValueForOption(limiteGeneracionesOption);
 
             Assert.Equal(0, limiteGeneraciones);
         }
@@ -39,8 +35,9 @@ namespace App.Tests.Commands.Resolver
         [Fact]
         public void Crear_CantidadIndividuosNoEspecificado_UsaValorPorDefecto()
         {
-            var cantidadIndividuosOption = (Option<int>)_command.Options.First(o => o.Name == "cantidad-individuos");
-            int cantidadIndividuos = _command.Parse("resolver --instancia instancia.dat").GetValueForOption(cantidadIndividuosOption);
+            var comandoResolver = ResolverCommand.Crear();
+            var cantidadIndividuosOption = (Option<int>)comandoResolver.Options.First(o => o.Name == "cantidad-individuos");
+            int cantidadIndividuos = comandoResolver.Parse("resolver --instancia instancia.dat").GetValueForOption(cantidadIndividuosOption);
 
             Assert.Equal(100, cantidadIndividuos);
         }
@@ -48,8 +45,9 @@ namespace App.Tests.Commands.Resolver
         [Fact]
         public void Crear_LimiteEstancamientoNoEspecificado_UsaValorPorDefecto()
         {
-            var limiteEstancamientoOption = (Option<int>)_command.Options.First(o => o.Name == "limite-estancamiento");
-            int limiteEstancamiento = _command.Parse("resolver --instancia instancia.dat").GetValueForOption(limiteEstancamientoOption);
+            var comandoResolver = ResolverCommand.Crear();
+            var limiteEstancamientoOption = (Option<int>)comandoResolver.Options.First(o => o.Name == "limite-estancamiento");
+            int limiteEstancamiento = comandoResolver.Parse("resolver --instancia instancia.dat").GetValueForOption(limiteEstancamientoOption);
 
             Assert.Equal(1000, limiteEstancamiento);
         }
@@ -57,8 +55,9 @@ namespace App.Tests.Commands.Resolver
         [Fact]
         public void Crear_TipoIndividuoNoEspecificado_UsaValorPorDefecto()
         {
-            var tipoIndividuoOption = (Option<string>)_command.Options.First(o => o.Name == "tipo-individuo");
-            string tipoIndividuo = _command.Parse("resolver --instancia instancia.dat").GetValueForOption(tipoIndividuoOption);
+            var comandoResolver = ResolverCommand.Crear();
+            var tipoIndividuoOption = (Option<string>)comandoResolver.Options.First(o => o.Name == "tipo-individuo");
+            string tipoIndividuo = comandoResolver.Parse("resolver --instancia instancia.dat").GetValueForOption(tipoIndividuoOption);
 
             Assert.Equal("intercambio", tipoIndividuo);
         }
