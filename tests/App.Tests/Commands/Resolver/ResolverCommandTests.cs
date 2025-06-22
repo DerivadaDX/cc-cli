@@ -3,7 +3,6 @@ using App.Commands.Resolver;
 using Common;
 using NSubstitute;
 using Solver;
-using Solver.Individuos;
 
 namespace App.Tests.Commands.Resolver
 {
@@ -27,7 +26,10 @@ namespace App.Tests.Commands.Resolver
         {
             var comandoResolver = ResolverCommand.Crear();
             var limiteGeneracionesOption = (Option<int>)comandoResolver.Options.First(o => o.Name == "limite-generaciones");
-            int limiteGeneraciones = comandoResolver.Parse("resolver --instancia instancia.dat").GetValueForOption(limiteGeneracionesOption);
+
+            int limiteGeneraciones = comandoResolver
+                .Parse("resolver --instancia instancia.dat")
+                .GetValueForOption(limiteGeneracionesOption);
 
             Assert.Equal(0, limiteGeneraciones);
         }
@@ -37,7 +39,10 @@ namespace App.Tests.Commands.Resolver
         {
             var comandoResolver = ResolverCommand.Crear();
             var cantidadIndividuosOption = (Option<int>)comandoResolver.Options.First(o => o.Name == "cantidad-individuos");
-            int cantidadIndividuos = comandoResolver.Parse("resolver --instancia instancia.dat").GetValueForOption(cantidadIndividuosOption);
+
+            int cantidadIndividuos = comandoResolver
+                .Parse("resolver --instancia instancia.dat")
+                .GetValueForOption(cantidadIndividuosOption);
 
             Assert.Equal(100, cantidadIndividuos);
         }
@@ -47,7 +52,10 @@ namespace App.Tests.Commands.Resolver
         {
             var comandoResolver = ResolverCommand.Crear();
             var limiteEstancamientoOption = (Option<int>)comandoResolver.Options.First(o => o.Name == "limite-estancamiento");
-            int limiteEstancamiento = comandoResolver.Parse("resolver --instancia instancia.dat").GetValueForOption(limiteEstancamientoOption);
+
+            int limiteEstancamiento = comandoResolver
+                .Parse("resolver --instancia instancia.dat")
+                .GetValueForOption(limiteEstancamientoOption);
 
             Assert.Equal(1000, limiteEstancamiento);
         }
@@ -57,7 +65,10 @@ namespace App.Tests.Commands.Resolver
         {
             var comandoResolver = ResolverCommand.Crear();
             var tipoIndividuoOption = (Option<string>)comandoResolver.Options.First(o => o.Name == "tipo-individuo");
-            string tipoIndividuo = comandoResolver.Parse("resolver --instancia instancia.dat").GetValueForOption(tipoIndividuoOption);
+
+            string tipoIndividuo = comandoResolver
+                .Parse("resolver --instancia instancia.dat")
+                .GetValueForOption(tipoIndividuoOption);
 
             Assert.Equal("intercambio", tipoIndividuo);
         }
@@ -65,20 +76,17 @@ namespace App.Tests.Commands.Resolver
         [Fact]
         public void EjecutarResolucion_MatrizValoraciones_SeLee()
         {
-            var lector = Substitute.For<LectorArchivoMatrizValoraciones>(Substitute.For<FileSystemHelper>());
-            lector.Leer(Arg.Any<string>()).Returns(new decimal[,] { { 0, 3.9m }, { 1, 1.2m } });
-
             var parametros = new ParametrosSolucion
             {
-                RutaInstancia = "instancia.dat",
-                LimiteGeneraciones = 1,
-                CantidadIndividuos = 2,
-                LimiteEstancamiento = 3,
-                TipoIndividuos = TipoIndividuo.IntercambioAsignaciones,
+                RutaInstancia = "ruta/a/instancia.dat",
             };
-            ResolverCommand.EjecutarResolucion(parametros, lector, Substitute.For<Presentador>(Substitute.For<ConsoleProxy>()));
 
-            lector.Received(1).Leer(parametros.RutaInstancia);
+            var lector = Substitute.For<LectorArchivoMatrizValoraciones>(Substitute.For<FileSystemHelper>());
+            var presentador = Substitute.For<Presentador>(Substitute.For<ConsoleProxy>());
+
+            ResolverCommand.EjecutarResolucion(parametros, lector, presentador);
+
+            lector.Received(1).Leer("ruta/a/instancia.dat");
         }
     }
 }
