@@ -19,12 +19,12 @@
         [Fact]
         public void SetearProxy_Helper_SeSeteaCorrectamente()
         {
-            var instancia = new ConsoleProxy();
-            ConsoleProxyFactory.SetearConsola(instancia);
+            var consolaSeteada = new ConsoleProxy();
+            ConsoleProxyFactory.SetearConsola(consolaSeteada);
 
-            var consola = ConsoleProxyFactory.Crear();
+            var consolaObtenida = ConsoleProxyFactory.Crear();
 
-            Assert.Same(instancia, consola);
+            Assert.Same(consolaSeteada, consolaObtenida);
         }
     }
 }

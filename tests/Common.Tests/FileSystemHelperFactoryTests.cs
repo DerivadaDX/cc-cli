@@ -19,12 +19,12 @@
         [Fact]
         public void SetearHelper_Helper_SeSeteaCorrectamente()
         {
-            var helperMock = new FileSystemHelper();
-            FileSystemHelperFactory.SetearHelper(helperMock);
+            var helperSeteado = new FileSystemHelper();
+            FileSystemHelperFactory.SetearHelper(helperSeteado);
 
-            var helper = FileSystemHelperFactory.Crear();
+            var helperObtenido = FileSystemHelperFactory.Crear();
 
-            Assert.Same(helperMock, helper);
+            Assert.Same(helperSeteado, helperObtenido);
         }
     }
 }

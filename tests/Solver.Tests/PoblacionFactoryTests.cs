@@ -34,13 +34,13 @@ namespace Solver.Tests
         [Fact]
         public void SetearPoblacion_Poblacion_SeSeteaCorrectamente()
         {
-            var instancia1 = new Poblacion(1);
-            PoblacionFactory.SetearPoblacion(instancia1);
+            var poblacionSeteada = new Poblacion(1);
+            PoblacionFactory.SetearPoblacion(poblacionSeteada);
 
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,] { { 1m, 0m }, { 0m, 1m } });
-            var instancia2 = PoblacionFactory.Crear(1, problema, TipoIndividuo.IntercambioAsignaciones);
+            var poblacionObtenida = PoblacionFactory.Crear(1, problema, TipoIndividuo.IntercambioAsignaciones);
 
-            Assert.Same(instancia1, instancia2);
+            Assert.Same(poblacionSeteada, poblacionObtenida);
         }
     }
 }
