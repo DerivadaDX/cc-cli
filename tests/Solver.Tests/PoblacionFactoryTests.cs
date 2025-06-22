@@ -1,5 +1,4 @@
-﻿using NSubstitute;
-using Solver.Individuos;
+﻿using Solver.Individuos;
 
 namespace Solver.Tests
 {
@@ -12,18 +11,20 @@ namespace Solver.Tests
         }
 
         [Fact]
-        public void Crear_IndividuoFactory_Null_Excepcion()
+        public void Crear_ProblemaNull_LanzaArgumentNullException()
         {
-            var ex = Assert.Throws<ArgumentNullException>(() => PoblacionFactory.Crear(5, null));
-            Assert.Equal("individuoFactory", ex.ParamName);
+            var ex = Assert.Throws<ArgumentNullException>(
+                () => PoblacionFactory.Crear(5, null, TipoIndividuo.IntercambioAsignaciones));
+            Assert.Equal("problema", ex.ParamName);
         }
 
         [Fact]
         public void Crear_InstanciaDevuelta_EsValida()
         {
             int tamaño = 5;
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,] { { 1m, 0m }, { 0m, 1m } });
 
-            var poblacion = PoblacionFactory.Crear(tamaño, Substitute.For<IIndividuoFactory>());
+            var poblacion = PoblacionFactory.Crear(tamaño, problema, TipoIndividuo.IntercambioAsignaciones);
 
             Assert.NotNull(poblacion);
             Assert.IsType<Poblacion>(poblacion);
@@ -36,7 +37,8 @@ namespace Solver.Tests
             var instancia1 = new Poblacion(1);
             PoblacionFactory.SetearPoblacion(instancia1);
 
-            var instancia2 = PoblacionFactory.Crear(1, Substitute.For<IIndividuoFactory>());
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,] { { 1m, 0m }, { 0m, 1m } });
+            var instancia2 = PoblacionFactory.Crear(1, problema, TipoIndividuo.IntercambioAsignaciones);
 
             Assert.Same(instancia1, instancia2);
         }
