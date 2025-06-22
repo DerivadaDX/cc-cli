@@ -69,7 +69,14 @@ namespace App.Tests.Commands.Resolver
             var lector = Substitute.For<LectorArchivoMatrizValoraciones>(Substitute.For<FileSystemHelper>());
             lector.Leer(Arg.Any<string>()).Returns(new decimal[,] { { 0, 3.9m }, { 1, 1.2m } });
 
-            var parametros = new ParametrosSolucion("instancia.dat", 1, 2, 3, TipoIndividuo.IntercambioAsignaciones);
+            var parametros = new ParametrosSolucion
+            {
+                RutaInstancia = "instancia.dat",
+                LimiteGeneraciones = 1,
+                CantidadIndividuos = 2,
+                LimiteEstancamiento = 3,
+                TipoIndividuos = TipoIndividuo.IntercambioAsignaciones,
+            };
             ResolverCommand.EjecutarResolucion(parametros, lector, Substitute.For<Presentador>(Substitute.For<ConsoleProxy>()));
 
             lector.Received(1).Leer(parametros.RutaInstancia);
