@@ -57,14 +57,14 @@ namespace App.Tests.Commands.Generar
         [Fact]
         public void EjecutarGeneracion_ConParametrosValidos_GeneraYEscribeInstancia()
         {
-            var instanciaMock = new decimal[1, 1];
+            var instanciaConstruida = new decimal[1, 1];
 
             var builder = Substitute.For<InstanciaBuilder>(Substitute.For<GeneradorNumerosRandom>());
             builder.ConCantidadDeAtomos(Arg.Any<int>()).Returns(builder);
             builder.ConCantidadDeAgentes(Arg.Any<int>()).Returns(builder);
             builder.ConValorMaximo(Arg.Any<int>()).Returns(builder);
             builder.ConValoracionesDisjuntas(Arg.Any<bool>()).Returns(builder);
-            builder.Build().Returns(instanciaMock);
+            builder.Build().Returns(instanciaConstruida);
 
             var parametros = new ParametrosGeneracion
             {
@@ -84,7 +84,7 @@ namespace App.Tests.Commands.Generar
             builder.Received(1).ConValorMaximo(100);
             builder.Received(1).ConValoracionesDisjuntas(true);
             builder.Received(1).Build();
-            escritor.Received(1).EscribirInstancia(instanciaMock, "instancia.dat");
+            escritor.Received(1).EscribirInstancia(instanciaConstruida, "instancia.dat");
         }
     }
 }
