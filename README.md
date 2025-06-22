@@ -92,7 +92,7 @@ cc-cli.exe resolver [opciones]
 
 **Argumentos y opciones**:
 
-| Argumento / Opción       | Descripón                                        | Valores aceptados                                       |
+| Argumento / Opción       | Descripción                                      | Valores aceptados                                       |
 | ------------------------ | ------------------------------------------------ | ------------------------------------------------------- |
 | `ruta-instancia`         | Ruta de la instancia a resolver                  | Un path (**requerido**)                                 |
 | `--limite-generaciones`  | Límite de generaciones a computar (0 = infinito) | Entero positivo (default: 0)                            |
