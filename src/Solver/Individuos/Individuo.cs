@@ -172,7 +172,7 @@ namespace Solver.Individuos
             if (cantidadAsignaciones <= 1)
                 return [.. asignacionesPadre1];
 
-            var asignacionesHijo = Enumerable.Repeat(-1, cantidadAsignaciones).ToList();
+            var asignacionesHijo = Enumerable.Repeat(-1, cantidadAsignaciones).ToList<int>();
             int indiceInicioSegmento = _random.Siguiente(cantidadAsignaciones);
             int indiceFinSegmento = _random.Siguiente(indiceInicioSegmento, cantidadAsignaciones);
 
