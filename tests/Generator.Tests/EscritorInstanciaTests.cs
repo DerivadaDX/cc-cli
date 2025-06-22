@@ -6,18 +6,9 @@ namespace Generator.Tests
     public class EscritorInstanciaTests
     {
         private const string DirectorioSalida = "nombreCarpeta";
-        private const string NombreArchivoSalida = "instancia.dat";
+        private const string ArchivoSalida = "instancia.dat";
 
         private readonly decimal[,] _instancia = new decimal[,] { { 1 } };
-
-        private readonly FileSystemHelper _fileSystemHelper;
-        private readonly EscritorInstancia _escritorInstancia;
-
-        public EscritorInstanciaTests()
-        {
-            _fileSystemHelper = Substitute.For<FileSystemHelper>();
-            _escritorInstancia = new EscritorInstancia(_fileSystemHelper);
-        }
 
         [Fact]
         public void Constructor_FileSystemNull_LanzaArgumentNullException()
@@ -29,9 +20,9 @@ namespace Generator.Tests
         [Fact]
         public void EscribirInstancia_InstanciaNull_LanzaArgumentNullException()
         {
-            var ex = Assert.Throws<ArgumentNullException>(() =>
-                _escritorInstancia.EscribirInstancia(null, NombreArchivoSalida));
+            EscritorInstancia escritorInstancia = ObtenerEscritorInstancia();
 
+            var ex = Assert.Throws<ArgumentNullException>(() => escritorInstancia.EscribirInstancia(null, ArchivoSalida));
             Assert.Equal("instancia", ex.ParamName);
         }
 
@@ -41,9 +32,9 @@ namespace Generator.Tests
         [InlineData(null)]
         public void EscribirInstancia_RutaVacia_LanzaArgumentException(string rutaInvalida)
         {
-            var ex = Assert.Throws<ArgumentException>(() =>
-                _escritorInstancia.EscribirInstancia(_instancia, rutaInvalida));
+            EscritorInstancia escritorInstancia = ObtenerEscritorInstancia();
 
+            var ex = Assert.Throws<ArgumentException>(() => escritorInstancia.EscribirInstancia(_instancia, rutaInvalida));
             Assert.Contains("ruta no puede estar vacía", ex.Message);
             Assert.Equal("rutaArchivo", ex.ParamName);
         }
@@ -51,38 +42,48 @@ namespace Generator.Tests
         [Fact]
         public void EscribirInstancia_RutaSinDirectorio_NoPreguntaSiExisteNiIntentaCrearDirectorio()
         {
-            _escritorInstancia.EscribirInstancia(_instancia, NombreArchivoSalida);
+            var fileSystemHelper = Substitute.For<FileSystemHelper>();
 
-            _fileSystemHelper.DidNotReceive().DirectoryExists(Arg.Any<string>());
-            _fileSystemHelper.DidNotReceive().CreateDirectory(Arg.Any<string>());
+            EscritorInstancia escritorInstancia = ObtenerEscritorInstancia(fileSystemHelper);
+            escritorInstancia.EscribirInstancia(_instancia, ArchivoSalida);
+
+            fileSystemHelper.DidNotReceive().DirectoryExists(Arg.Any<string>());
+            fileSystemHelper.DidNotReceive().CreateDirectory(Arg.Any<string>());
         }
 
         [Fact]
         public void EscribirInstancia_DirectorioExistente_NoIntentaCrearlo()
         {
-            _fileSystemHelper.DirectoryExists(DirectorioSalida).Returns(true);
+            var fileSystemHelper = Substitute.For<FileSystemHelper>();
+            fileSystemHelper.DirectoryExists(DirectorioSalida).Returns(true);
 
-            _escritorInstancia.EscribirInstancia(_instancia, DirectorioSalida + "/" + NombreArchivoSalida);
+            EscritorInstancia escritorInstancia = ObtenerEscritorInstancia(fileSystemHelper);
+            escritorInstancia.EscribirInstancia(_instancia, DirectorioSalida + "/" + ArchivoSalida);
 
-            _fileSystemHelper.DidNotReceive().CreateDirectory(Arg.Any<string>());
+            fileSystemHelper.DidNotReceive().CreateDirectory(Arg.Any<string>());
         }
 
         [Fact]
         public void EscribirInstancia_DirectorioNoExistente_LoCrea()
         {
-            _fileSystemHelper.DirectoryExists(DirectorioSalida).Returns(false);
+            var fileSystemHelper = Substitute.For<FileSystemHelper>();
+            fileSystemHelper.DirectoryExists(DirectorioSalida).Returns(false);
 
-            _escritorInstancia.EscribirInstancia(_instancia, DirectorioSalida + "/" + NombreArchivoSalida);
+            EscritorInstancia escritorInstancia = ObtenerEscritorInstancia(fileSystemHelper);
+            escritorInstancia.EscribirInstancia(_instancia, DirectorioSalida + "/" + ArchivoSalida);
 
-            _fileSystemHelper.Received(1).CreateDirectory(DirectorioSalida);
+            fileSystemHelper.Received(1).CreateDirectory(DirectorioSalida);
         }
 
         [Fact]
         public void EscribirInstancia_InstanciaValida_EscribeContenidoCorrecto()
         {
-            _escritorInstancia.EscribirInstancia(new decimal[,] { { 1, 2, 3 }, { 4, 5, 6 } }, NombreArchivoSalida);
+            var fileSystemHelper = Substitute.For<FileSystemHelper>();
 
-            _fileSystemHelper.Received(1).WriteAllLines(NombreArchivoSalida, Arg.Is<List<string>>(x =>
+            EscritorInstancia escritorInstancia = ObtenerEscritorInstancia(fileSystemHelper);
+            escritorInstancia.EscribirInstancia(new decimal[,] { { 1, 2, 3 }, { 4, 5, 6 } }, ArchivoSalida);
+
+            fileSystemHelper.Received(1).WriteAllLines(ArchivoSalida, Arg.Is<List<string>>(x =>
                 x.Count == 3 &&
                 x[0] == "2 3" &&
                 x[1] == "1\t2\t3" &&
@@ -93,9 +94,12 @@ namespace Generator.Tests
         [Fact]
         public void EscribirInstancia_InstanciaVacia_EscribeSoloEncabezado()
         {
-            _escritorInstancia.EscribirInstancia(new decimal[0, 0], NombreArchivoSalida);
+            var fileSystemHelper = Substitute.For<FileSystemHelper>();
 
-            _fileSystemHelper.Received(1).WriteAllLines(NombreArchivoSalida, Arg.Is<List<string>>(x =>
+            EscritorInstancia escritorInstancia = ObtenerEscritorInstancia(fileSystemHelper);
+            escritorInstancia.EscribirInstancia(new decimal[0, 0], ArchivoSalida);
+
+            fileSystemHelper.Received(1).WriteAllLines(ArchivoSalida, Arg.Is<List<string>>(x =>
                 x.Count == 1 &&
                 x[0] == "0 0"
             ));
@@ -106,14 +110,28 @@ namespace Generator.Tests
         {
             const string mensajeExcepcionInterna = "Error de disco";
 
-            _fileSystemHelper
+            var fileSystemHelper = Substitute.For<FileSystemHelper>();
+            fileSystemHelper
                 .When(x => x.WriteAllLines(Arg.Any<string>(), Arg.Any<List<string>>()))
                 .Throw(new IOException(mensajeExcepcionInterna));
 
-            var ex = Assert.Throws<IOException>(() =>
-                _escritorInstancia.EscribirInstancia(_instancia, NombreArchivoSalida));
+            EscritorInstancia escritorInstancia = ObtenerEscritorInstancia(fileSystemHelper);
 
+            var ex = Assert.Throws<IOException>(() => escritorInstancia.EscribirInstancia(_instancia, ArchivoSalida));
             Assert.Contains(mensajeExcepcionInterna, ex.Message);
+        }
+
+        private EscritorInstancia ObtenerEscritorInstancia()
+        {
+            var fileSystemHelper = Substitute.For<FileSystemHelper>();
+            var escritor = new EscritorInstancia(fileSystemHelper);
+            return escritor;
+        }
+
+        private EscritorInstancia ObtenerEscritorInstancia(FileSystemHelper fileSystemHelper)
+        {
+            var escritor = new EscritorInstancia(fileSystemHelper);
+            return escritor;
         }
     }
 }
