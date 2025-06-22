@@ -34,6 +34,28 @@ namespace App.Tests.Commands.Generar
         }
 
         [Fact]
+        public void Crear_AtomosNoEspecificado_IndicaQueEsCampoRequerido()
+        {
+            var comandoGenerar = GenerarCommand.Crear();
+
+            ParseResult resultadoParseo = comandoGenerar.Parse("--agentes 3");
+
+            Assert.Single(resultadoParseo.Errors);
+            Assert.Contains(resultadoParseo.Errors, e => e.Message.Contains("--atomos"));
+        }
+
+        [Fact]
+        public void Crear_AgentesNoEspecificado_IndicaQueEsCampoRequerido()
+        {
+            var comandoGenerar = GenerarCommand.Crear();
+
+            ParseResult resultadoParseo = comandoGenerar.Parse("--atomos 5");
+
+            Assert.Single(resultadoParseo.Errors);
+            Assert.Contains(resultadoParseo.Errors, e => e.Message.Contains("--agentes"));
+        }
+
+        [Fact]
         public void Crear_ValorMaximoNoEspecificado_UsaValorPorDefecto()
         {
             var comandoGenerar = GenerarCommand.Crear();
