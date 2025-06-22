@@ -1,4 +1,5 @@
 using App.Commands.Resolver;
+using Solver.Individuos;
 
 namespace App.Tests.Commands.Resolver
 {
@@ -15,28 +16,28 @@ namespace App.Tests.Commands.Resolver
         public void Parse_ValorIntercambio_DevuelveTipoIndividuoIntercambio()
         {
             TipoIndividuo resultado = TipoIndividuoHelper.Parse("intercambio");
-            Assert.Equal(TipoIndividuo.Intercambio, resultado);
+            Assert.Equal(TipoIndividuo.IntercambioAsignaciones, resultado);
         }
 
         [Fact]
         public void Parse_ValorOptimizacion_DevuelveTipoIndividuoOptimizacion()
         {
             TipoIndividuo resultado = TipoIndividuoHelper.Parse("optimizacion");
-            Assert.Equal(TipoIndividuo.Optimizacion, resultado);
+            Assert.Equal(TipoIndividuo.OptimizacionAsignaciones, resultado);
         }
 
         [Fact]
         public void Parse_ValorMayusculas_DevuelveCorrespondienteTipoIndividuo()
         {
             TipoIndividuo resultado = TipoIndividuoHelper.Parse("INTERCAMBIO");
-            Assert.Equal(TipoIndividuo.Intercambio, resultado);
+            Assert.Equal(TipoIndividuo.IntercambioAsignaciones, resultado);
         }
 
         [Fact]
         public void Parse_ValorMixtoMayusculasMinusculas_DevuelveCorrespondienteTipoIndividuo()
         {
             TipoIndividuo resultado = TipoIndividuoHelper.Parse("OptimizaCION");
-            Assert.Equal(TipoIndividuo.Optimizacion, resultado);
+            Assert.Equal(TipoIndividuo.OptimizacionAsignaciones, resultado);
         }
 
         [Theory]
