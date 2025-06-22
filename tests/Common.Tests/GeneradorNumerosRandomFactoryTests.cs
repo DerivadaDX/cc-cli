@@ -20,32 +20,32 @@
         public void Crear_ConSemillaSinGeneradorSeteador_DevuelveNuevaInstanciaConSemilla()
         {
             int semilla = 456;
-            var generador = GeneradorNumerosRandomFactory.Crear(semilla);
+            var generador1 = GeneradorNumerosRandomFactory.Crear(semilla);
             var generador2 = GeneradorNumerosRandomFactory.Crear(semilla);
 
-            Assert.Equal(generador.Siguiente(), generador2.Siguiente());
+            Assert.Equal(generador1.Siguiente(), generador2.Siguiente());
         }
 
         [Fact]
         public void Crear_ConSemillaConGeneradorSeteador_DevuelveGeneradorSeteado()
         {
-            var generadorMock = new GeneradorNumerosRandom(123);
-            GeneradorNumerosRandomFactory.SetearGenerador(generadorMock);
+            var generadorSeteado = new GeneradorNumerosRandom(123);
+            GeneradorNumerosRandomFactory.SetearGenerador(generadorSeteado);
 
-            var generador = GeneradorNumerosRandomFactory.Crear(456);
+            var generadorObtenido = GeneradorNumerosRandomFactory.Crear(456);
 
-            Assert.Same(generadorMock, generador);
+            Assert.Same(generadorSeteado, generadorObtenido);
         }
 
         [Fact]
         public void SetearGenerador_Generador_SeSeteaCorrectamente()
         {
-            var generadorMock = new GeneradorNumerosRandom(123);
-            GeneradorNumerosRandomFactory.SetearGenerador(generadorMock);
+            var generadorSeteado = new GeneradorNumerosRandom(123);
+            GeneradorNumerosRandomFactory.SetearGenerador(generadorSeteado);
 
-            var generador = GeneradorNumerosRandomFactory.Crear();
+            var generadorObtenido = GeneradorNumerosRandomFactory.Crear();
 
-            Assert.Same(generadorMock, generador);
+            Assert.Same(generadorSeteado, generadorObtenido);
         }
     }
 }
