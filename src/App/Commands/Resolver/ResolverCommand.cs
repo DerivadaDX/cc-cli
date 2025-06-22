@@ -42,7 +42,14 @@ namespace App.Commands.Resolver
             command.SetHandler((rutaInstancia, limiteGeneraciones, cantidadIndividuos, limiteEstancamiento, tipoIndividuoStr) =>
             {
                 var tipoIndividuo = TipoIndividuoHelper.Parse(tipoIndividuoStr);
-                var parametros = new ParametrosSolucion(rutaInstancia, limiteGeneraciones, cantidadIndividuos, limiteEstancamiento, tipoIndividuo);
+                var parametros = new ParametrosSolucion
+                {
+                    RutaInstancia = rutaInstancia,
+                    LimiteGeneraciones = limiteGeneraciones,
+                    CantidadIndividuos = cantidadIndividuos,
+                    LimiteEstancamiento = limiteEstancamiento,
+                    TipoIndividuo = tipoIndividuo,
+                };
 
                 var fileSystemHelper = FileSystemHelperFactory.Crear();
                 var lector = new LectorArchivoMatrizValoraciones(fileSystemHelper);
