@@ -89,9 +89,8 @@ namespace Generator
             }
 
             var instancia = new decimal[_cantidadAtomos, _cantidadAgentes];
-
-            List<int> atomosDisponibles = Enumerable.Range(0, _cantidadAtomos).ToList();
-            List<int> agentesDisponibles = Enumerable.Range(0, _cantidadAgentes).ToList();
+            var atomosDisponibles = Enumerable.Range(0, _cantidadAtomos).ToList<int>();
+            var agentesDisponibles = Enumerable.Range(0, _cantidadAgentes).ToList<int>();
 
             while (agentesDisponibles.Count > 0)
             {
