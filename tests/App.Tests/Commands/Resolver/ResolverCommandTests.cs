@@ -75,7 +75,7 @@ namespace App.Tests.Commands.Resolver
                 LimiteGeneraciones = 1,
                 CantidadIndividuos = 2,
                 LimiteEstancamiento = 3,
-                TipoIndividuo = TipoIndividuo.IntercambioAsignaciones,
+                TipoIndividuos = TipoIndividuo.IntercambioAsignaciones,
             };
             ResolverCommand.EjecutarResolucion(parametros, lector, Substitute.For<Presentador>(Substitute.For<ConsoleProxy>()));
 

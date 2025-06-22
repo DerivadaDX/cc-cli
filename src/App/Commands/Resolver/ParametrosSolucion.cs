@@ -8,6 +8,6 @@ namespace App.Commands.Resolver
         internal int LimiteGeneraciones { get; set; }
         internal int CantidadIndividuos { get; set; }
         internal int LimiteEstancamiento { get; set; }
-        internal TipoIndividuo TipoIndividuo { get; set; }
+        internal TipoIndividuo TipoIndividuos { get; set; }
     }
 }

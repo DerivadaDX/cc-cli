@@ -39,16 +39,16 @@ namespace App.Commands.Resolver
             command.AddOption(limiteEstancamientoOption);
             command.AddOption(tipoIndividuoOption);
 
-            command.SetHandler((rutaInstancia, limiteGeneraciones, cantidadIndividuos, limiteEstancamiento, tipoIndividuoStr) =>
+            command.SetHandler((rutaInstancia, limiteGeneraciones, cantidadIndividuos, limiteEstancamiento, tipoIndividuo) =>
             {
-                var tipoIndividuo = TipoIndividuoHelper.Parse(tipoIndividuoStr);
+                var tipoIndividuos = TipoIndividuoHelper.Parse(tipoIndividuo);
                 var parametros = new ParametrosSolucion
                 {
                     RutaInstancia = rutaInstancia,
                     LimiteGeneraciones = limiteGeneraciones,
                     CantidadIndividuos = cantidadIndividuos,
                     LimiteEstancamiento = limiteEstancamiento,
-                    TipoIndividuo = tipoIndividuo,
+                    TipoIndividuos = tipoIndividuos,
                 };
 
                 var fileSystemHelper = FileSystemHelperFactory.Crear();
@@ -78,7 +78,7 @@ namespace App.Commands.Resolver
             {
                 decimal[,] matrizValoraciones = lector.Leer(parametros.RutaInstancia);
                 var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matrizValoraciones);
-                var poblacion = PoblacionFactory.Crear(parametros.CantidadIndividuos, instanciaProblema, parametros.TipoIndividuo);
+                var poblacion = PoblacionFactory.Crear(parametros.CantidadIndividuos, instanciaProblema, parametros.TipoIndividuos);
 
                 var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.LimiteGeneraciones, parametros.LimiteEstancamiento);
                 ConfigurarProgreso(parametros, algoritmoGenetico, presentador);
