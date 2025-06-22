@@ -13,8 +13,8 @@ namespace Solver.Individuos
 
             Individuo individuo = tipoIndividuo switch
             {
-                TipoIndividuo.Intercambio => new IndividuoIntercambioAsignaciones(cromosoma, problema),
-                TipoIndividuo.Optimizacion => new IndividuoOptimizacionAsignaciones(cromosoma, problema),
+                TipoIndividuo.IntercambioAsignaciones => new IndividuoIntercambioAsignaciones(cromosoma, problema),
+                TipoIndividuo.OptimizacionAsignaciones => new IndividuoOptimizacionAsignaciones(cromosoma, problema),
                 _ => throw new ArgumentException($"Tipo de individuo no soportado: {tipoIndividuo}", nameof(tipoIndividuo))
             };
 

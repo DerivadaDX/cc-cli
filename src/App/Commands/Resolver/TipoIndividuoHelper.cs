@@ -10,8 +10,8 @@ namespace App.Commands.Resolver
 
             TipoIndividuo tipo = valor.ToLower() switch
             {
-                "intercambio" => TipoIndividuo.Intercambio,
-                "optimizacion" => TipoIndividuo.Optimizacion,
+                "intercambio" => TipoIndividuo.IntercambioAsignaciones,
+                "optimizacion" => TipoIndividuo.OptimizacionAsignaciones,
                 _ => throw new ArgumentException($"Tipo de individuo '{valor}' no reconocido.", nameof(valor)),
             };
 
