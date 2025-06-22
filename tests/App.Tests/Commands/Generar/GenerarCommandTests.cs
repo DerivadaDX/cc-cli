@@ -15,11 +15,22 @@ namespace App.Tests.Commands.Generar
             var comandoGenerar = GenerarCommand.Crear();
 
             Assert.Equal("generar", comandoGenerar.Name);
+            Assert.Contains(comandoGenerar.Arguments, a => a.Name == "ruta-salida");
             Assert.Contains(comandoGenerar.Options, o => o.Name == "atomos");
             Assert.Contains(comandoGenerar.Options, o => o.Name == "agentes");
             Assert.Contains(comandoGenerar.Options, o => o.Name == "valor-maximo");
-            Assert.Contains(comandoGenerar.Options, o => o.Name == "output");
             Assert.Contains(comandoGenerar.Options, o => o.Name == "disjuntas");
+        }
+
+        [Fact]
+        public void Crear_RutaSalidaNoEspecificada_UsaValorPorDefecto()
+        {
+            var comandoGenerar = GenerarCommand.Crear();
+            var rutaSalidaArgument = (Argument<string>)comandoGenerar.Arguments.First(a => a.Name == "ruta-salida");
+
+            string rutaSalida = comandoGenerar.Parse("--atomos 5 --agentes 3").GetValueForArgument(rutaSalidaArgument);
+
+            Assert.Equal(GenerarCommand.RutaSalidaPorDefecto, rutaSalida);
         }
 
         [Fact]
@@ -28,20 +39,9 @@ namespace App.Tests.Commands.Generar
             var comandoGenerar = GenerarCommand.Crear();
             var valorMaximoOption = (Option<int>)comandoGenerar.Options.First(o => o.Name == "valor-maximo");
 
-            int valorMaximo = comandoGenerar.Parse("generar --atomos 5 --agentes 3").GetValueForOption(valorMaximoOption);
+            int valorMaximo = comandoGenerar.Parse("--atomos 5 --agentes 3").GetValueForOption(valorMaximoOption);
 
             Assert.Equal(GenerarCommand.ValorMaximoPorDefecto, valorMaximo);
-        }
-
-        [Fact]
-        public void Crear_OutputNoEspecificada_UsaValorPorDefecto()
-        {
-            var comandoGenerar = GenerarCommand.Crear();
-            var outputOption = (Option<string>)comandoGenerar.Options.First(o => o.Name == "output");
-
-            string output = comandoGenerar.Parse("generar --atomos 5 --agentes 3").GetValueForOption(outputOption);
-
-            Assert.Equal(GenerarCommand.RutaSalidaPorDefecto, output);
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace App.Tests.Commands.Generar
             var comandoGenerar = GenerarCommand.Crear();
             var disjuntasOption = (Option<bool>)comandoGenerar.Options.First(o => o.Name == "disjuntas");
 
-            bool disjuntas = comandoGenerar.Parse("generar --atomos 5 --agentes 3").GetValueForOption(disjuntasOption);
+            bool disjuntas = comandoGenerar.Parse("--atomos 5 --agentes 3").GetValueForOption(disjuntasOption);
 
             Assert.False(disjuntas);
         }
