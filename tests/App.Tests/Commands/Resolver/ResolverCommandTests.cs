@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using System.CommandLine.Parsing;
 using App.Commands.Resolver;
 using Common;
 using NSubstitute;
@@ -19,6 +20,16 @@ namespace App.Tests.Commands.Resolver
             Assert.Contains(comandoResolver.Options, o => o.Name == "cantidad-individuos");
             Assert.Contains(comandoResolver.Options, o => o.Name == "limite-estancamiento");
             Assert.Contains(comandoResolver.Options, o => o.Name == "tipo-individuo");
+        }
+
+        [Fact]
+        public void Crear_RutaInstanciaNoEspecificada_IndicaQueEsCampoRequerido()
+        {
+            var comandoResolver = ResolverCommand.Crear();
+
+            ParseResult resultadoParseo = comandoResolver.Parse("");
+
+            Assert.Single(resultadoParseo.Errors);
         }
 
         [Fact]
