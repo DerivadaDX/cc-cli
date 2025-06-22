@@ -90,16 +90,11 @@ En ese caso se muestra el mejor individuo encontrado hasta el momento.
 cc-cli.exe resolver [opciones]
 ```
 
-**Opciones principales**:
+**Argumentos y opciones**:
 
-| Opción        | Descripción                     | Valores aceptados   |
-| ------------- | ------------------------------- | ------------------- |
-| `--instancia` | Ruta de la instancia a resolver | Un path (requerido) |
-
-**Opciones secundarias**:
-
-| Opción                   | Descripón                                        | Valores aceptados                                       |
+| Argumento / Opción       | Descripón                                        | Valores aceptados                                       |
 | ------------------------ | ------------------------------------------------ | ------------------------------------------------------- |
+| `ruta-instancia`         | Ruta de la instancia a resolver                  | Un path (**requerido**)                                 |
 | `--limite-generaciones`  | Límite de generaciones a computar (0 = infinito) | Entero positivo (default: 0)                            |
 | `--cantidad-individuos`  | Cantidad de individuos por generación            | Entero positivo (default: 100)                          |
 | `--limite-estancamiento` | Límite de generaciones sin mejora (0 = infinito) | Entero positivo (default: 1000)                         |
@@ -108,23 +103,23 @@ cc-cli.exe resolver [opciones]
 **Ejemplos**:
 
 ```bash
-# Resolver una instancia (corre indefinidamente con tamaño de poblacion = 100)
-cc-cli.exe resolver --instancia instancia.dat
+# Resolver una instancia
+cc-cli.exe resolver instancia.dat
 
 # Especificando límite de generaciones
-cc-cli.exe resolver --instancia instancia.dat --limite-generaciones 1000
+cc-cli.exe resolver instancia.dat --limite-generaciones 1000
 
 # Especificando cantidad de individuos
-cc-cli.exe resolver --instancia instancia.dat --cantidad-individuos 500
+cc-cli.exe resolver instancia.dat --cantidad-individuos 500
 
 # Especificando límite de estancamiento
-cc-cli.exe resolver --instancia instancia.dat --limite-estancamiento 500
+cc-cli.exe resolver instancia.dat --limite-estancamiento 500
 
 # Especificando tipo de individuo
-cc-cli.exe resolver --instancia instancia.dat --tipo-individuo optimizacion
+cc-cli.exe resolver instancia.dat --tipo-individuo optimizacion
 
 # Ejemplo completo
-cc-cli.exe resolver --instancia instancia.dat --cantidad-individuos 500 --limite-generaciones 1000 --limite-estancamiento 500 --tipo-individuo intercambio
+cc-cli.exe resolver instancia.dat --limite-generaciones 1000 --cantidad-individuos 500 --limite-estancamiento 500 --tipo-individuo intercambio
 ```
 
 #### 3. Otros comandos
