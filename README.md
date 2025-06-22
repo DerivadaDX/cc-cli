@@ -24,7 +24,7 @@ decir, que ningún jugador prefiera la porción de otro en vez de la suya.
 ### Uso básico
 
 ```bash
-cc-cli.exe [comando] [opciones]
+cc-cli.exe [comando] [argumentos] [opciones]
 ```
 
 ### Comandos disponibles
@@ -45,23 +45,18 @@ El archivo de salida se sobrescribe sin confirmación.
 **Sintaxis**:
 
 ```bash
-cc-cli.exe generar [opciones]
+cc-cli.exe generar [ruta-salida] [opciones]
 ```
 
-**Opciones principales**:
+**Argumentos y opciones**:
 
-| Opción      | Descripción         | Valores aceptados           |
-| ----------- | ------------------- | --------------------------- |
-| `--atomos`  | Cantidad de átomos  | Entero positivo (requerido) |
-| `--agentes` | Cantidad de agentes | Entero positivo (requerido) |
-
-**Opciones secundarias**:
-
-| Opción           | Descripción                              | Valores aceptados                  |
-| ---------------- | ---------------------------------------- | ---------------------------------- |
-| `--valor-maximo` | Valor máximo para cada valoración        | Entero positivo (default: 1000)    |
-| `--output`       | Ruta donde guardar la instancia generada | Un path (default: `instancia.dat`) |
-| `--disjuntas`    | Indica si las valoraciones son disjuntas |                                    |
+| Argumento / Opción | Descripción                              | Valores aceptados                  |
+| ------------------ | ---------------------------------------- | ---------------------------------- |
+| `ruta-salida`      | Ruta donde guardar la instancia generada | Un path (default: `instancia.dat`) |
+| `--atomos`         | Cantidad de átomos                       | Entero positivo (**requerido**)    |
+| `--agentes`        | Cantidad de agentes                      | Entero positivo (**requerido**)    |
+| `--valor-maximo`   | Valor máximo para cada valoración        | Entero positivo (default: 1000)    |
+| `--disjuntas`      | Indica si las valoraciones son disjuntas | (flag, opcional)                   |
 
 **Ejemplos**:
 
@@ -69,17 +64,17 @@ cc-cli.exe generar [opciones]
 # Instancia básica
 cc-cli.exe generar --atomos 10 --agentes 3
 
-# Con valoraciones disjuntas
-cc-cli.exe generar --atomos 15 --agentes 4 --disjuntas
+# Especificando archivo de salida
+cc-cli.exe generar output/instancia.txt --atomos 8 --agentes 2
 
 # Especificando valor máximo
 cc-cli.exe generar --atomos 8 --agentes 2 --valor-maximo 100
 
-# Especificando archivo de salida
-cc-cli.exe generar --atomos 8 --agentes 2 --output datos/instancia1.txt
+# Con valoraciones disjuntas
+cc-cli.exe generar --atomos 15 --agentes 4 --disjuntas
 
 # Ejemplo completo
-cc-cli.exe generar --atomos 5 --agentes 3 --disjuntas --valor-maximo 500 --output instancia.txt
+cc-cli.exe generar output/instancia.txt --atomos 5 --agentes 3 --valor-maximo 500 --disjuntas
 ```
 
 #### 2. Resolver instancias
@@ -95,16 +90,11 @@ En ese caso se muestra el mejor individuo encontrado hasta el momento.
 cc-cli.exe resolver [opciones]
 ```
 
-**Opciones principales**:
+**Argumentos y opciones**:
 
-| Opción        | Descripción                     | Valores aceptados   |
-| ------------- | ------------------------------- | ------------------- |
-| `--instancia` | Ruta de la instancia a resolver | Un path (requerido) |
-
-**Opciones secundarias**:
-
-| Opción                   | Descripón                                        | Valores aceptados                                       |
+| Argumento / Opción       | Descripción                                      | Valores aceptados                                       |
 | ------------------------ | ------------------------------------------------ | ------------------------------------------------------- |
+| `ruta-instancia`         | Ruta de la instancia a resolver                  | Un path (**requerido**)                                 |
 | `--limite-generaciones`  | Límite de generaciones a computar (0 = infinito) | Entero positivo (default: 0)                            |
 | `--cantidad-individuos`  | Cantidad de individuos por generación            | Entero positivo (default: 100)                          |
 | `--limite-estancamiento` | Límite de generaciones sin mejora (0 = infinito) | Entero positivo (default: 1000)                         |
@@ -113,23 +103,23 @@ cc-cli.exe resolver [opciones]
 **Ejemplos**:
 
 ```bash
-# Resolver una instancia (corre indefinidamente con tamaño de poblacion = 100)
-cc-cli.exe resolver --instancia instancia.dat
+# Resolver una instancia
+cc-cli.exe resolver instancia.dat
 
 # Especificando límite de generaciones
-cc-cli.exe resolver --instancia instancia.dat --limite-generaciones 1000
+cc-cli.exe resolver instancia.dat --limite-generaciones 1000
 
 # Especificando cantidad de individuos
-cc-cli.exe resolver --instancia instancia.dat --cantidad-individuos 500
+cc-cli.exe resolver instancia.dat --cantidad-individuos 500
 
 # Especificando límite de estancamiento
-cc-cli.exe resolver --instancia instancia.dat --limite-estancamiento 500
+cc-cli.exe resolver instancia.dat --limite-estancamiento 500
 
 # Especificando tipo de individuo
-cc-cli.exe resolver --instancia instancia.dat --tipo-individuo optimizacion
+cc-cli.exe resolver instancia.dat --tipo-individuo optimizacion
 
 # Ejemplo completo
-cc-cli.exe resolver --instancia instancia.dat --cantidad-individuos 500 --limite-generaciones 1000 --limite-estancamiento 500 --tipo-individuo intercambio
+cc-cli.exe resolver instancia.dat --limite-generaciones 1000 --cantidad-individuos 500 --limite-estancamiento 500 --tipo-individuo intercambio
 ```
 
 #### 3. Otros comandos

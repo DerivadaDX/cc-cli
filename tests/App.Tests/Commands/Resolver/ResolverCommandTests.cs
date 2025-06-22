@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using System.CommandLine.Parsing;
 using App.Commands.Resolver;
 using Common;
 using NSubstitute;
@@ -14,11 +15,21 @@ namespace App.Tests.Commands.Resolver
             var comandoResolver = ResolverCommand.Crear();
 
             Assert.Equal("resolver", comandoResolver.Name);
-            Assert.Contains(comandoResolver.Options, o => o.Name == "instancia");
+            Assert.Contains(comandoResolver.Arguments, a => a.Name == "ruta-instancia");
             Assert.Contains(comandoResolver.Options, o => o.Name == "limite-generaciones");
             Assert.Contains(comandoResolver.Options, o => o.Name == "cantidad-individuos");
             Assert.Contains(comandoResolver.Options, o => o.Name == "limite-estancamiento");
             Assert.Contains(comandoResolver.Options, o => o.Name == "tipo-individuo");
+        }
+
+        [Fact]
+        public void Crear_RutaInstanciaNoEspecificada_IndicaQueEsCampoRequerido()
+        {
+            var comandoResolver = ResolverCommand.Crear();
+
+            ParseResult resultadoParseo = comandoResolver.Parse("");
+
+            Assert.Single(resultadoParseo.Errors);
         }
 
         [Fact]
@@ -27,9 +38,7 @@ namespace App.Tests.Commands.Resolver
             var comandoResolver = ResolverCommand.Crear();
             var limiteGeneracionesOption = (Option<int>)comandoResolver.Options.First(o => o.Name == "limite-generaciones");
 
-            int limiteGeneraciones = comandoResolver
-                .Parse("resolver --instancia instancia.dat")
-                .GetValueForOption(limiteGeneracionesOption);
+            int limiteGeneraciones = comandoResolver.Parse("instancia.dat").GetValueForOption(limiteGeneracionesOption);
 
             Assert.Equal(0, limiteGeneraciones);
         }
@@ -40,9 +49,7 @@ namespace App.Tests.Commands.Resolver
             var comandoResolver = ResolverCommand.Crear();
             var cantidadIndividuosOption = (Option<int>)comandoResolver.Options.First(o => o.Name == "cantidad-individuos");
 
-            int cantidadIndividuos = comandoResolver
-                .Parse("resolver --instancia instancia.dat")
-                .GetValueForOption(cantidadIndividuosOption);
+            int cantidadIndividuos = comandoResolver.Parse("instancia.dat").GetValueForOption(cantidadIndividuosOption);
 
             Assert.Equal(100, cantidadIndividuos);
         }
@@ -53,9 +60,7 @@ namespace App.Tests.Commands.Resolver
             var comandoResolver = ResolverCommand.Crear();
             var limiteEstancamientoOption = (Option<int>)comandoResolver.Options.First(o => o.Name == "limite-estancamiento");
 
-            int limiteEstancamiento = comandoResolver
-                .Parse("resolver --instancia instancia.dat")
-                .GetValueForOption(limiteEstancamientoOption);
+            int limiteEstancamiento = comandoResolver.Parse("instancia.dat").GetValueForOption(limiteEstancamientoOption);
 
             Assert.Equal(1000, limiteEstancamiento);
         }
@@ -66,9 +71,7 @@ namespace App.Tests.Commands.Resolver
             var comandoResolver = ResolverCommand.Crear();
             var tipoIndividuoOption = (Option<string>)comandoResolver.Options.First(o => o.Name == "tipo-individuo");
 
-            string tipoIndividuo = comandoResolver
-                .Parse("resolver --instancia instancia.dat")
-                .GetValueForOption(tipoIndividuoOption);
+            string tipoIndividuo = comandoResolver.Parse("instancia.dat").GetValueForOption(tipoIndividuoOption);
 
             Assert.Equal("intercambio", tipoIndividuo);
         }

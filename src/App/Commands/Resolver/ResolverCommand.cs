@@ -11,10 +11,10 @@ namespace App.Commands.Resolver
         internal static Command Crear()
         {
             var command = new Command("resolver", "Resuelve una instancia");
-            var instanciaOption = new Option<string>("--instancia")
+
+            var rutaInstanciaArgument = new Argument<string>("ruta-instancia")
             {
                 Description = "Ruta de la instancia a resolver",
-                IsRequired = true,
             };
             var limiteGeneracionesOption = new Option<int>("--limite-generaciones", () => 0)
             {
@@ -33,7 +33,7 @@ namespace App.Commands.Resolver
                 Description = "Tipo de individuo a utilizar (intercambio|optimizacion)",
             };
 
-            command.AddOption(instanciaOption);
+            command.AddArgument(rutaInstanciaArgument);
             command.AddOption(limiteGeneracionesOption);
             command.AddOption(cantidadIndividuosOption);
             command.AddOption(limiteEstancamientoOption);
@@ -63,7 +63,7 @@ namespace App.Commands.Resolver
                 Console.WriteLine("Presioná una tecla para salir...");
                 Console.ReadKey();
 #endif
-            }, instanciaOption, limiteGeneracionesOption, cantidadIndividuosOption, limiteEstancamientoOption, tipoIndividuoOption);
+            }, rutaInstanciaArgument, limiteGeneracionesOption, cantidadIndividuosOption, limiteEstancamientoOption, tipoIndividuoOption);
 
             return command;
         }

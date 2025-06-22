@@ -13,6 +13,10 @@ namespace App.Commands.Generar
         {
             var command = new Command("generar", "Genera una nueva instancia");
 
+            var rutaSalidaArgument = new Argument<string>("ruta-salida", () => RutaSalidaPorDefecto)
+            {
+                Description = "Ruta donde guardar la instancia generada",
+            };
             var atomosOption = new Option<int>("--atomos")
             {
                 Description = "Cantidad de átomos",
@@ -27,29 +31,25 @@ namespace App.Commands.Generar
             {
                 Description = "Valor máximo para cada valoración",
             };
-            var outputOption = new Option<string>("--output", () => RutaSalidaPorDefecto)
-            {
-                Description = "Ruta donde guardar la instancia generada",
-            };
             var disjuntasOption = new Option<bool>("--disjuntas")
             {
                 Description = "Indica si las valoraciones son disjuntas",
             };
 
+            command.AddArgument(rutaSalidaArgument);
             command.AddOption(atomosOption);
             command.AddOption(agentesOption);
             command.AddOption(valorMaximoOption);
-            command.AddOption(outputOption);
             command.AddOption(disjuntasOption);
 
-            command.SetHandler((atomos, agentes, valorMaximo, output, disjuntas) =>
+            command.SetHandler((rutaSalida, atomos, agentes, valorMaximo, disjuntas) =>
             {
                 var parametros = new ParametrosGeneracion
                 {
+                    RutaSalida = rutaSalida,
                     Atomos = atomos,
                     Agentes = agentes,
                     ValorMaximo = valorMaximo,
-                    RutaSalida = output,
                     ValoracionesDisjuntas = disjuntas,
                 };
 
@@ -63,7 +63,7 @@ namespace App.Commands.Generar
                 var presentador = new Presentador(consola);
 
                 EjecutarGeneracion(parametros, builder, escritor, presentador);
-            }, atomosOption, agentesOption, valorMaximoOption, outputOption, disjuntasOption);
+            }, rutaSalidaArgument, atomosOption, agentesOption, valorMaximoOption, disjuntasOption);
 
             return command;
         }
