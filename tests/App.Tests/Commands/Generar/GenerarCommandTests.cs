@@ -27,6 +27,7 @@ namespace App.Tests.Commands.Generar
         {
             var comandoGenerar = GenerarCommand.Crear();
             var valorMaximoOption = (Option<int>)comandoGenerar.Options.First(o => o.Name == "valor-maximo");
+
             int valorMaximo = comandoGenerar.Parse("generar --atomos 5 --agentes 3").GetValueForOption(valorMaximoOption);
 
             Assert.Equal(GenerarCommand.ValorMaximoPorDefecto, valorMaximo);
@@ -37,6 +38,7 @@ namespace App.Tests.Commands.Generar
         {
             var comandoGenerar = GenerarCommand.Crear();
             var outputOption = (Option<string>)comandoGenerar.Options.First(o => o.Name == "output");
+
             string output = comandoGenerar.Parse("generar --atomos 5 --agentes 3").GetValueForOption(outputOption);
 
             Assert.Equal(GenerarCommand.RutaSalidaPorDefecto, output);
@@ -47,6 +49,7 @@ namespace App.Tests.Commands.Generar
         {
             var comandoGenerar = GenerarCommand.Crear();
             var disjuntasOption = (Option<bool>)comandoGenerar.Options.First(o => o.Name == "disjuntas");
+
             bool disjuntas = comandoGenerar.Parse("generar --atomos 5 --agentes 3").GetValueForOption(disjuntasOption);
 
             Assert.False(disjuntas);
