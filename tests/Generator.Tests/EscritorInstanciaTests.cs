@@ -65,12 +65,12 @@ namespace Generator.Tests
         public void EscribirInstancia_DirectorioNoExistente_LoCrea()
         {
             var fileSystemHelper = Substitute.For<FileSystemHelper>();
-            fileSystemHelper.DirectoryExists("directorio\\salida").Returns(false);
+            fileSystemHelper.DirectoryExists("directorio").Returns(false);
 
             EscritorInstancia escritorInstancia = ObtenerEscritorInstancia(fileSystemHelper);
-            escritorInstancia.EscribirInstancia(_instancia, RutaArchivo);
+            escritorInstancia.EscribirInstancia(_instancia, "directorio/instancia.dat");
 
-            fileSystemHelper.Received(1).CreateDirectory("directorio\\salida");
+            fileSystemHelper.Received(1).CreateDirectory("directorio");
         }
 
         [Fact]
