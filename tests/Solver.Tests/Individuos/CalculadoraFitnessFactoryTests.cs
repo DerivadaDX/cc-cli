@@ -22,12 +22,12 @@ namespace Solver.Tests.Individuos
         [Fact]
         public void SetearCalculadora_Calculadora_SeSeteaCorrectamente()
         {
-            var calculadora1 = new CalculadoraFitness();
-            CalculadoraFitnessFactory.SetearCalculadora(calculadora1);
+            var calculadoraSeteada = new CalculadoraFitness();
+            CalculadoraFitnessFactory.SetearCalculadora(calculadoraSeteada);
 
-            var calculadora2 = CalculadoraFitnessFactory.Crear();
+            var calculadoraObtenida = CalculadoraFitnessFactory.Crear();
 
-            Assert.Same(calculadora1, calculadora2);
+            Assert.Same(calculadoraSeteada, calculadoraObtenida);
         }
     }
 }
