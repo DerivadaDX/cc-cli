@@ -44,7 +44,14 @@ namespace App.Commands.Generar
 
             command.SetHandler((atomos, agentes, valorMaximo, output, disjuntas) =>
             {
-                var parametros = new ParametrosGeneracion(atomos, agentes, valorMaximo, output, disjuntas);
+                var parametros = new ParametrosGeneracion
+                {
+                    Atomos = atomos,
+                    Agentes = agentes,
+                    ValorMaximo = valorMaximo,
+                    RutaSalida = output,
+                    ValoracionesDisjuntas = disjuntas,
+                };
 
                 var generadorNumerosRandom = GeneradorNumerosRandomFactory.Crear();
                 var builder = new InstanciaBuilder(generadorNumerosRandom);

@@ -66,15 +66,16 @@ namespace App.Tests.Commands.Generar
             builder.ConValoracionesDisjuntas(Arg.Any<bool>()).Returns(builder);
             builder.Build().Returns(instanciaMock);
 
+            var parametros = new ParametrosGeneracion
+            {
+                Atomos = 5,
+                Agentes = 3,
+                ValorMaximo = 100,
+                RutaSalida = "instancia.dat",
+                ValoracionesDisjuntas = true,
+            };
             var escritor = Substitute.For<EscritorInstancia>(Substitute.For<FileSystemHelper>());
             var presentador = Substitute.For<Presentador>(Substitute.For<ConsoleProxy>());
-
-            var parametros = new ParametrosGeneracion(
-                atomos: 5,
-                agentes: 3,
-                valorMaximo: 100,
-                rutaSalida: "instancia.dat",
-                valoracionesDisjuntas: true);
 
             GenerarCommand.EjecutarGeneracion(parametros, builder, escritor, presentador);
 
