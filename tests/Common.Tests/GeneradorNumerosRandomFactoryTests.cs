@@ -20,10 +20,10 @@
         public void Crear_ConSemillaSinGeneradorSeteador_DevuelveNuevaInstanciaConSemilla()
         {
             int semilla = 456;
-            var generador = GeneradorNumerosRandomFactory.Crear(semilla);
+            var generador1 = GeneradorNumerosRandomFactory.Crear(semilla);
             var generador2 = GeneradorNumerosRandomFactory.Crear(semilla);
 
-            Assert.Equal(generador.Siguiente(), generador2.Siguiente());
+            Assert.Equal(generador1.Siguiente(), generador2.Siguiente());
         }
 
         [Fact]
