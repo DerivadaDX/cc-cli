@@ -173,12 +173,11 @@ namespace App.Tests.Commands.Generar
                 ValoracionesDisjuntas = true,
             };
             var escritor = Substitute.For<EscritorInstancia>(Substitute.For<FileSystemHelper>());
-            var consola = Substitute.For<ConsoleProxy>();
-            var presentador = new Presentador(consola);
+            var presentador = Substitute.For<Presentador>(Substitute.For<ConsoleProxy>());
 
             GenerarCommand.EjecutarGeneracion(parametros, builder, escritor, presentador);
 
-            consola.Received(1).WriteLine("Instancia generada y guardada en 'instancia.dat'.");
+            presentador.Received(1).MostrarExito("Instancia generada y guardada en 'instancia.dat'.");
         }
 
         [Fact]
@@ -200,12 +199,11 @@ namespace App.Tests.Commands.Generar
                 ValoracionesDisjuntas = true,
             };
             var escritor = Substitute.For<EscritorInstancia>(Substitute.For<FileSystemHelper>());
-            var consola = Substitute.For<ConsoleProxy>();
-            var presentador = new Presentador(consola);
+            var presentador = Substitute.For<Presentador>(Substitute.For<ConsoleProxy>());
 
             GenerarCommand.EjecutarGeneracion(parametros, builder, escritor, presentador);
 
-            consola.Received(1).WriteLine("Error al generar la instancia: Error de generación");
+            presentador.Received(1).MostrarError("Error al generar la instancia: Error de generación");
         }
     }
 }
