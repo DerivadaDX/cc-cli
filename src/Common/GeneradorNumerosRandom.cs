@@ -2,6 +2,8 @@
 {
     public class GeneradorNumerosRandom
     {
+        private static int? _seed;
+
         private readonly Random _random;
 
         internal GeneradorNumerosRandom()
@@ -15,6 +17,24 @@
                 throw new ArgumentOutOfRangeException(nameof(seed), $"La semilla no puede ser negativa (valor: {seed})");
 
             _random = new Random(seed);
+        }
+
+#if DEBUG
+        public static void SetearSeed(int seed)
+        {
+            if (seed < 0)
+                throw new ArgumentOutOfRangeException(nameof(seed), $"La semilla no puede ser negativa (valor: {seed})");
+            _seed = seed;
+        }
+#endif
+
+        public static int GenerarSeed()
+        {
+            if (_seed.HasValue)
+                return _seed.Value;
+
+            int seed = Environment.TickCount;
+            return seed;
         }
 
         public virtual int Siguiente()

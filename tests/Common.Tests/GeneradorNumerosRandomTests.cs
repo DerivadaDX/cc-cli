@@ -11,6 +11,34 @@
         }
 
         [Fact]
+        public void SetearSeed_SemillaNegativa_LanzaArgumentOutOfRangeException()
+        {
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => GeneradorNumerosRandom.SetearSeed(-1));
+            Assert.Contains("no puede ser negativa", ex.Message);
+            Assert.Equal("seed", ex.ParamName);
+        }
+
+        [Fact]
+        public void GenerarSeed_SinSetearSeed_DevuelveValorNoNegativo()
+        {
+            int seed = GeneradorNumerosRandom.GenerarSeed();
+            Assert.True(seed >= 0);
+        }
+
+        [Fact]
+        public void GenerarSeed_ConSeedSeteada_DevuelveMismoValor()
+        {
+            int seedCustom = 123;
+            GeneradorNumerosRandom.SetearSeed(seedCustom);
+
+            int seed1 = GeneradorNumerosRandom.GenerarSeed();
+            int seed2 = GeneradorNumerosRandom.GenerarSeed();
+
+            Assert.Equal(seedCustom, seed1);
+            Assert.Equal(seedCustom, seed2);
+        }
+
+        [Fact]
         public void Siguiente_ConSemillaFija_DevuelveMismosNumeros()
         {
             var generador1 = new GeneradorNumerosRandom(123);
