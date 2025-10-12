@@ -32,7 +32,7 @@ namespace App.Commands.Resolver
             {
                 Description = "Tipo de individuo a utilizar (intercambio|optimizacion)",
             };
-            var seedOption = new Option<long>("--seed", () => 0)
+            var seedOption = new Option<int>("--seed", () => 0)
             {
                 Description = "Semilla para la generación de números aleatorios",
             };
@@ -170,12 +170,7 @@ namespace App.Commands.Resolver
             };
         }
 
-        private static void MostrarResultado(
-            Individuo mejorIndividuo,
-            int generaciones,
-            long tiempoMs,
-            Presentador presentador
-        )
+        private static void MostrarResultado(Individuo mejorIndividuo, int generaciones, long tiempoMs, Presentador presentador)
         {
             presentador.MostrarExito($"Resultado encontrado después de {generaciones} generaciones.");
             presentador.MostrarExito($"Resultado obtenido: {mejorIndividuo}.");
