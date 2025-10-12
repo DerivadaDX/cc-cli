@@ -79,6 +79,8 @@ namespace App.Commands.Generar
         {
             try
             {
+                presentador.MostrarInfo($"Usando seed '{parametros.Seed}'");
+
                 decimal[,] instancia = builder
                     .ConCantidadDeAtomos(parametros.Atomos)
                     .ConCantidadDeAgentes(parametros.Agentes)

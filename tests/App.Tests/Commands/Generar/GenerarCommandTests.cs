@@ -124,7 +124,36 @@ namespace App.Tests.Commands.Generar
         }
 
         [Fact]
-        public void EjecutarGeneracion_GeneracionExitosa_MuestraMensajeDeExito()
+        public void EjecutarGeneracion_ValorDeSeed_SePresenta()
+        {
+            var instanciaConstruida = new decimal[1, 1];
+
+            var builder = Substitute.For<InstanciaBuilder>(Substitute.For<GeneradorNumerosRandom>(1));
+            builder.ConCantidadDeAtomos(Arg.Any<int>()).Returns(builder);
+            builder.ConCantidadDeAgentes(Arg.Any<int>()).Returns(builder);
+            builder.ConValorMaximo(Arg.Any<int>()).Returns(builder);
+            builder.ConValoracionesDisjuntas(Arg.Any<bool>()).Returns(builder);
+            builder.Build().Returns(instanciaConstruida);
+
+            var parametros = new ParametrosGeneracion
+            {
+                Atomos = 5,
+                Agentes = 3,
+                ValorMaximo = 100,
+                RutaSalida = "instancia.dat",
+                ValoracionesDisjuntas = true,
+                Seed = 123,
+            };
+            var escritor = Substitute.For<EscritorInstancia>(Substitute.For<FileSystemHelper>());
+            var presentador = Substitute.For<Presentador>(Substitute.For<ConsoleProxy>());
+
+            GenerarCommand.EjecutarGeneracion(parametros, builder, escritor, presentador);
+
+            presentador.Received(1).MostrarInfo("Usando seed '123'");
+        }
+
+        [Fact]
+        public void EjecutarGeneracion_GeneracionExitosa_PresentaMensajeDeExito()
         {
             var instanciaConstruida = new decimal[1, 1];
 
@@ -153,7 +182,7 @@ namespace App.Tests.Commands.Generar
         }
 
         [Fact]
-        public void EjecutarGeneracion_ErrorAlGenerar_MuestraMensajeDeError()
+        public void EjecutarGeneracion_ErrorAlGenerar_PresentaMensajeDeError()
         {
             var builder = Substitute.For<InstanciaBuilder>(Substitute.For<GeneradorNumerosRandom>(1));
             builder.ConCantidadDeAtomos(Arg.Any<int>()).Returns(builder);

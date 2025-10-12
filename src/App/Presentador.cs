@@ -11,7 +11,7 @@
             _consola = consola;
         }
 
-        internal void MostrarInfo(string mensaje)
+        internal virtual void MostrarInfo(string mensaje)
         {
             AgregarSaltoSiNecesario();
             MostrarMensajeConColor(mensaje, ConsoleColor.White);
