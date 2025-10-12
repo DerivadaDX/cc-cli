@@ -87,7 +87,7 @@ namespace App.Commands.Generar
                     .Build();
 
                 escritor.EscribirInstancia(instancia, parametros.RutaSalida);
-                presentador.MostrarExito($"Instancia generada correctamente en '{parametros.RutaSalida}'.");
+                presentador.MostrarExito($"Instancia generada y guardada en '{parametros.RutaSalida}'.");
             }
             catch (Exception ex)
             {

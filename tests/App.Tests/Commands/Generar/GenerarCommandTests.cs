@@ -121,5 +121,34 @@ namespace App.Tests.Commands.Generar
             builder.Received(1).Build();
             escritor.Received(1).EscribirInstancia(instanciaConstruida, "instancia.dat");
         }
+
+        [Fact]
+        public void EjecutarGeneracion_GeneracionExitosa_MuestraMensajeDeExito()
+        {
+            var instanciaConstruida = new decimal[1, 1];
+
+            var builder = Substitute.For<InstanciaBuilder>(Substitute.For<GeneradorNumerosRandom>(1));
+            builder.ConCantidadDeAtomos(Arg.Any<int>()).Returns(builder);
+            builder.ConCantidadDeAgentes(Arg.Any<int>()).Returns(builder);
+            builder.ConValorMaximo(Arg.Any<int>()).Returns(builder);
+            builder.ConValoracionesDisjuntas(Arg.Any<bool>()).Returns(builder);
+            builder.Build().Returns(instanciaConstruida);
+
+            var parametros = new ParametrosGeneracion
+            {
+                Atomos = 5,
+                Agentes = 3,
+                ValorMaximo = 100,
+                RutaSalida = "instancia.dat",
+                ValoracionesDisjuntas = true,
+            };
+            var escritor = Substitute.For<EscritorInstancia>(Substitute.For<FileSystemHelper>());
+            var consola = Substitute.For<ConsoleProxy>();
+            var presentador = new Presentador(consola);
+
+            GenerarCommand.EjecutarGeneracion(parametros, builder, escritor, presentador);
+
+            consola.Received(1).WriteLine("Instancia generada y guardada en 'instancia.dat'.");
+        }
     }
 }
