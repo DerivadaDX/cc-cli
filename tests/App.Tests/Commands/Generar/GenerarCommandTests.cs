@@ -20,6 +20,7 @@ namespace App.Tests.Commands.Generar
             Assert.Contains(comandoGenerar.Options, o => o.Name == "agentes");
             Assert.Contains(comandoGenerar.Options, o => o.Name == "valor-maximo");
             Assert.Contains(comandoGenerar.Options, o => o.Name == "disjuntas");
+            Assert.Contains(comandoGenerar.Options, o => o.Name == "seed");
         }
 
         [Fact]
@@ -78,6 +79,17 @@ namespace App.Tests.Commands.Generar
         }
 
         [Fact]
+        public void Crear_SemillaNoEspecificada_UsaNull()
+        {
+            var comandoGenerar = GenerarCommand.Crear();
+            var seedOption = (Option<int?>)comandoGenerar.Options.First(o => o.Name == "seed");
+
+            int? seed = comandoGenerar.Parse("--atomos 5 --agentes 3").GetValueForOption(seedOption);
+
+            Assert.Equal(null, seed);
+        }
+
+        [Fact]
         public void EjecutarGeneracion_ConParametrosValidos_GeneraYEscribeInstancia()
         {
             var instanciaConstruida = new decimal[1, 1];
@@ -111,4 +123,3 @@ namespace App.Tests.Commands.Generar
         }
     }
 }
-

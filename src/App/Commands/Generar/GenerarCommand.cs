@@ -24,12 +24,14 @@ namespace App.Commands.Generar
                 Description = "Valor máximo para cada valoración",
             };
             var disjuntasOption = new Option<bool>("--disjuntas") { Description = "Indica si las valoraciones son disjuntas" };
+            var seedOption = new Option<int?>("--seed") { Description = "Semilla para la generación de números aleatorios" };
 
             command.AddArgument(rutaSalidaArgument);
             command.AddOption(atomosOption);
             command.AddOption(agentesOption);
             command.AddOption(valorMaximoOption);
             command.AddOption(disjuntasOption);
+            command.AddOption(seedOption);
 
             command.SetHandler(
                 (rutaSalida, atomos, agentes, valorMaximo, disjuntas) =>
