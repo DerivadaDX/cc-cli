@@ -28,11 +28,7 @@ namespace Solver.Tests
             int tamaño = 3;
 
             var poblacion = new Poblacion(tamaño);
-            poblacion.Individuos.AddRange([
-                CrearIndividuoFake(),
-                CrearIndividuoFake(),
-                CrearIndividuoFake()
-            ]);
+            poblacion.Individuos.AddRange([CrearIndividuoFake(), CrearIndividuoFake(), CrearIndividuoFake()]);
 
             Poblacion nuevaGeneracion = poblacion.GenerarNuevaGeneracion();
             Assert.Equal(tamaño, nuevaGeneracion.Individuos.Count);
@@ -45,11 +41,7 @@ namespace Solver.Tests
 
             int tamaño = 3;
             var poblacion = new Poblacion(tamaño);
-            poblacion.Individuos.AddRange([
-                mejorIndividuo,
-                CrearIndividuoFake(fitness: 5),
-                CrearIndividuoFake(fitness: 15),
-            ]);
+            poblacion.Individuos.AddRange([mejorIndividuo, CrearIndividuoFake(fitness: 5), CrearIndividuoFake(fitness: 15)]);
 
             Poblacion nuevaGeneracion = poblacion.GenerarNuevaGeneracion();
 
@@ -59,9 +51,11 @@ namespace Solver.Tests
         [Fact]
         public void GenerarNuevaGeneracion_Padres_SonCruzados()
         {
-            int tamaño = 2, indicePadre1 = 0, indicePadre2 = 1;
+            int tamaño = 2,
+                indicePadre1 = 0,
+                indicePadre2 = 1;
 
-            var random = Substitute.For<GeneradorNumerosRandom>();
+            var random = Substitute.For<GeneradorNumerosRandom>(1);
             random.Siguiente(tamaño).Returns(indicePadre1, indicePadre2);
             GeneradorNumerosRandomFactory.SetearGenerador(random);
 
@@ -75,7 +69,7 @@ namespace Solver.Tests
         [Fact]
         public void GenerarNuevaGeneracion_Hijos_Mutan()
         {
-            var random = Substitute.For<GeneradorNumerosRandom>();
+            var random = Substitute.For<GeneradorNumerosRandom>(1);
             random.Siguiente(Arg.Any<int>()).Returns(0, 1);
             GeneradorNumerosRandomFactory.SetearGenerador(random);
 
@@ -96,11 +90,9 @@ namespace Solver.Tests
             int mejorFitness = 5;
 
             var poblacion = new Poblacion(tamaño: 3);
-            poblacion.Individuos.AddRange([
-                CrearIndividuoFake(fitness: 15),
-                CrearIndividuoFake(fitness: mejorFitness),
-                CrearIndividuoFake(fitness: 10),
-            ]);
+            poblacion.Individuos.AddRange(
+                [CrearIndividuoFake(fitness: 15), CrearIndividuoFake(fitness: mejorFitness), CrearIndividuoFake(fitness: 10)]
+            );
 
             Individuo mejorIndividuo = poblacion.ObtenerMejorIndividuo();
             Assert.Equal(mejorFitness, mejorIndividuo.Fitness());
@@ -109,12 +101,14 @@ namespace Solver.Tests
         private Individuo CrearIndividuoFake(int fitness = 0)
         {
             var cromosoma = new List<int> { 1, 1, 2 };
-            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
-            {
-                { 1m, 0m },
-                { 0m, 1m },
-                { 0m, 1m },
-            });
+            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
+                new decimal[,]
+                {
+                    { 1m, 0m },
+                    { 0m, 1m },
+                    { 0m, 1m },
+                }
+            );
 
             var individuo = Substitute.For<Individuo>(cromosoma, instanciaProblema);
             var otroIndividuo = Substitute.For<Individuo>(cromosoma, instanciaProblema);

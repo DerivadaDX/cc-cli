@@ -17,7 +17,7 @@ namespace Solver.Individuos
 
             Cromosoma = cromosoma;
             _problema = problema;
-            _random = GeneradorNumerosRandomFactory.Crear();
+            _random = GeneradorNumerosRandomFactory.Crear(0); // TODO: Cambiar
             _calculadoraFitness = CalculadoraFitnessFactory.Crear();
         }
 

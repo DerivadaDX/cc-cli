@@ -6,11 +6,6 @@
 
         private readonly Random _random;
 
-        internal GeneradorNumerosRandom()
-        {
-            _random = new Random();
-        }
-
         internal GeneradorNumerosRandom(int seed)
         {
             if (seed < 0)
@@ -20,6 +15,9 @@
         }
 
 #if DEBUG
+        /// <summary>
+        /// Solo usar para tests. Solamente está disponible en modo DEBUG.
+        /// </summary>
         public static void SetearSeed(int seed)
         {
             if (seed < 0)
@@ -35,11 +33,6 @@
 
             int seed = Environment.TickCount;
             return seed;
-        }
-
-        public virtual int Siguiente()
-        {
-            return _random.Next();
         }
 
         public virtual int Siguiente(int maximo)

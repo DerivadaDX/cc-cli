@@ -82,7 +82,7 @@ namespace App.Tests.Commands.Generar
         {
             var instanciaConstruida = new decimal[1, 1];
 
-            var builder = Substitute.For<InstanciaBuilder>(Substitute.For<GeneradorNumerosRandom>());
+            var builder = Substitute.For<InstanciaBuilder>(Substitute.For<GeneradorNumerosRandom>(1));
             builder.ConCantidadDeAtomos(Arg.Any<int>()).Returns(builder);
             builder.ConCantidadDeAgentes(Arg.Any<int>()).Returns(builder);
             builder.ConValorMaximo(Arg.Any<int>()).Returns(builder);
@@ -111,3 +111,4 @@ namespace App.Tests.Commands.Generar
         }
     }
 }
+

@@ -17,24 +17,13 @@ namespace App.Commands.Generar
             {
                 Description = "Ruta donde guardar la instancia generada",
             };
-            var atomosOption = new Option<int>("--atomos")
-            {
-                Description = "Cantidad de átomos",
-                IsRequired = true,
-            };
-            var agentesOption = new Option<int>("--agentes")
-            {
-                Description = "Cantidad de agentes",
-                IsRequired = true,
-            };
+            var atomosOption = new Option<int>("--atomos") { Description = "Cantidad de átomos", IsRequired = true };
+            var agentesOption = new Option<int>("--agentes") { Description = "Cantidad de agentes", IsRequired = true };
             var valorMaximoOption = new Option<int>("--valor-maximo", () => ValorMaximoPorDefecto)
             {
                 Description = "Valor máximo para cada valoración",
             };
-            var disjuntasOption = new Option<bool>("--disjuntas")
-            {
-                Description = "Indica si las valoraciones son disjuntas",
-            };
+            var disjuntasOption = new Option<bool>("--disjuntas") { Description = "Indica si las valoraciones son disjuntas" };
 
             command.AddArgument(rutaSalidaArgument);
             command.AddOption(atomosOption);
@@ -42,34 +31,45 @@ namespace App.Commands.Generar
             command.AddOption(valorMaximoOption);
             command.AddOption(disjuntasOption);
 
-            command.SetHandler((rutaSalida, atomos, agentes, valorMaximo, disjuntas) =>
-            {
-                var parametros = new ParametrosGeneracion
+            command.SetHandler(
+                (rutaSalida, atomos, agentes, valorMaximo, disjuntas) =>
                 {
-                    RutaSalida = rutaSalida,
-                    Atomos = atomos,
-                    Agentes = agentes,
-                    ValorMaximo = valorMaximo,
-                    ValoracionesDisjuntas = disjuntas,
-                };
+                    var parametros = new ParametrosGeneracion
+                    {
+                        RutaSalida = rutaSalida,
+                        Atomos = atomos,
+                        Agentes = agentes,
+                        ValorMaximo = valorMaximo,
+                        ValoracionesDisjuntas = disjuntas,
+                    };
 
-                var generadorNumerosRandom = GeneradorNumerosRandomFactory.Crear();
-                var builder = new InstanciaBuilder(generadorNumerosRandom);
+                    var generadorNumerosRandom = GeneradorNumerosRandomFactory.Crear(0); // TODO: Cambiar
+                    var builder = new InstanciaBuilder(generadorNumerosRandom);
 
-                var fileSystemHelper = FileSystemHelperFactory.Crear();
-                var escritor = new EscritorInstancia(fileSystemHelper);
+                    var fileSystemHelper = FileSystemHelperFactory.Crear();
+                    var escritor = new EscritorInstancia(fileSystemHelper);
 
-                var consola = ConsoleProxyFactory.Crear();
-                var presentador = new Presentador(consola);
+                    var consola = ConsoleProxyFactory.Crear();
+                    var presentador = new Presentador(consola);
 
-                EjecutarGeneracion(parametros, builder, escritor, presentador);
-            }, rutaSalidaArgument, atomosOption, agentesOption, valorMaximoOption, disjuntasOption);
+                    EjecutarGeneracion(parametros, builder, escritor, presentador);
+                },
+                rutaSalidaArgument,
+                atomosOption,
+                agentesOption,
+                valorMaximoOption,
+                disjuntasOption
+            );
 
             return command;
         }
 
         internal static void EjecutarGeneracion(
-            ParametrosGeneracion parametros, InstanciaBuilder builder, EscritorInstancia escritor, Presentador presentador)
+            ParametrosGeneracion parametros,
+            InstanciaBuilder builder,
+            EscritorInstancia escritor,
+            Presentador presentador
+        )
         {
             try
             {

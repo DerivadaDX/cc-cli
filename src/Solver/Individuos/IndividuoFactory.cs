@@ -8,14 +8,14 @@ namespace Solver.Individuos
         {
             ArgumentNullException.ThrowIfNull(problema, nameof(problema));
 
-            var random = GeneradorNumerosRandomFactory.Crear();
+            var random = GeneradorNumerosRandomFactory.Crear(0); // TODO: Cambiar
             List<int> cromosoma = GenerarCromosoma(problema, random);
 
             Individuo individuo = tipoIndividuo switch
             {
                 TipoIndividuo.IntercambioAsignaciones => new IndividuoIntercambioAsignaciones(cromosoma, problema),
                 TipoIndividuo.OptimizacionAsignaciones => new IndividuoOptimizacionAsignaciones(cromosoma, problema),
-                _ => throw new ArgumentException($"Tipo de individuo no soportado: {tipoIndividuo}", nameof(tipoIndividuo))
+                _ => throw new ArgumentException($"Tipo de individuo no soportado: {tipoIndividuo}", nameof(tipoIndividuo)),
             };
 
             return individuo;

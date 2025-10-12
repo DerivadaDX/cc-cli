@@ -16,7 +16,7 @@ namespace Solver
                 throw new ArgumentOutOfRangeException(nameof(tamaño), mensaje);
             }
 
-            _random = GeneradorNumerosRandomFactory.Crear();
+            _random = GeneradorNumerosRandomFactory.Crear(0); // TODO: Cambiar
             _tamaño = tamaño;
         }
 
