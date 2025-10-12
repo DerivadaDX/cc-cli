@@ -34,7 +34,7 @@ namespace App.Commands.Generar
             command.AddOption(seedOption);
 
             command.SetHandler(
-                (rutaSalida, atomos, agentes, valorMaximo, disjuntas) =>
+                (rutaSalida, atomos, agentes, valorMaximo, disjuntas, seed) =>
                 {
                     var parametros = new ParametrosGeneracion
                     {
@@ -45,7 +45,10 @@ namespace App.Commands.Generar
                         ValoracionesDisjuntas = disjuntas,
                     };
 
-                    var generadorNumerosRandom = GeneradorNumerosRandomFactory.Crear(0); // TODO: Cambiar
+                    if (!seed.HasValue)
+                        seed = GeneradorNumerosRandom.GenerarSeed();
+
+                    var generadorNumerosRandom = GeneradorNumerosRandomFactory.Crear(seed.Value);
                     var builder = new InstanciaBuilder(generadorNumerosRandom);
 
                     var fileSystemHelper = FileSystemHelperFactory.Crear();
@@ -60,7 +63,8 @@ namespace App.Commands.Generar
                 atomosOption,
                 agentesOption,
                 valorMaximoOption,
-                disjuntasOption
+                disjuntasOption,
+                seedOption
             );
 
             return command;
