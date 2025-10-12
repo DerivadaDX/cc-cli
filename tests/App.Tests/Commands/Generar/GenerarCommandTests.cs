@@ -4,6 +4,7 @@ using App.Commands.Generar;
 using Common;
 using Generator;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 
 namespace App.Tests.Commands.Generar
 {
@@ -149,6 +150,33 @@ namespace App.Tests.Commands.Generar
             GenerarCommand.EjecutarGeneracion(parametros, builder, escritor, presentador);
 
             consola.Received(1).WriteLine("Instancia generada y guardada en 'instancia.dat'.");
+        }
+
+        [Fact]
+        public void EjecutarGeneracion_ErrorAlGenerar_MuestraMensajeDeError()
+        {
+            var builder = Substitute.For<InstanciaBuilder>(Substitute.For<GeneradorNumerosRandom>(1));
+            builder.ConCantidadDeAtomos(Arg.Any<int>()).Returns(builder);
+            builder.ConCantidadDeAgentes(Arg.Any<int>()).Returns(builder);
+            builder.ConValorMaximo(Arg.Any<int>()).Returns(builder);
+            builder.ConValoracionesDisjuntas(Arg.Any<bool>()).Returns(builder);
+            builder.Build().Throws(new Exception("Error de generación"));
+
+            var parametros = new ParametrosGeneracion
+            {
+                Atomos = 5,
+                Agentes = 3,
+                ValorMaximo = 100,
+                RutaSalida = "instancia.dat",
+                ValoracionesDisjuntas = true,
+            };
+            var escritor = Substitute.For<EscritorInstancia>(Substitute.For<FileSystemHelper>());
+            var consola = Substitute.For<ConsoleProxy>();
+            var presentador = new Presentador(consola);
+
+            GenerarCommand.EjecutarGeneracion(parametros, builder, escritor, presentador);
+
+            consola.Received(1).WriteLine("Error al generar la instancia: Error de generación");
         }
     }
 }
