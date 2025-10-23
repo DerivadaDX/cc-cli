@@ -8,7 +8,6 @@ namespace Solver.Tests
     {
         public void Dispose()
         {
-            GeneradorNumerosRandomFactory.SetearGenerador(null);
             GC.SuppressFinalize(this);
         }
 
@@ -17,9 +16,17 @@ namespace Solver.Tests
         [InlineData(-1)]
         public void Constructor_TamañoInvalido_LanzaExcepcion(int tamaño)
         {
-            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => new Poblacion(tamaño));
+            var random = Substitute.For<GeneradorNumerosRandom>(1);
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => new Poblacion(tamaño, random));
             Assert.Contains("debe ser mayor a cero", ex.Message);
             Assert.Equal("tamaño", ex.ParamName);
+        }
+
+        [Fact]
+        public void Constructor_GeneradorRandomNull_LanzaExcepcion()
+        {
+            var ex = Assert.Throws<ArgumentNullException>(() => new Poblacion(3, null));
+            Assert.Equal("generadorRandom", ex.ParamName);
         }
 
         [Fact]
@@ -27,7 +34,7 @@ namespace Solver.Tests
         {
             int tamaño = 3;
 
-            var poblacion = new Poblacion(tamaño);
+            var poblacion = new Poblacion(tamaño, Substitute.For<GeneradorNumerosRandom>(1));
             poblacion.Individuos.AddRange([CrearIndividuoFake(), CrearIndividuoFake(), CrearIndividuoFake()]);
 
             Poblacion nuevaGeneracion = poblacion.GenerarNuevaGeneracion();
@@ -40,7 +47,7 @@ namespace Solver.Tests
             Individuo mejorIndividuo = CrearIndividuoFake(fitness: 1);
 
             int tamaño = 3;
-            var poblacion = new Poblacion(tamaño);
+            var poblacion = new Poblacion(tamaño, Substitute.For<GeneradorNumerosRandom>(1));
             poblacion.Individuos.AddRange([mejorIndividuo, CrearIndividuoFake(fitness: 5), CrearIndividuoFake(fitness: 15)]);
 
             Poblacion nuevaGeneracion = poblacion.GenerarNuevaGeneracion();
@@ -57,9 +64,8 @@ namespace Solver.Tests
 
             var random = Substitute.For<GeneradorNumerosRandom>(1);
             random.Siguiente(tamaño).Returns(indicePadre1, indicePadre2);
-            GeneradorNumerosRandomFactory.SetearGenerador(random);
 
-            var poblacion = new Poblacion(tamaño);
+            var poblacion = new Poblacion(tamaño, random);
             poblacion.Individuos.AddRange([CrearIndividuoFake(), CrearIndividuoFake()]);
             poblacion.GenerarNuevaGeneracion();
 
@@ -71,13 +77,12 @@ namespace Solver.Tests
         {
             var random = Substitute.For<GeneradorNumerosRandom>(1);
             random.Siguiente(Arg.Any<int>()).Returns(0, 1);
-            GeneradorNumerosRandomFactory.SetearGenerador(random);
 
             Individuo padre = CrearIndividuoFake(fitness: 5);
             Individuo hijoMock = CrearIndividuoFake(fitness: 3);
             padre.Cruzar(Arg.Any<Individuo>()).Returns(hijoMock);
 
-            var poblacion = new Poblacion(tamaño: 2);
+            var poblacion = new Poblacion(tamaño: 2, random);
             poblacion.Individuos.AddRange([padre, CrearIndividuoFake(fitness: 15)]);
             poblacion.GenerarNuevaGeneracion();
 
@@ -89,7 +94,7 @@ namespace Solver.Tests
         {
             int mejorFitness = 5;
 
-            var poblacion = new Poblacion(tamaño: 3);
+            var poblacion = new Poblacion(tamaño: 3, Substitute.For<GeneradorNumerosRandom>(1));
             poblacion.Individuos.AddRange(
                 [CrearIndividuoFake(fitness: 15), CrearIndividuoFake(fitness: mejorFitness), CrearIndividuoFake(fitness: 10)]
             );

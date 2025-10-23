@@ -8,7 +8,7 @@ namespace Solver
         private readonly GeneradorNumerosRandom _random;
         private readonly int _tamaño;
 
-        public Poblacion(int tamaño)
+        public Poblacion(int tamaño, GeneradorNumerosRandom generadorRandom)
         {
             if (tamaño <= 0)
             {
@@ -16,7 +16,9 @@ namespace Solver
                 throw new ArgumentOutOfRangeException(nameof(tamaño), mensaje);
             }
 
-            _random = GeneradorNumerosRandomFactory.Crear(0); // TODO: Cambiar
+            ArgumentNullException.ThrowIfNull(generadorRandom, nameof(generadorRandom));
+
+            _random = generadorRandom;
             _tamaño = tamaño;
         }
 
@@ -24,7 +26,7 @@ namespace Solver
 
         internal virtual Poblacion GenerarNuevaGeneracion()
         {
-            var nuevaGeneracion = new Poblacion(_tamaño);
+            var nuevaGeneracion = new Poblacion(_tamaño, _random);
 
             List<Individuo> elite = SeleccionarElite();
             nuevaGeneracion.Individuos.AddRange(elite);

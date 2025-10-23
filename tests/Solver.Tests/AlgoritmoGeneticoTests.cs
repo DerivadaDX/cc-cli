@@ -1,3 +1,4 @@
+using Common;
 using NSubstitute;
 using Solver.Individuos;
 
@@ -15,7 +16,8 @@ namespace Solver.Tests
         [Fact]
         public void Constructor_LimiteGeneracionesNegativo_LanzaArgumentOutOfRangeException()
         {
-            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => new AlgoritmoGenetico(new Poblacion(1), -1, 0));
+            var random = Substitute.For<GeneradorNumerosRandom>(1);
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => new AlgoritmoGenetico(new Poblacion(1, random), -1, 0));
             Assert.Contains("no puede ser negativo", ex.Message);
             Assert.Equal("limiteGeneraciones", ex.ParamName);
         }
@@ -23,7 +25,8 @@ namespace Solver.Tests
         [Fact]
         public void Constructor_LimiteGeneracionesSinMejoraNegativo_LanzaArgumentOutOfRangeException()
         {
-            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => new AlgoritmoGenetico(new Poblacion(1), 1, -1));
+            var random = Substitute.For<GeneradorNumerosRandom>(1);
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => new AlgoritmoGenetico(new Poblacion(1, random), 1, -1));
             Assert.Contains("no puede ser negativo", ex.Message);
             Assert.Equal("limiteGeneracionesSinMejora", ex.ParamName);
         }
@@ -200,7 +203,7 @@ namespace Solver.Tests
             Individuo individuo = CrearIndividuoFake();
             individuo.Fitness().Returns(1);
 
-            var poblacion = Substitute.For<Poblacion>(1);
+            var poblacion = Substitute.For<Poblacion>(1, Substitute.For<GeneradorNumerosRandom>(1));
             poblacion.ObtenerMejorIndividuo().Returns(individuo);
 
             return (poblacion, individuo);
@@ -211,7 +214,7 @@ namespace Solver.Tests
             Individuo individuo = CrearIndividuoFake();
             individuo.Fitness().Returns(0);
 
-            var poblacion = Substitute.For<Poblacion>(1);
+            var poblacion = Substitute.For<Poblacion>(1, Substitute.For<GeneradorNumerosRandom>(1));
             poblacion.ObtenerMejorIndividuo().Returns(individuo);
 
             return (poblacion, individuo);
@@ -219,12 +222,14 @@ namespace Solver.Tests
 
         private Individuo CrearIndividuoFake()
         {
-            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
-            {
-                { 1m, 0m },
-                { 0m, 1m },
-                { 0m, 1m },
-            });
+            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
+                new decimal[,]
+                {
+                    { 1m, 0m },
+                    { 0m, 1m },
+                    { 0m, 1m },
+                }
+            );
             var individuo = Substitute.For<Individuo>(new List<int> { 1, 1, 2 }, instanciaProblema);
             return individuo;
         }

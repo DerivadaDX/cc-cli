@@ -95,8 +95,9 @@ namespace App.Tests.Commands.Resolver
 
             var lector = Substitute.For<LectorArchivoMatrizValoraciones>(Substitute.For<FileSystemHelper>());
             var presentador = Substitute.For<Presentador>(Substitute.For<ConsoleProxy>());
+            var generadorRandom = Substitute.For<GeneradorNumerosRandom>(1);
 
-            ResolverCommand.EjecutarResolucion(parametros, lector, presentador);
+            ResolverCommand.EjecutarResolucion(parametros, lector, presentador, generadorRandom);
 
             lector.Received(1).Leer("ruta/a/instancia.dat");
         }

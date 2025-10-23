@@ -45,7 +45,7 @@ namespace App.Commands.Resolver
             command.AddOption(seedOption);
 
             command.SetHandler(
-                (rutaInstancia, limiteGeneraciones, cantidadIndividuos, limiteEstancamiento, tipoIndividuo) =>
+                (rutaInstancia, limiteGeneraciones, cantidadIndividuos, limiteEstancamiento, tipoIndividuo, seed) =>
                 {
                     var tipoIndividuos = TipoIndividuoHelper.Parse(tipoIndividuo);
                     var parametros = new ParametrosSolucion
@@ -63,7 +63,8 @@ namespace App.Commands.Resolver
                     var consola = ConsoleProxyFactory.Crear();
                     var presentador = new Presentador(consola);
 
-                    EjecutarResolucion(parametros, lector, presentador);
+                    var generadorRandom = GeneradorNumerosRandomFactory.Crear(seed);
+                    EjecutarResolucion(parametros, lector, presentador, generadorRandom);
 
 #if DEBUG
                     Console.WriteLine("Presioná una tecla para salir...");
@@ -74,7 +75,8 @@ namespace App.Commands.Resolver
                 limiteGeneracionesOption,
                 cantidadIndividuosOption,
                 limiteEstancamientoOption,
-                tipoIndividuoOption
+                tipoIndividuoOption,
+                seedOption
             );
 
             return command;
@@ -83,7 +85,8 @@ namespace App.Commands.Resolver
         internal static void EjecutarResolucion(
             ParametrosSolucion parametros,
             LectorArchivoMatrizValoraciones lector,
-            Presentador presentador
+            Presentador presentador,
+            GeneradorNumerosRandom generadorRandom
         )
         {
             using var cts = new CancellationTokenSource();
@@ -96,7 +99,8 @@ namespace App.Commands.Resolver
                 var poblacion = PoblacionFactory.Crear(
                     parametros.CantidadIndividuos,
                     instanciaProblema,
-                    parametros.TipoIndividuos
+                    parametros.TipoIndividuos,
+                    generadorRandom
                 );
 
                 var algoritmoGenetico = new AlgoritmoGenetico(
