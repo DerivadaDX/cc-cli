@@ -9,15 +9,16 @@ namespace Solver.Individuos
         protected readonly GeneradorNumerosRandom _random;
         protected readonly CalculadoraFitness _calculadoraFitness;
 
-        protected Individuo(List<int> cromosoma, InstanciaProblema problema)
+        protected Individuo(List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
         {
             ArgumentNullException.ThrowIfNull(cromosoma, nameof(cromosoma));
             ArgumentNullException.ThrowIfNull(problema, nameof(problema));
+            ArgumentNullException.ThrowIfNull(generadorRandom, nameof(generadorRandom));
             ValidarCromosoma(cromosoma, problema);
 
             Cromosoma = cromosoma;
             _problema = problema;
-            _random = GeneradorNumerosRandomFactory.Crear(0); // TODO: Cambiar
+            _random = generadorRandom;
             _calculadoraFitness = CalculadoraFitnessFactory.Crear();
         }
 

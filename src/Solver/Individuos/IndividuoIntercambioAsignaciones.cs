@@ -1,10 +1,15 @@
+using Common;
+
 namespace Solver.Individuos
 {
     internal class IndividuoIntercambioAsignaciones : Individuo
     {
-        internal IndividuoIntercambioAsignaciones(List<int> cromosoma, InstanciaProblema problema) : base(cromosoma, problema)
-        {
-        }
+        internal IndividuoIntercambioAsignaciones(
+            List<int> cromosoma,
+            InstanciaProblema problema,
+            GeneradorNumerosRandom generadorRandom
+        )
+            : base(cromosoma, problema, generadorRandom) { }
 
         protected override void MutarAsignaciones()
         {
@@ -28,7 +33,7 @@ namespace Solver.Individuos
 
         protected override Individuo CrearNuevoIndividuo(List<int> cromosoma)
         {
-            var individuo = new IndividuoIntercambioAsignaciones(cromosoma, _problema);
+            var individuo = new IndividuoIntercambioAsignaciones(cromosoma, _problema, _random);
             return individuo;
         }
     }

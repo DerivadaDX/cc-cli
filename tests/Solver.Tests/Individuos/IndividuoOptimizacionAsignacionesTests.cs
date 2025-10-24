@@ -4,20 +4,13 @@ using Solver.Individuos;
 
 namespace Solver.Tests.Individuos
 {
-    public class IndividuoOptimizacionAsignacionesTests : IDisposable
+    public class IndividuoOptimizacionAsignacionesTests
     {
-        public void Dispose()
-        {
-            GeneradorNumerosRandomFactory.SetearGenerador(null);
-            GC.SuppressFinalize(this);
-        }
-
         [Fact]
         public void Mutar_Asignaciones_SeAsignaDistribucionOptima()
         {
-            var random = Substitute.For<GeneradorNumerosRandom>(1);
-            random.SiguienteDouble().Returns(1.0);
-            GeneradorNumerosRandomFactory.SetearGenerador(random);
+            var generadorRandom = Substitute.For<GeneradorNumerosRandom>(1);
+            generadorRandom.SiguienteDouble().Returns(1.0);
 
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
                 new decimal[,]
@@ -29,7 +22,7 @@ namespace Solver.Tests.Individuos
                 }
             );
             var cromosoma = new List<int> { 1, 2, 3, 4, 3, 2, 1 };
-            var individuo = new IndividuoOptimizacionAsignaciones(cromosoma, problema);
+            var individuo = new IndividuoOptimizacionAsignaciones(cromosoma, problema, generadorRandom);
 
             individuo.Mutar();
 
@@ -40,4 +33,3 @@ namespace Solver.Tests.Individuos
         }
     }
 }
-

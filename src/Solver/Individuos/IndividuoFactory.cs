@@ -11,13 +11,24 @@ namespace Solver.Individuos
         )
         {
             ArgumentNullException.ThrowIfNull(problema, nameof(problema));
+            ArgumentNullException.ThrowIfNull(generadorRandom, nameof(generadorRandom));
 
             List<int> cromosoma = GenerarCromosoma(problema, generadorRandom);
 
             Individuo individuo = tipoIndividuo switch
             {
-                TipoIndividuo.IntercambioAsignaciones => new IndividuoIntercambioAsignaciones(cromosoma, problema),
-                TipoIndividuo.OptimizacionAsignaciones => new IndividuoOptimizacionAsignaciones(cromosoma, problema),
+                TipoIndividuo.IntercambioAsignaciones => new IndividuoIntercambioAsignaciones(
+                    cromosoma,
+                    problema,
+                    generadorRandom
+                ),
+
+                TipoIndividuo.OptimizacionAsignaciones => new IndividuoOptimizacionAsignaciones(
+                    cromosoma,
+                    problema,
+                    generadorRandom
+                ),
+
                 _ => throw new ArgumentException($"Tipo de individuo no soportado: {tipoIndividuo}", nameof(tipoIndividuo)),
             };
 

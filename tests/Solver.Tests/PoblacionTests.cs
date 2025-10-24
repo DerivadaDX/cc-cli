@@ -114,9 +114,10 @@ namespace Solver.Tests
                     { 0m, 1m },
                 }
             );
+            var generadorRandom = Substitute.For<GeneradorNumerosRandom>(1);
 
-            var individuo = Substitute.For<Individuo>(cromosoma, instanciaProblema);
-            var otroIndividuo = Substitute.For<Individuo>(cromosoma, instanciaProblema);
+            var individuo = Substitute.For<Individuo>(cromosoma, instanciaProblema, generadorRandom);
+            var otroIndividuo = Substitute.For<Individuo>(cromosoma, instanciaProblema, generadorRandom);
             individuo.Cruzar(Arg.Any<Individuo>()).Returns(otroIndividuo);
             individuo.Fitness().Returns(fitness);
             return individuo;

@@ -230,7 +230,8 @@ namespace Solver.Tests
                     { 0m, 1m },
                 }
             );
-            var individuo = Substitute.For<Individuo>(new List<int> { 1, 1, 2 }, instanciaProblema);
+            var generadorRandom = Substitute.For<GeneradorNumerosRandom>(1);
+            var individuo = Substitute.For<Individuo>(new List<int> { 1, 1, 2 }, instanciaProblema, generadorRandom);
             return individuo;
         }
     }
