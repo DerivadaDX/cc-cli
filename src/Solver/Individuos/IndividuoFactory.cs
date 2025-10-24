@@ -4,12 +4,15 @@ namespace Solver.Individuos
 {
     public static class IndividuoFactory
     {
-        public static Individuo CrearAleatorio(InstanciaProblema problema, TipoIndividuo tipoIndividuo)
+        public static Individuo CrearAleatorio(
+            InstanciaProblema problema,
+            TipoIndividuo tipoIndividuo,
+            GeneradorNumerosRandom generadorRandom
+        )
         {
             ArgumentNullException.ThrowIfNull(problema, nameof(problema));
 
-            var random = GeneradorNumerosRandomFactory.Crear(0); // TODO: Cambiar
-            List<int> cromosoma = GenerarCromosoma(problema, random);
+            List<int> cromosoma = GenerarCromosoma(problema, generadorRandom);
 
             Individuo individuo = tipoIndividuo switch
             {

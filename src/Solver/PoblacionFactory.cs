@@ -20,7 +20,7 @@ namespace Solver
             var poblacion = _poblacion ?? new Poblacion(tamaño, generadorRandom);
             for (int i = 0; i < tamaño; i++)
             {
-                Individuo individuo = IndividuoFactory.CrearAleatorio(problema, tipoIndividuo);
+                Individuo individuo = IndividuoFactory.CrearAleatorio(problema, tipoIndividuo, generadorRandom);
                 poblacion.Individuos.Add(individuo);
             }
 
