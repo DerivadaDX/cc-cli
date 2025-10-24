@@ -22,10 +22,10 @@ namespace Solver.Individuos
 
             for (int idxActual = cantidadCortes; idxActual < L; idxActual++)
             {
-                double probabilidadMutacion = _random.SiguienteDouble();
+                double probabilidadMutacion = _generadorRandom.SiguienteDouble();
                 if (probabilidadMutacion < 1.0 / L)
                 {
-                    int idxDestino = _random.Siguiente(cantidadCortes, L);
+                    int idxDestino = _generadorRandom.Siguiente(cantidadCortes, L);
                     (Cromosoma[idxDestino], Cromosoma[idxActual]) = (Cromosoma[idxActual], Cromosoma[idxDestino]);
                 }
             }
@@ -33,7 +33,7 @@ namespace Solver.Individuos
 
         protected override Individuo CrearNuevoIndividuo(List<int> cromosoma)
         {
-            var individuo = new IndividuoIntercambioAsignaciones(cromosoma, _problema, _random);
+            var individuo = new IndividuoIntercambioAsignaciones(cromosoma, _problema, _generadorRandom);
             return individuo;
         }
     }

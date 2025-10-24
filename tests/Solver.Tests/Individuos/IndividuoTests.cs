@@ -575,7 +575,7 @@ namespace Solver.Tests.Individuos
 
             protected override Individuo CrearNuevoIndividuo(List<int> cromosoma)
             {
-                var individuo = new IndividuoFake(cromosoma, _problema, _random);
+                var individuo = new IndividuoFake(cromosoma, _problema, _generadorRandom);
                 return individuo;
             }
         }
