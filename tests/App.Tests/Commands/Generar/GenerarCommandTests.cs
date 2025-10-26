@@ -87,7 +87,7 @@ namespace App.Tests.Commands.Generar
 
             int? seed = comandoGenerar.Parse("--atomos 5 --agentes 3").GetValueForOption(seedOption);
 
-            Assert.Equal(null, seed);
+            Assert.Null(seed);
         }
 
         [Fact]

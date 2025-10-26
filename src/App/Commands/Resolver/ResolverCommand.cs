@@ -32,10 +32,7 @@ namespace App.Commands.Resolver
             {
                 Description = "Tipo de individuo a utilizar (intercambio|optimizacion)",
             };
-            var seedOption = new Option<int>("--seed", () => 0)
-            {
-                Description = "Semilla para la generación de números aleatorios",
-            };
+            var seedOption = new Option<int?>("--seed") { Description = "Semilla para la generación de números aleatorios" };
 
             command.AddArgument(rutaInstanciaArgument);
             command.AddOption(limiteGeneracionesOption);
@@ -47,6 +44,9 @@ namespace App.Commands.Resolver
             command.SetHandler(
                 (rutaInstancia, limiteGeneraciones, cantidadIndividuos, limiteEstancamiento, tipoIndividuo, seed) =>
                 {
+                    if (!seed.HasValue)
+                        seed = GeneradorNumerosRandom.GenerarSeed();
+
                     var tipoIndividuos = TipoIndividuoHelper.Parse(tipoIndividuo);
                     var parametros = new ParametrosSolucion
                     {
@@ -63,7 +63,7 @@ namespace App.Commands.Resolver
                     var consola = ConsoleProxyFactory.Crear();
                     var presentador = new Presentador(consola);
 
-                    var generadorRandom = GeneradorNumerosRandomFactory.Crear(seed);
+                    var generadorRandom = GeneradorNumerosRandomFactory.Crear(seed.Value);
                     EjecutarResolucion(parametros, lector, presentador, generadorRandom);
 
 #if DEBUG

@@ -78,14 +78,14 @@ namespace App.Tests.Commands.Resolver
         }
 
         [Fact]
-        public void Crear_SemillaNoEspecificada_UsaValorPorDefecto()
+        public void Crear_SemillaNoEspecificada_UsaNull()
         {
             var comandoResolver = ResolverCommand.Crear();
-            var seedOption = (Option<int>)comandoResolver.Options.First(o => o.Name == "seed");
+            var seedOption = (Option<int?>)comandoResolver.Options.First(o => o.Name == "seed");
 
-            int seed = comandoResolver.Parse("instancia.dat").GetValueForOption(seedOption);
+            int? seed = comandoResolver.Parse("instancia.dat").GetValueForOption(seedOption);
 
-            Assert.Equal(0, seed);
+            Assert.Null(seed);
         }
 
         [Fact]
