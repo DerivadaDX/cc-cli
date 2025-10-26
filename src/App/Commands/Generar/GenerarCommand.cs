@@ -80,7 +80,7 @@ namespace App.Commands.Generar
         {
             try
             {
-                presentador.MostrarInfo($"Usando seed '{parametros.Seed}'");
+                presentador.MostrarInfo($"Seed utilizada: {parametros.Seed}");
 
                 decimal[,] instancia = builder
                     .ConCantidadDeAtomos(parametros.Atomos)

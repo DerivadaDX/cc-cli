@@ -149,7 +149,7 @@ namespace App.Tests.Commands.Generar
 
             GenerarCommand.EjecutarGeneracion(parametros, builder, escritor, presentador);
 
-            presentador.Received(1).MostrarInfo("Usando seed '123'");
+            presentador.Received(1).MostrarInfo("Seed utilizada: 123");
         }
 
         [Fact]
