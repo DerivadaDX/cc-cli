@@ -4,6 +4,7 @@ using App.Commands.Generar;
 using Common;
 using Generator;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 
 namespace App.Tests.Commands.Generar
 {
@@ -20,6 +21,7 @@ namespace App.Tests.Commands.Generar
             Assert.Contains(comandoGenerar.Options, o => o.Name == "agentes");
             Assert.Contains(comandoGenerar.Options, o => o.Name == "valor-maximo");
             Assert.Contains(comandoGenerar.Options, o => o.Name == "disjuntas");
+            Assert.Contains(comandoGenerar.Options, o => o.Name == "seed");
         }
 
         [Fact]
@@ -78,11 +80,22 @@ namespace App.Tests.Commands.Generar
         }
 
         [Fact]
+        public void Crear_SemillaNoEspecificada_UsaNull()
+        {
+            var comandoGenerar = GenerarCommand.Crear();
+            var seedOption = (Option<int?>)comandoGenerar.Options.First(o => o.Name == "seed");
+
+            int? seed = comandoGenerar.Parse("--atomos 5 --agentes 3").GetValueForOption(seedOption);
+
+            Assert.Null(seed);
+        }
+
+        [Fact]
         public void EjecutarGeneracion_ConParametrosValidos_GeneraYEscribeInstancia()
         {
             var instanciaConstruida = new decimal[1, 1];
 
-            var builder = Substitute.For<InstanciaBuilder>(Substitute.For<GeneradorNumerosRandom>());
+            var builder = Substitute.For<InstanciaBuilder>(Substitute.For<GeneradorNumerosRandom>(1));
             builder.ConCantidadDeAtomos(Arg.Any<int>()).Returns(builder);
             builder.ConCantidadDeAgentes(Arg.Any<int>()).Returns(builder);
             builder.ConValorMaximo(Arg.Any<int>()).Returns(builder);
@@ -108,6 +121,89 @@ namespace App.Tests.Commands.Generar
             builder.Received(1).ConValoracionesDisjuntas(true);
             builder.Received(1).Build();
             escritor.Received(1).EscribirInstancia(instanciaConstruida, "instancia.dat");
+        }
+
+        [Fact]
+        public void EjecutarGeneracion_ValorDeSeed_SePresenta()
+        {
+            var instanciaConstruida = new decimal[1, 1];
+
+            var builder = Substitute.For<InstanciaBuilder>(Substitute.For<GeneradorNumerosRandom>(1));
+            builder.ConCantidadDeAtomos(Arg.Any<int>()).Returns(builder);
+            builder.ConCantidadDeAgentes(Arg.Any<int>()).Returns(builder);
+            builder.ConValorMaximo(Arg.Any<int>()).Returns(builder);
+            builder.ConValoracionesDisjuntas(Arg.Any<bool>()).Returns(builder);
+            builder.Build().Returns(instanciaConstruida);
+
+            var parametros = new ParametrosGeneracion
+            {
+                Atomos = 5,
+                Agentes = 3,
+                ValorMaximo = 100,
+                RutaSalida = "instancia.dat",
+                ValoracionesDisjuntas = true,
+                Seed = 123,
+            };
+            var escritor = Substitute.For<EscritorInstancia>(Substitute.For<FileSystemHelper>());
+            var presentador = Substitute.For<Presentador>(Substitute.For<ConsoleProxy>());
+
+            GenerarCommand.EjecutarGeneracion(parametros, builder, escritor, presentador);
+
+            presentador.Received(1).MostrarInfo("Seed utilizada: 123");
+        }
+
+        [Fact]
+        public void EjecutarGeneracion_GeneracionExitosa_PresentaMensajeDeExito()
+        {
+            var instanciaConstruida = new decimal[1, 1];
+
+            var builder = Substitute.For<InstanciaBuilder>(Substitute.For<GeneradorNumerosRandom>(1));
+            builder.ConCantidadDeAtomos(Arg.Any<int>()).Returns(builder);
+            builder.ConCantidadDeAgentes(Arg.Any<int>()).Returns(builder);
+            builder.ConValorMaximo(Arg.Any<int>()).Returns(builder);
+            builder.ConValoracionesDisjuntas(Arg.Any<bool>()).Returns(builder);
+            builder.Build().Returns(instanciaConstruida);
+
+            var parametros = new ParametrosGeneracion
+            {
+                Atomos = 5,
+                Agentes = 3,
+                ValorMaximo = 100,
+                RutaSalida = "instancia.dat",
+                ValoracionesDisjuntas = true,
+            };
+            var escritor = Substitute.For<EscritorInstancia>(Substitute.For<FileSystemHelper>());
+            var presentador = Substitute.For<Presentador>(Substitute.For<ConsoleProxy>());
+
+            GenerarCommand.EjecutarGeneracion(parametros, builder, escritor, presentador);
+
+            presentador.Received(1).MostrarExito("Instancia generada y guardada en 'instancia.dat'.");
+        }
+
+        [Fact]
+        public void EjecutarGeneracion_ErrorAlGenerar_PresentaMensajeDeError()
+        {
+            var builder = Substitute.For<InstanciaBuilder>(Substitute.For<GeneradorNumerosRandom>(1));
+            builder.ConCantidadDeAtomos(Arg.Any<int>()).Returns(builder);
+            builder.ConCantidadDeAgentes(Arg.Any<int>()).Returns(builder);
+            builder.ConValorMaximo(Arg.Any<int>()).Returns(builder);
+            builder.ConValoracionesDisjuntas(Arg.Any<bool>()).Returns(builder);
+            builder.Build().Throws(new Exception("Error de generación"));
+
+            var parametros = new ParametrosGeneracion
+            {
+                Atomos = 5,
+                Agentes = 3,
+                ValorMaximo = 100,
+                RutaSalida = "instancia.dat",
+                ValoracionesDisjuntas = true,
+            };
+            var escritor = Substitute.For<EscritorInstancia>(Substitute.For<FileSystemHelper>());
+            var presentador = Substitute.For<Presentador>(Substitute.For<ConsoleProxy>());
+
+            GenerarCommand.EjecutarGeneracion(parametros, builder, escritor, presentador);
+
+            presentador.Received(1).MostrarError("Error al generar la instancia: Error de generación");
         }
     }
 }

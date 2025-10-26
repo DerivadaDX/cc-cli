@@ -32,55 +32,85 @@ namespace App.Commands.Resolver
             {
                 Description = "Tipo de individuo a utilizar (intercambio|optimizacion)",
             };
+            var seedOption = new Option<int?>("--seed") { Description = "Semilla para la generación de números aleatorios" };
 
             command.AddArgument(rutaInstanciaArgument);
             command.AddOption(limiteGeneracionesOption);
             command.AddOption(cantidadIndividuosOption);
             command.AddOption(limiteEstancamientoOption);
             command.AddOption(tipoIndividuoOption);
+            command.AddOption(seedOption);
 
-            command.SetHandler((rutaInstancia, limiteGeneraciones, cantidadIndividuos, limiteEstancamiento, tipoIndividuo) =>
-            {
-                var tipoIndividuos = TipoIndividuoHelper.Parse(tipoIndividuo);
-                var parametros = new ParametrosSolucion
+            command.SetHandler(
+                (rutaInstancia, limiteGeneraciones, cantidadIndividuos, limiteEstancamiento, tipoIndividuo, seed) =>
                 {
-                    RutaInstancia = rutaInstancia,
-                    LimiteGeneraciones = limiteGeneraciones,
-                    CantidadIndividuos = cantidadIndividuos,
-                    LimiteEstancamiento = limiteEstancamiento,
-                    TipoIndividuos = tipoIndividuos,
-                };
+                    if (!seed.HasValue)
+                        seed = GeneradorNumerosRandom.GenerarSeed();
 
-                var fileSystemHelper = FileSystemHelperFactory.Crear();
-                var lector = new LectorArchivoMatrizValoraciones(fileSystemHelper);
+                    var tipoIndividuos = TipoIndividuoHelper.Parse(tipoIndividuo);
+                    var parametros = new ParametrosSolucion
+                    {
+                        RutaInstancia = rutaInstancia,
+                        LimiteGeneraciones = limiteGeneraciones,
+                        CantidadIndividuos = cantidadIndividuos,
+                        LimiteEstancamiento = limiteEstancamiento,
+                        TipoIndividuos = tipoIndividuos,
+                        Seed = seed.Value,
+                    };
 
-                var consola = ConsoleProxyFactory.Crear();
-                var presentador = new Presentador(consola);
+                    var fileSystemHelper = FileSystemHelperFactory.Crear();
+                    var lector = new LectorArchivoMatrizValoraciones(fileSystemHelper);
 
-                EjecutarResolucion(parametros, lector, presentador);
+                    var consola = ConsoleProxyFactory.Crear();
+                    var presentador = new Presentador(consola);
+
+                    var generadorRandom = GeneradorNumerosRandomFactory.Crear(seed.Value);
+                    EjecutarResolucion(parametros, lector, presentador, generadorRandom);
 
 #if DEBUG
-                Console.WriteLine("Presioná una tecla para salir...");
-                Console.ReadKey();
+                    Console.WriteLine("Presioná una tecla para salir...");
+                    Console.ReadKey();
 #endif
-            }, rutaInstanciaArgument, limiteGeneracionesOption, cantidadIndividuosOption, limiteEstancamientoOption, tipoIndividuoOption);
+                },
+                rutaInstanciaArgument,
+                limiteGeneracionesOption,
+                cantidadIndividuosOption,
+                limiteEstancamientoOption,
+                tipoIndividuoOption,
+                seedOption
+            );
 
             return command;
         }
 
         internal static void EjecutarResolucion(
-            ParametrosSolucion parametros, LectorArchivoMatrizValoraciones lector, Presentador presentador)
+            ParametrosSolucion parametros,
+            LectorArchivoMatrizValoraciones lector,
+            Presentador presentador,
+            GeneradorNumerosRandom generadorRandom
+        )
         {
             using var cts = new CancellationTokenSource();
             ConfigurarCancelacion(cts, presentador);
 
             try
             {
+                presentador.MostrarInfo($"Seed utilizada: {parametros.Seed}");
+
                 decimal[,] matrizValoraciones = lector.Leer(parametros.RutaInstancia);
                 var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matrizValoraciones);
-                var poblacion = PoblacionFactory.Crear(parametros.CantidadIndividuos, instanciaProblema, parametros.TipoIndividuos);
+                var poblacion = PoblacionFactory.Crear(
+                    parametros.CantidadIndividuos,
+                    instanciaProblema,
+                    parametros.TipoIndividuos,
+                    generadorRandom
+                );
 
-                var algoritmoGenetico = new AlgoritmoGenetico(poblacion, parametros.LimiteGeneraciones, parametros.LimiteEstancamiento);
+                var algoritmoGenetico = new AlgoritmoGenetico(
+                    poblacion,
+                    parametros.LimiteGeneraciones,
+                    parametros.LimiteEstancamiento
+                );
                 ConfigurarProgreso(parametros, algoritmoGenetico, presentador);
                 ConfigurarEstancamiento(algoritmoGenetico, presentador);
 
@@ -107,7 +137,10 @@ namespace App.Commands.Resolver
         }
 
         private static void ConfigurarProgreso(
-            ParametrosSolucion parametros, AlgoritmoGenetico algoritmoGenetico, Presentador presentador)
+            ParametrosSolucion parametros,
+            AlgoritmoGenetico algoritmoGenetico,
+            Presentador presentador
+        )
         {
             if (parametros.LimiteGeneraciones > 0)
             {
@@ -144,8 +177,7 @@ namespace App.Commands.Resolver
             };
         }
 
-        private static void MostrarResultado(
-            Individuo mejorIndividuo, int generaciones, long tiempoMs, Presentador presentador)
+        private static void MostrarResultado(Individuo mejorIndividuo, int generaciones, long tiempoMs, Presentador presentador)
         {
             presentador.MostrarExito($"Resultado encontrado después de {generaciones} generaciones.");
             presentador.MostrarExito($"Resultado obtenido: {mejorIndividuo}.");

@@ -1,10 +1,15 @@
+using Common;
+
 namespace Solver.Individuos
 {
     internal class IndividuoIntercambioAsignaciones : Individuo
     {
-        internal IndividuoIntercambioAsignaciones(List<int> cromosoma, InstanciaProblema problema) : base(cromosoma, problema)
-        {
-        }
+        internal IndividuoIntercambioAsignaciones(
+            List<int> cromosoma,
+            InstanciaProblema problema,
+            GeneradorNumerosRandom generadorRandom
+        )
+            : base(cromosoma, problema, generadorRandom) { }
 
         protected override void MutarAsignaciones()
         {
@@ -17,10 +22,10 @@ namespace Solver.Individuos
 
             for (int idxActual = cantidadCortes; idxActual < L; idxActual++)
             {
-                double probabilidadMutacion = _random.SiguienteDouble();
+                double probabilidadMutacion = _generadorRandom.SiguienteDouble();
                 if (probabilidadMutacion < 1.0 / L)
                 {
-                    int idxDestino = _random.Siguiente(cantidadCortes, L);
+                    int idxDestino = _generadorRandom.Siguiente(cantidadCortes, L);
                     (Cromosoma[idxDestino], Cromosoma[idxActual]) = (Cromosoma[idxActual], Cromosoma[idxDestino]);
                 }
             }
@@ -28,7 +33,7 @@ namespace Solver.Individuos
 
         protected override Individuo CrearNuevoIndividuo(List<int> cromosoma)
         {
-            var individuo = new IndividuoIntercambioAsignaciones(cromosoma, _problema);
+            var individuo = new IndividuoIntercambioAsignaciones(cromosoma, _problema, _generadorRandom);
             return individuo;
         }
     }

@@ -1,4 +1,5 @@
-﻿using Solver.Individuos;
+﻿using Common;
+using Solver.Individuos;
 
 namespace Solver
 {
@@ -6,14 +7,20 @@ namespace Solver
     {
         private static Poblacion _poblacion;
 
-        public static Poblacion Crear(int tamaño, InstanciaProblema problema, TipoIndividuo tipoIndividuo)
+        public static Poblacion Crear(
+            int tamaño,
+            InstanciaProblema problema,
+            TipoIndividuo tipoIndividuo,
+            GeneradorNumerosRandom generadorRandom
+        )
         {
             ArgumentNullException.ThrowIfNull(problema, nameof(problema));
+            ArgumentNullException.ThrowIfNull(generadorRandom, nameof(generadorRandom));
 
-            var poblacion = _poblacion ?? new Poblacion(tamaño);
+            var poblacion = _poblacion ?? new Poblacion(tamaño, generadorRandom);
             for (int i = 0; i < tamaño; i++)
             {
-                Individuo individuo = IndividuoFactory.CrearAleatorio(problema, tipoIndividuo);
+                Individuo individuo = IndividuoFactory.CrearAleatorio(problema, tipoIndividuo, generadorRandom);
                 poblacion.Individuos.Add(individuo);
             }
 

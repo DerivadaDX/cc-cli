@@ -1,3 +1,5 @@
+using Common;
+using NSubstitute;
 using Solver.Individuos;
 
 namespace Solver.Tests.Individuos
@@ -9,11 +11,13 @@ namespace Solver.Tests.Individuos
         [Fact]
         public void CalcularFitness_AsignacionSinEnvidia_RetornaCero()
         {
-            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
-            {
-                { 1m, 0m },
-                { 0m, 1m }
-            });
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
+                new decimal[,]
+                {
+                    { 1m, 0m },
+                    { 0m, 1m },
+                }
+            );
             var cromosoma = new List<int> { 1, 1, 2 };
             var individuo = new IndividuoFake(cromosoma, problema);
 
@@ -24,11 +28,13 @@ namespace Solver.Tests.Individuos
         [Fact]
         public void CalcularFitness_HayEnvidia_RetornaPositivo()
         {
-            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
-            {
-                { 1m, .5m },
-                { 0m, .5m },
-            });
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
+                new decimal[,]
+                {
+                    { 1m, .5m },
+                    { 0m, .5m },
+                }
+            );
             var cromosoma = new List<int> { 1, 2, 1 };
             var individuo = new IndividuoFake(cromosoma, problema);
 
@@ -39,11 +45,13 @@ namespace Solver.Tests.Individuos
         [Fact]
         public void CalcularFitness_TodosValoracionesIguales_SinEnvidia()
         {
-            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
-            {
-                { .5m, .5m },
-                { .5m, .5m },
-            });
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
+                new decimal[,]
+                {
+                    { .5m, .5m },
+                    { .5m, .5m },
+                }
+            );
 
             var cromosoma = new List<int> { 1, 1, 2 };
             var individuo = new IndividuoFake(cromosoma, problema);
@@ -54,9 +62,8 @@ namespace Solver.Tests.Individuos
 
         private class IndividuoFake : Individuo
         {
-            internal IndividuoFake(List<int> cromosoma, InstanciaProblema problema) : base(cromosoma, problema)
-            {
-            }
+            internal IndividuoFake(List<int> cromosoma, InstanciaProblema problema)
+                : base(cromosoma, problema, Substitute.For<GeneradorNumerosRandom>(1)) { }
 
             protected override void MutarAsignaciones()
             {

@@ -1,5 +1,4 @@
-﻿using Common;
-using Solver.Individuos;
+﻿using Solver.Individuos;
 
 namespace Solver.Tests.Individuos
 {

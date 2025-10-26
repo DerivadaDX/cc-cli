@@ -142,7 +142,7 @@ namespace Generator.Tests
         [Fact]
         public void Build_ValoracionesDisjuntas_CadaFilaTieneUnSoloValorPositivo()
         {
-            var generadorNumerosRandom = Substitute.For<GeneradorNumerosRandom>();
+            var generadorNumerosRandom = Substitute.For<GeneradorNumerosRandom>(1);
             generadorNumerosRandom.Siguiente(Arg.Any<int>()).Returns(0);
             generadorNumerosRandom.Siguiente(Arg.Any<int>(), Arg.Any<int>()).Returns(1, 2, 3, 4);
 
@@ -171,7 +171,7 @@ namespace Generator.Tests
         [Fact]
         public void Build_UnSoloAgenteValoracionesDisjuntas_AsignaTodaLaColumnaAlAgente()
         {
-            var generadorNumerosRandom = Substitute.For<GeneradorNumerosRandom>();
+            var generadorNumerosRandom = Substitute.For<GeneradorNumerosRandom>(1);
             generadorNumerosRandom.Siguiente(Arg.Any<int>()).Returns(0);
             generadorNumerosRandom.Siguiente(Arg.Any<int>(), Arg.Any<int>()).Returns(1, 2, 3);
 
@@ -193,7 +193,7 @@ namespace Generator.Tests
         {
             const int valorMaximo = 5;
 
-            var generadorNumerosRandom = Substitute.For<GeneradorNumerosRandom>();
+            var generadorNumerosRandom = Substitute.For<GeneradorNumerosRandom>(1);
             generadorNumerosRandom.Siguiente(1, valorMaximo + 1).Returns(1);
 
             InstanciaBuilder instanciaBuilder = ObtenerInstanciaBuilder(generadorNumerosRandom)
@@ -218,7 +218,7 @@ namespace Generator.Tests
 
         private InstanciaBuilder ObtenerInstanciaBuilder()
         {
-            var generadorNumerosRandom = Substitute.For<GeneradorNumerosRandom>();
+            var generadorNumerosRandom = Substitute.For<GeneradorNumerosRandom>(1);
             var instanciaBuilder = new InstanciaBuilder(generadorNumerosRandom);
             return instanciaBuilder;
         }

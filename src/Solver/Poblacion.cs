@@ -5,10 +5,10 @@ namespace Solver
 {
     public class Poblacion
     {
-        private readonly GeneradorNumerosRandom _random;
         private readonly int _tamaño;
+        private readonly GeneradorNumerosRandom _generadorRandom;
 
-        public Poblacion(int tamaño)
+        public Poblacion(int tamaño, GeneradorNumerosRandom generadorRandom)
         {
             if (tamaño <= 0)
             {
@@ -16,7 +16,9 @@ namespace Solver
                 throw new ArgumentOutOfRangeException(nameof(tamaño), mensaje);
             }
 
-            _random = GeneradorNumerosRandomFactory.Crear();
+            ArgumentNullException.ThrowIfNull(generadorRandom, nameof(generadorRandom));
+
+            _generadorRandom = generadorRandom;
             _tamaño = tamaño;
         }
 
@@ -24,7 +26,7 @@ namespace Solver
 
         internal virtual Poblacion GenerarNuevaGeneracion()
         {
-            var nuevaGeneracion = new Poblacion(_tamaño);
+            var nuevaGeneracion = new Poblacion(_tamaño, _generadorRandom);
 
             List<Individuo> elite = SeleccionarElite();
             nuevaGeneracion.Individuos.AddRange(elite);
@@ -60,10 +62,10 @@ namespace Solver
 
         private Individuo SeleccionarIndividuoPorTorneo()
         {
-            int indice1 = _random.Siguiente(Individuos.Count);
+            int indice1 = _generadorRandom.Siguiente(Individuos.Count);
             Individuo individuo1 = Individuos[indice1];
 
-            int indice2 = _random.Siguiente(Individuos.Count);
+            int indice2 = _generadorRandom.Siguiente(Individuos.Count);
             Individuo individuo2 = Individuos[indice2];
 
             Individuo resultado = individuo1.Fitness() <= individuo2.Fitness() ? individuo1 : individuo2;

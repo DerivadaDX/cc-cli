@@ -4,12 +4,6 @@
     {
         private static GeneradorNumerosRandom _generador;
 
-        public static GeneradorNumerosRandom Crear()
-        {
-            var generador = _generador ?? new GeneradorNumerosRandom();
-            return generador;
-        }
-
         public static GeneradorNumerosRandom Crear(int seed)
         {
             var generador = _generador ?? new GeneradorNumerosRandom(seed);

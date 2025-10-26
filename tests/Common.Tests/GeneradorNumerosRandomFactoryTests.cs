@@ -11,39 +11,28 @@
         [Fact]
         public void Crear_InstanciaDevuelta_EsValida()
         {
-            var generador = GeneradorNumerosRandomFactory.Crear();
+            var generador = GeneradorNumerosRandomFactory.Crear(123);
             Assert.NotNull(generador);
             Assert.IsType<GeneradorNumerosRandom>(generador);
         }
 
         [Fact]
-        public void Crear_ConSemillaSinGeneradorSeteador_DevuelveNuevaInstanciaConSemilla()
+        public void Crear_SinGeneradorSeteado_DevuelveNuevaInstanciaConSeedSeteada()
         {
-            int semilla = 456;
-            var generador1 = GeneradorNumerosRandomFactory.Crear(semilla);
-            var generador2 = GeneradorNumerosRandomFactory.Crear(semilla);
+            int seed = 456;
+            var generador1 = GeneradorNumerosRandomFactory.Crear(seed);
+            var generador2 = GeneradorNumerosRandomFactory.Crear(seed);
 
-            Assert.Equal(generador1.Siguiente(), generador2.Siguiente());
+            Assert.Equal(generador1.Siguiente(100), generador2.Siguiente(100));
         }
 
         [Fact]
-        public void Crear_ConSemillaConGeneradorSeteador_DevuelveGeneradorSeteado()
+        public void Crear_ConGeneradorSeteado_DevuelveGeneradorSeteado()
         {
             var generadorSeteado = new GeneradorNumerosRandom(123);
             GeneradorNumerosRandomFactory.SetearGenerador(generadorSeteado);
 
             var generadorObtenido = GeneradorNumerosRandomFactory.Crear(456);
-
-            Assert.Same(generadorSeteado, generadorObtenido);
-        }
-
-        [Fact]
-        public void SetearGenerador_Generador_SeSeteaCorrectamente()
-        {
-            var generadorSeteado = new GeneradorNumerosRandom(123);
-            GeneradorNumerosRandomFactory.SetearGenerador(generadorSeteado);
-
-            var generadorObtenido = GeneradorNumerosRandomFactory.Crear();
 
             Assert.Same(generadorSeteado, generadorObtenido);
         }

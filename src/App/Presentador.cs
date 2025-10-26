@@ -11,14 +11,14 @@
             _consola = consola;
         }
 
-        internal void MostrarInfo(string mensaje)
+        internal virtual void MostrarInfo(string mensaje)
         {
             AgregarSaltoSiNecesario();
             MostrarMensajeConColor(mensaje, ConsoleColor.White);
             _lineaEnCurso = false;
         }
 
-        internal void MostrarExito(string mensaje)
+        internal virtual void MostrarExito(string mensaje)
         {
             AgregarSaltoSiNecesario();
             MostrarMensajeConColor(mensaje, ConsoleColor.Green);
@@ -32,7 +32,7 @@
             _lineaEnCurso = false;
         }
 
-        internal void MostrarError(string mensaje)
+        internal virtual void MostrarError(string mensaje)
         {
             AgregarSaltoSiNecesario();
             MostrarMensajeConColor(mensaje, ConsoleColor.Red);

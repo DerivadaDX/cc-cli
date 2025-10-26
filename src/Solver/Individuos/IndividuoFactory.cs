@@ -4,18 +4,32 @@ namespace Solver.Individuos
 {
     public static class IndividuoFactory
     {
-        public static Individuo CrearAleatorio(InstanciaProblema problema, TipoIndividuo tipoIndividuo)
+        public static Individuo CrearAleatorio(
+            InstanciaProblema problema,
+            TipoIndividuo tipoIndividuo,
+            GeneradorNumerosRandom generadorRandom
+        )
         {
             ArgumentNullException.ThrowIfNull(problema, nameof(problema));
+            ArgumentNullException.ThrowIfNull(generadorRandom, nameof(generadorRandom));
 
-            var random = GeneradorNumerosRandomFactory.Crear();
-            List<int> cromosoma = GenerarCromosoma(problema, random);
+            List<int> cromosoma = GenerarCromosoma(problema, generadorRandom);
 
             Individuo individuo = tipoIndividuo switch
             {
-                TipoIndividuo.IntercambioAsignaciones => new IndividuoIntercambioAsignaciones(cromosoma, problema),
-                TipoIndividuo.OptimizacionAsignaciones => new IndividuoOptimizacionAsignaciones(cromosoma, problema),
-                _ => throw new ArgumentException($"Tipo de individuo no soportado: {tipoIndividuo}", nameof(tipoIndividuo))
+                TipoIndividuo.IntercambioAsignaciones => new IndividuoIntercambioAsignaciones(
+                    cromosoma,
+                    problema,
+                    generadorRandom
+                ),
+
+                TipoIndividuo.OptimizacionAsignaciones => new IndividuoOptimizacionAsignaciones(
+                    cromosoma,
+                    problema,
+                    generadorRandom
+                ),
+
+                _ => throw new ArgumentException($"Tipo de individuo no soportado: {tipoIndividuo}", nameof(tipoIndividuo)),
             };
 
             return individuo;
