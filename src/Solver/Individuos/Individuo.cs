@@ -6,18 +6,19 @@ namespace Solver.Individuos
     public abstract class Individuo
     {
         protected readonly InstanciaProblema _problema;
-        protected readonly GeneradorNumerosRandom _random;
+        protected readonly GeneradorNumerosRandom _generadorRandom;
         protected readonly CalculadoraFitness _calculadoraFitness;
 
-        protected Individuo(List<int> cromosoma, InstanciaProblema problema)
+        protected Individuo(List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
         {
             ArgumentNullException.ThrowIfNull(cromosoma, nameof(cromosoma));
             ArgumentNullException.ThrowIfNull(problema, nameof(problema));
+            ArgumentNullException.ThrowIfNull(generadorRandom, nameof(generadorRandom));
             ValidarCromosoma(cromosoma, problema);
 
             Cromosoma = cromosoma;
             _problema = problema;
-            _random = GeneradorNumerosRandomFactory.Crear();
+            _generadorRandom = generadorRandom;
             _calculadoraFitness = CalculadoraFitnessFactory.Crear();
         }
 
@@ -136,10 +137,10 @@ namespace Solver.Individuos
 
             for (int i = 0; i < cantidadCortes; i++)
             {
-                double probabilidadMutacion = _random.SiguienteDouble();
+                double probabilidadMutacion = _generadorRandom.SiguienteDouble();
                 if (probabilidadMutacion < 1.0 / L)
                 {
-                    int direccion = _random.Siguiente(2) == 0 ? -1 : 1;
+                    int direccion = _generadorRandom.Siguiente(2) == 0 ? -1 : 1;
                     int nuevoValor = (Cromosoma[i] + direccion + rango) % rango;
                     Cromosoma[i] = nuevoValor;
                 }
@@ -155,7 +156,7 @@ namespace Solver.Individuos
             if (cantidadCortes == 0)
                 return [];
 
-            int indiceCorte = cantidadCortes > 1 ? _random.Siguiente(1, cantidadCortes) : cantidadCortes;
+            int indiceCorte = cantidadCortes > 1 ? _generadorRandom.Siguiente(1, cantidadCortes) : cantidadCortes;
             var cortesHijo = cortesPadre1.Take(indiceCorte).ToList<int>();
             cortesHijo.AddRange(cortesPadre2.Skip(indiceCorte));
             return cortesHijo;
@@ -173,8 +174,8 @@ namespace Solver.Individuos
                 return [.. asignacionesPadre1];
 
             var asignacionesHijo = Enumerable.Repeat(-1, cantidadAsignaciones).ToList<int>();
-            int indiceInicioSegmento = _random.Siguiente(cantidadAsignaciones);
-            int indiceFinSegmento = _random.Siguiente(indiceInicioSegmento, cantidadAsignaciones);
+            int indiceInicioSegmento = _generadorRandom.Siguiente(cantidadAsignaciones);
+            int indiceFinSegmento = _generadorRandom.Siguiente(indiceInicioSegmento, cantidadAsignaciones);
 
             for (int i = indiceInicioSegmento; i <= indiceFinSegmento; i++)
                 asignacionesHijo[i] = asignacionesPadre1[i];

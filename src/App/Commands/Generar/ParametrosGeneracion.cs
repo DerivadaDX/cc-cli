@@ -7,5 +7,6 @@
         internal int ValorMaximo { get; set; }
         internal string RutaSalida { get; set; }
         internal bool ValoracionesDisjuntas { get; set; }
+        internal int Seed { get; set; }
     }
 }

@@ -20,6 +20,7 @@ namespace App.Tests.Commands.Resolver
             Assert.Contains(comandoResolver.Options, o => o.Name == "cantidad-individuos");
             Assert.Contains(comandoResolver.Options, o => o.Name == "limite-estancamiento");
             Assert.Contains(comandoResolver.Options, o => o.Name == "tipo-individuo");
+            Assert.Contains(comandoResolver.Options, o => o.Name == "seed");
         }
 
         [Fact]
@@ -77,17 +78,40 @@ namespace App.Tests.Commands.Resolver
         }
 
         [Fact]
-        public void EjecutarResolucion_MatrizValoraciones_SeLee()
+        public void Crear_SemillaNoEspecificada_UsaNull()
         {
-            var parametros = new ParametrosSolucion
-            {
-                RutaInstancia = "ruta/a/instancia.dat",
-            };
+            var comandoResolver = ResolverCommand.Crear();
+            var seedOption = (Option<int?>)comandoResolver.Options.First(o => o.Name == "seed");
+
+            int? seed = comandoResolver.Parse("instancia.dat").GetValueForOption(seedOption);
+
+            Assert.Null(seed);
+        }
+
+        [Fact]
+        public void EjecutarResolucion_ValorDeSeed_SePresenta()
+        {
+            var parametros = new ParametrosSolucion { RutaInstancia = "ruta/a/instancia.dat", Seed = 123 };
 
             var lector = Substitute.For<LectorArchivoMatrizValoraciones>(Substitute.For<FileSystemHelper>());
             var presentador = Substitute.For<Presentador>(Substitute.For<ConsoleProxy>());
+            var generadorRandom = Substitute.For<GeneradorNumerosRandom>(1);
 
-            ResolverCommand.EjecutarResolucion(parametros, lector, presentador);
+            ResolverCommand.EjecutarResolucion(parametros, lector, presentador, generadorRandom);
+
+            presentador.Received(1).MostrarInfo("Seed utilizada: 123");
+        }
+
+        [Fact]
+        public void EjecutarResolucion_MatrizValoraciones_SeLee()
+        {
+            var parametros = new ParametrosSolucion { RutaInstancia = "ruta/a/instancia.dat" };
+
+            var lector = Substitute.For<LectorArchivoMatrizValoraciones>(Substitute.For<FileSystemHelper>());
+            var presentador = Substitute.For<Presentador>(Substitute.For<ConsoleProxy>());
+            var generadorRandom = Substitute.For<GeneradorNumerosRandom>(1);
+
+            ResolverCommand.EjecutarResolucion(parametros, lector, presentador, generadorRandom);
 
             lector.Received(1).Leer("ruta/a/instancia.dat");
         }
