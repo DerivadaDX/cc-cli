@@ -55,6 +55,7 @@ namespace App.Commands.Resolver
                         CantidadIndividuos = cantidadIndividuos,
                         LimiteEstancamiento = limiteEstancamiento,
                         TipoIndividuos = tipoIndividuos,
+                        Seed = seed.Value,
                     };
 
                     var fileSystemHelper = FileSystemHelperFactory.Crear();
@@ -94,6 +95,8 @@ namespace App.Commands.Resolver
 
             try
             {
+                presentador.MostrarInfo($"Seed utilizada: {parametros.Seed}");
+
                 decimal[,] matrizValoraciones = lector.Leer(parametros.RutaInstancia);
                 var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matrizValoraciones);
                 var poblacion = PoblacionFactory.Crear(

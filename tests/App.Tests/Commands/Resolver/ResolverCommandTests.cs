@@ -89,6 +89,20 @@ namespace App.Tests.Commands.Resolver
         }
 
         [Fact]
+        public void EjecutarResolucion_ValorDeSeed_SePresenta()
+        {
+            var parametros = new ParametrosSolucion { RutaInstancia = "ruta/a/instancia.dat", Seed = 123 };
+
+            var lector = Substitute.For<LectorArchivoMatrizValoraciones>(Substitute.For<FileSystemHelper>());
+            var presentador = Substitute.For<Presentador>(Substitute.For<ConsoleProxy>());
+            var generadorRandom = Substitute.For<GeneradorNumerosRandom>(1);
+
+            ResolverCommand.EjecutarResolucion(parametros, lector, presentador, generadorRandom);
+
+            presentador.Received(1).MostrarInfo("Seed utilizada: 123");
+        }
+
+        [Fact]
         public void EjecutarResolucion_MatrizValoraciones_SeLee()
         {
             var parametros = new ParametrosSolucion { RutaInstancia = "ruta/a/instancia.dat" };
