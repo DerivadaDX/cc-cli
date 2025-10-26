@@ -36,6 +36,9 @@ namespace App.Commands.Generar
             command.SetHandler(
                 (rutaSalida, atomos, agentes, valorMaximo, disjuntas, seed) =>
                 {
+                    if (!seed.HasValue)
+                        seed = GeneradorNumerosRandom.GenerarSeed();
+
                     var parametros = new ParametrosGeneracion
                     {
                         RutaSalida = rutaSalida,
@@ -43,10 +46,8 @@ namespace App.Commands.Generar
                         Agentes = agentes,
                         ValorMaximo = valorMaximo,
                         ValoracionesDisjuntas = disjuntas,
+                        Seed = seed.Value,
                     };
-
-                    if (!seed.HasValue)
-                        seed = GeneradorNumerosRandom.GenerarSeed();
 
                     var generadorNumerosRandom = GeneradorNumerosRandomFactory.Crear(seed.Value);
                     var builder = new InstanciaBuilder(generadorNumerosRandom);
