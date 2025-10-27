@@ -74,7 +74,7 @@ namespace App.Tests.Commands.Resolver
 
             string tipoIndividuo = comandoResolver.Parse("instancia.dat").GetValueForOption(tipoIndividuoOption);
 
-            Assert.Equal("intercambio", tipoIndividuo);
+            Assert.Equal("optimizacion", tipoIndividuo);
         }
 
         [Fact]
