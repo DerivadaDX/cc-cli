@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/DerivadaDX/cc-cli/compare/v2.0.0...v3.0.0) (2025-10-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* **resolver-command:** cambio de individuo por defecto a 'optimizacion' (#72)
+* **commands:** cambio en forma de recibir rutas de archivos a generar y resolver (#68)
+
+### Features
+
+* **commands:** cambio en forma de recibir rutas de archivos a generar y resolver ([#68](https://github.com/DerivadaDX/cc-cli/issues/68)) ([d522bdd](https://github.com/DerivadaDX/cc-cli/commit/d522bddc06d4f25b823343277422fd311da5262f))
+* **commands:** incorporación de parámetro `seed` ([#70](https://github.com/DerivadaDX/cc-cli/issues/70)) ([bba03f9](https://github.com/DerivadaDX/cc-cli/commit/bba03f945ee25f0bbec9efa12b26cc9c7084fb0d))
+* **resolver-command:** cambio de individuo por defecto a 'optimizacion' ([#72](https://github.com/DerivadaDX/cc-cli/issues/72)) ([6c27705](https://github.com/DerivadaDX/cc-cli/commit/6c27705f5c1dcb77b475753751481b060d506881))
+* **resolver-command:** notificación de detención por estancamiento ([#61](https://github.com/DerivadaDX/cc-cli/issues/61)) ([6e3f87d](https://github.com/DerivadaDX/cc-cli/commit/6e3f87d315fe2aa645f1132b056341bc7bbb4370))
+
 ## [2.0.0](https://github.com/DerivadaDX/cc-cli/compare/v1.0.0...v2.0.0) (2025-06-19)
 
 
