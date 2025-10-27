@@ -28,7 +28,7 @@ namespace App.Commands.Resolver
             {
                 Description = "Límite de generaciones sin mejora (0 = infinito)",
             };
-            var tipoIndividuoOption = new Option<string>("--tipo-individuo", () => "intercambio")
+            var tipoIndividuoOption = new Option<string>("--tipo-individuo", () => "optimizacion")
             {
                 Description = "Tipo de individuo a utilizar (intercambio|optimizacion)",
             };
