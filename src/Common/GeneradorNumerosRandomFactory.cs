@@ -2,7 +2,7 @@
 {
     public class GeneradorNumerosRandomFactory
     {
-        private static GeneradorNumerosRandom _generador;
+        private static GeneradorNumerosRandom _generador = null;
 
         public static GeneradorNumerosRandom Crear(int seed)
         {

@@ -2,7 +2,7 @@
 {
     public class GeneradorNumerosRandom
     {
-        private static int? _seed;
+        private static int? _seed = null;
 
         private readonly Random _random;
 
