@@ -11,11 +11,12 @@ publish:
 	fi
 	@echo "Publicando versión $(VERSION)"
 	for rid in $(RIDS); do \
-		echo ">> $$rid"; \
+		outdir="$(OUT)/cc-cli-v$(VERSION)-$$rid"; \
+		echo ">> $$rid -> $$outdir"; \
 		dotnet publish $(PROJECT) -c Release -r $$rid \
 			/p:PublishSingleFile=true \
 			/p:Version=$(VERSION) \
-			-o $(OUT)/$$rid; \
+			-o "$$outdir"; \
 	done
 	@echo "Listo."
 
