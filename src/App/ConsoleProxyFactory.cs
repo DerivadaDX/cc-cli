@@ -2,7 +2,7 @@
 {
     internal class ConsoleProxyFactory
     {
-        private static ConsoleProxy _consola;
+        private static ConsoleProxy _consola = null;
 
         internal static ConsoleProxy Crear()
         {
