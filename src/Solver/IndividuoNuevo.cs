@@ -1,8 +1,12 @@
+using Common;
+
 namespace Solver
 {
     public class IndividuoNuevo
     {
-        internal IndividuoNuevo(int cantidadAtomos, int cantidadJugadores)
+        private readonly GeneradorNumerosRandom _generadorRandom;
+
+        internal IndividuoNuevo(int cantidadAtomos, int cantidadJugadores, GeneradorNumerosRandom generadorRandom)
         {
             if (cantidadAtomos < 1)
             {
@@ -18,13 +22,25 @@ namespace Solver
                 throw new ArgumentOutOfRangeException(nameof(cantidadJugadores), mensaje);
             }
 
+            _generadorRandom = generadorRandom;
+
             Cromosoma = new List<int>(new int[cantidadAtomos - 1]);
-            for (int i = 0; i < cantidadJugadores - 1; i++)
-            {
-                Cromosoma[i] = 1;
-            }
+            InicializarCromosomaAleatorio(cantidadJugadores - 1);
         }
 
         internal List<int> Cromosoma { get; }
+
+        private void InicializarCromosomaAleatorio(int cantidadUnos)
+        {
+            var indicesDisponibles = Enumerable.Range(0, Cromosoma.Count).ToList<int>();
+            for (int i = 0; i < cantidadUnos; i++)
+            {
+                int indiceRandom = _generadorRandom.Siguiente(indicesDisponibles.Count);
+                int indiceSeleccionado = indicesDisponibles[indiceRandom];
+
+                Cromosoma[indiceSeleccionado] = 1;
+                indicesDisponibles.RemoveAt(indiceRandom);
+            }
+        }
     }
 }
