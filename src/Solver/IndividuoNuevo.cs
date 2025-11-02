@@ -6,7 +6,7 @@ namespace Solver
     {
         private readonly GeneradorNumerosRandom _generadorRandom;
 
-        internal IndividuoNuevo(int cantidadAtomos, int cantidadJugadores, GeneradorNumerosRandom generadorRandom)
+        internal IndividuoNuevo(int cantidadAtomos, int cantidadAgentes, GeneradorNumerosRandom generadorRandom)
         {
             if (cantidadAtomos < 1)
             {
@@ -14,18 +14,18 @@ namespace Solver
                 throw new ArgumentOutOfRangeException(nameof(cantidadAtomos), mensaje);
             }
 
-            if (cantidadJugadores > cantidadAtomos)
+            if (cantidadAgentes > cantidadAtomos)
             {
                 string mensaje =
-                    "La cantidad de jugadores no puede ser mayor que la cantidad de átomos (átomos: {0}, jugadores: {1})";
-                mensaje = string.Format(mensaje, cantidadAtomos, cantidadJugadores);
-                throw new ArgumentOutOfRangeException(nameof(cantidadJugadores), mensaje);
+                    "La cantidad de agentes no puede ser mayor que la cantidad de átomos (átomos: {0}, agentes: {1})";
+                mensaje = string.Format(mensaje, cantidadAtomos, cantidadAgentes);
+                throw new ArgumentOutOfRangeException(nameof(cantidadAgentes), mensaje);
             }
 
             _generadorRandom = generadorRandom;
 
             Cromosoma = new List<int>(new int[cantidadAtomos - 1]);
-            InicializarCromosomaAleatorio(cantidadJugadores - 1);
+            InicializarCromosomaAleatorio(cantidadAgentes - 1);
         }
 
         internal List<int> Cromosoma { get; }

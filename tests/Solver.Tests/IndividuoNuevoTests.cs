@@ -1,5 +1,4 @@
 using Common;
-using NSubstitute;
 using Solver;
 
 public class IndividuoNuevoTests
@@ -15,21 +14,21 @@ public class IndividuoNuevoTests
     }
 
     [Fact]
-    public void Constructor_CantidadJugadoresMayorQueCantidadAtomos_LanzaArgumentOutOfRangeException()
+    public void Constructor_CantidadAgentesMayorQueCantidadAtomos_LanzaArgumentOutOfRangeException()
     {
         var ex = Assert.Throws<ArgumentOutOfRangeException>(() => CrearIndividuo(cantidadAtomos: 5, cantidadAgentes: 6));
         Assert.Contains("no puede ser mayor que la cantidad de átomos", ex.Message);
-        Assert.Equal("cantidadJugadores", ex.ParamName);
+        Assert.Equal("cantidadAgentes", ex.ParamName);
     }
 
     [Fact]
     public void Contructor_Cromosoma_CantidadCorrectaDeCerosYUnos()
     {
         int cantidadAtomos = 5;
-        int cantidadJugadores = 3;
-        IndividuoNuevo individuo = CrearIndividuo(cantidadAtomos, cantidadJugadores);
+        int cantidadAgentes = 3;
+        IndividuoNuevo individuo = CrearIndividuo(cantidadAtomos, cantidadAgentes);
 
-        int cantidadUnosEsperada = cantidadJugadores - 1;
+        int cantidadUnosEsperada = cantidadAgentes - 1;
         int cantidadUnos = individuo.Cromosoma.Count(gen => gen == 1);
         Assert.Equal(cantidadUnosEsperada, cantidadUnos);
 
@@ -44,11 +43,11 @@ public class IndividuoNuevoTests
     public void Constructor_Cromosoma_UnosAsignaosAleatoriamente()
     {
         int cantidadAtomos = 10;
-        int cantidadJugadores = 4;
+        int cantidadAgentes = 4;
         var generadorRandom1 = GeneradorNumerosRandomFactory.Crear(1);
         var generadorRandom2 = GeneradorNumerosRandomFactory.Crear(2);
-        IndividuoNuevo individuo1 = CrearIndividuo(cantidadAtomos, cantidadJugadores, generadorRandom1);
-        IndividuoNuevo individuo2 = CrearIndividuo(cantidadAtomos, cantidadJugadores, generadorRandom2);
+        IndividuoNuevo individuo1 = CrearIndividuo(cantidadAtomos, cantidadAgentes, generadorRandom1);
+        IndividuoNuevo individuo2 = CrearIndividuo(cantidadAtomos, cantidadAgentes, generadorRandom2);
 
         bool sonIguales = individuo1.Cromosoma.SequenceEqual(individuo2.Cromosoma);
         Assert.False(sonIguales, "Se esperaban cromosomas diferentes entre dos instancias.");
