@@ -13,6 +13,14 @@ public class IndividuoNuevoTests
     }
 
     [Fact]
+    public void Constructor_CantidadJugadoresMayorQueCantidadAtomos_LanzaArgumentOutOfRangeException()
+    {
+        var ex = Assert.Throws<ArgumentOutOfRangeException>(() => new IndividuoNuevo(cantidadAtomos: 5, cantidadJugadores: 6));
+        Assert.Contains("no puede ser mayor que la cantidad de átomos", ex.Message);
+        Assert.Equal("cantidadJugadores", ex.ParamName);
+    }
+
+    [Fact]
     public void Constructor_Cromosoma_TamañoCorrecto()
     {
         int cantidadAtomos = 5;
@@ -23,10 +31,20 @@ public class IndividuoNuevoTests
     }
 
     [Fact]
-    public void Constructor_CantidadJugadoresMayorQueCantidadAtomos_LanzaArgumentOutOfRangeException()
+    public void Contructor_Cromosoma_CantidadCorrectaDeCerosYUnos()
     {
-        var ex = Assert.Throws<ArgumentOutOfRangeException>(() => new IndividuoNuevo(cantidadAtomos: 5, cantidadJugadores: 6));
-        Assert.Contains("no puede ser mayor que la cantidad de átomos", ex.Message);
-        Assert.Equal("cantidadJugadores", ex.ParamName);
+        int cantidadAtomos = 5;
+        int cantidadJugadores = 3;
+        var individuo = new IndividuoNuevo(cantidadAtomos, cantidadJugadores);
+
+        int cantidadUnosEsperada = cantidadJugadores - 1;
+        int cantidadUnos = individuo.Cromosoma.Count(gen => gen == 1);
+        Assert.Equal(cantidadUnosEsperada, cantidadUnos);
+
+        int cantidadCerosEsperada = cantidadAtomos - 1 - cantidadUnosEsperada;
+        int cantidadCeros = individuo.Cromosoma.Count(gen => gen == 0);
+        Assert.Equal(cantidadCerosEsperada, cantidadCeros);
+
+        Assert.Equal(cantidadUnosEsperada + cantidadCerosEsperada, individuo.Cromosoma.Count);
     }
 }

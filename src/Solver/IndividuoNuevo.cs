@@ -19,6 +19,10 @@ namespace Solver
             }
 
             Cromosoma = new List<int>(new int[cantidadAtomos - 1]);
+            for (int i = 0; i < cantidadJugadores - 1; i++)
+            {
+                Cromosoma[i] = 1;
+            }
         }
 
         internal List<int> Cromosoma { get; }
