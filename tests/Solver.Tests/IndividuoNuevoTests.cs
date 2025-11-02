@@ -22,6 +22,13 @@ public class IndividuoNuevoTests
     }
 
     [Fact]
+    public void Constructor_GeneradorNumerosRandomNull_LanzaArgumentNullException()
+    {
+        var ex = Assert.Throws<ArgumentNullException>(() => new IndividuoNuevo(cantidadAtomos: 5, cantidadAgentes: 3, null));
+        Assert.Equal("generadorRandom", ex.ParamName);
+    }
+
+    [Fact]
     public void Contructor_Cromosoma_CantidadCorrectaDeCerosYUnos()
     {
         int cantidadAtomos = 5;

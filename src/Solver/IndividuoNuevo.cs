@@ -16,12 +16,12 @@ namespace Solver
 
             if (cantidadAgentes > cantidadAtomos)
             {
-                string mensaje =
-                    "La cantidad de agentes no puede ser mayor que la cantidad de átomos (átomos: {0}, agentes: {1})";
+                string mensaje = "La cantidad de agentes no puede ser mayor que la cantidad de átomos (átomos: {0}, agentes: {1})";
                 mensaje = string.Format(mensaje, cantidadAtomos, cantidadAgentes);
                 throw new ArgumentOutOfRangeException(nameof(cantidadAgentes), mensaje);
             }
 
+            ArgumentNullException.ThrowIfNull(generadorRandom, nameof(generadorRandom));
             _generadorRandom = generadorRandom;
 
             Cromosoma = new List<int>(new int[cantidadAtomos - 1]);
