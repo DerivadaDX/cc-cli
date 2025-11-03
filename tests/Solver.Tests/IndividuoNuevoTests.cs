@@ -66,4 +66,15 @@ public class IndividuoNuevoTests
         var individuo = new IndividuoNuevo(cantidadAtomos, cantidadAgentes, generador);
         return individuo;
     }
+
+    /*
+     * Tests faltantes:
+     * - Inicializar el cromosoma calcula la asignación óptima de porciones
+     * - Mutar mantiene la cantidad correcta de unos y ceros
+     * - Mutar cambia la posición de algunos unos y ceros si cumple la probabilidad
+     * - Mutar produce diferentes resultados en distintas ejecuciones
+     * - Mutar actualiza la asignación óptima de porciones
+     * - Cruzar produce un hijo con la cantidad correcta de unos y ceros
+     * - Cruzar produce un hijo con genes tomados de ambos padres
+     */
 }
