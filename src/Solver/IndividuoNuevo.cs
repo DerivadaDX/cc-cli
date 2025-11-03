@@ -5,6 +5,7 @@ namespace Solver
     public class IndividuoNuevo
     {
         private readonly GeneradorNumerosRandom _generadorRandom;
+        private readonly List<int> _cromosoma;
 
         internal IndividuoNuevo(int cantidadAtomos, int cantidadAgentes, GeneradorNumerosRandom generadorRandom)
         {
@@ -24,11 +25,11 @@ namespace Solver
             ArgumentNullException.ThrowIfNull(generadorRandom, nameof(generadorRandom));
             _generadorRandom = generadorRandom;
 
-            Cromosoma = new List<int>(new int[cantidadAtomos - 1]);
+            _cromosoma = new List<int>(new int[cantidadAtomos - 1]);
             InicializarCromosomaAleatorio(cantidadAgentes - 1);
         }
 
-        internal List<int> Cromosoma { get; }
+        internal IReadOnlyList<int> Cromosoma => _cromosoma;
 
         private void InicializarCromosomaAleatorio(int cantidadUnos)
         {
@@ -38,7 +39,7 @@ namespace Solver
                 int indiceRandom = _generadorRandom.Siguiente(indicesDisponibles.Count);
                 int indiceSeleccionado = indicesDisponibles[indiceRandom];
 
-                Cromosoma[indiceSeleccionado] = 1;
+                _cromosoma[indiceSeleccionado] = 1;
                 indicesDisponibles.RemoveAt(indiceRandom);
             }
         }
