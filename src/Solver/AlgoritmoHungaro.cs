@@ -2,7 +2,7 @@ using HungarianAlgorithmSolver = HungarianAlgorithm.HungarianAlgorithm;
 
 internal class AlgoritmoHungaro
 {
-    public int[] EncontrarAsignacionQueMinimizaEnvidia(decimal[,] valoraciones)
+    public int[] EncontrarAsignacionesQueMinimizanEnvidia(decimal[,] valoraciones)
     {
         int[,] matrizCostosEnteros = ConvertirValoracionesACostos(valoraciones);
         int[] asignaciones = HungarianAlgorithmSolver.FindAssignments(matrizCostosEnteros);

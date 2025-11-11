@@ -1,6 +1,21 @@
 public class AlgoritmoHungaroTests
 {
     [Fact]
+    public void EncontrarAsignacionQueMinimizaEnvidia_MatrizUnElemento_RetornaEseValor()
+    {
+        var algoritmoHungaro = new AlgoritmoHungaro();
+        decimal[,] valoraciones = new decimal[,]
+        {
+            { 42m },
+        };
+
+        int[] asignaciones = algoritmoHungaro.EncontrarAsignacionesQueMinimizanEnvidia(valoraciones);
+
+        var asignacionesEsperadas = new int[] { 0 };
+        Assert.Equal(asignacionesEsperadas, asignaciones);
+    }
+
+    [Fact]
     public void EncontrarAsignacionQueMinimizaEnvidia_ValoracionesSimples_RetornaAsignacionCorrecta()
     {
         var algoritmoHungaro = new AlgoritmoHungaro();
@@ -10,7 +25,7 @@ public class AlgoritmoHungaroTests
             { 10m, 50m },
         };
 
-        int[] asignaciones = algoritmoHungaro.EncontrarAsignacionQueMinimizaEnvidia(valoraciones);
+        int[] asignaciones = algoritmoHungaro.EncontrarAsignacionesQueMinimizanEnvidia(valoraciones);
 
         var asignacionesEsperadas = new int[] { 0, 1 };
         Assert.Equal(asignacionesEsperadas, asignaciones);
@@ -26,7 +41,7 @@ public class AlgoritmoHungaroTests
             { 20m, 20m },
         };
 
-        int[] asignaciones = algoritmoHungaro.EncontrarAsignacionQueMinimizaEnvidia(valoraciones);
+        int[] asignaciones = algoritmoHungaro.EncontrarAsignacionesQueMinimizanEnvidia(valoraciones);
 
         var asignacionesEsperadas1 = new int[] { 0, 1 };
         var asignacionesEsperadas2 = new int[] { 1, 0 };
