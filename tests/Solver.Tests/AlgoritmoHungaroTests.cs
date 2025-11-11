@@ -9,7 +9,7 @@ public class AlgoritmoHungaroTests
             { 42m },
         };
 
-        int[] asignaciones = algoritmoHungaro.EncontrarAsignacionesQueMinimizanEnvidia(valoraciones);
+        int[] asignaciones = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
 
         var asignacionesEsperadas = new int[] { 0 };
         Assert.Equal(asignacionesEsperadas, asignaciones);
@@ -25,7 +25,7 @@ public class AlgoritmoHungaroTests
             { 10m, 50m },
         };
 
-        int[] asignaciones = algoritmoHungaro.EncontrarAsignacionesQueMinimizanEnvidia(valoraciones);
+        int[] asignaciones = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
 
         var asignacionesEsperadas = new int[] { 0, 1 };
         Assert.Equal(asignacionesEsperadas, asignaciones);
@@ -41,7 +41,7 @@ public class AlgoritmoHungaroTests
             { 20m, 20m },
         };
 
-        int[] asignaciones = algoritmoHungaro.EncontrarAsignacionesQueMinimizanEnvidia(valoraciones);
+        int[] asignaciones = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
 
         var asignacionesEsperadas1 = new int[] { 0, 1 };
         var asignacionesEsperadas2 = new int[] { 1, 0 };

@@ -2,29 +2,29 @@ using HungarianAlgorithmSolver = HungarianAlgorithm.HungarianAlgorithm;
 
 internal class AlgoritmoHungaro
 {
-    public int[] EncontrarAsignacionesQueMinimizanEnvidia(decimal[,] valoraciones)
+    public int[] CalcularAsignacionOptimaDePorciones(decimal[,] valoracionesDePorciones)
     {
-        int[,] matrizCostosEnteros = ConvertirValoracionesACostos(valoraciones);
+        int[,] matrizCostosEnteros = ConvertirValoracionesACostos(valoracionesDePorciones);
         int[] asignaciones = HungarianAlgorithmSolver.FindAssignments(matrizCostosEnteros);
         return asignaciones;
     }
 
-    private int[,] ConvertirValoracionesACostos(decimal[,] valoraciones)
+    private int[,] ConvertirValoracionesACostos(decimal[,] valoracionesDePorciones)
     {
-        decimal valoracionMaxima = ObtenerValoracionMaxima(valoraciones);
-        int cantidadAtomos = valoraciones.GetLength(0);
-        int cantidadAgentes = valoraciones.GetLength(1);
+        decimal valoracionMaxima = ObtenerValoracionMaxima(valoracionesDePorciones);
+        int cantidadPorciones = valoracionesDePorciones.GetLength(0);
+        int cantidadAgentes = valoracionesDePorciones.GetLength(1);
 
-        int[,] costos = new int[cantidadAtomos, cantidadAgentes];
-        for (int indiceAtomo = 0; indiceAtomo < cantidadAtomos; indiceAtomo++)
+        int[,] costos = new int[cantidadPorciones, cantidadAgentes];
+        for (int indicePorcion = 0; indicePorcion < cantidadPorciones; indicePorcion++)
         {
             for (int indiceAgente = 0; indiceAgente < cantidadAgentes; indiceAgente++)
             {
-                decimal costo = valoracionMaxima - valoraciones[indiceAtomo, indiceAgente];
+                decimal costo = valoracionMaxima - valoracionesDePorciones[indicePorcion, indiceAgente];
 
                 // TODO: Poder trabajar con decimal. Se pasa a int porque la biblioteca que usamos no soporta decimal.
                 int costoRedondeado = (int)Math.Round(costo * 1000m);
-                costos[indiceAtomo, indiceAgente] = costoRedondeado;
+                costos[indicePorcion, indiceAgente] = costoRedondeado;
             }
         }
 
@@ -33,15 +33,15 @@ internal class AlgoritmoHungaro
 
     private decimal ObtenerValoracionMaxima(decimal[,] valoraciones)
     {
-        int cantidadAtomos = valoraciones.GetLength(0);
+        int cantidadPorciones = valoraciones.GetLength(0);
         int cantidadAgentes = valoraciones.GetLength(1);
 
         var valoracionMaxima = decimal.MinValue;
-        for (int indiceAtomo = 0; indiceAtomo < cantidadAtomos; indiceAtomo++)
+        for (int indicePorcion = 0; indicePorcion < cantidadPorciones; indicePorcion++)
         {
             for (int indiceAgente = 0; indiceAgente < cantidadAgentes; indiceAgente++)
             {
-                decimal valorActual = valoraciones[indiceAtomo, indiceAgente];
+                decimal valorActual = valoraciones[indicePorcion, indiceAgente];
                 if (valorActual > valoracionMaxima)
                     valoracionMaxima = valorActual;
             }
