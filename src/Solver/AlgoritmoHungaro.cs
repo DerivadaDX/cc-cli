@@ -20,7 +20,8 @@ internal class AlgoritmoHungaro
         {
             for (int indiceAgente = 0; indiceAgente < cantidadAgentes; indiceAgente++)
             {
-                decimal costo = valoracionMaxima - valoracionesDePorciones[indicePorcion, indiceAgente];
+                decimal valoracion = valoracionesDePorciones[indicePorcion, indiceAgente];
+                decimal costo = valoracionMaxima - valoracion;
 
                 // TODO: Poder trabajar con decimal. Se pasa a int porque la biblioteca que usamos no soporta decimal.
                 int costoRedondeado = (int)Math.Round(costo * 1000m);
