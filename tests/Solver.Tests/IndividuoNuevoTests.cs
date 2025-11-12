@@ -35,15 +35,16 @@ public class IndividuoNuevoTests
         int cantidadAgentes = 3;
         IndividuoNuevo individuo = CrearIndividuo(cantidadAtomos, cantidadAgentes);
 
+        int longitudCromosomaEsperada = cantidadAtomos - 1;
+        Assert.Equal(longitudCromosomaEsperada, individuo.Cromosoma.Count);
+
         int cantidadUnosEsperada = cantidadAgentes - 1;
         int cantidadUnos = individuo.Cromosoma.Count(gen => gen == 1);
         Assert.Equal(cantidadUnosEsperada, cantidadUnos);
 
-        int cantidadCerosEsperada = cantidadAtomos - 1 - cantidadUnosEsperada;
+        int cantidadCerosEsperada = longitudCromosomaEsperada - cantidadUnosEsperada;
         int cantidadCeros = individuo.Cromosoma.Count(gen => gen == 0);
         Assert.Equal(cantidadCerosEsperada, cantidadCeros);
-
-        Assert.Equal(cantidadCerosEsperada + cantidadUnosEsperada, individuo.Cromosoma.Count);
     }
 
     [Fact]
