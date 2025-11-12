@@ -47,7 +47,7 @@ public class IndividuoNuevoTests
     }
 
     [Fact]
-    public void Constructor_Cromosoma_UnosAsignaosAleatoriamente()
+    public void Constructor_Cromosoma_UnosAsignadosAleatoriamente()
     {
         int cantidadAtomos = 10;
         int cantidadAgentes = 4;
