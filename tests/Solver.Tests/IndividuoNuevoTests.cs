@@ -1,5 +1,4 @@
 using Common;
-using Solver;
 
 namespace Solver.Tests
 {

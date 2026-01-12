@@ -1,3 +1,5 @@
+using Solver;
+
 public class AlgoritmoHungaroTests
 {
     [Fact]
