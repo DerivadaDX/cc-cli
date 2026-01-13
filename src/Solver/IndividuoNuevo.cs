@@ -25,7 +25,7 @@ namespace Solver
             ArgumentNullException.ThrowIfNull(generadorRandom, nameof(generadorRandom));
             _generadorRandom = generadorRandom;
 
-            _cromosoma = new List<int>(new int[cantidadAtomos - 1]);
+            _cromosoma = [.. new int[cantidadAtomos - 1]];
             InicializarCromosomaAleatorio(cantidadAgentes - 1);
         }
 
