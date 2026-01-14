@@ -6,6 +6,7 @@ namespace Solver
     {
         private readonly GeneradorNumerosRandom _generadorRandom;
         private readonly List<int> _cromosoma;
+        private readonly List<int> _asignaciones;
 
         internal IndividuoNuevo(int cantidadAtomos, int cantidadAgentes, GeneradorNumerosRandom generadorRandom)
         {
@@ -25,11 +26,18 @@ namespace Solver
             ArgumentNullException.ThrowIfNull(generadorRandom, nameof(generadorRandom));
             _generadorRandom = generadorRandom;
 
-            _cromosoma = [.. new int[cantidadAtomos - 1]];
-            InicializarCromosomaAleatorio(cantidadAgentes - 1);
+            int tamañoCromosoma = cantidadAtomos - 1;
+            _cromosoma = [.. new int[tamañoCromosoma]];
+            InicializarCromosomaAleatorio(cantidadUnos: cantidadAgentes - 1);
+
+            // Falta calcular la matriz de valoraciones de porciones.
+            var algoritmoHungaro = AlgoritmoHungaroFactory.Crear();
+            var valoracionesDePorciones = new decimal[cantidadAtomos, cantidadAgentes];
+            _asignaciones = [.. algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoracionesDePorciones)];
         }
 
         internal IReadOnlyList<int> Cromosoma => _cromosoma;
+        internal IReadOnlyList<int> Asignaciones => _asignaciones;
 
         private void InicializarCromosomaAleatorio(int cantidadUnos)
         {

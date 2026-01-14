@@ -4,7 +4,7 @@ namespace Solver
 {
     internal class AlgoritmoHungaro
     {
-        public int[] CalcularAsignacionOptimaDePorciones(decimal[,] valoracionesDePorciones)
+        public virtual int[] CalcularAsignacionOptimaDePorciones(decimal[,] valoracionesDePorciones)
         {
             int[,] matrizCostosEnteros = ConvertirValoracionesACostos(valoracionesDePorciones);
             int[] asignaciones = HungarianAlgorithmSolver.FindAssignments(matrizCostosEnteros);

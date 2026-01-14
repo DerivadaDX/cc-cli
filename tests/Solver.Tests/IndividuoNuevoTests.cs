@@ -1,9 +1,16 @@
 using Common;
+using NSubstitute;
 
 namespace Solver.Tests
 {
-    public class IndividuoNuevoTests
+    public class IndividuoNuevoTests : IDisposable
     {
+        public void Dispose()
+        {
+            AlgoritmoHungaroFactory.SetearInstancia(null);
+            GC.SuppressFinalize(this);
+        }
+
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
@@ -62,6 +69,22 @@ namespace Solver.Tests
             Assert.False(sonIguales, "Se esperaban cromosomas diferentes entre dos instancias.");
         }
 
+        [Fact]
+        public void Constructor_AsignacionDePorciones_InicializadaConLaOptima()
+        {
+            int[] asignacionOptima = [0, 2, 1, 3];
+
+            var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
+            algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns(asignacionOptima);
+            AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
+
+            var generadorRandom = GeneradorNumerosRandomFactory.Crear(1);
+            IndividuoNuevo individuo = CrearIndividuo(cantidadAtomos: 10, cantidadAgentes: 4, generadorRandom);
+
+            bool sonIguales = individuo.Asignaciones.SequenceEqual(asignacionOptima);
+            Assert.True(sonIguales, "La asignación de porciones no coincide con la óptima esperada.");
+        }
+
         private IndividuoNuevo CrearIndividuo(int cantidadAtomos, int cantidadAgentes, GeneradorNumerosRandom generadorRandom = null)
         {
             var generador = generadorRandom ?? GeneradorNumerosRandomFactory.Crear(1);
@@ -71,6 +94,7 @@ namespace Solver.Tests
 
         /*
          * Tests faltantes:
+         * - Antes de calcular la asignación óptima de porciones, la matriz de valoraciones es correcta
          * - Inicializar el cromosoma calcula la asignación óptima de porciones
          * - Mutar mantiene la cantidad correcta de unos y ceros
          * - Mutar cambia la posición de algunos unos y ceros si cumple la probabilidad
