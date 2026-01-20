@@ -1,12 +1,13 @@
 using Common;
-using System.Linq;
 
 namespace Solver
 {
     public class IndividuoNuevo
     {
-        private readonly GeneradorNumerosRandom _generadorRandom;
         private readonly InstanciaProblema _problema;
+        private readonly GeneradorNumerosRandom _generadorRandom;
+        private readonly CalculadoraValoracionesPorciones _calculadoraValoraciones;
+        private readonly AlgoritmoHungaro _algoritmoHungaro;
         private readonly List<int> _cromosoma;
         private readonly List<int> _asignaciones;
 
@@ -23,10 +24,9 @@ namespace Solver
             _cromosoma = [.. new int[tamañoCromosoma]];
             InicializarCromosomaAleatorio(cantidadUnos);
 
-            var algoritmoHungaro = AlgoritmoHungaroFactory.Crear();
-            var calculadoraValoraciones = CalculadoraValoracionesPorcionesFactory.Crear();
-            decimal[,] valoracionesDePorciones = calculadoraValoraciones.Calcular(_problema, Cromosoma);
-            _asignaciones = [.. algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoracionesDePorciones)];
+            _calculadoraValoraciones = CalculadoraValoracionesPorcionesFactory.Crear();
+            _algoritmoHungaro = AlgoritmoHungaroFactory.Crear();
+            _asignaciones = CalcularAsignacionesOptimas();
         }
 
         internal IReadOnlyList<int> Cromosoma => _cromosoma;
@@ -43,6 +43,27 @@ namespace Solver
                 _cromosoma[indiceSeleccionado] = 1;
                 indicesDisponibles.RemoveAt(indiceRandom);
             }
+        }
+
+        private List<int> CalcularAsignacionesOptimas()
+        {
+            List<int> posicionesCortes = ExtraerPosicionesCortes(_cromosoma);
+            decimal[,] valoracionesDePorciones = _calculadoraValoraciones.Calcular(_problema, posicionesCortes);
+
+            int[] asignaciones = _algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoracionesDePorciones);
+            return asignaciones.ToList();
+        }
+
+        private List<int> ExtraerPosicionesCortes(List<int> cromosoma)
+        {
+            var posiciones = new List<int>();
+            for (int indice = 0; indice < cromosoma.Count; indice++)
+            {
+                if (cromosoma[indice] == 1)
+                    posiciones.Add(indice + 1);
+            }
+
+            return posiciones;
         }
     }
 }

@@ -1,4 +1,3 @@
-using System.Reflection;
 using Common;
 using NSubstitute;
 
@@ -98,6 +97,31 @@ namespace Solver.Tests
             CrearIndividuo(problema);
 
             algoritmoHungaro.Received(1).CalcularAsignacionOptimaDePorciones(valoraciones);
+        }
+
+        [Fact]
+        public void Constructor_PosicionesDeCortes_CoincidenConLosGenesActivados()
+        {
+            IReadOnlyList<int> posicionesRecibidas = null;
+
+            var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
+            calculadora
+                .Calcular(Arg.Any<InstanciaProblema>(), Arg.Do<IReadOnlyList<int>>(p => posicionesRecibidas = p));
+            CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
+
+            var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
+            AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
+
+            InstanciaProblema problema = CrearInstanciaProblema(cantidadAtomos: 5, cantidadAgentes: 3);
+            IndividuoNuevo individuo = CrearIndividuo(problema, GeneradorNumerosRandomFactory.Crear(1));
+
+            var posicionesEsperadas = individuo.Cromosoma
+                .Select((gen, indice) => gen == 1 ? indice + 1 : 0)
+                .Where(posicion => posicion > 0)
+                .ToList();
+
+            Assert.NotNull(posicionesRecibidas);
+            Assert.Equal(posicionesEsperadas, posicionesRecibidas);
         }
 
         private IndividuoNuevo CrearIndividuo(InstanciaProblema problema, GeneradorNumerosRandom generadorRandom = null)
