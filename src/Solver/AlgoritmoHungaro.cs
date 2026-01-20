@@ -4,11 +4,13 @@ namespace Solver
 {
     internal class AlgoritmoHungaro
     {
-        public virtual int[] CalcularAsignacionOptimaDePorciones(decimal[,] valoracionesDePorciones)
+        public virtual List<int> CalcularAsignacionOptimaDePorciones(decimal[,] valoracionesDePorciones)
         {
             int[,] matrizCostosEnteros = ConvertirValoracionesACostos(valoracionesDePorciones);
             int[] asignaciones = HungarianAlgorithmSolver.FindAssignments(matrizCostosEnteros);
-            return asignaciones;
+
+            List<int> resultado = [.. asignaciones];
+            return resultado;
         }
 
         private int[,] ConvertirValoracionesACostos(decimal[,] valoracionesDePorciones)

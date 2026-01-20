@@ -8,12 +8,12 @@ namespace Solver.Tests
             var algoritmoHungaro = new AlgoritmoHungaro();
             decimal[,] valoraciones = new decimal[,]
             {
-            { 42m },
+                { 42m },
             };
 
-            int[] asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
+            List<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
 
-            var asignacionEsperada = new int[] { 0 };
+            var asignacionEsperada = new List<int> { 0 };
             Assert.Equal(asignacionEsperada, asignacion);
         }
 
@@ -23,13 +23,13 @@ namespace Solver.Tests
             var algoritmoHungaro = new AlgoritmoHungaro();
             decimal[,] valoraciones = new decimal[,]
             {
-            { 50m, 10m },
-            { 10m, 50m },
+                { 50m, 10m },
+                { 10m, 50m },
             };
 
-            int[] asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
+            List<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
 
-            var asignacionEsperada = new int[] { 0, 1 };
+            var asignacionEsperada = new List<int> { 0, 1 };
             Assert.Equal(asignacionEsperada, asignacion);
         }
 
@@ -39,14 +39,14 @@ namespace Solver.Tests
             var algoritmoHungaro = new AlgoritmoHungaro();
             decimal[,] valoraciones = new decimal[,]
             {
-            { 20m, 20m },
-            { 20m, 20m },
+                { 20m, 20m },
+                { 20m, 20m },
             };
 
-            int[] asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
+            List<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
 
-            var asignacionEsperada1 = new int[] { 0, 1 };
-            var asignacionEsperada2 = new int[] { 1, 0 };
+            var asignacionEsperada1 = new List<int> { 0, 1 };
+            var asignacionEsperada2 = new List<int> { 1, 0 };
 
             bool esAsignacionValida = asignacion.SequenceEqual(asignacionEsperada1) || asignacion.SequenceEqual(asignacionEsperada2);
             Assert.True(esAsignacionValida, $"La asignación devuelta no es la esperada: [{string.Join(", ", asignacion)}]");
@@ -58,17 +58,17 @@ namespace Solver.Tests
             var algoritmoHungaro = new AlgoritmoHungaro();
             decimal[,] valoracionesNormal =
             {
-            { 8m, 4m },
-            { 6m, 7m },
-        };
+                { 8m, 4m },
+                { 6m, 7m },
+            };
             decimal[,] valoracionesEscaladas =
             {
-            { 16m, 8m },
-            { 12m, 14m },
-        };
+                { 16m, 8m },
+                { 12m, 14m },
+            };
 
-            int[] asignacionValoracionesBase = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoracionesNormal);
-            int[] asignacionValoracionesEscaladas = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoracionesEscaladas);
+            List<int> asignacionValoracionesBase = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoracionesNormal);
+            List<int> asignacionValoracionesEscaladas = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoracionesEscaladas);
 
             Assert.Equal(asignacionValoracionesBase, asignacionValoracionesEscaladas);
         }
@@ -79,13 +79,13 @@ namespace Solver.Tests
             var algoritmoHungaro = new AlgoritmoHungaro();
             decimal[,] valoraciones =
             {
-            { 1.234m, 0.100m },
-            { 0.200m, 1.233m },
-        };
+                { 1.234m, 0.100m },
+                { 0.200m, 1.233m },
+            };
 
-            int[] asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
+            List<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
 
-            var asignacionEsperada = new[] { 0, 1 };
+            var asignacionEsperada = new List<int> { 0, 1 };
             Assert.Equal(asignacionEsperada, asignacion);
         }
 
@@ -95,13 +95,13 @@ namespace Solver.Tests
             var algoritmoHungaro = new AlgoritmoHungaro();
             decimal[,] valoraciones =
             {
-            { -1m, -10m },
-            { -20m, -2m },
-        };
+                { -1m, -10m },
+                { -20m, -2m },
+            };
 
-            int[] asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
+            List<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
 
-            var asignacionEsperada = new[] { 0, 1 };
+            var asignacionEsperada = new List<int> { 0, 1 };
             Assert.Equal(asignacionEsperada, asignacion);
         }
 
@@ -111,16 +111,16 @@ namespace Solver.Tests
             var algoritmoHungaro = new AlgoritmoHungaro();
             decimal[,] valoraciones =
             {
-            { 9m, 1m, 2m, 3m, 4m },
-            { 1m, 9m, 2m, 3m, 4m },
-            { 1m, 2m, 9m, 3m, 4m },
-            { 1m, 2m, 3m, 9m, 4m },
-            { 1m, 2m, 3m, 4m, 9m },
-        };
+                { 9m, 1m, 2m, 3m, 4m },
+                { 1m, 9m, 2m, 3m, 4m },
+                { 1m, 2m, 9m, 3m, 4m },
+                { 1m, 2m, 3m, 9m, 4m },
+                { 1m, 2m, 3m, 4m, 9m },
+            };
 
-            int[] asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
+            List<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
 
-            var asignacionEsperada = new[] { 0, 1, 2, 3, 4 };
+            var asignacionEsperada = new List<int> { 0, 1, 2, 3, 4 };
             Assert.Equal(asignacionEsperada, asignacion);
         }
 
@@ -130,16 +130,16 @@ namespace Solver.Tests
             var algoritmoHungaro = new AlgoritmoHungaro();
             decimal[,] valoraciones =
             {
-            { 0.998348m, 0.999539m },
-            { 0.998660m, 1.000000m },
-        };
+                { 0.998348m, 0.999539m },
+                { 0.998660m, 1.000000m },
+            };
 
-            int[] asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
+            List<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
 
             // Suma real:
             // Asignación [0, 1]: 0.998348 + 1.000000 = 1.998348  (óptimo real)
             // Asignación [1, 0]: 0.999539 + 0.998660 = 1.998199
-            var asignacionErroneaEsperada = new[] { 1, 0 };
+            var asignacionErroneaEsperada = new List<int> { 1, 0 };
             Assert.Equal(asignacionErroneaEsperada, asignacion);
         }
     }

@@ -69,7 +69,7 @@ namespace Solver.Tests
         [Fact]
         public void Constructor_AsignacionDePorciones_InicializadaConLaOptima()
         {
-            int[] asignacionOptima = [0, 2, 1, 3];
+            var asignacionOptima = new List<int> { 0, 2, 1, 3 };
 
             var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
             algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns(asignacionOptima);

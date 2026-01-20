@@ -49,9 +49,8 @@ namespace Solver
         {
             List<int> posicionesCortes = ExtraerPosicionesCortes(_cromosoma);
             decimal[,] valoracionesDePorciones = _calculadoraValoraciones.Calcular(_problema, posicionesCortes);
-
-            int[] asignaciones = _algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoracionesDePorciones);
-            return asignaciones.ToList();
+            List<int> asignaciones = _algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoracionesDePorciones);
+            return asignaciones;
         }
 
         private List<int> ExtraerPosicionesCortes(List<int> cromosoma)
