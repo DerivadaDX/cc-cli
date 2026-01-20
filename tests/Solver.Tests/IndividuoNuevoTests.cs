@@ -1,3 +1,4 @@
+using System.Reflection;
 using Common;
 using NSubstitute;
 
@@ -8,31 +9,25 @@ namespace Solver.Tests
         public void Dispose()
         {
             AlgoritmoHungaroFactory.SetearInstancia(null);
+            CalculadoraValoracionesPorcionesFactory.SetearInstancia(null);
             GC.SuppressFinalize(this);
         }
 
-        [Theory]
-        [InlineData(0)]
-        [InlineData(-1)]
-        public void Constructor_CantidadAtomosInvalida_LanzaArgumentOutOfRangeException(int cantidadAtomos)
-        {
-            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => CrearIndividuo(cantidadAtomos, cantidadAgentes: 1));
-            Assert.Contains("debe ser mayor o igual a 1", ex.Message);
-            Assert.Equal("cantidadAtomos", ex.ParamName);
-        }
-
         [Fact]
-        public void Constructor_CantidadAgentesMayorQueCantidadAtomos_LanzaArgumentOutOfRangeException()
+        public void Constructor_InstanciaProblemaNull_LanzaArgumentNullException()
         {
-            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => CrearIndividuo(cantidadAtomos: 5, cantidadAgentes: 6));
-            Assert.Contains("no puede ser mayor que la cantidad de átomos", ex.Message);
-            Assert.Equal("cantidadAgentes", ex.ParamName);
+            var generadorRandom = GeneradorNumerosRandomFactory.Crear(1);
+            var ex = Assert.Throws<ArgumentNullException>(() => new IndividuoNuevo(null, generadorRandom));
+
+            Assert.Equal("problema", ex.ParamName);
         }
 
         [Fact]
         public void Constructor_GeneradorNumerosRandomNull_LanzaArgumentNullException()
         {
-            var ex = Assert.Throws<ArgumentNullException>(() => new IndividuoNuevo(cantidadAtomos: 5, cantidadAgentes: 3, null));
+            InstanciaProblema problema = CrearInstanciaProblema(cantidadAtomos: 5, cantidadAgentes: 3);
+            var ex = Assert.Throws<ArgumentNullException>(() => new IndividuoNuevo(problema, null));
+
             Assert.Equal("generadorRandom", ex.ParamName);
         }
 
@@ -41,7 +36,8 @@ namespace Solver.Tests
         {
             int cantidadAtomos = 5;
             int cantidadAgentes = 3;
-            IndividuoNuevo individuo = CrearIndividuo(cantidadAtomos, cantidadAgentes);
+            InstanciaProblema problema = CrearInstanciaProblema(cantidadAtomos, cantidadAgentes);
+            IndividuoNuevo individuo = CrearIndividuo(problema);
 
             int longitudCromosomaEsperada = cantidadAtomos - 1;
             Assert.Equal(longitudCromosomaEsperada, individuo.Cromosoma.Count);
@@ -60,10 +56,12 @@ namespace Solver.Tests
         {
             int cantidadAtomos = 10;
             int cantidadAgentes = 4;
+            InstanciaProblema problema = CrearInstanciaProblema(cantidadAtomos, cantidadAgentes);
+
             var generadorRandom1 = GeneradorNumerosRandomFactory.Crear(1);
             var generadorRandom2 = GeneradorNumerosRandomFactory.Crear(2);
-            IndividuoNuevo individuo1 = CrearIndividuo(cantidadAtomos, cantidadAgentes, generadorRandom1);
-            IndividuoNuevo individuo2 = CrearIndividuo(cantidadAtomos, cantidadAgentes, generadorRandom2);
+            IndividuoNuevo individuo1 = CrearIndividuo(problema, generadorRandom1);
+            IndividuoNuevo individuo2 = CrearIndividuo(problema, generadorRandom2);
 
             bool sonIguales = individuo1.Cromosoma.SequenceEqual(individuo2.Cromosoma);
             Assert.False(sonIguales, "Se esperaban cromosomas diferentes entre dos instancias.");
@@ -78,30 +76,48 @@ namespace Solver.Tests
             algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns(asignacionOptima);
             AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
 
-            var generadorRandom = GeneradorNumerosRandomFactory.Crear(1);
-            IndividuoNuevo individuo = CrearIndividuo(cantidadAtomos: 10, cantidadAgentes: 4, generadorRandom);
+            InstanciaProblema problema = CrearInstanciaProblema(cantidadAtomos: 4, cantidadAgentes: 4);
+            IndividuoNuevo individuo = CrearIndividuo(problema);
 
             bool sonIguales = individuo.Asignaciones.SequenceEqual(asignacionOptima);
             Assert.True(sonIguales, "La asignación de porciones no coincide con la óptima esperada.");
         }
 
-        private IndividuoNuevo CrearIndividuo(int cantidadAtomos, int cantidadAgentes, GeneradorNumerosRandom generadorRandom = null)
+        [Fact]
+        public void Constructor_ValoracionesDePorciones_SeCalculanYUsanLasCorrectas()
+        {
+            var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
+            var valoraciones = new decimal[,] { { 1m, 2m }, { 3m, 4m } };
+            calculadora.Calcular(Arg.Any<InstanciaProblema>(), Arg.Any<IReadOnlyList<int>>()).Returns(valoraciones);
+            CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
+
+            var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
+            AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
+
+            InstanciaProblema problema = CrearInstanciaProblema(cantidadAtomos: 3, cantidadAgentes: 2);
+            CrearIndividuo(problema);
+
+            algoritmoHungaro.Received(1).CalcularAsignacionOptimaDePorciones(valoraciones);
+        }
+
+        private IndividuoNuevo CrearIndividuo(InstanciaProblema problema, GeneradorNumerosRandom generadorRandom = null)
         {
             var generador = generadorRandom ?? GeneradorNumerosRandomFactory.Crear(1);
-            var individuo = new IndividuoNuevo(cantidadAtomos, cantidadAgentes, generador);
+            var individuo = new IndividuoNuevo(problema, generador);
             return individuo;
         }
 
-        /*
-         * Tests faltantes:
-         * - Antes de calcular la asignación óptima de porciones, la matriz de valoraciones es correcta
-         * - Inicializar el cromosoma calcula la asignación óptima de porciones
-         * - Mutar mantiene la cantidad correcta de unos y ceros
-         * - Mutar cambia la posición de algunos unos y ceros si cumple la probabilidad
-         * - Mutar produce diferentes resultados en distintas ejecuciones
-         * - Mutar actualiza la asignación óptima de porciones
-         * - Cruzar produce un hijo con la cantidad correcta de unos y ceros
-         * - Cruzar produce un hijo con genes tomados de ambos padres
-         */
+        private InstanciaProblema CrearInstanciaProblema(int cantidadAtomos, int cantidadAgentes)
+        {
+            var matriz = new decimal[cantidadAtomos, cantidadAgentes];
+            for (int atomo = 0; atomo < cantidadAtomos; atomo++)
+            {
+                for (int agente = 0; agente < cantidadAgentes; agente++)
+                    matriz[atomo, agente] = atomo + agente + 1;
+            }
+
+            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz);
+            return instanciaProblema;
+        }
     }
 }

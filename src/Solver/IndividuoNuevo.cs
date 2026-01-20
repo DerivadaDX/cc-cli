@@ -1,38 +1,31 @@
 using Common;
+using System.Linq;
 
 namespace Solver
 {
     public class IndividuoNuevo
     {
         private readonly GeneradorNumerosRandom _generadorRandom;
+        private readonly InstanciaProblema _problema;
         private readonly List<int> _cromosoma;
         private readonly List<int> _asignaciones;
 
-        internal IndividuoNuevo(int cantidadAtomos, int cantidadAgentes, GeneradorNumerosRandom generadorRandom)
+        internal IndividuoNuevo(InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
         {
-            if (cantidadAtomos < 1)
-            {
-                string mensaje = $"La cantidad de átomos debe ser mayor o igual a 1 (valor: {cantidadAtomos})";
-                throw new ArgumentOutOfRangeException(nameof(cantidadAtomos), mensaje);
-            }
-
-            if (cantidadAgentes > cantidadAtomos)
-            {
-                string mensaje = "La cantidad de agentes no puede ser mayor que la cantidad de átomos (átomos: {0}, agentes: {1})";
-                mensaje = string.Format(mensaje, cantidadAtomos, cantidadAgentes);
-                throw new ArgumentOutOfRangeException(nameof(cantidadAgentes), mensaje);
-            }
+            ArgumentNullException.ThrowIfNull(problema, nameof(problema));
+            _problema = problema;
 
             ArgumentNullException.ThrowIfNull(generadorRandom, nameof(generadorRandom));
             _generadorRandom = generadorRandom;
 
-            int tamañoCromosoma = cantidadAtomos - 1;
+            int tamañoCromosoma = problema.CantidadAtomos - 1;
+            int cantidadUnos = problema.Agentes.Count - 1;
             _cromosoma = [.. new int[tamañoCromosoma]];
-            InicializarCromosomaAleatorio(cantidadUnos: cantidadAgentes - 1);
+            InicializarCromosomaAleatorio(cantidadUnos);
 
-            // Falta calcular la matriz de valoraciones de porciones.
             var algoritmoHungaro = AlgoritmoHungaroFactory.Crear();
-            var valoracionesDePorciones = new decimal[cantidadAtomos, cantidadAgentes];
+            var calculadoraValoraciones = CalculadoraValoracionesPorcionesFactory.Crear();
+            decimal[,] valoracionesDePorciones = calculadoraValoraciones.Calcular(_problema, Cromosoma);
             _asignaciones = [.. algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoracionesDePorciones)];
         }
 
