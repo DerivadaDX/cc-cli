@@ -105,23 +105,22 @@ namespace Solver.Tests
             IReadOnlyList<int> posicionesRecibidas = null;
 
             var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
+            var valoraciones = new decimal[,] { { 1m } };
             calculadora
-                .Calcular(Arg.Any<InstanciaProblema>(), Arg.Do<IReadOnlyList<int>>(p => posicionesRecibidas = p));
+                .Calcular(Arg.Any<InstanciaProblema>(), Arg.Do<IReadOnlyList<int>>(p => posicionesRecibidas = p))
+                .Returns(valoraciones);
             CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
 
             var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
             AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
 
             InstanciaProblema problema = CrearInstanciaProblema(cantidadAtomos: 5, cantidadAgentes: 3);
-            IndividuoNuevo individuo = CrearIndividuo(problema, GeneradorNumerosRandomFactory.Crear(1));
+            var generador = Substitute.For<GeneradorNumerosRandom>(1);
+            generador.Siguiente(Arg.Any<int>()).Returns(2, 0); // Selecciona índices 2 y 0 para los unos en el cromosoma
+            CrearIndividuo(problema, generador);
 
-            var posicionesEsperadas = individuo.Cromosoma
-                .Select((gen, indice) => gen == 1 ? indice + 1 : 0)
-                .Where(posicion => posicion > 0)
-                .ToList();
-
-            Assert.NotNull(posicionesRecibidas);
-            Assert.Equal(posicionesEsperadas, posicionesRecibidas);
+            // Los unos en el cromosoma estarán en las posiciones 1 y 3 (índices 0-based)
+            Assert.Equal([1, 3], posicionesRecibidas);
         }
 
         private IndividuoNuevo CrearIndividuo(InstanciaProblema problema, GeneradorNumerosRandom generadorRandom = null)
