@@ -1,3 +1,4 @@
+using System.Linq;
 using Common;
 
 namespace Solver
@@ -21,8 +22,7 @@ namespace Solver
 
             int tamañoCromosoma = problema.CantidadAtomos - 1;
             int cantidadUnos = problema.Agentes.Count - 1;
-            _cromosoma = [.. new int[tamañoCromosoma]];
-            InicializarCromosomaAleatorio(cantidadUnos);
+            _cromosoma = GenerarCromosomaAleatorio(tamañoCromosoma, cantidadUnos);
 
             _calculadoraValoraciones = CalculadoraValoracionesPorcionesFactory.Crear();
             _algoritmoHungaro = AlgoritmoHungaroFactory.Crear();
@@ -32,23 +32,27 @@ namespace Solver
         internal IReadOnlyList<int> Cromosoma => _cromosoma;
         internal IReadOnlyList<int> Asignaciones => _asignaciones;
 
-        private void InicializarCromosomaAleatorio(int cantidadUnos)
+        private List<int> GenerarCromosomaAleatorio(int tamaño, int cantidadUnos)
         {
-            var indicesDisponibles = Enumerable.Range(0, Cromosoma.Count).ToList<int>();
+            var cromosoma = Enumerable.Repeat(0, tamaño).ToList<int>();
+            var indicesDisponibles = Enumerable.Range(0, tamaño).ToList<int>();
             for (int i = 0; i < cantidadUnos; i++)
             {
                 int indiceRandom = _generadorRandom.Siguiente(indicesDisponibles.Count);
                 int indiceSeleccionado = indicesDisponibles[indiceRandom];
 
-                _cromosoma[indiceSeleccionado] = 1;
+                cromosoma[indiceSeleccionado] = 1;
                 indicesDisponibles.RemoveAt(indiceRandom);
             }
+
+            return cromosoma;
         }
 
         private List<int> CalcularAsignacionesOptimas()
         {
             List<int> posicionesCortes = ExtraerPosicionesCortes(_cromosoma);
             decimal[,] valoracionesDePorciones = _calculadoraValoraciones.Calcular(_problema, posicionesCortes);
+
             List<int> asignaciones = _algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoracionesDePorciones);
             return asignaciones;
         }
