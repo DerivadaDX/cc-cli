@@ -102,6 +102,25 @@ namespace Solver.Tests
         }
 
         [Fact]
+        public void Constructor_PreferenciasPorcion_SeCalculanAPartirDeLasValoraciones()
+        {
+            var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
+            var valoraciones = new decimal[,] { { 1m, 2m }, { 3m, 4m } };
+            calculadora
+                .CalcularMatrizValoracionesPorcionAgente(Arg.Any<InstanciaProblema>(), Arg.Any<IReadOnlyList<int>>())
+                .Returns(valoraciones);
+            CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
+
+            var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
+            AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
+
+            InstanciaProblema problema = CrearInstanciaProblema(cantidadAtomos: 3, cantidadAgentes: 2);
+            CrearIndividuo(problema);
+
+            calculadora.Received(1).CalcularPreferenciasPorcion(valoraciones);
+        }
+
+        [Fact]
         public void Constructor_PosicionesDeCortes_CoincidenConLosGenesActivados()
         {
             IReadOnlyList<int> posicionesRecibidas = null;

@@ -1,4 +1,3 @@
-using System.Linq;
 using Common;
 
 namespace Solver
@@ -11,6 +10,7 @@ namespace Solver
         private readonly AlgoritmoHungaro _algoritmoHungaro;
         private readonly List<int> _cromosoma;
         private readonly List<int> _asignaciones;
+        private readonly List<int> _preferenciasPorcion;
 
         internal IndividuoNuevo(InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
         {
@@ -26,7 +26,10 @@ namespace Solver
 
             _calculadoraValoraciones = CalculadoraValoracionesPorcionesFactory.Crear();
             _algoritmoHungaro = AlgoritmoHungaroFactory.Crear();
-            _asignaciones = CalcularAsignacionesOptimas();
+
+            decimal[,] valoracionesDePorciones = CalcularMatrizValoracionesPorcionAgente();
+            _asignaciones = _algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoracionesDePorciones);
+            _preferenciasPorcion = _calculadoraValoraciones.CalcularPreferenciasPorcion(valoracionesDePorciones);
         }
 
         internal IReadOnlyList<int> Cromosoma => _cromosoma;
@@ -48,26 +51,18 @@ namespace Solver
             return cromosoma;
         }
 
-        private List<int> CalcularAsignacionesOptimas()
+        private decimal[,] CalcularMatrizValoracionesPorcionAgente()
         {
-            List<int> posicionesCortes = ExtraerPosicionesCortes(_cromosoma);
-            decimal[,] valoracionesDePorciones =
-                _calculadoraValoraciones.CalcularMatrizValoracionesPorcionAgente(_problema, posicionesCortes);
-
-            List<int> asignaciones = _algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoracionesDePorciones);
-            return asignaciones;
-        }
-
-        private List<int> ExtraerPosicionesCortes(List<int> cromosoma)
-        {
-            var posiciones = new List<int>();
-            for (int indice = 0; indice < cromosoma.Count; indice++)
+            var posicionesCortes = new List<int>();
+            for (int indice = 0; indice < _cromosoma.Count; indice++)
             {
-                if (cromosoma[indice] == 1)
-                    posiciones.Add(indice + 1);
+                if (_cromosoma[indice] == 1)
+                    posicionesCortes.Add(indice + 1);
             }
 
-            return posiciones;
+            decimal[,] valoraciones =
+                _calculadoraValoraciones.CalcularMatrizValoracionesPorcionAgente(_problema, posicionesCortes);
+            return valoraciones;
         }
     }
 }
