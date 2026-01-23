@@ -23,7 +23,10 @@ namespace Solver
             int atomoInicio = 1;
             for (int indicePorcion = 0; indicePorcion < cantidadAgentes; indicePorcion++)
             {
-                int atomoFin = indicePorcion < cortesOrdenados.Count ? cortesOrdenados[indicePorcion] : problema.CantidadAtomos;
+                int atomoFin = indicePorcion < cortesOrdenados.Count
+                    ? cortesOrdenados[indicePorcion]
+                    : problema.CantidadAtomos;
+
                 for (int indiceAgente = 0; indiceAgente < cantidadAgentes; indiceAgente++)
                 {
                     Agente agente = problema.Agentes[indiceAgente];
