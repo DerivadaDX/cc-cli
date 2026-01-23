@@ -87,7 +87,9 @@ namespace Solver.Tests
         {
             var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
             var valoraciones = new decimal[,] { { 1m, 2m }, { 3m, 4m } };
-            calculadora.Calcular(Arg.Any<InstanciaProblema>(), Arg.Any<IReadOnlyList<int>>()).Returns(valoraciones);
+            calculadora
+                .CalcularMatrizValoracionesPorcionAgente(Arg.Any<InstanciaProblema>(), Arg.Any<IReadOnlyList<int>>())
+                .Returns(valoraciones);
             CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
 
             var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
@@ -107,7 +109,8 @@ namespace Solver.Tests
             var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
             var valoraciones = new decimal[,] { { 1m } };
             calculadora
-                .Calcular(Arg.Any<InstanciaProblema>(), Arg.Do<IReadOnlyList<int>>(p => posicionesRecibidas = p))
+                .CalcularMatrizValoracionesPorcionAgente(
+                    Arg.Any<InstanciaProblema>(), Arg.Do<IReadOnlyList<int>>(p => posicionesRecibidas = p))
                 .Returns(valoraciones);
             CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
 

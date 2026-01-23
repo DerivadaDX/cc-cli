@@ -3,16 +3,17 @@ namespace Solver.Tests
     public class CalculadoraValoracionesPorcionesTests
     {
         [Fact]
-        public void Calcular_ProblemaEsNull_LanzaArgumentNullException()
+        public void CalcularMatrizValoracionesPorcionAgente_ProblemaEsNull_LanzaArgumentNullException()
         {
             var calculadora = new CalculadoraValoracionesPorciones();
 
-            var ex = Assert.Throws<ArgumentNullException>(() => calculadora.Calcular(null, []));
+            var ex = Assert.Throws<ArgumentNullException>(
+                () => calculadora.CalcularMatrizValoracionesPorcionAgente(null, []));
             Assert.Equal("problema", ex.ParamName);
         }
 
         [Fact]
-        public void Calcular_CortesEsNull_LanzaArgumentNullException()
+        public void CalcularMatrizValoracionesPorcionAgente_CortesEsNull_LanzaArgumentNullException()
         {
             decimal[,] valoraciones = new decimal[,]
             {
@@ -21,12 +22,13 @@ namespace Solver.Tests
             InstanciaProblema problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(valoraciones);
             var calculadora = new CalculadoraValoracionesPorciones();
 
-            var ex = Assert.Throws<ArgumentNullException>(() => calculadora.Calcular(problema, null));
+            var ex = Assert.Throws<ArgumentNullException>(
+                () => calculadora.CalcularMatrizValoracionesPorcionAgente(problema, null));
             Assert.Equal("posicionesCortes", ex.ParamName);
         }
 
         [Fact]
-        public void Calcular_CantidadCortesInsuficiente_LanzaArgumentException()
+        public void CalcularMatrizValoracionesPorcionAgente_CantidadCortesInsuficiente_LanzaArgumentException()
         {
             decimal[,] valoraciones = new decimal[,]
             {
@@ -37,13 +39,14 @@ namespace Solver.Tests
             var calculadora = new CalculadoraValoracionesPorciones();
             var cortes = new List<int> { 1 };
 
-            var ex = Assert.Throws<ArgumentException>(() => calculadora.Calcular(problema, cortes));
+            var ex = Assert.Throws<ArgumentException>(
+                () => calculadora.CalcularMatrizValoracionesPorcionAgente(problema, cortes));
             Assert.Contains("cantidad de cortes indicada no coincide con la esperada", ex.Message);
             Assert.Equal("posicionesCortes", ex.ParamName);
         }
 
         [Fact]
-        public void Calcular_CortesDesordenados_RetornaMatrizDeValoracionesPorcionAgente()
+        public void CalcularMatrizValoracionesPorcionAgente_CortesDesordenados_RetornaMatrizDeValoracionesPorcionAgente()
         {
             decimal[,] valoraciones = new decimal[,]
             {
@@ -58,7 +61,7 @@ namespace Solver.Tests
             var calculadora = new CalculadoraValoracionesPorciones();
             var cortes = new List<int> { 4, 2 };
 
-            decimal[,] resultado = calculadora.Calcular(problema, cortes);
+            decimal[,] resultado = calculadora.CalcularMatrizValoracionesPorcionAgente(problema, cortes);
 
             decimal[,] esperado = new decimal[,]
             {
