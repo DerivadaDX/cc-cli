@@ -69,6 +69,73 @@ namespace Solver.Tests
             AssertMatricesIguales(esperado, resultado);
         }
 
+        [Fact]
+        public void CalcularPreferenciasPorcion_ValoracionesDePorcionesNull_LanzaArgumentNullException()
+        {
+            var calculadora = new CalculadoraValoracionesPorciones();
+
+            var ex = Assert.Throws<ArgumentNullException>(() => calculadora.CalcularPreferenciasPorcion(null));
+            Assert.Equal("valoracionesDePorciones", ex.ParamName);
+        }
+
+        [Fact]
+        public void CalcularPreferenciasPorcion_ValoracionesDispares_RetornaConteosEsperados()
+        {
+            decimal[,] valoraciones =
+            {
+                { 5m, 1m, 4m },
+                { 3m, 6m, 4m },
+                { 1m, 2m, 4m },
+            };
+            var calculadora = new CalculadoraValoracionesPorciones();
+
+            List<int> preferencias = calculadora.CalcularPreferenciasPorcion(valoraciones);
+
+            Assert.Equal([2, 2, 1], preferencias);
+        }
+
+        [Fact]
+        public void CalcularPreferenciasPorcion_MatrizVacia_RetornaListaVacia()
+        {
+            decimal[,] valoraciones = new decimal[0, 0];
+            var calculadora = new CalculadoraValoracionesPorciones();
+
+            List<int> preferencias = calculadora.CalcularPreferenciasPorcion(valoraciones);
+
+            Assert.Empty(preferencias);
+        }
+
+        [Fact]
+        public void CalcularPreferenciasPorcion_ValoracionesTodasCero_CuentaATodosLosAgentes()
+        {
+            decimal[,] valoraciones =
+            {
+                { 0m, 0m, 0m },
+                { 0m, 0m, 0m },
+            };
+            var calculadora = new CalculadoraValoracionesPorciones();
+
+            List<int> preferencias = calculadora.CalcularPreferenciasPorcion(valoraciones);
+
+            Assert.Equal([3, 3], preferencias);
+        }
+
+        [Fact]
+        public void CalcularPreferenciasPorcion_ValoracionesTodasIgualesNoCero_CuentaATodosLosAgentes()
+        {
+            decimal[,] valoraciones =
+            {
+                { 4m, 4m },
+                { 4m, 4m },
+                { 4m, 4m },
+            };
+            var calculadora = new CalculadoraValoracionesPorciones();
+
+            List<int> preferencias = calculadora.CalcularPreferenciasPorcion(valoraciones);
+
+            Assert.Equal([2, 2, 2], preferencias);
+        }
+
         private void AssertMatricesIguales(decimal[,] esperado, decimal[,] obtenido)
         {
             Assert.Equal(esperado.GetLength(0), obtenido.GetLength(0));
