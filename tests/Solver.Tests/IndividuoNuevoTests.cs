@@ -88,7 +88,7 @@ namespace Solver.Tests
             var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
             var valoraciones = new decimal[,] { { 1m, 2m }, { 3m, 4m } };
             calculadora
-                .CalcularMatrizValoracionesPorcionAgente(Arg.Any<InstanciaProblema>(), Arg.Any<IReadOnlyList<int>>())
+                .CalcularMatrizValoracionesPorcionAgente(Arg.Any<InstanciaProblema>(), Arg.Any<List<int>>())
                 .Returns(valoraciones);
             CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
 
@@ -107,7 +107,7 @@ namespace Solver.Tests
             var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
             var valoraciones = new decimal[,] { { 1m, 2m }, { 3m, 4m } };
             calculadora
-                .CalcularMatrizValoracionesPorcionAgente(Arg.Any<InstanciaProblema>(), Arg.Any<IReadOnlyList<int>>())
+                .CalcularMatrizValoracionesPorcionAgente(Arg.Any<InstanciaProblema>(), Arg.Any<List<int>>())
                 .Returns(valoraciones);
             CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
 
@@ -123,13 +123,13 @@ namespace Solver.Tests
         [Fact]
         public void Constructor_PosicionesDeCortes_CoincidenConLosGenesActivados()
         {
-            IReadOnlyList<int> posicionesRecibidas = null;
+            List<int> posicionesRecibidas = null;
 
             var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
             var valoraciones = new decimal[,] { { 1m } };
             calculadora
                 .CalcularMatrizValoracionesPorcionAgente(
-                    Arg.Any<InstanciaProblema>(), Arg.Do<IReadOnlyList<int>>(p => posicionesRecibidas = p))
+                    Arg.Any<InstanciaProblema>(), Arg.Do<List<int>>(p => posicionesRecibidas = p))
                 .Returns(valoraciones);
             CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
 

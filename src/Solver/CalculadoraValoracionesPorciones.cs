@@ -2,8 +2,7 @@ namespace Solver
 {
     internal class CalculadoraValoracionesPorciones
     {
-        public virtual decimal[,] CalcularMatrizValoracionesPorcionAgente(
-            InstanciaProblema problema, IReadOnlyList<int> posicionesCortes)
+        public virtual decimal[,] CalcularMatrizValoracionesPorcionAgente(InstanciaProblema problema, List<int> posicionesCortes)
         {
             ArgumentNullException.ThrowIfNull(problema, nameof(problema));
             ArgumentNullException.ThrowIfNull(posicionesCortes, nameof(posicionesCortes));
