@@ -65,7 +65,8 @@ namespace Solver
             _posicionesCortes = [];
             for (int indice = 0; indice < _cromosoma.Count; indice++)
             {
-                if (_cromosoma[indice] == 1)
+                bool esCorte = _cromosoma[indice] == 1;
+                if (esCorte)
                     _posicionesCortes.Add(indice + 1);
             }
 
