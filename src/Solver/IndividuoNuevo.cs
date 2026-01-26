@@ -2,15 +2,16 @@ using Common;
 
 namespace Solver
 {
-    public class IndividuoNuevo
+    internal class IndividuoNuevo
     {
         private readonly InstanciaProblema _problema;
         private readonly GeneradorNumerosRandom _generadorRandom;
         private readonly CalculadoraValoracionesPorciones _calculadoraValoraciones;
         private readonly AlgoritmoHungaro _algoritmoHungaro;
         private readonly List<int> _cromosoma;
-        private readonly List<int> _asignaciones;
-        private readonly List<int> _preferenciasPorcion;
+        private List<int> _asignaciones = [];
+        private List<int> _preferenciasPorcion = [];
+        private List<int> _posicionesCortes = [];
 
         internal IndividuoNuevo(InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
         {
@@ -27,13 +28,21 @@ namespace Solver
             _calculadoraValoraciones = CalculadoraValoracionesPorcionesFactory.Crear();
             _algoritmoHungaro = AlgoritmoHungaroFactory.Crear();
 
-            decimal[,] valoracionesDePorciones = CalcularMatrizValoracionesPorcionAgente();
-            _asignaciones = _algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoracionesDePorciones);
-            _preferenciasPorcion = _calculadoraValoraciones.CalcularPreferenciasPorcion(valoracionesDePorciones);
+            CalcularEstado();
         }
 
         internal IReadOnlyList<int> Cromosoma => _cromosoma;
         internal IReadOnlyList<int> Asignaciones => _asignaciones;
+
+        internal void Mutar()
+        {
+            int indicePorcionMasDeseada = ObtenerPorcionMasDeseada();
+            bool seAchico = AchicarPorcion(indicePorcionMasDeseada);
+            if (!seAchico)
+                return;
+
+            CalcularEstado();
+        }
 
         private List<int> GenerarCromosomaAleatorio(int tamaño, int cantidadUnos)
         {
@@ -51,18 +60,110 @@ namespace Solver
             return cromosoma;
         }
 
-        private decimal[,] CalcularMatrizValoracionesPorcionAgente()
+        private void CalcularEstado()
         {
-            var posicionesCortes = new List<int>();
+            _posicionesCortes = [];
             for (int indice = 0; indice < _cromosoma.Count; indice++)
             {
                 if (_cromosoma[indice] == 1)
-                    posicionesCortes.Add(indice + 1);
+                    _posicionesCortes.Add(indice + 1);
             }
 
-            decimal[,] valoraciones =
-                _calculadoraValoraciones.CalcularMatrizValoracionesPorcionAgente(_problema, posicionesCortes);
-            return valoraciones;
+            decimal[,] valoraciones = _calculadoraValoraciones.CalcularMatrizValoracionesPorcionAgente(_problema, _posicionesCortes);
+            _asignaciones = _algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
+            _preferenciasPorcion = _calculadoraValoraciones.CalcularPreferenciasPorcion(valoraciones);
+        }
+
+        private int ObtenerPorcionMasDeseada()
+        {
+            int indiceMaximo = 0;
+            int valorMaximo = _preferenciasPorcion[0];
+
+            for (int i = 1; i < _preferenciasPorcion.Count; i++)
+            {
+                if (_preferenciasPorcion[i] > valorMaximo)
+                {
+                    valorMaximo = _preferenciasPorcion[i];
+                    indiceMaximo = i;
+                }
+            }
+
+            return indiceMaximo;
+        }
+
+        private bool AchicarPorcion(int indicePorcion)
+        {
+            int tamañoPorcion = CalcularTamañoPorcion(indicePorcion);
+            if (tamañoPorcion <= 1)
+                return false;
+
+            bool esPrimeraPorcion = indicePorcion == 0;
+            if (esPrimeraPorcion)
+            {
+                int corteDerecho = _posicionesCortes[0];
+                bool pudoMover = MoverCorte(corteDerecho, corteDerecho - 1);
+                return pudoMover;
+            }
+
+            bool esUltimaPorcion = indicePorcion == _posicionesCortes.Count;
+            if (esUltimaPorcion)
+            {
+                int corteIzquierdo = _posicionesCortes[^1];
+                bool pudoMover = MoverCorte(corteIzquierdo, corteIzquierdo + 1);
+                return pudoMover;
+            }
+
+            int preferenciaIzquierda = _preferenciasPorcion[indicePorcion - 1];
+            int preferenciaDerecha = _preferenciasPorcion[indicePorcion + 1];
+            bool porcionIzquierdaEsMenosDeseada = preferenciaIzquierda <= preferenciaDerecha;
+            if (porcionIzquierdaEsMenosDeseada)
+            {
+                int corteIzquierdo = _posicionesCortes[indicePorcion - 1];
+                bool pudoMoverIzquierdo = MoverCorte(corteIzquierdo, corteIzquierdo + 1);
+                return pudoMoverIzquierdo;
+            }
+
+            int corteDerechoIntermedio = _posicionesCortes[indicePorcion];
+            bool pudoMoverDerecho = MoverCorte(corteDerechoIntermedio, corteDerechoIntermedio - 1);
+            return pudoMoverDerecho;
+        }
+
+        private int CalcularTamañoPorcion(int indicePorcion)
+        {
+            int inicio = indicePorcion > 0
+                ? _posicionesCortes[indicePorcion - 1] + 1
+                : 1;
+
+            int fin = indicePorcion < _posicionesCortes.Count
+                ? _posicionesCortes[indicePorcion]
+                : _problema.CantidadAtomos;
+
+            int tamaño = fin - inicio + 1;
+            return tamaño;
+        }
+
+        private bool MoverCorte(int posicionActual, int nuevaPosicion)
+        {
+            bool nuevaPosicionInvalida = nuevaPosicion < 1 || nuevaPosicion > _cromosoma.Count;
+            if (nuevaPosicionInvalida)
+                return false;
+
+            int indiceActual = posicionActual - 1;
+            bool posicionActualNoEsCorte = _cromosoma[indiceActual] == 0;
+            if (posicionActualNoEsCorte)
+                return false;
+
+            int indiceNuevo = nuevaPosicion - 1;
+            bool posicionNuevaYaEsCorte = _cromosoma[indiceNuevo] == 1;
+            if (posicionNuevaYaEsCorte)
+                return false;
+
+            _cromosoma[indiceActual] = 0;
+            _cromosoma[indiceNuevo] = 1;
+            _posicionesCortes.Remove(posicionActual);
+            _posicionesCortes.Add(nuevaPosicion);
+            _posicionesCortes.Sort();
+            return true;
         }
     }
 }
