@@ -145,6 +145,28 @@ namespace Solver.Tests
             Assert.Equal([1, 3], posicionesRecibidas);
         }
 
+        [Fact]
+        public void Mutar_PorcionMasDeseadaUnica_AchicaEsaPorcion()
+        {
+            var valoraciones = new decimal[,]
+            {
+                { 1m, 1m, 1m },
+                { 1m, 1m, 1m },
+                { 9m, 9m, 9m },
+                { 1m, 1m, 1m },
+                { 1m, 1m, 1m },
+            };
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(valoraciones);
+            var generador = Substitute.For<GeneradorNumerosRandom>(1);
+            generador.Siguiente(Arg.Any<int>()).Returns(2, 0); // Cortes iniciales en 1 y 3 → cromosoma [1,0,1,0]
+
+            IndividuoNuevo individuo = CrearIndividuo(problema, generador);
+            individuo.Mutar();
+
+            // Se achica la porción del medio moviendo el corte de la izquierda (1 → 2).
+            Assert.Equal([0, 1, 1, 0], individuo.Cromosoma);
+        }
+
         private IndividuoNuevo CrearIndividuo(InstanciaProblema problema, GeneradorNumerosRandom generadorRandom = null)
         {
             var generador = generadorRandom ?? GeneradorNumerosRandomFactory.Crear(1);
