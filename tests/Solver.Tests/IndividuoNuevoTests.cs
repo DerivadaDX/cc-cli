@@ -148,7 +148,7 @@ namespace Solver.Tests
         [Fact]
         public void Mutar_PorcionMasDeseadaUnica_AchicaEsaPorcion()
         {
-            // Cortes iniciales en 1 y 3 → cromosoma [1,0,1,0]
+            // Cortes iniciales en 1 y 3 → cromosoma [1, 0, 1, 0]
             // Preferencias por porción: [0, 3, 0].
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
@@ -170,7 +170,7 @@ namespace Solver.Tests
         [Fact]
         public void Mutar_PorcionesVecinasEmpatadas_AgrandaLaIzquierda()
         {
-            // Cortes iniciales en 1 y 3 → cromosoma [1,0,1,0]
+            // Cortes iniciales en 1 y 3 → cromosoma [1, 0, 1, 0]
             // Preferencias por porción: [0, 3, 0].
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
@@ -192,7 +192,7 @@ namespace Solver.Tests
         [Fact]
         public void Mutar_PorcionIzquierdaMenosDeseada_AgrandaLaIzquierda()
         {
-            // Cortes iniciales en 1 y 3 → cromosoma [1,0,1,0]
+            // Cortes iniciales en 1 y 3 → cromosoma [1, 0, 1, 0]
             // Preferencias por porción: [0, 2, 1].
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
@@ -214,7 +214,7 @@ namespace Solver.Tests
         [Fact]
         public void Mutar_PorcionDerechaMenosDeseada_AgrandaLaDerecha()
         {
-            // Cortes iniciales en 1 y 3 → cromosoma [1,0,1,0]
+            // Cortes iniciales en 1 y 3 → cromosoma [1, 0, 1, 0]
             // Preferencias por porción: [1, 2, 0].
             var valoraciones = new decimal[,]
             {
@@ -232,6 +232,31 @@ namespace Solver.Tests
             individuo.Mutar();
 
             Assert.Equal([1, 1, 0, 0], individuo.Cromosoma);
+        }
+
+        [Fact]
+        public void Mutar_MasDeUnaPorcionMasDeseada_AchicaLaPrimera()
+        {
+            // Cortes iniciales en 2, 4 y 6 → cromosoma [0, 1, 0, 1, 0, 1, 0]
+            // Preferencias por porción: [0, 3, 3, 0].
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 1m, 1m, 1m, 1m },
+                { 1m, 1m, 1m, 1m },
+                { 9m, 1m, 9m, 9m },
+                { 9m, 1m, 9m, 9m },
+                { 1m, 9m, 9m, 9m },
+                { 1m, 9m, 9m, 9m },
+                { 1m, 1m, 1m, 1m },
+                { 1m, 1m, 1m, 1m },
+            });
+            var generador = Substitute.For<GeneradorNumerosRandom>(1);
+            generador.Siguiente(Arg.Any<int>()).Returns(5, 3, 1);
+
+            IndividuoNuevo individuo = CrearIndividuo(problema, generador);
+            individuo.Mutar();
+
+            Assert.Equal([0, 0, 1, 1, 0, 1, 0], individuo.Cromosoma);
         }
 
         private IndividuoNuevo CrearIndividuo(InstanciaProblema problema, GeneradorNumerosRandom generadorRandom = null)
