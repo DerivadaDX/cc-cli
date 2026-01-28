@@ -149,7 +149,7 @@ namespace Solver.Tests
         public void Mutar_PorcionMasDeseadaUnica_AchicaEsaPorcion()
         {
             // Cortes iniciales en 1 y 3 → cromosoma [1, 0, 1, 0]
-            // Preferencias por porción: [0, 3, 0].
+            // Preferencias por porción: [0, 3, 0]
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
                 { 1m, 1m, 1m },
@@ -171,7 +171,7 @@ namespace Solver.Tests
         public void Mutar_PorcionesVecinasEmpatadas_AgrandaLaIzquierda()
         {
             // Cortes iniciales en 1 y 3 → cromosoma [1, 0, 1, 0]
-            // Preferencias por porción: [0, 3, 0].
+            // Preferencias por porción: [0, 3, 0]
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
                 { 1m, 1m, 1m },
@@ -193,7 +193,7 @@ namespace Solver.Tests
         public void Mutar_PorcionIzquierdaMenosDeseada_AgrandaLaIzquierda()
         {
             // Cortes iniciales en 1 y 3 → cromosoma [1, 0, 1, 0]
-            // Preferencias por porción: [0, 2, 1].
+            // Preferencias por porción: [0, 2, 1]
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
                 { 1m, 1m, 1m },
@@ -215,7 +215,7 @@ namespace Solver.Tests
         public void Mutar_PorcionDerechaMenosDeseada_AgrandaLaDerecha()
         {
             // Cortes iniciales en 1 y 3 → cromosoma [1, 0, 1, 0]
-            // Preferencias por porción: [1, 2, 0].
+            // Preferencias por porción: [1, 2, 0]
             var valoraciones = new decimal[,]
             {
                 { 9m, 1m, 1m },
@@ -238,7 +238,7 @@ namespace Solver.Tests
         public void Mutar_MasDeUnaPorcionMasDeseada_AchicaLaPrimera()
         {
             // Cortes iniciales en 2, 4 y 6 → cromosoma [0, 1, 0, 1, 0, 1, 0]
-            // Preferencias por porción: [0, 3, 3, 0].
+            // Preferencias por porción: [0, 3, 3, 0]
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
                 { 1m, 1m, 1m, 1m },
@@ -263,7 +263,7 @@ namespace Solver.Tests
         public void Mutar_PorcionMasDeseadaEnExtremoIzquierdo_AchicaDesdeAdentro()
         {
             // Cortes iniciales en 2 y 4 → cromosoma [0, 1, 0, 1]
-            // Preferencias por porción: [3, 0, 0].
+            // Preferencias por porción: [3, 0, 0]
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
                 { 9m, 9m, 9m },
@@ -285,7 +285,7 @@ namespace Solver.Tests
         public void Mutar_PorcionMasDeseadaEnExtremoDerecho_AchicaDesdeAdentro()
         {
             // Cortes iniciales en 1 y 3 → cromosoma [1, 0, 1, 0]
-            // Preferencias por porción: [0, 0, 3].
+            // Preferencias por porción: [0, 0, 3]
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
                 { 1m, 1m, 1m },
