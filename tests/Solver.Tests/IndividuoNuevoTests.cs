@@ -324,6 +324,29 @@ namespace Solver.Tests
             Assert.Equal([1, 1, 0], individuo.Cromosoma);
         }
 
+        [Fact]
+        public void Mutar_AsignacionesDePorciones_SeRecalculan()
+        {
+            var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
+            AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
+
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 1m, 1m, 1m },
+                { 1m, 1m, 1m },
+                { 9m, 9m, 9m },
+                { 1m, 1m, 1m },
+                { 1m, 1m, 1m },
+            });
+            var generador = Substitute.For<GeneradorNumerosRandom>(1);
+            generador.Siguiente(Arg.Any<int>()).Returns(2, 0);
+            
+            IndividuoNuevo individuo = CrearIndividuo(problema, generador);
+            individuo.Mutar();
+
+            algoritmoHungaro.Received(2).CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>());
+        }
+
         private IndividuoNuevo CrearIndividuo(InstanciaProblema problema, GeneradorNumerosRandom generadorRandom = null)
         {
             var generador = generadorRandom ?? GeneradorNumerosRandomFactory.Crear(1);
