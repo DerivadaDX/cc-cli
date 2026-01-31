@@ -82,7 +82,12 @@ namespace Solver.Tests
         public void Constructor_ValoracionesDePorciones_SeCalculanYUsanLasCorrectas()
         {
             var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
-            var valoraciones = new decimal[,] { { 1m, 2m }, { 3m, 4m } };
+            var valoraciones = new decimal[,]
+            {
+                { 1m, 2m, 3m },
+                { 4m, 5m, 6m },
+                { 7m, 8m, 9m },
+            };
             calculadora
                 .CalcularMatrizValoracionesPorcionAgente(Arg.Any<InstanciaProblema>(), Arg.Any<List<int>>())
                 .Returns(valoraciones);
@@ -101,7 +106,12 @@ namespace Solver.Tests
         public void Constructor_PreferenciasPorcion_SeCalculanAPartirDeLasValoraciones()
         {
             var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
-            var valoraciones = new decimal[,] { { 1m, 2m }, { 3m, 4m } };
+            var valoraciones = new decimal[,]
+            {
+                { 1m, 2m, 3m },
+                { 4m, 5m, 6m },
+                { 7m, 8m, 9m },
+            };
             calculadora
                 .CalcularMatrizValoracionesPorcionAgente(Arg.Any<InstanciaProblema>(), Arg.Any<List<int>>())
                 .Returns(valoraciones);
@@ -119,10 +129,16 @@ namespace Solver.Tests
             List<int> posicionesRecibidas = null;
 
             var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
+            var valoraciones = new decimal[,]
+            {
+                { 1m, 2m, 3m },
+                { 4m, 5m, 6m },
+                { 7m, 8m, 9m },
+            };
             calculadora
                 .CalcularMatrizValoracionesPorcionAgente(
                     Arg.Any<InstanciaProblema>(), Arg.Do<List<int>>(p => posicionesRecibidas = p))
-                .Returns(new decimal[,] { { 1m } });
+                .Returns(valoraciones);
             CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
 
             InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
@@ -154,7 +170,7 @@ namespace Solver.Tests
             IndividuoNuevo individuo = CrearIndividuo(problema, generador);
             individuo.Mutar();
 
-            var cromosomaEsperado = new List<int> { 0, 1, 0, 0 };
+            var cromosomaEsperado = new List<int> { 0, 1, 1, 0 };
             Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
@@ -338,7 +354,7 @@ namespace Solver.Tests
             });
             var generador = Substitute.For<GeneradorNumerosRandom>(1);
             generador.Siguiente(Arg.Any<int>()).Returns(2, 0);
-            
+
             IndividuoNuevo individuo = CrearIndividuo(problema, generador);
             individuo.Mutar();
 
