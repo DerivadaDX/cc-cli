@@ -24,7 +24,7 @@ namespace Solver.Tests
         [Fact]
         public void Constructor_GeneradorNumerosRandomNull_LanzaArgumentNullException()
         {
-            InstanciaProblema problema = CrearInstanciaProblema(cantidadAtomos: 5, cantidadAgentes: 3);
+            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
             var ex = Assert.Throws<ArgumentNullException>(() => new IndividuoNuevo(problema, null));
 
             Assert.Equal("generadorRandom", ex.ParamName);
@@ -33,15 +33,13 @@ namespace Solver.Tests
         [Fact]
         public void Contructor_Cromosoma_CantidadCorrectaDeCerosYUnos()
         {
-            int cantidadAtomos = 5;
-            int cantidadAgentes = 3;
-            InstanciaProblema problema = CrearInstanciaProblema(cantidadAtomos, cantidadAgentes);
+            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
             IndividuoNuevo individuo = CrearIndividuo(problema);
 
-            int longitudCromosomaEsperada = cantidadAtomos - 1;
+            int longitudCromosomaEsperada = 4;
             Assert.Equal(longitudCromosomaEsperada, individuo.Cromosoma.Count);
 
-            int cantidadUnosEsperada = cantidadAgentes - 1;
+            int cantidadUnosEsperada = 2;
             int cantidadUnos = individuo.Cromosoma.Count(gen => gen == 1);
             Assert.Equal(cantidadUnosEsperada, cantidadUnos);
 
@@ -53,9 +51,7 @@ namespace Solver.Tests
         [Fact]
         public void Constructor_Cromosoma_UnosAsignadosAleatoriamente()
         {
-            int cantidadAtomos = 10;
-            int cantidadAgentes = 4;
-            InstanciaProblema problema = CrearInstanciaProblema(cantidadAtomos, cantidadAgentes);
+            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
 
             var generadorRandom1 = GeneradorNumerosRandomFactory.Crear(1);
             var generadorRandom2 = GeneradorNumerosRandomFactory.Crear(2);
@@ -69,13 +65,13 @@ namespace Solver.Tests
         [Fact]
         public void Constructor_AsignacionDePorciones_InicializadaConLaOptima()
         {
-            var asignacionOptima = new List<int> { 0, 2, 1, 3 };
+            var asignacionOptima = new List<int> { 0, 2, 1 };
 
             var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
             algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns(asignacionOptima);
             AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
 
-            InstanciaProblema problema = CrearInstanciaProblema(cantidadAtomos: 4, cantidadAgentes: 4);
+            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
             IndividuoNuevo individuo = CrearIndividuo(problema);
 
             bool sonIguales = individuo.Asignaciones.SequenceEqual(asignacionOptima);
@@ -95,7 +91,7 @@ namespace Solver.Tests
             var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
             AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
 
-            InstanciaProblema problema = CrearInstanciaProblema(cantidadAtomos: 3, cantidadAgentes: 2);
+            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
             CrearIndividuo(problema);
 
             algoritmoHungaro.Received(1).CalcularAsignacionOptimaDePorciones(valoraciones);
@@ -111,10 +107,7 @@ namespace Solver.Tests
                 .Returns(valoraciones);
             CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
 
-            var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
-            AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
-
-            InstanciaProblema problema = CrearInstanciaProblema(cantidadAtomos: 3, cantidadAgentes: 2);
+            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
             CrearIndividuo(problema);
 
             calculadora.Received(1).CalcularPreferenciasPorcion(valoraciones);
@@ -126,23 +119,20 @@ namespace Solver.Tests
             List<int> posicionesRecibidas = null;
 
             var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
-            var valoraciones = new decimal[,] { { 1m } };
             calculadora
                 .CalcularMatrizValoracionesPorcionAgente(
                     Arg.Any<InstanciaProblema>(), Arg.Do<List<int>>(p => posicionesRecibidas = p))
-                .Returns(valoraciones);
+                .Returns(new decimal[,] { { 1m } });
             CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
 
-            var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
-            AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
-
-            InstanciaProblema problema = CrearInstanciaProblema(cantidadAtomos: 5, cantidadAgentes: 3);
+            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
             var generador = Substitute.For<GeneradorNumerosRandom>(1);
-            generador.Siguiente(Arg.Any<int>()).Returns(2, 0); // Selecciona índices 2 y 0 para los unos en el cromosoma
+            generador.Siguiente(Arg.Any<int>()).Returns(2, 0);
             CrearIndividuo(problema, generador);
 
-            // Los unos en el cromosoma estarán en las posiciones 1 y 3 (índices 0-based)
-            Assert.Equal([1, 3], posicionesRecibidas);
+            // Los cortes se generan en las posiciones 1 y 3 (del cromosoma [1, 0, 1, 0])
+            var posicionesEsperadas = new List<int> { 1, 3 };
+            Assert.Equal(posicionesEsperadas, posicionesRecibidas);
         }
 
         [Fact]
@@ -164,7 +154,8 @@ namespace Solver.Tests
             IndividuoNuevo individuo = CrearIndividuo(problema, generador);
             individuo.Mutar();
 
-            Assert.Equal([0, 1, 1, 0], individuo.Cromosoma);
+            var cromosomaEsperado = new List<int> { 0, 1, 0, 0 };
+            Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
         [Fact]
@@ -186,7 +177,8 @@ namespace Solver.Tests
             IndividuoNuevo individuo = CrearIndividuo(problema, generador);
             individuo.Mutar();
 
-            Assert.Equal([0, 1, 1, 0], individuo.Cromosoma);
+            var cromosomaEsperado = new List<int> { 0, 1, 1, 0 };
+            Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
         [Fact]
@@ -208,7 +200,8 @@ namespace Solver.Tests
             IndividuoNuevo individuo = CrearIndividuo(problema, generador);
             individuo.Mutar();
 
-            Assert.Equal([0, 1, 1, 0], individuo.Cromosoma);
+            var cromosomaEsperado = new List<int> { 0, 1, 1, 0 };
+            Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
         [Fact]
@@ -231,7 +224,8 @@ namespace Solver.Tests
             IndividuoNuevo individuo = CrearIndividuo(problema, generador);
             individuo.Mutar();
 
-            Assert.Equal([1, 1, 0, 0], individuo.Cromosoma);
+            var cromosomaEsperado = new List<int> { 1, 1, 0, 0 };
+            Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
         [Fact]
@@ -256,7 +250,8 @@ namespace Solver.Tests
             IndividuoNuevo individuo = CrearIndividuo(problema, generador);
             individuo.Mutar();
 
-            Assert.Equal([0, 0, 1, 1, 0, 1, 0], individuo.Cromosoma);
+            var cromosomaEsperado = new List<int> { 0, 0, 1, 1, 0, 1, 0 };
+            Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
         [Fact]
@@ -278,7 +273,8 @@ namespace Solver.Tests
             IndividuoNuevo individuo = CrearIndividuo(problema, generador);
             individuo.Mutar();
 
-            Assert.Equal([1, 0, 0, 1], individuo.Cromosoma);
+            var cromosomaEsperado = new List<int> { 1, 0, 0, 1 };
+            Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
         [Fact]
@@ -300,7 +296,8 @@ namespace Solver.Tests
             IndividuoNuevo individuo = CrearIndividuo(problema, generador);
             individuo.Mutar();
 
-            Assert.Equal([1, 0, 0, 1], individuo.Cromosoma);
+            var cromosomaEsperado = new List<int> { 1, 0, 0, 1 };
+            Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
         [Fact]
@@ -321,7 +318,8 @@ namespace Solver.Tests
             IndividuoNuevo individuo = CrearIndividuo(problema, generador);
             individuo.Mutar();
 
-            Assert.Equal([1, 1, 0], individuo.Cromosoma);
+            var cromosomaEsperado = new List<int> { 1, 1, 0 };
+            Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
         [Fact]
@@ -354,16 +352,16 @@ namespace Solver.Tests
             return individuo;
         }
 
-        private InstanciaProblema CrearInstanciaProblema(int cantidadAtomos, int cantidadAgentes)
+        private InstanciaProblema CrearInstanciaProblemaCincoAtomosTresAgentes()
         {
-            var matriz = new decimal[cantidadAtomos, cantidadAgentes];
-            for (int atomo = 0; atomo < cantidadAtomos; atomo++)
+            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
-                for (int agente = 0; agente < cantidadAgentes; agente++)
-                    matriz[atomo, agente] = atomo + agente + 1;
-            }
-
-            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(matriz);
+                { 1m, 2m, 3m },
+                { 2m, 3m, 4m },
+                { 3m, 4m, 5m },
+                { 4m, 5m, 6m },
+                { 5m, 6m, 7m },
+            });
             return instanciaProblema;
         }
     }
