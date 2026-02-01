@@ -320,7 +320,7 @@ namespace Solver.Tests
         public void Mutar_PorcionMasDeseadaDeUnAtomo_AchicaLaSegundaMasDeseada()
         {
             // Cortes iniciales en 1 y 2 → cromosoma [1, 1, 0]
-            // Preferencias por porción: [0, 3, 2].
+            // Preferencias por porción: [0, 3, 2]
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
                 { 1m, 1m, 1m },
@@ -335,6 +335,29 @@ namespace Solver.Tests
             individuo.Mutar();
 
             var cromosomaEsperado = new List<int> { 1, 0, 1 };
+            Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
+        }
+
+        [Fact]
+        public void Mutar_PorcionesMasDeseadasEmpatadasConPrimeraDeUnAtomo_AchicaLaSiguiente()
+        {
+            // Cortes iniciales en 1 y 3 → cromosoma [1, 0, 1, 0]
+            // Preferencias por porción: [3, 0, 3]
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 9m, 9m, 9m },
+                { 1m, 1m, 1m },
+                { 1m, 1m, 1m },
+                { 9m, 9m, 9m },
+                { 9m, 9m, 9m },
+            });
+            var generador = Substitute.For<GeneradorNumerosRandom>(1);
+            generador.Siguiente(Arg.Any<int>()).Returns(2, 0);
+
+            IndividuoNuevo individuo = CrearIndividuo(problema, generador);
+            individuo.Mutar();
+
+            var cromosomaEsperado = new List<int> { 1, 0, 0, 1 };
             Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
