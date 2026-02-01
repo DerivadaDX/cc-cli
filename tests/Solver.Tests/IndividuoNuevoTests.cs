@@ -362,6 +362,29 @@ namespace Solver.Tests
         }
 
         [Fact]
+        public void Mutar_PorcionMasDeseadaDeUnAtomo_RecorrePorcionesHastaEncontrarUnaAchicable()
+        {
+            // Cortes iniciales en 1, 2 y 3 → cromosoma [1, 1, 1, 0]
+            // Preferencias por porción: [4, 4, 3, 2]
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 9m, 7m, 4m, 2m },
+                { 9m, 7m, 4m, 2m },
+                { 5m, 7m, 4m, 2m },
+                { 1m, 1m, 2m, 1m },
+                { 1m, 1m, 2m, 1m },
+            });
+            var generador = Substitute.For<GeneradorNumerosRandom>(1);
+            generador.Siguiente(Arg.Any<int>()).Returns(2, 1, 0);
+
+            IndividuoNuevo individuo = CrearIndividuo(problema, generador);
+            individuo.Mutar();
+
+            var cromosomaEsperado = new List<int> { 1, 1, 0, 1 };
+            Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
+        }
+
+        [Fact]
         public void Mutar_AsignacionesDePorciones_SeRecalculan()
         {
             var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
