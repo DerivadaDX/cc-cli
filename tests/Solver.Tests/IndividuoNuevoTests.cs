@@ -385,6 +385,27 @@ namespace Solver.Tests
         }
 
         [Fact]
+        public void Mutar_TodasLasPorcionesDeUnAtomo_NoModificaElCromosoma()
+        {
+            // Cortes iniciales en 1 y 2 → cromosoma [1, 1]
+            // Preferencias por porción: [1, 1, 1]
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 1m, 2m, 3m },
+                { 1m, 2m, 3m },
+                { 1m, 2m, 3m },
+            });
+            var generador = Substitute.For<GeneradorNumerosRandom>(1);
+            generador.Siguiente(Arg.Any<int>()).Returns(1, 0);
+
+            IndividuoNuevo individuo = CrearIndividuo(problema, generador);
+            individuo.Mutar();
+
+            var cromosomaEsperado = new List<int> { 1, 1 };
+            Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
+        }
+
+        [Fact]
         public void Mutar_AsignacionesDePorciones_SeRecalculan()
         {
             var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
