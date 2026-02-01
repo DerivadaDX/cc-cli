@@ -36,12 +36,16 @@ namespace Solver
 
         internal void Mutar()
         {
-            int indicePorcionMasDeseada = ObtenerPorcionMasDeseada();
-            bool seAchico = AchicarPorcion(indicePorcionMasDeseada);
-            if (!seAchico)
-                return;
+            List<int> porcionesOrdenadas = ObtenerPorcionesOrdenadasPorPreferencia();
+            foreach (int indicePorcion in porcionesOrdenadas)
+            {
+                bool seAchico = AchicarPorcion(indicePorcion);
+                if (!seAchico)
+                    continue;
 
-            CalcularEstado();
+                CalcularEstado();
+                return;
+            }
         }
 
         private List<int> GenerarCromosomaAleatorio(int tamaño, int cantidadUnos)
@@ -75,21 +79,21 @@ namespace Solver
             _preferenciasPorcion = _calculadoraValoraciones.CalcularPreferenciasPorcion(valoraciones);
         }
 
-        private int ObtenerPorcionMasDeseada()
+        private List<int> ObtenerPorcionesOrdenadasPorPreferencia()
         {
-            int indiceMaximo = 0;
-            int valorMaximo = _preferenciasPorcion[0];
-
-            for (int i = 1; i < _preferenciasPorcion.Count; i++)
+            var indices = Enumerable.Range(0, _preferenciasPorcion.Count).ToList<int>();
+            indices.Sort((a, b) =>
             {
-                if (_preferenciasPorcion[i] > valorMaximo)
-                {
-                    valorMaximo = _preferenciasPorcion[i];
-                    indiceMaximo = i;
-                }
-            }
+                int comparacionPreferencia = _preferenciasPorcion[b].CompareTo(_preferenciasPorcion[a]);
+                bool preferenciasSonDistintas = comparacionPreferencia != 0;
+                if (preferenciasSonDistintas)
+                    return comparacionPreferencia;
 
-            return indiceMaximo;
+                int comparacionIndice = a.CompareTo(b);
+                return comparacionIndice;
+            });
+
+            return indices;
         }
 
         private bool AchicarPorcion(int indicePorcion)
