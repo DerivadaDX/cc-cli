@@ -248,7 +248,7 @@ namespace Solver.Tests
         public void Mutar_MasDeUnaPorcionMasDeseada_SeleccionaAleatoriamenteUnaDeLasMasDeseadasYLaAchica()
         {
             // Cortes iniciales en 2, 4 y 6 → cromosoma [0, 1, 0, 1, 0, 1, 0]
-            // Preferencias por porción: [0, 3, 3, 0]
+            // Preferencias por porción: [0, 3, 3, 1]
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
                 { 1m, 1m, 1m, 1m },
@@ -257,8 +257,8 @@ namespace Solver.Tests
                 { 9m, 1m, 9m, 9m },
                 { 1m, 9m, 9m, 9m },
                 { 1m, 9m, 9m, 9m },
-                { 1m, 1m, 1m, 1m },
-                { 1m, 1m, 1m, 1m },
+                { 1m, 1m, 1m, 9m },
+                { 1m, 1m, 1m, 9m },
             });
             var generador = Substitute.For<GeneradorNumerosRandom>(1);
             generador.Siguiente(Arg.Any<int>()).Returns(
@@ -277,13 +277,13 @@ namespace Solver.Tests
         public void Mutar_PorcionMasDeseadaEnExtremoIzquierdo_AchicaDesdeAdentro()
         {
             // Cortes iniciales en 2 y 4 → cromosoma [0, 1, 0, 1]
-            // Preferencias por porción: [3, 0, 0]
+            // Preferencias por porción: [3, 1, 0]
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
                 { 9m, 9m, 9m },
                 { 9m, 9m, 9m },
-                { 1m, 1m, 1m },
-                { 1m, 1m, 1m },
+                { 1m, 1m, 9m },
+                { 1m, 1m, 9m },
                 { 1m, 1m, 1m },
             });
             var generador = Substitute.For<GeneradorNumerosRandom>(1);
