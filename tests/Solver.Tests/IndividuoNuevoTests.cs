@@ -358,7 +358,7 @@ namespace Solver.Tests
             var generador = Substitute.For<GeneradorNumerosRandom>(1);
             generador.Siguiente(Arg.Any<int>()).Returns(
                 4, 2, 0, // posiciones de cortes
-                0 // desempate entre las más deseadas. [2, 1].
+                0 // desempate entre segundas más deseadas. [2, 1].
             );
 
             IndividuoNuevo individuo = CrearIndividuo(problema, generador);
