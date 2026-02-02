@@ -31,7 +31,7 @@ namespace Solver.Tests
         }
 
         [Fact]
-        public void Contructor_Cromosoma_CantidadCorrectaDeCerosYUnos()
+        public void Constructor_Cromosoma_CantidadCorrectaDeCerosYUnos()
         {
             InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
             IndividuoNuevo individuo = CrearIndividuo(problema);
