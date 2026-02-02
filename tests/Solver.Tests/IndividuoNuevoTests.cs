@@ -245,7 +245,7 @@ namespace Solver.Tests
         }
 
         [Fact]
-        public void Mutar_MasDeUnaPorcionMasDeseada_AchicaLaPrimera()
+        public void Mutar_MasDeUnaPorcionMasDeseada_SeleccionaAleatoriamenteUnaDeLasMasDeseadasYLaAchica()
         {
             // Cortes iniciales en 2, 4 y 6 → cromosoma [0, 1, 0, 1, 0, 1, 0]
             // Preferencias por porción: [0, 3, 3, 0]
@@ -261,12 +261,15 @@ namespace Solver.Tests
                 { 1m, 1m, 1m, 1m },
             });
             var generador = Substitute.For<GeneradorNumerosRandom>(1);
-            generador.Siguiente(Arg.Any<int>()).Returns(5, 3, 1);
+            generador.Siguiente(Arg.Any<int>()).Returns(
+                5, 3, 1, // posiciones de cortes
+                0 // desempate entre las más deseadas. [2, 1].
+            );
 
             IndividuoNuevo individuo = CrearIndividuo(problema, generador);
             individuo.Mutar();
 
-            var cromosomaEsperado = new List<int> { 0, 0, 1, 1, 0, 1, 0 };
+            var cromosomaEsperado = new List<int> { 0, 1, 0, 1, 1, 0, 0 };
             Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
@@ -284,7 +287,7 @@ namespace Solver.Tests
                 { 1m, 1m, 1m },
             });
             var generador = Substitute.For<GeneradorNumerosRandom>(1);
-            generador.Siguiente(Arg.Any<int>()).Returns(1, 2);
+            generador.Siguiente(Arg.Any<int>()).Returns(3, 1);
 
             IndividuoNuevo individuo = CrearIndividuo(problema, generador);
             individuo.Mutar();
@@ -324,7 +327,7 @@ namespace Solver.Tests
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
                 { 1m, 1m, 1m },
-                { 10m, 6m, 4m },
+                { 9m, 6m, 4m },
                 { 2m, 3m, 2m },
                 { 2m, 3m, 2m },
             });
@@ -339,20 +342,50 @@ namespace Solver.Tests
         }
 
         [Fact]
-        public void Mutar_PorcionesMasDeseadasEmpatadasConPrimeraDeUnAtomo_AchicaLaSiguiente()
+        public void Mutar_PorcionMasDeseadaDeUnAtomo_ConSegundasMasDeseadasEmpatadas_AchicaLaPorcionSeleccionadaAlAzar()
         {
-            // Cortes iniciales en 1 y 3 → cromosoma [1, 0, 1, 0]
-            // Preferencias por porción: [3, 0, 3]
+            // Cortes iniciales en 1, 3 y 5 → cromosoma [1, 0, 1, 0, 1]
+            // Preferencias por porción: [2, 1, 1, 0]
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
-                { 9m, 9m, 9m },
-                { 1m, 1m, 1m },
-                { 1m, 1m, 1m },
-                { 9m, 9m, 9m },
-                { 9m, 9m, 9m },
+                { 9m, 9m, 1m, 1m },
+                { 1m, 1m, 9m, 1m },
+                { 1m, 1m, 9m, 1m },
+                { 1m, 1m, 1m, 9m },
+                { 1m, 1m, 1m, 9m },
+                { 1m, 1m, 1m, 1m },
             });
             var generador = Substitute.For<GeneradorNumerosRandom>(1);
-            generador.Siguiente(Arg.Any<int>()).Returns(2, 0);
+            generador.Siguiente(Arg.Any<int>()).Returns(
+                4, 2, 0, // posiciones de cortes
+                0 // desempate entre las más deseadas. [2, 1].
+            );
+
+            IndividuoNuevo individuo = CrearIndividuo(problema, generador);
+            individuo.Mutar();
+
+            var cromosomaEsperado = new List<int> { 1, 0, 1, 1, 0 };
+            Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
+        }
+
+        [Fact]
+        public void Mutar_PorcionesEmpatadasConSeleccionadaDeUnAtomo_AchicaLaSiguienteAleatoria()
+        {
+            // Cortes iniciales en 1 y 3 → cromosoma [1, 0, 1, 0]
+            // Preferencias por porción: [3, 3, 3]
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 4m, 4m, 4m },
+                { 2m, 2m, 2m },
+                { 2m, 2m, 2m },
+                { 2m, 2m, 2m },
+                { 2m, 2m, 2m },
+            });
+            var generador = Substitute.For<GeneradorNumerosRandom>(1);
+            generador.Siguiente(Arg.Any<int>()).Returns(
+                2, 0, // posiciones de cortes
+                1, 1 // desempate entre las más deseadas. [0, 2, 1].
+            );
 
             IndividuoNuevo individuo = CrearIndividuo(problema, generador);
             individuo.Mutar();

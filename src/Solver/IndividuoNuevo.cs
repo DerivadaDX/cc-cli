@@ -82,18 +82,28 @@ namespace Solver
         private List<int> ObtenerPorcionesOrdenadasPorPreferencia()
         {
             var indices = Enumerable.Range(0, _preferenciasPorcion.Count).ToList<int>();
-            indices.Sort((a, b) =>
+            var gruposPorPreferencia = indices
+                .GroupBy(indice => _preferenciasPorcion[indice])
+                .OrderByDescending(grupo => grupo.Key);
+
+            var resultado = new List<int>(indices.Count);
+            foreach (IGrouping<int, int> grupo in gruposPorPreferencia)
             {
-                int comparacionPreferencia = _preferenciasPorcion[b].CompareTo(_preferenciasPorcion[a]);
-                bool preferenciasSonDistintas = comparacionPreferencia != 0;
-                if (preferenciasSonDistintas)
-                    return comparacionPreferencia;
+                var porcionesEmpatadas = grupo.ToList<int>();
+                MezclarPorcionesEmpatadas(porcionesEmpatadas);
+                resultado.AddRange(porcionesEmpatadas);
+            }
 
-                int comparacionIndice = a.CompareTo(b);
-                return comparacionIndice;
-            });
+            return resultado;
+        }
 
-            return indices;
+        private void MezclarPorcionesEmpatadas(List<int> porciones)
+        {
+            for (int indice = porciones.Count - 1; indice > 0; indice--)
+            {
+                int indiceRandom = _generadorRandom.Siguiente(indice + 1);
+                (porciones[indiceRandom], porciones[indice]) = (porciones[indice], porciones[indiceRandom]);
+            }
         }
 
         private bool AchicarPorcion(int indicePorcion)
