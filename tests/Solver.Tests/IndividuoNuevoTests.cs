@@ -162,6 +162,25 @@ namespace Solver.Tests
         }
 
         [Fact]
+        public void Cruzar_CromosomasDeDistintaLongitud_LanzaArgumentException()
+        {
+            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
+            IndividuoNuevo padre = CrearIndividuo(problema);
+
+            var problemaOtro = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 1m, 2m, 3m },
+                { 2m, 3m, 4m },
+                { 3m, 4m, 5m },
+                { 4m, 5m, 6m },
+            });
+            IndividuoNuevo otroPadre = CrearIndividuo(problemaOtro);
+
+            var ex = Assert.Throws<ArgumentException>(() => padre.Cruzar(otroPadre));
+            Assert.Contains("cromosomas no tienen la misma longitud", ex.Message);
+        }
+
+        [Fact]
         public void Cruzar_CortesEnComun_SeHeredan()
         {
             // Padre A cortes en 1 y 3 → cromosoma [1, 0, 1, 0]

@@ -53,6 +53,9 @@ namespace Solver
         {
             ArgumentNullException.ThrowIfNull(otro, nameof(otro));
 
+            if (_cromosoma.Count != otro._cromosoma.Count)
+                throw new ArgumentException("Los cromosomas no tienen la misma longitud.");
+
             var cortesEnComun = new List<int>();
             var cromosomaHijo = Enumerable.Repeat(0, _cromosoma.Count).ToList<int>();
             for (int indice = 0; indice < _cromosoma.Count; indice++)
