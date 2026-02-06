@@ -210,7 +210,7 @@ namespace Solver.Tests
             InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
 
             var generadorPadreA = Substitute.For<GeneradorNumerosRandom>(1);
-            generadorPadreA.Siguiente(Arg.Any<int>()).Returns(2, 0);
+            generadorPadreA.Siguiente(Arg.Any<int>()).Returns(2, 0, 2);
             IndividuoNuevo padreA = CrearIndividuo(problema, generadorPadreA);
 
             var generadorPadreB = Substitute.For<GeneradorNumerosRandom>(1);
@@ -243,6 +243,23 @@ namespace Solver.Tests
             IndividuoNuevo hijo = padreA.Cruzar(padreB);
 
             var cromosomaEsperado = new List<int> { 1, 0, 0, 1 };
+            Assert.Equal(cromosomaEsperado, hijo.Cromosoma);
+        }
+
+        [Fact]
+        public void Cruzar_HijoIgualAPadre_HaceSwapDeUnCorte()
+        {
+            // Padre cortes en 1 y 3 → cromosoma [1, 0, 1, 0]
+            // Anti-clon: selecciona el 1 en índice 0 y el 0 en índice 3.
+            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
+
+            var generador = Substitute.For<GeneradorNumerosRandom>(1);
+            generador.Siguiente(Arg.Any<int>()).Returns(2, 0, 0, 1);
+            IndividuoNuevo padre = CrearIndividuo(problema, generador);
+
+            IndividuoNuevo hijo = padre.Cruzar(padre);
+
+            var cromosomaEsperado = new List<int> { 0, 0, 1, 1 };
             Assert.Equal(cromosomaEsperado, hijo.Cromosoma);
         }
 

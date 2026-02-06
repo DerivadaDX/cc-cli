@@ -88,6 +88,29 @@ namespace Solver
                 cantidadCortesSeleccionados++;
             }
 
+            bool hijoIgualPadre = cromosomaHijo.SequenceEqual(_cromosoma);
+            bool hijoIgualOtro = cromosomaHijo.SequenceEqual(otro._cromosoma);
+            if (hijoIgualPadre || hijoIgualOtro)
+            {
+                var indicesConUno = new List<int>();
+                var indicesConCero = new List<int>();
+                for (int indice = 0; indice < cromosomaHijo.Count; indice++)
+                {
+                    if (cromosomaHijo[indice] == 1)
+                        indicesConUno.Add(indice);
+                    else
+                        indicesConCero.Add(indice);
+                }
+
+                int indiceUno = _generadorRandom.Siguiente(indicesConUno.Count);
+                int posicionUno = indicesConUno[indiceUno];
+                cromosomaHijo[posicionUno] = 0;
+
+                int indiceCero = _generadorRandom.Siguiente(indicesConCero.Count);
+                int posicionCero = indicesConCero[indiceCero];
+                cromosomaHijo[posicionCero] = 1;
+            }
+
             // TODO: Pasar una instancia distinta de GeneradorNumerosRandom a los hijos.
             var hijo = new IndividuoNuevo(_problema, _generadorRandom, cromosomaHijo);
             return hijo;
