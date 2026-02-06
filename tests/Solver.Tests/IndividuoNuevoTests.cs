@@ -264,6 +264,47 @@ namespace Solver.Tests
         }
 
         [Fact]
+        public void Cruzar_Hijo_CalculaAsignacionesYPreferencias()
+        {
+            // Hijo cortes en 1 y 4 → cromosoma [1, 0, 0, 1]
+            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
+
+            // Padre A cortes en 1 y 3 → cromosoma [1, 0, 1, 0]
+            var generadorPadreA = Substitute.For<GeneradorNumerosRandom>(1);
+            generadorPadreA.Siguiente(Arg.Any<int>()).Returns(2, 0, 2);
+            IndividuoNuevo padreA = CrearIndividuo(problema, generadorPadreA);
+
+            // Padre B cortes en 1 y 2 → cromosoma [1, 1, 0, 0]
+            var generadorPadreB = Substitute.For<GeneradorNumerosRandom>(1);
+            generadorPadreB.Siguiente(Arg.Any<int>()).Returns(1, 0);
+            IndividuoNuevo padreB = CrearIndividuo(problema, generadorPadreB);
+
+            List<int> posicionesRecibidas = null;
+            var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
+            var valoraciones = new decimal[,]
+            {
+                { 1m, 2m, 3m },
+                { 4m, 5m, 6m },
+                { 7m, 8m, 9m },
+            };
+            calculadora
+                .CalcularMatrizValoracionesPorcionAgente(
+                    Arg.Any<InstanciaProblema>(), Arg.Do<List<int>>(p => posicionesRecibidas = p))
+                .Returns(valoraciones);
+            CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
+
+            var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
+            AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
+
+            IndividuoNuevo hijo = padreA.Cruzar(padreB);
+
+            var posicionesEsperadas = new List<int> { 1, 4 };
+            Assert.Equal(posicionesEsperadas, posicionesRecibidas);
+            algoritmoHungaro.Received(1).CalcularAsignacionOptimaDePorciones(valoraciones);
+            calculadora.Received(1).CalcularPreferenciasPorcion(valoraciones);
+        }
+
+        [Fact]
         public void Mutar_PorcionMasDeseadaUnica_AchicaEsaPorcion()
         {
             // Cortes iniciales en 1 y 3 → cromosoma [1, 0, 1, 0]

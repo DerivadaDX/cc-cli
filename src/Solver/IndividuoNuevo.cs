@@ -44,6 +44,8 @@ namespace Solver
 
             _calculadoraValoraciones = CalculadoraValoracionesPorcionesFactory.Crear();
             _algoritmoHungaro = AlgoritmoHungaroFactory.Crear();
+
+            CalcularEstado();
         }
 
         internal IReadOnlyList<int> Cromosoma => _cromosoma;
