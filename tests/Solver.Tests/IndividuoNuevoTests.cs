@@ -225,6 +225,28 @@ namespace Solver.Tests
         }
 
         [Fact]
+        public void Cruzar_CortesFaltantes_CompletaAleatoriamenteHastaLaCantidadEsperada()
+        {
+            // Padre A cortes en 1 y 3 → cromosoma [1, 0, 1, 0]
+            // Padre B cortes en 1 y 2 → cromosoma [1, 1, 0, 0]
+            // Cortes diferentes: [2, 3, 4] (índices 1, 2 y 3). Se elige el último.
+            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
+
+            var generadorPadreA = Substitute.For<GeneradorNumerosRandom>(1);
+            generadorPadreA.Siguiente(Arg.Any<int>()).Returns(2, 0, 2);
+            IndividuoNuevo padreA = CrearIndividuo(problema, generadorPadreA);
+
+            var generadorPadreB = Substitute.For<GeneradorNumerosRandom>(1);
+            generadorPadreB.Siguiente(Arg.Any<int>()).Returns(1, 0);
+            IndividuoNuevo padreB = CrearIndividuo(problema, generadorPadreB);
+
+            IndividuoNuevo hijo = padreA.Cruzar(padreB);
+
+            var cromosomaEsperado = new List<int> { 1, 0, 0, 1 };
+            Assert.Equal(cromosomaEsperado, hijo.Cromosoma);
+        }
+
+        [Fact]
         public void Mutar_PorcionMasDeseadaUnica_AchicaEsaPorcion()
         {
             // Cortes iniciales en 1 y 3 → cromosoma [1, 0, 1, 0]

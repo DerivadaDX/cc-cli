@@ -61,18 +61,34 @@ namespace Solver
             if (cantidadCortes != cantidadCortesOtro)
                 throw new ArgumentException("Los cromosomas no tienen la misma cantidad de cortes.");
 
-            var cortesEnComun = new List<int>();
+            int cantidadCortesSeleccionados = 0;
+            var cortesDisponibles = new List<int>();
             var cromosomaHijo = Enumerable.Repeat(0, _cromosoma.Count).ToList<int>();
+
             for (int indice = 0; indice < _cromosoma.Count; indice++)
             {
-                bool corteEnAmbosPadres = _cromosoma[indice] == 1 && otro._cromosoma[indice] == 1;
-                if (!corteEnAmbosPadres)
+                bool esCorteEnComun = _cromosoma[indice] == 1 && otro._cromosoma[indice] == 1;
+                if (!esCorteEnComun)
+                {
+                    cortesDisponibles.Add(indice);
                     continue;
+                }
 
                 cromosomaHijo[indice] = 1;
-                cortesEnComun.Add(indice);
+                cantidadCortesSeleccionados++;
             }
 
+            while (cantidadCortesSeleccionados < cantidadCortes)
+            {
+                int indiceRandom = _generadorRandom.Siguiente(cortesDisponibles.Count);
+                int indiceSeleccionado = cortesDisponibles[indiceRandom];
+                cortesDisponibles.RemoveAt(indiceRandom);
+
+                cromosomaHijo[indiceSeleccionado] = 1;
+                cantidadCortesSeleccionados++;
+            }
+
+            // TODO: Pasar una instancia distinta de GeneradorNumerosRandom a los hijos.
             var hijo = new IndividuoNuevo(_problema, _generadorRandom, cromosomaHijo);
             return hijo;
         }
