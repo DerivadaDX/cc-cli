@@ -31,8 +31,41 @@ namespace Solver
             CalcularEstado();
         }
 
+        private IndividuoNuevo(InstanciaProblema problema, GeneradorNumerosRandom generadorRandom, List<int> cromosoma)
+        {
+            ArgumentNullException.ThrowIfNull(problema, nameof(problema));
+            _problema = problema;
+
+            ArgumentNullException.ThrowIfNull(generadorRandom, nameof(generadorRandom));
+            _generadorRandom = generadorRandom;
+
+            ArgumentNullException.ThrowIfNull(cromosoma, nameof(cromosoma));
+            _cromosoma = cromosoma;
+
+            _calculadoraValoraciones = CalculadoraValoracionesPorcionesFactory.Crear();
+            _algoritmoHungaro = AlgoritmoHungaroFactory.Crear();
+        }
+
         internal IReadOnlyList<int> Cromosoma => _cromosoma;
         internal IReadOnlyList<int> Asignaciones => _asignaciones;
+
+        internal IndividuoNuevo Cruzar(IndividuoNuevo otro)
+        {
+            var cortesEnComun = new List<int>();
+            var cromosomaHijo = Enumerable.Repeat(0, _cromosoma.Count).ToList<int>();
+            for (int indice = 0; indice < _cromosoma.Count; indice++)
+            {
+                bool corteEnAmbosPadres = _cromosoma[indice] == 1 && otro._cromosoma[indice] == 1;
+                if (!corteEnAmbosPadres)
+                    continue;
+
+                cromosomaHijo[indice] = 1;
+                cortesEnComun.Add(indice);
+            }
+
+            var hijo = new IndividuoNuevo(_problema, _generadorRandom, cromosomaHijo);
+            return hijo;
+        }
 
         internal void Mutar()
         {

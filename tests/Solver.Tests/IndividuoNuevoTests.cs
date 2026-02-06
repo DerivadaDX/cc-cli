@@ -152,6 +152,28 @@ namespace Solver.Tests
         }
 
         [Fact]
+        public void Cruzar_CortesEnComun_SeHeredan()
+        {
+            // Padre A cortes en 1 y 3 → cromosoma [1, 0, 1, 0]
+            // Padre B cortes en 1 y 2 → cromosoma [1, 1, 0, 0]
+            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
+
+            var generadorPadreA = Substitute.For<GeneradorNumerosRandom>(1);
+            generadorPadreA.Siguiente(Arg.Any<int>()).Returns(2, 0);
+            IndividuoNuevo padreA = CrearIndividuo(problema, generadorPadreA);
+
+            var generadorPadreB = Substitute.For<GeneradorNumerosRandom>(1);
+            generadorPadreB.Siguiente(Arg.Any<int>()).Returns(1, 0);
+            IndividuoNuevo padreB = CrearIndividuo(problema, generadorPadreB);
+
+            IndividuoNuevo hijo = padreA.Cruzar(padreB);
+
+            int indiceCorteEnComun = 0;
+            Assert.Equal(padreA.Cromosoma[indiceCorteEnComun], padreB.Cromosoma[indiceCorteEnComun]);
+            Assert.Equal(padreB.Cromosoma[indiceCorteEnComun], hijo.Cromosoma[indiceCorteEnComun]);
+        }
+
+        [Fact]
         public void Mutar_PorcionMasDeseadaUnica_AchicaEsaPorcion()
         {
             // Cortes iniciales en 1 y 3 → cromosoma [1, 0, 1, 0]
