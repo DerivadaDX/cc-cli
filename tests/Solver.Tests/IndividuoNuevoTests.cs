@@ -152,6 +152,16 @@ namespace Solver.Tests
         }
 
         [Fact]
+        public void Cruzar_OtroPadreNull_LanzaArgumentNullException()
+        {
+            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
+            IndividuoNuevo padre = CrearIndividuo(problema);
+
+            var ex = Assert.Throws<ArgumentNullException>(() => padre.Cruzar(null));
+            Assert.Equal("otro", ex.ParamName);
+        }
+
+        [Fact]
         public void Cruzar_CortesEnComun_SeHeredan()
         {
             // Padre A cortes en 1 y 3 → cromosoma [1, 0, 1, 0]

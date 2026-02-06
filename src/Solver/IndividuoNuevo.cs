@@ -51,6 +51,8 @@ namespace Solver
 
         internal IndividuoNuevo Cruzar(IndividuoNuevo otro)
         {
+            ArgumentNullException.ThrowIfNull(otro, nameof(otro));
+
             var cortesEnComun = new List<int>();
             var cromosomaHijo = Enumerable.Repeat(0, _cromosoma.Count).ToList<int>();
             for (int indice = 0; indice < _cromosoma.Count; indice++)
