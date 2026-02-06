@@ -181,6 +181,28 @@ namespace Solver.Tests
         }
 
         [Fact]
+        public void Cruzar_CantidadDeCortesDiferente_LanzaArgumentException()
+        {
+            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
+            var generadorPadre = Substitute.For<GeneradorNumerosRandom>(1);
+            generadorPadre.Siguiente(Arg.Any<int>()).Returns(2, 0);
+            IndividuoNuevo padre = CrearIndividuo(problema, generadorPadre);
+
+            var problemaOtro = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 1m, 2m },
+                { 2m, 3m },
+                { 3m, 4m },
+                { 4m, 5m },
+                { 5m, 6m },
+            });
+            IndividuoNuevo otroPadre = CrearIndividuo(problemaOtro);
+
+            var ex = Assert.Throws<ArgumentException>(() => padre.Cruzar(otroPadre));
+            Assert.Contains("no tienen la misma cantidad de cortes", ex.Message);
+        }
+
+        [Fact]
         public void Cruzar_CortesEnComun_SeHeredan()
         {
             // Padre A cortes en 1 y 3 → cromosoma [1, 0, 1, 0]
