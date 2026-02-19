@@ -69,15 +69,16 @@ namespace Solver
 
             for (int indice = 0; indice < _cromosoma.Count; indice++)
             {
-                bool esCorteEnComun = _cromosoma[indice] == 1 && otro._cromosoma[indice] == 1;
-                if (!esCorteEnComun)
+                bool coinciden = _cromosoma[indice] == otro._cromosoma[indice];
+                if (coinciden)
                 {
-                    cortesDisponibles.Add(indice);
+                    cromosomaHijo[indice] = _cromosoma[indice];
+                    if (_cromosoma[indice] == 1)
+                        cantidadCortesSeleccionados++;
                     continue;
                 }
 
-                cromosomaHijo[indice] = 1;
-                cantidadCortesSeleccionados++;
+                cortesDisponibles.Add(indice);
             }
 
             while (cantidadCortesSeleccionados < cantidadCortes)

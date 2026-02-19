@@ -203,18 +203,19 @@ namespace Solver.Tests
         }
 
         [Fact]
-        public void Cruzar_CortesEnComun_SeHeredan()
+        public void Cruzar_CoincidenciasEnCerosYUnos_SeHeredan()
         {
-            // Padre A cortes en 1 y 3 → cromosoma [1, 0, 1, 0]
-            // Padre B cortes en 1 y 2 → cromosoma [1, 1, 0, 0]
-            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
+            // Padre A cortes en 1, 3 y 5 → cromosoma [1, 0, 1, 0, 1, 0]
+            // Padre B cortes en 1, 4 y 6 → cromosoma [1, 0, 0, 1, 0, 1]
+            // Cortes en común: índice 0 (1) e índice 1 (0).
+            InstanciaProblema problema = CrearInstanciaProblemaSieteAtomosCuatroAgentes();
 
             var generadorPadreA = Substitute.For<GeneradorNumerosRandom>(1);
-            generadorPadreA.Siguiente(Arg.Any<int>()).Returns(2, 0, 2);
+            generadorPadreA.Siguiente(Arg.Any<int>()).Returns(4, 2, 0, 0, 0);
             IndividuoNuevo padreA = CrearIndividuo(problema, generadorPadreA);
 
             var generadorPadreB = Substitute.For<GeneradorNumerosRandom>(1);
-            generadorPadreB.Siguiente(Arg.Any<int>()).Returns(1, 0);
+            generadorPadreB.Siguiente(Arg.Any<int>()).Returns(5, 3, 0);
             IndividuoNuevo padreB = CrearIndividuo(problema, generadorPadreB);
 
             IndividuoNuevo hijo = padreA.Cruzar(padreB);
@@ -222,27 +223,31 @@ namespace Solver.Tests
             int indiceCorteEnComun = 0;
             Assert.Equal(padreA.Cromosoma[indiceCorteEnComun], padreB.Cromosoma[indiceCorteEnComun]);
             Assert.Equal(padreB.Cromosoma[indiceCorteEnComun], hijo.Cromosoma[indiceCorteEnComun]);
+
+            int indiceNoCorteEnComun = 1;
+            Assert.Equal(padreA.Cromosoma[indiceNoCorteEnComun], padreB.Cromosoma[indiceNoCorteEnComun]);
+            Assert.Equal(padreB.Cromosoma[indiceNoCorteEnComun], hijo.Cromosoma[indiceNoCorteEnComun]);
         }
 
         [Fact]
         public void Cruzar_CortesFaltantes_CompletaAleatoriamenteHastaLaCantidadEsperada()
         {
-            // Padre A cortes en 1 y 3 → cromosoma [1, 0, 1, 0]
-            // Padre B cortes en 1 y 2 → cromosoma [1, 1, 0, 0]
-            // Cortes diferentes: [2, 3, 4] (índices 1, 2 y 3). Se elige el último.
-            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
+            // Padre A cortes en 1, 3 y 5 → cromosoma [1, 0, 1, 0, 1, 0]
+            // Padre B cortes en 1, 4 y 6 → cromosoma [1, 0, 0, 1, 0, 1]
+            // Cortes diferentes: índices 2, 3, 4, 5. Se eligen 2 y 3.
+            InstanciaProblema problema = CrearInstanciaProblemaSieteAtomosCuatroAgentes();
 
             var generadorPadreA = Substitute.For<GeneradorNumerosRandom>(1);
-            generadorPadreA.Siguiente(Arg.Any<int>()).Returns(2, 0, 2);
+            generadorPadreA.Siguiente(Arg.Any<int>()).Returns(4, 2, 0, 0, 0);
             IndividuoNuevo padreA = CrearIndividuo(problema, generadorPadreA);
 
             var generadorPadreB = Substitute.For<GeneradorNumerosRandom>(1);
-            generadorPadreB.Siguiente(Arg.Any<int>()).Returns(1, 0);
+            generadorPadreB.Siguiente(Arg.Any<int>()).Returns(5, 3, 0);
             IndividuoNuevo padreB = CrearIndividuo(problema, generadorPadreB);
 
             IndividuoNuevo hijo = padreA.Cruzar(padreB);
 
-            var cromosomaEsperado = new List<int> { 1, 0, 0, 1 };
+            var cromosomaEsperado = new List<int> { 1, 0, 1, 1, 0, 0 };
             Assert.Equal(cromosomaEsperado, hijo.Cromosoma);
         }
 
@@ -266,26 +271,27 @@ namespace Solver.Tests
         [Fact]
         public void Cruzar_Hijo_CalculaAsignacionesYPreferencias()
         {
-            // Hijo cortes en 1 y 4 → cromosoma [1, 0, 0, 1]
-            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
+            // Hijo cortes en 1, 3 y 4 → cromosoma [1, 0, 1, 1, 0, 0]
+            InstanciaProblema problema = CrearInstanciaProblemaSieteAtomosCuatroAgentes();
 
-            // Padre A cortes en 1 y 3 → cromosoma [1, 0, 1, 0]
+            // Padre A cortes en 1, 2 y 4 → cromosoma [1, 1, 0, 1, 0, 0]
             var generadorPadreA = Substitute.For<GeneradorNumerosRandom>(1);
-            generadorPadreA.Siguiente(Arg.Any<int>()).Returns(2, 0, 2);
+            generadorPadreA.Siguiente(Arg.Any<int>()).Returns(3, 1, 0, 2, 1);
             IndividuoNuevo padreA = CrearIndividuo(problema, generadorPadreA);
 
-            // Padre B cortes en 1 y 2 → cromosoma [1, 1, 0, 0]
+            // Padre B cortes en 1, 3 y 5 → cromosoma [1, 0, 1, 0, 1, 0]
             var generadorPadreB = Substitute.For<GeneradorNumerosRandom>(1);
-            generadorPadreB.Siguiente(Arg.Any<int>()).Returns(1, 0);
+            generadorPadreB.Siguiente(Arg.Any<int>()).Returns(4, 2, 0);
             IndividuoNuevo padreB = CrearIndividuo(problema, generadorPadreB);
 
             List<int> posicionesRecibidas = null;
             var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
             var valoraciones = new decimal[,]
             {
-                { 1m, 2m, 3m },
-                { 4m, 5m, 6m },
-                { 7m, 8m, 9m },
+                { 1m, 2m, 3m, 4m },
+                { 2m, 3m, 4m, 5m },
+                { 3m, 4m, 5m, 6m },
+                { 4m, 5m, 6m, 7m },
             };
             calculadora
                 .CalcularMatrizValoracionesPorcionAgente(
@@ -298,7 +304,7 @@ namespace Solver.Tests
 
             IndividuoNuevo hijo = padreA.Cruzar(padreB);
 
-            var posicionesEsperadas = new List<int> { 1, 4 };
+            var posicionesEsperadas = new List<int> { 1, 3, 4 };
             Assert.Equal(posicionesEsperadas, posicionesRecibidas);
             algoritmoHungaro.Received(1).CalcularAsignacionOptimaDePorciones(valoraciones);
             calculadora.Received(1).CalcularPreferenciasPorcion(valoraciones);
@@ -630,6 +636,21 @@ namespace Solver.Tests
                 { 3m, 4m, 5m },
                 { 4m, 5m, 6m },
                 { 5m, 6m, 7m },
+            });
+            return instanciaProblema;
+        }
+
+        private InstanciaProblema CrearInstanciaProblemaSieteAtomosCuatroAgentes()
+        {
+            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 1m, 2m, 3m, 4m },
+                { 2m, 3m, 4m, 5m },
+                { 3m, 4m, 5m, 6m },
+                { 4m, 5m, 6m, 7m },
+                { 5m, 6m, 7m, 8m },
+                { 6m, 7m, 8m, 9m },
+                { 7m, 8m, 9m, 10m },
             });
             return instanciaProblema;
         }
