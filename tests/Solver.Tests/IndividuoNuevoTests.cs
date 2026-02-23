@@ -221,9 +221,9 @@ namespace Solver.Tests
         {
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
-                { 0m, 0m, 0m },
                 { 1m, 1m, 1m },
-                { 0m, 0m, 0m },
+                { 5m, 5m, 5m },
+                { 1m, 1m, 1m },
             });
             IndividuoNuevo individuo = CrearIndividuo(problema);
 
