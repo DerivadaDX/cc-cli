@@ -51,6 +51,17 @@ namespace Solver
         internal IReadOnlyList<int> Cromosoma => _cromosoma;
         internal IReadOnlyList<int> Asignaciones => _asignaciones;
 
+        public override string ToString()
+        {
+            string cortes = string.Join(", ", _cromosoma);
+
+            List<int> asignacionesBaseUno = [.. _asignaciones.Select(asignacion => asignacion + 1)];
+            string asignaciones = string.Join(", ", asignacionesBaseUno);
+            
+            string resultado = $"Cortes=[{cortes}], Asignaciones=[{asignaciones}], Fitness=pendiente";
+            return resultado;
+        }
+
         internal IndividuoNuevo Cruzar(IndividuoNuevo otro)
         {
             ArgumentNullException.ThrowIfNull(otro, nameof(otro));

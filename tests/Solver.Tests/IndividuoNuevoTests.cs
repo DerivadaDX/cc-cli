@@ -152,6 +152,41 @@ namespace Solver.Tests
         }
 
         [Fact]
+        public void ToString_Asignaciones_SeMuestranEnBaseUno()
+        {
+            var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
+            algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns([2, 0, 1]);
+            AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
+
+            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
+            var generador = Substitute.For<GeneradorNumerosRandom>(1);
+            generador.Siguiente(Arg.Any<int>()).Returns(2, 0);
+            IndividuoNuevo individuo = CrearIndividuo(problema, generador);
+
+            string resultado = individuo.ToString();
+
+            Assert.Contains("Asignaciones=[3, 1, 2]", resultado);
+        }
+
+        [Fact]
+        public void ToString_FormatoGeneral_EsElEsperado()
+        {
+            var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
+            algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns([2, 0, 1]);
+            AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
+
+            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
+            var generador = Substitute.For<GeneradorNumerosRandom>(1);
+            generador.Siguiente(Arg.Any<int>()).Returns(2, 0);
+            IndividuoNuevo individuo = CrearIndividuo(problema, generador);
+
+            string resultado = individuo.ToString();
+
+            string esperado = "Cortes=[1, 0, 1, 0], Asignaciones=[3, 1, 2], Fitness=pendiente";
+            Assert.Equal(esperado, resultado);
+        }
+
+        [Fact]
         public void Cruzar_OtroPadreNull_LanzaArgumentNullException()
         {
             InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
