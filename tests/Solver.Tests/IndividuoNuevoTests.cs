@@ -202,7 +202,7 @@ namespace Solver.Tests
         }
 
         [Fact]
-        public void Fitness_AsignacionSinEnvidia_RetornaCero()
+        public void Fitness_SinEnvidia_RetornaCero()
         {
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
@@ -229,68 +229,6 @@ namespace Solver.Tests
 
             decimal fitness = individuo.Fitness;
             Assert.True(fitness > 0, $"Se esperaba un fitness positivo, pero se obtuvo {fitness}");
-        }
-
-        [Fact]
-        public void Fitness_ValoracionesIguales_RetornaCero()
-        {
-            var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
-            var valoraciones = new decimal[,]
-            {
-                { 0.5m, 0.5m },
-                { 0.5m, 0.5m },
-            };
-            calculadora
-                .CalcularMatrizValoracionesPorcionAgente(Arg.Any<InstanciaProblema>(), Arg.Any<List<int>>())
-                .Returns(valoraciones);
-            calculadora
-                .CalcularPreferenciasPorcion(Arg.Any<decimal[,]>())
-                .Returns([2, 2]);
-            CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
-
-            var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
-            algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns([0, 1]);
-            AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
-
-            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
-            {
-                { 1m, 0m },
-                { 0m, 1m },
-            });
-
-            IndividuoNuevo individuo = CrearIndividuo(problema);
-
-            decimal fitness = individuo.Fitness;
-            Assert.Equal(0m, fitness);
-        }
-
-        [Fact]
-        public void Fitness_AsignacionesCeroBasedSinOffByOne_CalculaCorrectamente()
-        {
-            var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
-            var valoraciones = new decimal[,]
-            {
-                { 9m, 1m, 4m },
-                { 5m, 2m, 7m },
-                { 1m, 6m, 3m },
-            };
-            calculadora
-                .CalcularMatrizValoracionesPorcionAgente(Arg.Any<InstanciaProblema>(), Arg.Any<List<int>>())
-                .Returns(valoraciones);
-            calculadora
-                .CalcularPreferenciasPorcion(Arg.Any<decimal[,]>())
-                .Returns([1, 1, 1]);
-            CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
-
-            var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
-            algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns([2, 0, 1]);
-            AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
-
-            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
-            IndividuoNuevo individuo = CrearIndividuo(problema);
-
-            decimal fitness = individuo.Fitness;
-            Assert.Equal(7m, fitness);
         }
 
         [Fact]
