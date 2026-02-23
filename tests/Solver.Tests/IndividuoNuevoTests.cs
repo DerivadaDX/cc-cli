@@ -94,6 +94,7 @@ namespace Solver.Tests
             CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
 
             var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
+            algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns([0, 1, 2]);
             AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
 
             InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
@@ -171,6 +172,20 @@ namespace Solver.Tests
         [Fact]
         public void ToString_FormatoGeneral_EsElEsperado()
         {
+            var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
+            calculadora
+                .CalcularMatrizValoracionesPorcionAgente(Arg.Any<InstanciaProblema>(), Arg.Any<List<int>>())
+                .Returns(new decimal[,]
+                {
+                    { 1m, 0m, 0m },
+                    { 0m, 0m, 0m },
+                    { 0m, 0m, 0m },
+                });
+            calculadora
+                .CalcularPreferenciasPorcion(Arg.Any<decimal[,]>())
+                .Returns([1, 1, 1]);
+            CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
+
             var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
             algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns([2, 0, 1]);
             AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
@@ -182,8 +197,134 @@ namespace Solver.Tests
 
             string resultado = individuo.ToString();
 
-            string esperado = "Cortes=[1, 0, 1, 0], Asignaciones=[3, 1, 2], Fitness=pendiente";
+            string esperado = "Cortes=[1, 0, 1, 0], Asignaciones=[3, 1, 2], Fitness=1";
             Assert.Equal(esperado, resultado);
+        }
+
+        [Fact]
+        public void Fitness_AsignacionSinEnvidia_RetornaCero()
+        {
+            var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
+            calculadora
+                .CalcularMatrizValoracionesPorcionAgente(Arg.Any<InstanciaProblema>(), Arg.Any<List<int>>())
+                .Returns(new decimal[,]
+                {
+                    { 1m, 0m },
+                    { 0m, 1m },
+                });
+            calculadora
+                .CalcularPreferenciasPorcion(Arg.Any<decimal[,]>())
+                .Returns([1, 1]);
+            CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
+
+            var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
+            algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns([0, 1]);
+            AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
+
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 1m, 0m },
+                { 0m, 1m },
+            });
+
+            IndividuoNuevo individuo = CrearIndividuo(problema);
+
+            decimal fitness = individuo.Fitness;
+            Assert.Equal(0m, fitness);
+        }
+
+        [Fact]
+        public void Fitness_HayEnvidia_RetornaPositivo()
+        {
+            var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
+            calculadora
+                .CalcularMatrizValoracionesPorcionAgente(Arg.Any<InstanciaProblema>(), Arg.Any<List<int>>())
+                .Returns(new decimal[,]
+                {
+                    { 0m, 0m },
+                    { 1m, 0m },
+                });
+            calculadora
+                .CalcularPreferenciasPorcion(Arg.Any<decimal[,]>())
+                .Returns([1, 1]);
+            CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
+
+            var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
+            algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns([0, 1]);
+            AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
+
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 1m, 0m },
+                { 0m, 1m },
+            });
+
+            IndividuoNuevo individuo = CrearIndividuo(problema);
+
+            decimal fitness = individuo.Fitness;
+            Assert.True(fitness > 0);
+        }
+
+        [Fact]
+        public void Fitness_ValoracionesIguales_RetornaCero()
+        {
+            var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
+            var valoraciones = new decimal[,]
+            {
+                { 0.5m, 0.5m },
+                { 0.5m, 0.5m },
+            };
+            calculadora
+                .CalcularMatrizValoracionesPorcionAgente(Arg.Any<InstanciaProblema>(), Arg.Any<List<int>>())
+                .Returns(valoraciones);
+            calculadora
+                .CalcularPreferenciasPorcion(Arg.Any<decimal[,]>())
+                .Returns([2, 2]);
+            CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
+
+            var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
+            algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns([0, 1]);
+            AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
+
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 1m, 0m },
+                { 0m, 1m },
+            });
+
+            IndividuoNuevo individuo = CrearIndividuo(problema);
+
+            decimal fitness = individuo.Fitness;
+            Assert.Equal(0m, fitness);
+        }
+
+        [Fact]
+        public void Fitness_AsignacionesCeroBasedSinOffByOne_CalculaCorrectamente()
+        {
+            var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
+            var valoraciones = new decimal[,]
+            {
+                { 9m, 1m, 4m },
+                { 5m, 2m, 7m },
+                { 1m, 6m, 3m },
+            };
+            calculadora
+                .CalcularMatrizValoracionesPorcionAgente(Arg.Any<InstanciaProblema>(), Arg.Any<List<int>>())
+                .Returns(valoraciones);
+            calculadora
+                .CalcularPreferenciasPorcion(Arg.Any<decimal[,]>())
+                .Returns([1, 1, 1]);
+            CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
+
+            var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
+            algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns([2, 0, 1]);
+            AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
+
+            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
+            IndividuoNuevo individuo = CrearIndividuo(problema);
+
+            decimal fitness = individuo.Fitness;
+            Assert.Equal(7m, fitness);
         }
 
         [Fact]
@@ -335,6 +476,7 @@ namespace Solver.Tests
             CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
 
             var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
+            algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns([0, 1, 2, 3]);
             AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
 
             IndividuoNuevo hijo = padreA.Cruzar(padreB);
@@ -636,6 +778,7 @@ namespace Solver.Tests
         public void Mutar_AsignacionesDePorciones_SeRecalculan()
         {
             var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
+            algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns([0, 1, 2]);
             AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
 
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]

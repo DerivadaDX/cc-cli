@@ -1,4 +1,5 @@
 using Common;
+using System.Globalization;
 
 namespace Solver
 {
@@ -12,6 +13,7 @@ namespace Solver
         private List<int> _asignaciones = [];
         private List<int> _preferenciasPorcion = [];
         private List<int> _posicionesCortes = [];
+        private decimal _fitness;
 
         internal IndividuoNuevo(InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
         {
@@ -50,6 +52,7 @@ namespace Solver
 
         internal IReadOnlyList<int> Cromosoma => _cromosoma;
         internal IReadOnlyList<int> Asignaciones => _asignaciones;
+        internal decimal Fitness => _fitness;
 
         public override string ToString()
         {
@@ -57,8 +60,10 @@ namespace Solver
 
             List<int> asignacionesBaseUno = [.. _asignaciones.Select(asignacion => asignacion + 1)];
             string asignaciones = string.Join(", ", asignacionesBaseUno);
-            
-            string resultado = $"Cortes=[{cortes}], Asignaciones=[{asignaciones}], Fitness=pendiente";
+
+            // TODO: Definir si el fitness debe mostrarse con padding fijo de decimales.
+            string fitness = Fitness.ToString(CultureInfo.InvariantCulture);
+            string resultado = $"Cortes=[{cortes}], Asignaciones=[{asignaciones}], Fitness={fitness}";
             return resultado;
         }
 
@@ -173,6 +178,38 @@ namespace Solver
             decimal[,] valoraciones = _calculadoraValoraciones.CalcularMatrizValoracionesPorcionAgente(_problema, _posicionesCortes);
             _asignaciones = _algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
             _preferenciasPorcion = _calculadoraValoraciones.CalcularPreferenciasPorcion(valoraciones);
+            _fitness = CalcularFitness(valoraciones);
+        }
+
+        private decimal CalcularFitness(decimal[,] valoracionesPorcionAgente)
+        {
+            decimal envidiaTotal = 0;
+
+            int cantidadAgentes = _problema.Agentes.Count;
+            for (int indiceAgente = 0; indiceAgente < cantidadAgentes; indiceAgente++)
+            {
+                int indicePorcionPropia = _asignaciones.FindIndex(asignacion => asignacion == indiceAgente);
+                decimal valoracionPropia = valoracionesPorcionAgente[indicePorcionPropia, indiceAgente];
+                decimal maxViolacion = 0;
+
+                for (int indicePorcion = 0; indicePorcion < cantidadAgentes; indicePorcion++)
+                {
+                    if (indicePorcion == indicePorcionPropia)
+                        continue;
+
+                    decimal valoracionAjena = valoracionesPorcionAgente[indicePorcion, indiceAgente];
+                    if (valoracionAjena <= valoracionPropia)
+                        continue;
+
+                    decimal violacion = valoracionAjena - valoracionPropia;
+                    if (violacion > maxViolacion)
+                        maxViolacion = violacion;
+                }
+
+                envidiaTotal += maxViolacion;
+            }
+
+            return envidiaTotal;
         }
 
         private List<int> ObtenerPorcionesOrdenadasPorPreferencia()
