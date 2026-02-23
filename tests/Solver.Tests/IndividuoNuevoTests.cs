@@ -204,29 +204,12 @@ namespace Solver.Tests
         [Fact]
         public void Fitness_AsignacionSinEnvidia_RetornaCero()
         {
-            var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
-            calculadora
-                .CalcularMatrizValoracionesPorcionAgente(Arg.Any<InstanciaProblema>(), Arg.Any<List<int>>())
-                .Returns(new decimal[,]
-                {
-                    { 1m, 0m },
-                    { 0m, 1m },
-                });
-            calculadora
-                .CalcularPreferenciasPorcion(Arg.Any<decimal[,]>())
-                .Returns([1, 1]);
-            CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
-
-            var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
-            algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns([0, 1]);
-            AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
-
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
-                { 1m, 0m },
-                { 0m, 1m },
+                { 1m, 0m, 0m },
+                { 0m, 1m, 0m },
+                { 0m, 0m, 1m },
             });
-
             IndividuoNuevo individuo = CrearIndividuo(problema);
 
             decimal fitness = individuo.Fitness;
