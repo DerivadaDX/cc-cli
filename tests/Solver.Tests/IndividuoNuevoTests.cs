@@ -219,33 +219,16 @@ namespace Solver.Tests
         [Fact]
         public void Fitness_HayEnvidia_RetornaPositivo()
         {
-            var calculadora = Substitute.For<CalculadoraValoracionesPorciones>();
-            calculadora
-                .CalcularMatrizValoracionesPorcionAgente(Arg.Any<InstanciaProblema>(), Arg.Any<List<int>>())
-                .Returns(new decimal[,]
-                {
-                    { 0m, 0m },
-                    { 1m, 0m },
-                });
-            calculadora
-                .CalcularPreferenciasPorcion(Arg.Any<decimal[,]>())
-                .Returns([1, 1]);
-            CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadora);
-
-            var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
-            algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns([0, 1]);
-            AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
-
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
-                { 1m, 0m },
-                { 0m, 1m },
+                { 0m, 0m, 0m },
+                { 1m, 1m, 1m },
+                { 0m, 0m, 0m },
             });
-
             IndividuoNuevo individuo = CrearIndividuo(problema);
 
             decimal fitness = individuo.Fitness;
-            Assert.True(fitness > 0);
+            Assert.True(fitness > 0, $"Se esperaba un fitness positivo, pero se obtuvo {fitness}");
         }
 
         [Fact]
