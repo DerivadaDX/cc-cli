@@ -61,7 +61,6 @@ namespace Solver
             List<int> asignacionesBaseUno = [.. _asignaciones.Select(asignacion => asignacion + 1)];
             string asignaciones = string.Join(", ", asignacionesBaseUno);
 
-            // TODO: Definir si el fitness debe mostrarse con padding fijo de decimales.
             string fitness = Fitness.ToString(CultureInfo.InvariantCulture);
             string resultado = $"Cortes=[{cortes}], Asignaciones=[{asignaciones}], Fitness={fitness}";
             return resultado;
@@ -130,7 +129,6 @@ namespace Solver
                 cromosomaHijo[posicionCero] = 1;
             }
 
-            // TODO: Pasar una instancia distinta de GeneradorNumerosRandom a los hijos.
             var hijo = new IndividuoNuevo(_problema, _generadorRandom, cromosomaHijo);
             return hijo;
         }

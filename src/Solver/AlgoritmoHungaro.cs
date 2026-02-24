@@ -27,7 +27,6 @@ namespace Solver
                     decimal valoracion = valoracionesDePorciones[indicePorcion, indiceAgente];
                     decimal costo = valoracionMaxima - valoracion;
 
-                    // TODO: Poder trabajar con decimal. Se pasa a int porque la biblioteca que usamos no soporta decimal.
                     int costoRedondeado = (int)Math.Round(costo * 1000m);
                     costos[indicePorcion, indiceAgente] = costoRedondeado;
                 }
