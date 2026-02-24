@@ -230,6 +230,20 @@ namespace Solver.Tests
         }
 
         [Fact]
+        public void Fitness_ValoracionesIguales_RetornaCero()
+        {
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 1m, 1m, 1m },
+                { 1m, 1m, 1m },
+                { 1m, 1m, 1m },
+            });
+            IndividuoNuevo individuo = CrearIndividuo(problema);
+
+            Assert.Equal(0m, individuo.Fitness);
+        }
+
+        [Fact]
         public void Fitness_AsignacionPorcionAgenteEnBaseCero_CalculaValorEsperado()
         {
             // Con 3 átomos y 3 agentes, el cromosoma queda fijo en [1, 1] (una porción por átomo).
