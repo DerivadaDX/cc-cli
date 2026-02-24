@@ -232,6 +232,23 @@ namespace Solver.Tests
         }
 
         [Fact]
+        public void Fitness_AsignacionPorcionAgenteEnBaseCero_CalculaValorEsperado()
+        {
+            // Con 3 átomos y 3 agentes, el cromosoma queda fijo en [1, 1] (una porción por átomo).
+            // La asignación óptima es [1, 2, 0] (porción -> agente).
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 9m, 8m, 1m },
+                { 8m, 2m, 9m },
+                { 7m, 1m, 2m },
+            });
+            IndividuoNuevo individuo = CrearIndividuo(problema);
+
+            decimal fitness = individuo.Fitness;
+            Assert.Equal(2m, fitness);
+        }
+
+        [Fact]
         public void Cruzar_OtroPadreNull_LanzaArgumentNullException()
         {
             InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
