@@ -212,8 +212,7 @@ namespace Solver.Tests
             });
             IndividuoNuevo individuo = CrearIndividuo(problema);
 
-            decimal fitness = individuo.Fitness;
-            Assert.Equal(0m, fitness);
+            Assert.Equal(0m, individuo.Fitness);
         }
 
         [Fact]
@@ -227,8 +226,7 @@ namespace Solver.Tests
             });
             IndividuoNuevo individuo = CrearIndividuo(problema);
 
-            decimal fitness = individuo.Fitness;
-            Assert.True(fitness > 0, $"Se esperaba un fitness positivo, pero se obtuvo {fitness}");
+            Assert.True(individuo.Fitness > 0, $"Se esperaba un fitness positivo, pero se obtuvo {individuo.Fitness}");
         }
 
         [Fact]
@@ -244,8 +242,7 @@ namespace Solver.Tests
             });
             IndividuoNuevo individuo = CrearIndividuo(problema);
 
-            decimal fitness = individuo.Fitness;
-            Assert.Equal(2m, fitness);
+            Assert.Equal(2m, individuo.Fitness);
         }
 
         [Fact]
