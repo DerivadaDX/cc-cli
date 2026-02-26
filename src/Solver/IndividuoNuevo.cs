@@ -5,44 +5,27 @@ namespace Solver
 {
     internal class IndividuoNuevo
     {
+        private readonly List<int> _cromosoma;
         private readonly InstanciaProblema _problema;
         private readonly GeneradorNumerosRandom _generadorRandom;
         private readonly CalculadoraValoracionesPorciones _calculadoraValoraciones;
         private readonly AlgoritmoHungaro _algoritmoHungaro;
-        private readonly List<int> _cromosoma;
         private List<int> _asignaciones = [];
         private List<int> _preferenciasPorcion = [];
         private List<int> _posicionesCortes = [];
         private decimal _fitness;
 
-        internal IndividuoNuevo(InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
+        internal IndividuoNuevo(List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
         {
-            ArgumentNullException.ThrowIfNull(problema, nameof(problema));
-            _problema = problema;
-
-            ArgumentNullException.ThrowIfNull(generadorRandom, nameof(generadorRandom));
-            _generadorRandom = generadorRandom;
-
-            int tamañoCromosoma = problema.CantidadAtomos - 1;
-            int cantidadUnos = problema.Agentes.Count - 1;
-            _cromosoma = GenerarCromosomaAleatorio(tamañoCromosoma, cantidadUnos);
-
-            _calculadoraValoraciones = CalculadoraValoracionesPorcionesFactory.Crear();
-            _algoritmoHungaro = AlgoritmoHungaroFactory.Crear();
-
-            CalcularEstado();
-        }
-
-        private IndividuoNuevo(InstanciaProblema problema, GeneradorNumerosRandom generadorRandom, List<int> cromosoma)
-        {
-            ArgumentNullException.ThrowIfNull(problema, nameof(problema));
-            _problema = problema;
-
-            ArgumentNullException.ThrowIfNull(generadorRandom, nameof(generadorRandom));
-            _generadorRandom = generadorRandom;
-
             ArgumentNullException.ThrowIfNull(cromosoma, nameof(cromosoma));
+            ArgumentNullException.ThrowIfNull(problema, nameof(problema));
+            ArgumentNullException.ThrowIfNull(generadorRandom, nameof(generadorRandom));
+
+            ValidarCromosoma(cromosoma, problema);
+
             _cromosoma = cromosoma;
+            _problema = problema;
+            _generadorRandom = generadorRandom;
 
             _calculadoraValoraciones = CalculadoraValoracionesPorcionesFactory.Crear();
             _algoritmoHungaro = AlgoritmoHungaroFactory.Crear();
@@ -129,7 +112,7 @@ namespace Solver
                 cromosomaHijo[posicionCero] = 1;
             }
 
-            var hijo = new IndividuoNuevo(_problema, _generadorRandom, cromosomaHijo);
+            var hijo = new IndividuoNuevo(cromosomaHijo, _problema, _generadorRandom);
             return hijo;
         }
 
@@ -147,20 +130,26 @@ namespace Solver
             }
         }
 
-        private List<int> GenerarCromosomaAleatorio(int tamaño, int cantidadUnos)
+        private void ValidarCromosoma(List<int> cromosoma, InstanciaProblema problema)
         {
-            var cromosoma = Enumerable.Repeat(0, tamaño).ToList<int>();
-            var indicesDisponibles = Enumerable.Range(0, tamaño).ToList<int>();
-            for (int i = 0; i < cantidadUnos; i++)
+            int cantidadGenesEsperada = problema.CantidadAtomos - 1;
+            if (cromosoma.Count != cantidadGenesEsperada)
             {
-                int indiceRandom = _generadorRandom.Siguiente(indicesDisponibles.Count);
-                int indiceSeleccionado = indicesDisponibles[indiceRandom];
-
-                cromosoma[indiceSeleccionado] = 1;
-                indicesDisponibles.RemoveAt(indiceRandom);
+                string mensaje = $"Cantidad de genes inválida. Esperada: {cantidadGenesEsperada}, recibida: {cromosoma.Count}";
+                throw new ArgumentException(mensaje, nameof(cromosoma));
             }
 
-            return cromosoma;
+            bool hayGenesInvalidos = cromosoma.Any(gen => gen != 0 && gen != 1);
+            if (hayGenesInvalidos)
+                throw new ArgumentException("El cromosoma solo puede contener genes 0 o 1.", nameof(cromosoma));
+
+            int cantidadCortesEsperada = problema.Agentes.Count - 1;
+            int cantidadCortes = cromosoma.Count(gen => gen == 1);
+            if (cantidadCortes != cantidadCortesEsperada)
+            {
+                string mensaje = $"Cantidad de cortes inválida. Esperada: {cantidadCortesEsperada}, recibida: {cantidadCortes}";
+                throw new ArgumentException(mensaje, nameof(cromosoma));
+            }
         }
 
         private void CalcularEstado()
