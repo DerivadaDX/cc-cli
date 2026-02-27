@@ -122,11 +122,11 @@ namespace Solver
             foreach (int indicePorcion in porcionesOrdenadas)
             {
                 bool seAchico = AchicarPorcion(indicePorcion);
-                if (!seAchico)
-                    continue;
-
-                CalcularEstado();
-                return;
+                if (seAchico)
+                {
+                    CalcularEstado();
+                    return;
+                }
             }
         }
 
