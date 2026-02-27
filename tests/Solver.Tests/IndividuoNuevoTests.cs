@@ -392,12 +392,10 @@ namespace Solver.Tests
             Assert.Equal(asignacionesEsperadas, hijo.Asignaciones);
         }
 
-        /*
         [Fact]
         public void Mutar_PorcionMasDeseadaUnica_AchicaEsaPorcion()
         {
-            // Cortes iniciales en 1 y 3 → cromosoma [1, 0, 1, 0]
-            // Preferencias por porción: [0, 3, 0]
+            // Preferencias por porción para cortes [1, 3]: [0, 3, 0].
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
                 { 1m, 1m, 1m },
@@ -406,16 +404,37 @@ namespace Solver.Tests
                 { 1m, 1m, 1m },
                 { 1m, 1m, 1m },
             });
-            var generador = Substitute.For<GeneradorNumerosRandom>(1);
-            generador.Siguiente(Arg.Any<int>()).Returns(2, 0);
+            var generador = GeneradorNumerosRandomFactory.Crear(1);
+            var individuo = new IndividuoNuevo([1, 0, 1, 0], problema, generador);
 
-            IndividuoNuevo individuo = CrearIndividuo(problema, generador);
             individuo.Mutar();
 
-            var cromosomaEsperado = new List<int> { 0, 1, 1, 0 };
+            List<int> cromosomaEsperado = [0, 1, 1, 0];
             Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
+        [Fact]
+        public void Mutar_PorcionIzquierdaMenosDeseada_AgrandaLaIzquierda()
+        {
+            // Preferencias por porción para cortes [1, 3]: [0, 2, 1].
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 1m, 1m, 1m },
+                { 9m, 9m, 1m },
+                { 9m, 9m, 1m },
+                { 1m, 1m, 9m },
+                { 1m, 1m, 9m },
+            });
+            var generador = GeneradorNumerosRandomFactory.Crear(1);
+            var individuo = new IndividuoNuevo([1, 0, 1, 0], problema, generador);
+
+            individuo.Mutar();
+
+            List<int> cromosomaEsperado = [0, 1, 1, 0];
+            Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
+        }
+
+        /*
         [Fact]
         public void Mutar_PorcionesVecinasEmpatadas_AgrandaLaIzquierda()
         {
@@ -428,29 +447,6 @@ namespace Solver.Tests
                 { 9m, 9m, 9m },
                 { 1m, 1m, 1m },
                 { 1m, 1m, 1m },
-            });
-            var generador = Substitute.For<GeneradorNumerosRandom>(1);
-            generador.Siguiente(Arg.Any<int>()).Returns(2, 0);
-
-            IndividuoNuevo individuo = CrearIndividuo(problema, generador);
-            individuo.Mutar();
-
-            var cromosomaEsperado = new List<int> { 0, 1, 1, 0 };
-            Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
-        }
-
-        [Fact]
-        public void Mutar_PorcionIzquierdaMenosDeseada_AgrandaLaIzquierda()
-        {
-            // Cortes iniciales en 1 y 3 → cromosoma [1, 0, 1, 0]
-            // Preferencias por porción: [0, 2, 1]
-            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
-            {
-                { 1m, 1m, 1m },
-                { 9m, 9m, 1m },
-                { 9m, 9m, 1m },
-                { 1m, 1m, 9m },
-                { 1m, 1m, 9m },
             });
             var generador = Substitute.For<GeneradorNumerosRandom>(1);
             generador.Siguiente(Arg.Any<int>()).Returns(2, 0);
