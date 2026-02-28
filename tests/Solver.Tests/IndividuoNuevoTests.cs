@@ -310,7 +310,7 @@ namespace Solver.Tests
             IndividuoNuevo padreA = CrearIndividuoSieteAtomosCuatroAgentes(cromosomaPadreA);
             IndividuoNuevo padreB = CrearIndividuoSieteAtomosCuatroAgentes(cromosomaPadreB);
 
-            var hijo = padreA.Cruzar(padreB);
+            IndividuoNuevo hijo = padreA.Cruzar(padreB);
 
             int indiceCorteEnComun = 0;
             Assert.Equal(cromosomaPadreA[indiceCorteEnComun], hijo.Cromosoma[indiceCorteEnComun]);
@@ -330,7 +330,7 @@ namespace Solver.Tests
             var padreA = new IndividuoNuevo([1, 0, 1, 0, 1, 0], problema, generadorPadres);
             var padreB = new IndividuoNuevo([1, 0, 0, 1, 0, 1], problema, generadorPadres);
 
-            var hijo = padreA.Cruzar(padreB);
+            IndividuoNuevo hijo = padreA.Cruzar(padreB);
 
             List<int> cromosomaEsperado = [1, 0, 0, 0, 1, 1];
             Assert.Equal(cromosomaEsperado, hijo.Cromosoma);
@@ -347,7 +347,7 @@ namespace Solver.Tests
 
             IndividuoNuevo padre = CrearIndividuoCincoAtomosTresAgentes([1, 0, 1, 0], generador);
 
-            var hijo = padre.Cruzar(padre);
+            IndividuoNuevo hijo = padre.Cruzar(padre);
 
             List<int> cromosomaEsperado = [0, 0, 1, 1];
             Assert.Equal(cromosomaEsperado, hijo.Cromosoma);
@@ -369,7 +369,7 @@ namespace Solver.Tests
             IndividuoNuevo padreA = CrearIndividuoSieteAtomosCuatroAgentes([1, 1, 0, 1, 0, 0], generadorPadres);
             IndividuoNuevo padreB = CrearIndividuoSieteAtomosCuatroAgentes([1, 0, 1, 0, 1, 0], generadorPadres);
 
-            var hijo = padreA.Cruzar(padreB);
+            IndividuoNuevo hijo = padreA.Cruzar(padreB);
 
             Assert.Equal(asignacionesEsperadas, hijo.Asignaciones);
         }
@@ -651,7 +651,8 @@ namespace Solver.Tests
 
             individuo.Mutar();
 
-            Assert.Equal([0, 1, 2], individuo.Asignaciones);
+            List<int> asignacionesEsperadas = [0, 1, 2];
+            Assert.Equal(asignacionesEsperadas, individuo.Asignaciones);
         }
 
         private IndividuoNuevo CrearIndividuoCincoAtomosTresAgentes(
