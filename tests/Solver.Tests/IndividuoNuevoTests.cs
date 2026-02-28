@@ -592,12 +592,10 @@ namespace Solver.Tests
             Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
-        /*
         [Fact]
         public void Mutar_PorcionesEmpatadasConSeleccionadaDeUnAtomo_AchicaLaSiguienteAleatoria()
         {
-            // Cortes iniciales en 1 y 3 → cromosoma [1, 0, 1, 0]
-            // Preferencias por porción: [3, 3, 3]
+            // Preferencias por porción para cortes [1, 3]: [3, 3, 3].
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
                 { 4m, 4m, 4m },
@@ -606,19 +604,19 @@ namespace Solver.Tests
                 { 2m, 2m, 2m },
                 { 2m, 2m, 2m },
             });
-            var generador = Substitute.For<GeneradorNumerosRandom>(1);
-            generador.Siguiente(Arg.Any<int>()).Returns(
-                2, 0, // posiciones de cortes
-                1, 1 // desempate entre las más deseadas. [0, 2, 1].
-            );
 
-            IndividuoNuevo individuo = CrearIndividuo(problema, generador);
+            // Mezcla [0, 1, 2] con Fisher-Yates: 1 y luego 1 => [0, 2, 1].
+            var generador = Substitute.For<GeneradorNumerosRandom>(1);
+            generador.Siguiente(Arg.Any<int>()).Returns(1, 1);
+
+            var individuo = new IndividuoNuevo([1, 0, 1, 0], problema, generador);
             individuo.Mutar();
 
-            var cromosomaEsperado = new List<int> { 1, 0, 0, 1 };
+            List<int> cromosomaEsperado = [1, 0, 0, 1];
             Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
+        /*
         [Fact]
         public void Mutar_PorcionMasDeseadaDeUnAtomo_RecorrePorcionesHastaEncontrarUnaAchicable()
         {
