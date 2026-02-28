@@ -656,39 +656,23 @@ namespace Solver.Tests
             Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
-        /*
         [Fact]
         public void Mutar_AsignacionesDePorciones_SeRecalculan()
         {
             var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
-            algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns([0, 1, 2]);
+            algoritmoHungaro
+                .CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>())
+                .Returns([2, 1, 0], [0, 1, 2]);
             AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
 
-            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
-            {
-                { 1m, 1m, 1m },
-                { 1m, 1m, 1m },
-                { 9m, 9m, 9m },
-                { 1m, 1m, 1m },
-                { 1m, 1m, 1m },
-            });
-            var generador = Substitute.For<GeneradorNumerosRandom>(1);
-            generador.Siguiente(Arg.Any<int>()).Returns(2, 0);
+            var problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
+            var generador = GeneradorNumerosRandomFactory.Crear(1);
+            var individuo = new IndividuoNuevo([1, 0, 1, 0], problema, generador);
 
-            IndividuoNuevo individuo = CrearIndividuo(problema, generador);
             individuo.Mutar();
 
-            algoritmoHungaro.Received(2).CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>());
+            Assert.Equal([0, 1, 2], individuo.Asignaciones);
         }
-
-        private IndividuoNuevo CrearIndividuo(
-            List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom = null)
-        {
-            var generador = generadorRandom ?? GeneradorNumerosRandomFactory.Crear(1);
-            var individuo = new IndividuoNuevo(cromosoma, problema, generador);
-            return individuo;
-        }
-        */
 
         private InstanciaProblema CrearInstanciaProblemaCincoAtomosTresAgentes()
         {
