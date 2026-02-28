@@ -567,12 +567,10 @@ namespace Solver.Tests
             Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
-        /*
         [Fact]
-        public void Mutar_PorcionMasDeseadaDeUnAtomo_ConSegundasMasDeseadasEmpatadas_AchicaLaPorcionSeleccionadaAlAzar()
+        public void Mutar_PorcionMasDeseadaDeUnAtomoConSegundasMasDeseadasEmpatadas_AchicaLaPorcionSeleccionadaAlAzar()
         {
-            // Cortes iniciales en 1, 3 y 5 → cromosoma [1, 0, 1, 0, 1]
-            // Preferencias por porción: [2, 1, 1, 0]
+            // Preferencias por porción para cortes [1, 3, 5]: [2, 1, 1, 0].
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
                 { 9m, 9m, 1m, 1m },
@@ -582,19 +580,19 @@ namespace Solver.Tests
                 { 1m, 1m, 1m, 9m },
                 { 1m, 1m, 1m, 1m },
             });
-            var generador = Substitute.For<GeneradorNumerosRandom>(1);
-            generador.Siguiente(Arg.Any<int>()).Returns(
-                4, 2, 0, // posiciones de cortes
-                0 // desempate entre segundas más deseadas. [2, 1].
-            );
 
-            IndividuoNuevo individuo = CrearIndividuo(problema, generador);
+            // En el empate [1, 2], devolver 0 en Fisher-Yates produce [2, 1].
+            var generador = Substitute.For<GeneradorNumerosRandom>(1);
+            generador.Siguiente(Arg.Any<int>()).Returns(0);
+
+            var individuo = new IndividuoNuevo([1, 0, 1, 0, 1], problema, generador);
             individuo.Mutar();
 
-            var cromosomaEsperado = new List<int> { 1, 0, 1, 1, 0 };
+            List<int> cromosomaEsperado = [1, 0, 1, 1, 0];
             Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
+        /*
         [Fact]
         public void Mutar_PorcionesEmpatadasConSeleccionadaDeUnAtomo_AchicaLaSiguienteAleatoria()
         {
