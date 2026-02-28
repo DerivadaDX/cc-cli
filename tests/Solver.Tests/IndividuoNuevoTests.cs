@@ -526,12 +526,10 @@ namespace Solver.Tests
             Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
-        /*
         [Fact]
         public void Mutar_PorcionMasDeseadaEnExtremoDerecho_AchicaDesdeAdentro()
         {
-            // Cortes iniciales en 1 y 3 → cromosoma [1, 0, 1, 0]
-            // Preferencias por porción: [0, 0, 3]
+            // Preferencias por porción para cortes [1, 3]: [0, 0, 3].
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
                 { 1m, 1m, 1m },
@@ -540,21 +538,19 @@ namespace Solver.Tests
                 { 9m, 9m, 9m },
                 { 9m, 9m, 9m },
             });
-            var generador = Substitute.For<GeneradorNumerosRandom>(1);
-            generador.Siguiente(Arg.Any<int>()).Returns(2, 0);
+            var generador = GeneradorNumerosRandomFactory.Crear(1);
+            var individuo = new IndividuoNuevo([1, 0, 1, 0], problema, generador);
 
-            IndividuoNuevo individuo = CrearIndividuo(problema, generador);
             individuo.Mutar();
 
-            var cromosomaEsperado = new List<int> { 1, 0, 0, 1 };
+            List<int> cromosomaEsperado = [1, 0, 0, 1];
             Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
         [Fact]
         public void Mutar_PorcionMasDeseadaDeUnAtomo_AchicaLaSegundaMasDeseada()
         {
-            // Cortes iniciales en 1 y 2 → cromosoma [1, 1, 0]
-            // Preferencias por porción: [0, 3, 2]
+            // Preferencias por porción para cortes [1, 2]: [0, 3, 2].
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
                 { 1m, 1m, 1m },
@@ -562,16 +558,16 @@ namespace Solver.Tests
                 { 2m, 3m, 2m },
                 { 2m, 3m, 2m },
             });
-            var generador = Substitute.For<GeneradorNumerosRandom>(1);
-            generador.Siguiente(Arg.Any<int>()).Returns(1, 0);
+            var generador = GeneradorNumerosRandomFactory.Crear(1);
+            var individuo = new IndividuoNuevo([1, 1, 0], problema, generador);
 
-            IndividuoNuevo individuo = CrearIndividuo(problema, generador);
             individuo.Mutar();
 
-            var cromosomaEsperado = new List<int> { 1, 0, 1 };
+            List<int> cromosomaEsperado = [1, 0, 1];
             Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
+        /*
         [Fact]
         public void Mutar_PorcionMasDeseadaDeUnAtomo_ConSegundasMasDeseadasEmpatadas_AchicaLaPorcionSeleccionadaAlAzar()
         {
