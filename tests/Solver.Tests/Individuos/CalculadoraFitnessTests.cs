@@ -60,7 +60,7 @@ namespace Solver.Tests.Individuos
             Assert.Equal(0, fitness);
         }
 
-        private class IndividuoFake : Individuo
+        private class IndividuoFake : IndividuoLegacy
         {
             internal IndividuoFake(List<int> cromosoma, InstanciaProblema problema)
                 : base(cromosoma, problema, Substitute.For<GeneradorNumerosRandom>(1)) { }

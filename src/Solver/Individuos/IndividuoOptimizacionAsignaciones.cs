@@ -2,13 +2,10 @@ using Common;
 
 namespace Solver.Individuos
 {
-    internal class IndividuoOptimizacionAsignaciones : Individuo
+    internal class IndividuoOptimizacionAsignaciones : IndividuoLegacy
     {
         internal IndividuoOptimizacionAsignaciones(
-            List<int> cromosoma,
-            InstanciaProblema problema,
-            GeneradorNumerosRandom generadorRandom
-        )
+            List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
             : base(cromosoma, problema, generadorRandom) { }
 
         protected override void MutarAsignaciones()

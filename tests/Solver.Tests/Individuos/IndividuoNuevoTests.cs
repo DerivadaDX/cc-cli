@@ -1,7 +1,8 @@
 using Common;
 using NSubstitute;
+using Solver.Individuos;
 
-namespace Solver.Tests
+namespace Solver.Tests.Individuos
 {
     public class IndividuoNuevoTests : IDisposable
     {
@@ -10,34 +11,6 @@ namespace Solver.Tests
             AlgoritmoHungaroFactory.SetearInstancia(null);
             CalculadoraValoracionesPorcionesFactory.SetearInstancia(null);
             GC.SuppressFinalize(this);
-        }
-
-        [Fact]
-        public void Constructor_CromosomaNull_LanzaArgumentNullException()
-        {
-            var generadorRandom = GeneradorNumerosRandomFactory.Crear(1);
-            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
-
-            var ex = Assert.Throws<ArgumentNullException>(() => new IndividuoNuevo(null, problema, generadorRandom));
-            Assert.Equal("cromosoma", ex.ParamName);
-        }
-
-        [Fact]
-        public void Constructor_InstanciaProblemaNull_LanzaArgumentNullException()
-        {
-            var generadorRandom = GeneradorNumerosRandomFactory.Crear(1);
-
-            var ex = Assert.Throws<ArgumentNullException>(() => new IndividuoNuevo([1, 0, 1, 0], null, generadorRandom));
-            Assert.Equal("problema", ex.ParamName);
-        }
-
-        [Fact]
-        public void Constructor_GeneradorNumerosRandomNull_LanzaArgumentNullException()
-        {
-            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
-
-            var ex = Assert.Throws<ArgumentNullException>(() => new IndividuoNuevo([1, 0, 1, 0], problema, null));
-            Assert.Equal("generadorRandom", ex.ParamName);
         }
 
         [Fact]
@@ -197,7 +170,7 @@ namespace Solver.Tests
             });
             IndividuoNuevo individuo = CrearIndividuo([1, 1], problema);
 
-            Assert.Equal(0m, individuo.Fitness);
+            Assert.Equal(0m, individuo.Fitness());
         }
 
         [Fact]
@@ -211,7 +184,7 @@ namespace Solver.Tests
             });
             IndividuoNuevo individuo = CrearIndividuo([1, 1], problema);
 
-            Assert.True(individuo.Fitness > 0, $"Se esperaba un fitness positivo, pero se obtuvo {individuo.Fitness}");
+            Assert.True(individuo.Fitness() > 0, $"Se esperaba un fitness positivo, pero se obtuvo {individuo.Fitness()}");
         }
 
         [Fact]
@@ -225,7 +198,7 @@ namespace Solver.Tests
             });
             IndividuoNuevo individuo = CrearIndividuo([1, 1], problema);
 
-            Assert.Equal(0m, individuo.Fitness);
+            Assert.Equal(0m, individuo.Fitness());
         }
 
         [Fact]
@@ -240,7 +213,20 @@ namespace Solver.Tests
             });
             IndividuoNuevo individuo = CrearIndividuo([1, 1], problema);
 
-            Assert.Equal(2m, individuo.Fitness);
+            Assert.Equal(2m, individuo.Fitness());
+        }
+
+        [Fact]
+        public void Cruzar_ConOtraFamiliaCromosoma_LanzaInvalidOperationException()
+        {
+            InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
+            GeneradorNumerosRandom generador = GeneradorNumerosRandomFactory.Crear(1);
+
+            Individuo padreNuevo = new IndividuoNuevo([1, 0, 1, 0], problema, generador);
+            Individuo otro = new IndividuoOtraFamiliaFake([1, 1, 2], problema, generador);
+
+            var ex = Assert.Throws<InvalidOperationException>(() => padreNuevo.Cruzar(otro));
+            Assert.Equal("No se puede cruzar individuos de familias de cromosoma diferentes.", ex.Message);
         }
 
         [Fact]
@@ -683,6 +669,32 @@ namespace Solver.Tests
                 { 5m, 6m },
             });
             return instanciaProblema;
+        }
+
+        private class IndividuoOtraFamiliaFake : Individuo
+        {
+            internal IndividuoOtraFamiliaFake(
+                List<int> cromosoma,
+                InstanciaProblema problema,
+                GeneradorNumerosRandom generadorRandom)
+                : base(cromosoma, problema, generadorRandom) { }
+
+            protected override string FamiliaCromosoma => "legacy";
+
+            internal override void Mutar()
+            {
+                throw new NotImplementedException();
+            }
+
+            internal override Individuo Cruzar(Individuo otro)
+            {
+                throw new NotImplementedException();
+            }
+
+            internal override decimal Fitness()
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

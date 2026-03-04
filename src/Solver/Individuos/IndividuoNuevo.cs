@@ -1,13 +1,10 @@
 using Common;
 using System.Globalization;
 
-namespace Solver
+namespace Solver.Individuos
 {
-    internal class IndividuoNuevo
+    internal class IndividuoNuevo : Individuo
     {
-        private readonly List<int> _cromosoma;
-        private readonly InstanciaProblema _problema;
-        private readonly GeneradorNumerosRandom _generadorRandom;
         private readonly CalculadoraValoracionesPorciones _calculadoraValoraciones;
         private readonly AlgoritmoHungaro _algoritmoHungaro;
         private List<int> _asignaciones = [];
@@ -16,16 +13,9 @@ namespace Solver
         private decimal _fitness;
 
         internal IndividuoNuevo(List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
+            : base(cromosoma, problema, generadorRandom)
         {
-            ArgumentNullException.ThrowIfNull(cromosoma, nameof(cromosoma));
-            ArgumentNullException.ThrowIfNull(problema, nameof(problema));
-            ArgumentNullException.ThrowIfNull(generadorRandom, nameof(generadorRandom));
-
             ValidarCromosoma(cromosoma, problema);
-
-            _cromosoma = cromosoma;
-            _problema = problema;
-            _generadorRandom = generadorRandom;
 
             _calculadoraValoraciones = CalculadoraValoracionesPorcionesFactory.Crear();
             _algoritmoHungaro = AlgoritmoHungaroFactory.Crear();
@@ -33,45 +23,53 @@ namespace Solver
             CalcularEstado();
         }
 
-        internal IReadOnlyList<int> Cromosoma => _cromosoma;
+        protected override string FamiliaCromosoma => "nuevo";
+
         internal IReadOnlyList<int> Asignaciones => _asignaciones;
-        internal decimal Fitness => _fitness;
 
         public override string ToString()
         {
-            string cortes = string.Join(", ", _cromosoma);
+            string cortes = string.Join(", ", Cromosoma);
 
             List<int> asignacionesBaseUno = [.. _asignaciones.Select(asignacion => asignacion + 1)];
             string asignaciones = string.Join(", ", asignacionesBaseUno);
 
-            string fitness = Fitness.ToString(CultureInfo.InvariantCulture);
+            string fitness = Fitness().ToString(CultureInfo.InvariantCulture);
             string resultado = $"Cortes=[{cortes}], Asignaciones=[{asignaciones}], Fitness={fitness}";
             return resultado;
+        }
+
+        internal override Individuo Cruzar(Individuo otro)
+        {
+            ValidarCompatibilidadCruce(otro);
+            IndividuoNuevo otroNuevo = (IndividuoNuevo)otro;
+            IndividuoNuevo hijo = Cruzar(otroNuevo);
+            return hijo;
         }
 
         internal IndividuoNuevo Cruzar(IndividuoNuevo otro)
         {
             ArgumentNullException.ThrowIfNull(otro, nameof(otro));
 
-            if (_cromosoma.Count != otro._cromosoma.Count)
+            if (Cromosoma.Count != otro.Cromosoma.Count)
                 throw new ArgumentException("Los cromosomas no tienen la misma longitud.");
 
-            int cantidadCortes = _cromosoma.Count(gen => gen == 1);
-            int cantidadCortesOtro = otro._cromosoma.Count(gen => gen == 1);
+            int cantidadCortes = Cromosoma.Count(gen => gen == 1);
+            int cantidadCortesOtro = otro.Cromosoma.Count(gen => gen == 1);
             if (cantidadCortes != cantidadCortesOtro)
                 throw new ArgumentException("Los cromosomas no tienen la misma cantidad de cortes.");
 
             int cantidadCortesSeleccionados = 0;
             var cortesDisponibles = new List<int>();
-            var cromosomaHijo = Enumerable.Repeat(0, _cromosoma.Count).ToList<int>();
+            var cromosomaHijo = Enumerable.Repeat(0, Cromosoma.Count).ToList<int>();
 
-            for (int indice = 0; indice < _cromosoma.Count; indice++)
+            for (int indice = 0; indice < Cromosoma.Count; indice++)
             {
-                bool coinciden = _cromosoma[indice] == otro._cromosoma[indice];
+                bool coinciden = Cromosoma[indice] == otro.Cromosoma[indice];
                 if (coinciden)
                 {
-                    cromosomaHijo[indice] = _cromosoma[indice];
-                    if (_cromosoma[indice] == 1)
+                    cromosomaHijo[indice] = Cromosoma[indice];
+                    if (Cromosoma[indice] == 1)
                         cantidadCortesSeleccionados++;
                     continue;
                 }
@@ -89,8 +87,8 @@ namespace Solver
                 cantidadCortesSeleccionados++;
             }
 
-            bool hijoIgualPadre = cromosomaHijo.SequenceEqual(_cromosoma);
-            bool hijoIgualOtro = cromosomaHijo.SequenceEqual(otro._cromosoma);
+            bool hijoIgualPadre = cromosomaHijo.SequenceEqual(Cromosoma);
+            bool hijoIgualOtro = cromosomaHijo.SequenceEqual(otro.Cromosoma);
             if (hijoIgualPadre || hijoIgualOtro)
             {
                 var indicesConUno = new List<int>();
@@ -116,7 +114,7 @@ namespace Solver
             return hijo;
         }
 
-        internal void Mutar()
+        internal override void Mutar()
         {
             List<int> porcionesOrdenadas = ObtenerPorcionesOrdenadasPorPreferencia();
             foreach (int indicePorcion in porcionesOrdenadas)
@@ -128,6 +126,11 @@ namespace Solver
                     return;
                 }
             }
+        }
+
+        internal override decimal Fitness()
+        {
+            return _fitness;
         }
 
         private void ValidarCromosoma(List<int> cromosoma, InstanciaProblema problema)
@@ -155,9 +158,9 @@ namespace Solver
         private void CalcularEstado()
         {
             _posicionesCortes = [];
-            for (int indice = 0; indice < _cromosoma.Count; indice++)
+            for (int indice = 0; indice < Cromosoma.Count; indice++)
             {
-                bool esCorte = _cromosoma[indice] == 1;
+                bool esCorte = Cromosoma[indice] == 1;
                 if (esCorte)
                     _posicionesCortes.Add(indice + 1);
             }
@@ -279,22 +282,22 @@ namespace Solver
 
         private bool MoverCorte(int posicionActual, int nuevaPosicion)
         {
-            bool nuevaPosicionInvalida = nuevaPosicion < 1 || nuevaPosicion > _cromosoma.Count;
+            bool nuevaPosicionInvalida = nuevaPosicion < 1 || nuevaPosicion > Cromosoma.Count;
             if (nuevaPosicionInvalida)
                 return false;
 
             int indiceActual = posicionActual - 1;
-            bool posicionActualNoEsCorte = _cromosoma[indiceActual] == 0;
+            bool posicionActualNoEsCorte = Cromosoma[indiceActual] == 0;
             if (posicionActualNoEsCorte)
                 return false;
 
             int indiceNuevo = nuevaPosicion - 1;
-            bool posicionNuevaYaEsCorte = _cromosoma[indiceNuevo] == 1;
+            bool posicionNuevaYaEsCorte = Cromosoma[indiceNuevo] == 1;
             if (posicionNuevaYaEsCorte)
                 return false;
 
-            _cromosoma[indiceActual] = 0;
-            _cromosoma[indiceNuevo] = 1;
+            Cromosoma[indiceActual] = 0;
+            Cromosoma[indiceNuevo] = 1;
             _posicionesCortes.Remove(posicionActual);
             _posicionesCortes.Add(nuevaPosicion);
             _posicionesCortes.Sort();
