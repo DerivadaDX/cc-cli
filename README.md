@@ -91,7 +91,7 @@ En ese caso se muestra el mejor individuo encontrado hasta el momento.
 **Sintaxis**:
 
 ```bash
-cc-cli.exe resolver [opciones]
+cc-cli.exe resolver [ruta-instancia] [opciones]
 ```
 
 **Argumentos y opciones**:
