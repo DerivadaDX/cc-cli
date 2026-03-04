@@ -103,7 +103,7 @@ cc-cli.exe resolver [opciones]
 | `--cantidad-individuos`  | Cantidad de individuos por generación            | Entero positivo (default: 100)                          |
 | `--limite-estancamiento` | Límite de generaciones sin mejora (0 = infinito) | Entero positivo (default: 1000)                         |
 | `--seed`                 | Seed para el generador aleatorio                 | Entero (default: aleatorio)                             |
-| `--tipo-individuo`       | Tipo de individuo a utilizar                     | "intercambio" u "optimizacion" (default: "intercambio") |
+| `--tipo-individuo`       | Tipo de individuo a utilizar                     | "intercambio", "optimizacion" o "cortes-binario" (default: "optimizacion") |
 
 **Ejemplos**:
 
