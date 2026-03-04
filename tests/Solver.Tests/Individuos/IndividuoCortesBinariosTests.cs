@@ -4,7 +4,7 @@ using Solver.Individuos;
 
 namespace Solver.Tests.Individuos
 {
-    public class IndividuoNuevoTests : IDisposable
+    public class IndividuoCortesBinariosTests : IDisposable
     {
         public void Dispose()
         {
@@ -19,7 +19,7 @@ namespace Solver.Tests.Individuos
             InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
             var generadorRandom = GeneradorNumerosRandomFactory.Crear(1);
 
-            var ex = Assert.Throws<ArgumentException>(() => new IndividuoNuevo([1, 0, 1], problema, generadorRandom));
+            var ex = Assert.Throws<ArgumentException>(() => new IndividuoCortesBinarios([1, 0, 1], problema, generadorRandom));
             Assert.Contains("Cantidad de genes inválida", ex.Message);
             Assert.Equal("cromosoma", ex.ParamName);
         }
@@ -30,7 +30,7 @@ namespace Solver.Tests.Individuos
             InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
             var generadorRandom = GeneradorNumerosRandomFactory.Crear(1);
 
-            var ex = Assert.Throws<ArgumentException>(() => new IndividuoNuevo([1, 0, 0, 0], problema, generadorRandom));
+            var ex = Assert.Throws<ArgumentException>(() => new IndividuoCortesBinarios([1, 0, 0, 0], problema, generadorRandom));
             Assert.Contains("Cantidad de cortes inválida", ex.Message);
             Assert.Equal("cromosoma", ex.ParamName);
         }
@@ -41,7 +41,7 @@ namespace Solver.Tests.Individuos
             InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
             var generadorRandom = GeneradorNumerosRandomFactory.Crear(1);
 
-            var ex = Assert.Throws<ArgumentException>(() => new IndividuoNuevo([1, 0, 2, 0], problema, generadorRandom));
+            var ex = Assert.Throws<ArgumentException>(() => new IndividuoCortesBinarios([1, 0, 2, 0], problema, generadorRandom));
             Assert.Contains("solo puede contener genes 0 o 1", ex.Message);
             Assert.Equal("cromosoma", ex.ParamName);
         }
@@ -110,7 +110,7 @@ namespace Solver.Tests.Individuos
             algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns(asignacionOptima);
             AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
 
-            IndividuoNuevo individuo = CrearIndividuoCincoAtomosTresAgentes([1, 0, 1, 0]);
+            IndividuoCortesBinarios individuo = CrearIndividuoCincoAtomosTresAgentes([1, 0, 1, 0]);
 
             Assert.Equal(asignacionOptima, individuo.Asignaciones);
             algoritmoHungaro.Received(1).CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>());
@@ -123,7 +123,7 @@ namespace Solver.Tests.Individuos
             algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns([2, 0, 1]);
             AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
 
-            IndividuoNuevo individuo = CrearIndividuoCincoAtomosTresAgentes([1, 0, 1, 0]);
+            IndividuoCortesBinarios individuo = CrearIndividuoCincoAtomosTresAgentes([1, 0, 1, 0]);
 
             string resultado = individuo.ToString();
 
@@ -151,7 +151,7 @@ namespace Solver.Tests.Individuos
             algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns([2, 0, 1]);
             AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
 
-            IndividuoNuevo individuo = CrearIndividuoCincoAtomosTresAgentes([1, 0, 1, 0]);
+            IndividuoCortesBinarios individuo = CrearIndividuoCincoAtomosTresAgentes([1, 0, 1, 0]);
 
             string resultado = individuo.ToString();
 
@@ -168,7 +168,7 @@ namespace Solver.Tests.Individuos
                 { 0m, 1m, 0m },
                 { 0m, 0m, 1m },
             });
-            IndividuoNuevo individuo = CrearIndividuo([1, 1], problema);
+            IndividuoCortesBinarios individuo = CrearIndividuo([1, 1], problema);
 
             Assert.Equal(0m, individuo.Fitness());
         }
@@ -182,7 +182,7 @@ namespace Solver.Tests.Individuos
                 { 5m, 5m, 5m },
                 { 1m, 1m, 1m },
             });
-            IndividuoNuevo individuo = CrearIndividuo([1, 1], problema);
+            IndividuoCortesBinarios individuo = CrearIndividuo([1, 1], problema);
 
             Assert.True(individuo.Fitness() > 0, $"Se esperaba un fitness positivo, pero se obtuvo {individuo.Fitness()}");
         }
@@ -196,7 +196,7 @@ namespace Solver.Tests.Individuos
                 { 1m, 1m, 1m },
                 { 1m, 1m, 1m },
             });
-            IndividuoNuevo individuo = CrearIndividuo([1, 1], problema);
+            IndividuoCortesBinarios individuo = CrearIndividuo([1, 1], problema);
 
             Assert.Equal(0m, individuo.Fitness());
         }
@@ -211,7 +211,7 @@ namespace Solver.Tests.Individuos
                 { 8m, 2m, 9m },
                 { 7m, 1m, 2m },
             });
-            IndividuoNuevo individuo = CrearIndividuo([1, 1], problema);
+            IndividuoCortesBinarios individuo = CrearIndividuo([1, 1], problema);
 
             Assert.Equal(2m, individuo.Fitness());
         }
@@ -222,7 +222,7 @@ namespace Solver.Tests.Individuos
             InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
             GeneradorNumerosRandom generador = GeneradorNumerosRandomFactory.Crear(1);
 
-            Individuo padreNuevo = new IndividuoNuevo([1, 0, 1, 0], problema, generador);
+            Individuo padreNuevo = new IndividuoCortesBinarios([1, 0, 1, 0], problema, generador);
             Individuo otro = new IndividuoOtraFamiliaFake([1, 1, 2], problema, generador);
 
             var ex = Assert.Throws<InvalidOperationException>(() => padreNuevo.Cruzar(otro));
@@ -232,7 +232,7 @@ namespace Solver.Tests.Individuos
         [Fact]
         public void Cruzar_OtroPadreNull_LanzaArgumentNullException()
         {
-            IndividuoNuevo padre = CrearIndividuoCincoAtomosTresAgentes([1, 0, 1, 0]);
+            IndividuoCortesBinarios padre = CrearIndividuoCincoAtomosTresAgentes([1, 0, 1, 0]);
 
             var ex = Assert.Throws<ArgumentNullException>(() => padre.Cruzar(null));
             Assert.Equal("otro", ex.ParamName);
@@ -241,9 +241,9 @@ namespace Solver.Tests.Individuos
         [Fact]
         public void Cruzar_CromosomasDeDistintaLongitud_LanzaArgumentException()
         {
-            IndividuoNuevo padre = CrearIndividuoCincoAtomosTresAgentes([1, 0, 1, 0]);
+            IndividuoCortesBinarios padre = CrearIndividuoCincoAtomosTresAgentes([1, 0, 1, 0]);
 
-            IndividuoNuevo otroPadre = CrearIndividuoSieteAtomosCuatroAgentes([1, 0, 1, 0, 1, 0]);
+            IndividuoCortesBinarios otroPadre = CrearIndividuoSieteAtomosCuatroAgentes([1, 0, 1, 0, 1, 0]);
 
             var ex = Assert.Throws<ArgumentException>(() => padre.Cruzar(otroPadre));
             Assert.Contains("cromosomas no tienen la misma longitud", ex.Message);
@@ -252,10 +252,10 @@ namespace Solver.Tests.Individuos
         [Fact]
         public void Cruzar_CantidadDeCortesDiferente_LanzaArgumentException()
         {
-            IndividuoNuevo padre = CrearIndividuoCincoAtomosTresAgentes([1, 0, 1, 0]);
+            IndividuoCortesBinarios padre = CrearIndividuoCincoAtomosTresAgentes([1, 0, 1, 0]);
 
             InstanciaProblema problemaOtro = CrearInstanciaProblemaCincoAtomosDosAgentes();
-            IndividuoNuevo otroPadre = CrearIndividuo([1, 0, 0, 0], problemaOtro);
+            IndividuoCortesBinarios otroPadre = CrearIndividuo([1, 0, 0, 0], problemaOtro);
 
             var ex = Assert.Throws<ArgumentException>(() => padre.Cruzar(otroPadre));
             Assert.Contains("no tienen la misma cantidad de cortes", ex.Message);
@@ -267,10 +267,10 @@ namespace Solver.Tests.Individuos
             List<int> cromosomaPadreA = [1, 0, 1, 0, 1, 0];
             List<int> cromosomaPadreB = [1, 0, 0, 1, 0, 1];
 
-            IndividuoNuevo padreA = CrearIndividuoSieteAtomosCuatroAgentes(cromosomaPadreA);
-            IndividuoNuevo padreB = CrearIndividuoSieteAtomosCuatroAgentes(cromosomaPadreB);
+            IndividuoCortesBinarios padreA = CrearIndividuoSieteAtomosCuatroAgentes(cromosomaPadreA);
+            IndividuoCortesBinarios padreB = CrearIndividuoSieteAtomosCuatroAgentes(cromosomaPadreB);
 
-            IndividuoNuevo hijo = padreA.Cruzar(padreB);
+            IndividuoCortesBinarios hijo = padreA.Cruzar(padreB);
 
             int indiceCorteEnComun = 0;
             Assert.Equal(cromosomaPadreA[indiceCorteEnComun], hijo.Cromosoma[indiceCorteEnComun]);
@@ -287,10 +287,10 @@ namespace Solver.Tests.Individuos
             generadorPadres.Siguiente(Arg.Any<int>()).Returns(3, 2);
 
             InstanciaProblema problema = CrearInstanciaProblemaSieteAtomosCuatroAgentes();
-            var padreA = new IndividuoNuevo([1, 0, 1, 0, 1, 0], problema, generadorPadres);
-            var padreB = new IndividuoNuevo([1, 0, 0, 1, 0, 1], problema, generadorPadres);
+            var padreA = new IndividuoCortesBinarios([1, 0, 1, 0, 1, 0], problema, generadorPadres);
+            var padreB = new IndividuoCortesBinarios([1, 0, 0, 1, 0, 1], problema, generadorPadres);
 
-            IndividuoNuevo hijo = padreA.Cruzar(padreB);
+            IndividuoCortesBinarios hijo = padreA.Cruzar(padreB);
 
             List<int> cromosomaEsperado = [1, 0, 0, 0, 1, 1];
             Assert.Equal(cromosomaEsperado, hijo.Cromosoma);
@@ -305,9 +305,9 @@ namespace Solver.Tests.Individuos
             var generador = Substitute.For<GeneradorNumerosRandom>(1);
             generador.Siguiente(Arg.Any<int>()).Returns(0, 1);
 
-            IndividuoNuevo padre = CrearIndividuoCincoAtomosTresAgentes([1, 0, 1, 0], generador);
+            IndividuoCortesBinarios padre = CrearIndividuoCincoAtomosTresAgentes([1, 0, 1, 0], generador);
 
-            IndividuoNuevo hijo = padre.Cruzar(padre);
+            IndividuoCortesBinarios hijo = padre.Cruzar(padre);
 
             List<int> cromosomaEsperado = [0, 0, 1, 1];
             Assert.Equal(cromosomaEsperado, hijo.Cromosoma);
@@ -326,10 +326,10 @@ namespace Solver.Tests.Individuos
             var generadorPadres = Substitute.For<GeneradorNumerosRandom>(1);
             generadorPadres.Siguiente(Arg.Any<int>()).Returns(3, 2);
 
-            IndividuoNuevo padreA = CrearIndividuoSieteAtomosCuatroAgentes([1, 1, 0, 1, 0, 0], generadorPadres);
-            IndividuoNuevo padreB = CrearIndividuoSieteAtomosCuatroAgentes([1, 0, 1, 0, 1, 0], generadorPadres);
+            IndividuoCortesBinarios padreA = CrearIndividuoSieteAtomosCuatroAgentes([1, 1, 0, 1, 0, 0], generadorPadres);
+            IndividuoCortesBinarios padreB = CrearIndividuoSieteAtomosCuatroAgentes([1, 0, 1, 0, 1, 0], generadorPadres);
 
-            IndividuoNuevo hijo = padreA.Cruzar(padreB);
+            IndividuoCortesBinarios hijo = padreA.Cruzar(padreB);
 
             Assert.Equal(asignacionesEsperadas, hijo.Asignaciones);
         }
@@ -346,7 +346,7 @@ namespace Solver.Tests.Individuos
                 { 1m, 1m, 1m },
                 { 1m, 1m, 1m },
             });
-            IndividuoNuevo individuo = CrearIndividuo([1, 0, 1, 0], problema);
+            IndividuoCortesBinarios individuo = CrearIndividuo([1, 0, 1, 0], problema);
 
             individuo.Mutar();
 
@@ -366,7 +366,7 @@ namespace Solver.Tests.Individuos
                 { 1m, 1m, 1m },
                 { 1m, 1m, 1m },
             });
-            IndividuoNuevo individuo = CrearIndividuo([1, 0, 1, 0], problema);
+            IndividuoCortesBinarios individuo = CrearIndividuo([1, 0, 1, 0], problema);
 
             individuo.Mutar();
 
@@ -386,7 +386,7 @@ namespace Solver.Tests.Individuos
                 { 1m, 1m, 9m },
                 { 1m, 1m, 9m },
             });
-            IndividuoNuevo individuo = CrearIndividuo([1, 0, 1, 0], problema);
+            IndividuoCortesBinarios individuo = CrearIndividuo([1, 0, 1, 0], problema);
 
             individuo.Mutar();
 
@@ -406,7 +406,7 @@ namespace Solver.Tests.Individuos
                 { 1m, 1m, 1m },
                 { 1m, 1m, 1m },
             });
-            IndividuoNuevo individuo = CrearIndividuo([1, 0, 1, 0], problema);
+            IndividuoCortesBinarios individuo = CrearIndividuo([1, 0, 1, 0], problema);
 
             individuo.Mutar();
 
@@ -436,7 +436,7 @@ namespace Solver.Tests.Individuos
             var generador = Substitute.For<GeneradorNumerosRandom>(1);
             generador.Siguiente(Arg.Any<int>()).Returns(0);
 
-            var individuo = new IndividuoNuevo([0, 1, 0, 1, 0, 1, 0], problema, generador);
+            var individuo = new IndividuoCortesBinarios([0, 1, 0, 1, 0, 1, 0], problema, generador);
             individuo.Mutar();
 
             List<int> cromosomaEsperado = [0, 1, 0, 1, 1, 0, 0];
@@ -455,7 +455,7 @@ namespace Solver.Tests.Individuos
                 { 1m, 1m, 9m },
                 { 1m, 1m, 1m },
             });
-            IndividuoNuevo individuo = CrearIndividuo([0, 1, 0, 1], problema);
+            IndividuoCortesBinarios individuo = CrearIndividuo([0, 1, 0, 1], problema);
 
             individuo.Mutar();
 
@@ -475,7 +475,7 @@ namespace Solver.Tests.Individuos
                 { 9m, 9m, 9m },
                 { 9m, 9m, 9m },
             });
-            IndividuoNuevo individuo = CrearIndividuo([1, 0, 1, 0], problema);
+            IndividuoCortesBinarios individuo = CrearIndividuo([1, 0, 1, 0], problema);
 
             individuo.Mutar();
 
@@ -494,7 +494,7 @@ namespace Solver.Tests.Individuos
                 { 2m, 3m, 2m },
                 { 2m, 3m, 2m },
             });
-            IndividuoNuevo individuo = CrearIndividuo([1, 1, 0], problema);
+            IndividuoCortesBinarios individuo = CrearIndividuo([1, 1, 0], problema);
 
             individuo.Mutar();
 
@@ -520,7 +520,7 @@ namespace Solver.Tests.Individuos
             var generador = Substitute.For<GeneradorNumerosRandom>(1);
             generador.Siguiente(Arg.Any<int>()).Returns(0);
 
-            var individuo = new IndividuoNuevo([1, 0, 1, 0, 1], problema, generador);
+            var individuo = new IndividuoCortesBinarios([1, 0, 1, 0, 1], problema, generador);
             individuo.Mutar();
 
             List<int> cromosomaEsperado = [1, 0, 1, 1, 0];
@@ -544,7 +544,7 @@ namespace Solver.Tests.Individuos
             var generador = Substitute.For<GeneradorNumerosRandom>(1);
             generador.Siguiente(Arg.Any<int>()).Returns(1, 1);
 
-            var individuo = new IndividuoNuevo([1, 0, 1, 0], problema, generador);
+            var individuo = new IndividuoCortesBinarios([1, 0, 1, 0], problema, generador);
             individuo.Mutar();
 
             List<int> cromosomaEsperado = [1, 0, 0, 1];
@@ -563,7 +563,7 @@ namespace Solver.Tests.Individuos
                 { 1m, 1m, 2m, 1m },
                 { 1m, 1m, 2m, 1m },
             });
-            IndividuoNuevo individuo = CrearIndividuo([1, 1, 1, 0], problema);
+            IndividuoCortesBinarios individuo = CrearIndividuo([1, 1, 1, 0], problema);
 
             individuo.Mutar();
 
@@ -581,7 +581,7 @@ namespace Solver.Tests.Individuos
                 { 1m, 2m, 3m },
                 { 1m, 2m, 3m },
             });
-            IndividuoNuevo individuo = CrearIndividuo([1, 1], problema);
+            IndividuoCortesBinarios individuo = CrearIndividuo([1, 1], problema);
 
             individuo.Mutar();
 
@@ -598,7 +598,7 @@ namespace Solver.Tests.Individuos
                 .Returns([2, 1, 0], [0, 1, 2]);
             AlgoritmoHungaroFactory.SetearInstancia(algoritmoHungaro);
 
-            IndividuoNuevo individuo = CrearIndividuoCincoAtomosTresAgentes([1, 0, 1, 0]);
+            IndividuoCortesBinarios individuo = CrearIndividuoCincoAtomosTresAgentes([1, 0, 1, 0]);
 
             individuo.Mutar();
 
@@ -606,7 +606,7 @@ namespace Solver.Tests.Individuos
             Assert.Equal(asignacionesEsperadas, individuo.Asignaciones);
         }
 
-        private IndividuoNuevo CrearIndividuoCincoAtomosTresAgentes(
+        private IndividuoCortesBinarios CrearIndividuoCincoAtomosTresAgentes(
             List<int> cromosoma, GeneradorNumerosRandom generadorRandom = null)
         {
             InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
@@ -614,7 +614,7 @@ namespace Solver.Tests.Individuos
             return individuo;
         }
 
-        private IndividuoNuevo CrearIndividuoSieteAtomosCuatroAgentes(
+        private IndividuoCortesBinarios CrearIndividuoSieteAtomosCuatroAgentes(
             List<int> cromosoma, GeneradorNumerosRandom generadorRandom = null)
         {
             InstanciaProblema problema = CrearInstanciaProblemaSieteAtomosCuatroAgentes();
@@ -622,11 +622,11 @@ namespace Solver.Tests.Individuos
             return individuo;
         }
 
-        private IndividuoNuevo CrearIndividuo(
+        private IndividuoCortesBinarios CrearIndividuo(
             List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom = null)
         {
             GeneradorNumerosRandom generador = generadorRandom ?? GeneradorNumerosRandomFactory.Crear(1);
-            var individuo = new IndividuoNuevo(cromosoma, problema, generador);
+            var individuo = new IndividuoCortesBinarios(cromosoma, problema, generador);
             return individuo;
         }
 

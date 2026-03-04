@@ -1,9 +1,9 @@
-using Common;
 using System.Globalization;
+using Common;
 
 namespace Solver.Individuos
 {
-    internal class IndividuoNuevo : Individuo
+    internal class IndividuoCortesBinarios : Individuo
     {
         private readonly CalculadoraValoracionesPorciones _calculadoraValoraciones;
         private readonly AlgoritmoHungaro _algoritmoHungaro;
@@ -12,7 +12,8 @@ namespace Solver.Individuos
         private List<int> _posicionesCortes = [];
         private decimal _fitness;
 
-        internal IndividuoNuevo(List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
+        internal IndividuoCortesBinarios(
+            List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
             : base(cromosoma, problema, generadorRandom)
         {
             ValidarCromosoma(cromosoma, problema);
@@ -23,7 +24,7 @@ namespace Solver.Individuos
             CalcularEstado();
         }
 
-        protected override string FamiliaCromosoma => "nuevo";
+        protected override string FamiliaCromosoma => "cortes-binario";
 
         internal IReadOnlyList<int> Asignaciones => _asignaciones;
 
@@ -42,12 +43,12 @@ namespace Solver.Individuos
         internal override Individuo Cruzar(Individuo otro)
         {
             ValidarCompatibilidadCruce(otro);
-            IndividuoNuevo otroNuevo = (IndividuoNuevo)otro;
-            IndividuoNuevo hijo = Cruzar(otroNuevo);
+            IndividuoCortesBinarios otroCortesBinarios = (IndividuoCortesBinarios)otro;
+            IndividuoCortesBinarios hijo = Cruzar(otroCortesBinarios);
             return hijo;
         }
 
-        internal IndividuoNuevo Cruzar(IndividuoNuevo otro)
+        internal IndividuoCortesBinarios Cruzar(IndividuoCortesBinarios otro)
         {
             ArgumentNullException.ThrowIfNull(otro, nameof(otro));
 
@@ -110,7 +111,7 @@ namespace Solver.Individuos
                 cromosomaHijo[posicionCero] = 1;
             }
 
-            var hijo = new IndividuoNuevo(cromosomaHijo, _problema, _generadorRandom);
+            var hijo = new IndividuoCortesBinarios(cromosomaHijo, _problema, _generadorRandom);
             return hijo;
         }
 
