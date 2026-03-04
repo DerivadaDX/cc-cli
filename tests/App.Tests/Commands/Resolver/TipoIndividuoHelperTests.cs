@@ -27,6 +27,13 @@ namespace App.Tests.Commands.Resolver
         }
 
         [Fact]
+        public void Parse_ValorCortesBinario_DevuelveTipoIndividuoCortesBinario()
+        {
+            TipoIndividuo resultado = TipoIndividuoHelper.Parse("cortes-binario");
+            Assert.Equal(TipoIndividuo.CortesBinario, resultado);
+        }
+
+        [Fact]
         public void Parse_ValorMayusculas_DevuelveCorrespondienteTipoIndividuo()
         {
             TipoIndividuo resultado = TipoIndividuoHelper.Parse("INTERCAMBIO");
@@ -38,6 +45,13 @@ namespace App.Tests.Commands.Resolver
         {
             TipoIndividuo resultado = TipoIndividuoHelper.Parse("OptimizaCION");
             Assert.Equal(TipoIndividuo.OptimizacionAsignaciones, resultado);
+        }
+
+        [Fact]
+        public void Parse_ValorCortesBinarioMixtoMayusculasMinusculas_DevuelveCorrespondienteTipoIndividuo()
+        {
+            TipoIndividuo resultado = TipoIndividuoHelper.Parse("CorTes-BinaRIO");
+            Assert.Equal(TipoIndividuo.CortesBinario, resultado);
         }
 
         [Theory]

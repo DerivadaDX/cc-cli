@@ -8,10 +8,11 @@ namespace App.Commands.Resolver
         {
             ArgumentNullException.ThrowIfNull(valor, nameof(valor));
 
-            TipoIndividuo tipo = valor.ToLower() switch
+            TipoIndividuo tipo = valor.ToLowerInvariant() switch
             {
                 "intercambio" => TipoIndividuo.IntercambioAsignaciones,
                 "optimizacion" => TipoIndividuo.OptimizacionAsignaciones,
+                "cortes-binario" => TipoIndividuo.CortesBinario,
                 _ => throw new ArgumentException($"Tipo de individuo '{valor}' no reconocido.", nameof(valor)),
             };
 
