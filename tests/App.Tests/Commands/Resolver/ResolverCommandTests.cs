@@ -85,7 +85,7 @@ namespace App.Tests.Commands.Resolver
 
             Assert.Contains("intercambio", tipoIndividuoOption.Description);
             Assert.Contains("optimizacion", tipoIndividuoOption.Description);
-            Assert.Contains("cortes-binario", tipoIndividuoOption.Description);
+            Assert.Contains("cortes-binarios", tipoIndividuoOption.Description);
         }
 
         [Fact]

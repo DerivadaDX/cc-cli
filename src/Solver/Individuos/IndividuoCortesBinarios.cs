@@ -24,7 +24,7 @@ namespace Solver.Individuos
             CalcularEstado();
         }
 
-        protected override string FamiliaCromosoma => "cortes-binario";
+        protected override string FamiliaCromosoma => "cortes-binarios";
 
         internal IReadOnlyList<int> Asignaciones => _asignaciones;
 

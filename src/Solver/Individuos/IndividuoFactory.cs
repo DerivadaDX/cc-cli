@@ -21,8 +21,8 @@ namespace Solver.Individuos
                 TipoIndividuo.OptimizacionAsignaciones => new IndividuoOptimizacionAsignaciones(
                     GenerarCromosomaLegacy(problema, generadorRandom), problema, generadorRandom),
 
-                TipoIndividuo.CortesBinario => new IndividuoCortesBinarios(
-                    GenerarCromosomaCortesBinario(problema, generadorRandom), problema, generadorRandom),
+                TipoIndividuo.CortesBinarios => new IndividuoCortesBinarios(
+                    GenerarCromosomaCortesBinarios(problema, generadorRandom), problema, generadorRandom),
 
                 _ => throw new ArgumentException($"Tipo de individuo no soportado: {tipoIndividuo}", nameof(tipoIndividuo)),
             };
@@ -39,7 +39,7 @@ namespace Solver.Individuos
             return cromosoma;
         }
 
-        private static List<int> GenerarCromosomaCortesBinario(InstanciaProblema problema, GeneradorNumerosRandom random)
+        private static List<int> GenerarCromosomaCortesBinarios(InstanciaProblema problema, GeneradorNumerosRandom random)
         {
             int cantidadGenes = problema.CantidadAtomos - 1;
             int cantidadCortes = problema.Agentes.Count - 1;

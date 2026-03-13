@@ -12,7 +12,7 @@ namespace App.Commands.Resolver
             {
                 "intercambio" => TipoIndividuo.IntercambioAsignaciones,
                 "optimizacion" => TipoIndividuo.OptimizacionAsignaciones,
-                "cortes-binario" => TipoIndividuo.CortesBinario,
+                "cortes-binarios" => TipoIndividuo.CortesBinarios,
                 _ => throw new ArgumentException($"Tipo de individuo '{valor}' no reconocido.", nameof(valor)),
             };
 

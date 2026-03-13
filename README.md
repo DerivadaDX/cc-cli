@@ -96,14 +96,14 @@ cc-cli.exe resolver [ruta-instancia] [opciones]
 
 **Argumentos y opciones**:
 
-| Argumento / Opción       | Descripción                                      | Valores aceptados                                       |
-| ------------------------ | ------------------------------------------------ | ------------------------------------------------------- |
-| `ruta-instancia`         | Ruta de la instancia a resolver                  | Un path (**requerido**)                                 |
-| `--limite-generaciones`  | Límite de generaciones a computar (0 = infinito) | Entero positivo (default: 0)                            |
-| `--cantidad-individuos`  | Cantidad de individuos por generación            | Entero positivo (default: 100)                          |
-| `--limite-estancamiento` | Límite de generaciones sin mejora (0 = infinito) | Entero positivo (default: 1000)                         |
-| `--seed`                 | Seed para el generador aleatorio                 | Entero (default: aleatorio)                             |
-| `--tipo-individuo`       | Tipo de individuo a utilizar                     | "intercambio", "optimizacion" o "cortes-binario" (default: "optimizacion") |
+| Argumento / Opción       | Descripción                                      | Valores aceptados                                                   |
+| ------------------------ | ------------------------------------------------ | ------------------------------------------------------------------- |
+| `ruta-instancia`         | Ruta de la instancia a resolver                  | Un path (**requerido**)                                             |
+| `--limite-generaciones`  | Límite de generaciones a computar (0 = infinito) | Entero positivo (default: 0)                                        |
+| `--cantidad-individuos`  | Cantidad de individuos por generación            | Entero positivo (default: 100)                                      |
+| `--limite-estancamiento` | Límite de generaciones sin mejora (0 = infinito) | Entero positivo (default: 1000)                                     |
+| `--seed`                 | Seed para el generador aleatorio                 | Entero (default: aleatorio)                                         |
+| `--tipo-individuo`       | Tipo de individuo a utilizar                     | intercambio, optimizacion o cortes-binarios (default: optimizacion) |
 
 **Ejemplos**:
 

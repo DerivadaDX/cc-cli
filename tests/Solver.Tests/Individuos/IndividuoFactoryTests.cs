@@ -101,7 +101,7 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void CrearAleatorio_TipoCortesBinario_DevuelveIndividuoCortesBinarios()
+        public void CrearAleatorio_TipoCortesBinarios_DevuelveIndividuoCortesBinarios()
         {
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
                 new decimal[,]
@@ -114,13 +114,13 @@ namespace Solver.Tests.Individuos
                 }
             );
             var generadorRandom = Substitute.For<GeneradorNumerosRandom>(1);
-            var individuo = IndividuoFactory.CrearAleatorio(problema, TipoIndividuo.CortesBinario, generadorRandom);
+            var individuo = IndividuoFactory.CrearAleatorio(problema, TipoIndividuo.CortesBinarios, generadorRandom);
 
             Assert.IsType<IndividuoCortesBinarios>(individuo);
         }
 
         [Fact]
-        public void CrearAleatorio_TipoCortesBinario_GeneraCromosomaConCantidadesDeGenesYCortesEsperadas()
+        public void CrearAleatorio_TipoCortesBinarios_GeneraCromosomaConCantidadesDeGenesYCortesEsperadas()
         {
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
                 new decimal[,]
@@ -133,7 +133,7 @@ namespace Solver.Tests.Individuos
                 }
             );
             var generadorRandom = Substitute.For<GeneradorNumerosRandom>(1);
-            var individuo = IndividuoFactory.CrearAleatorio(problema, TipoIndividuo.CortesBinario, generadorRandom);
+            var individuo = IndividuoFactory.CrearAleatorio(problema, TipoIndividuo.CortesBinarios, generadorRandom);
 
             int longitudEsperada = problema.CantidadAtomos - 1;
             Assert.Equal(longitudEsperada, individuo.Cromosoma.Count);

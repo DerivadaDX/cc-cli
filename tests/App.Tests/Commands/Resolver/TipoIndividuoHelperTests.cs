@@ -27,10 +27,10 @@ namespace App.Tests.Commands.Resolver
         }
 
         [Fact]
-        public void Parse_ValorCortesBinario_DevuelveTipoIndividuoCortesBinario()
+        public void Parse_ValorCortesBinarios_DevuelveTipoIndividuoCortesBinarios()
         {
-            TipoIndividuo resultado = TipoIndividuoHelper.Parse("cortes-binario");
-            Assert.Equal(TipoIndividuo.CortesBinario, resultado);
+            TipoIndividuo resultado = TipoIndividuoHelper.Parse("cortes-binarios");
+            Assert.Equal(TipoIndividuo.CortesBinarios, resultado);
         }
 
         [Fact]
@@ -48,10 +48,10 @@ namespace App.Tests.Commands.Resolver
         }
 
         [Fact]
-        public void Parse_ValorCortesBinarioMixtoMayusculasMinusculas_DevuelveCorrespondienteTipoIndividuo()
+        public void Parse_ValorCortesBinariosMixtoMayusculasMinusculas_DevuelveCorrespondienteTipoIndividuo()
         {
-            TipoIndividuo resultado = TipoIndividuoHelper.Parse("CorTes-BinaRIO");
-            Assert.Equal(TipoIndividuo.CortesBinario, resultado);
+            TipoIndividuo resultado = TipoIndividuoHelper.Parse("CorTes-BinaRIos");
+            Assert.Equal(TipoIndividuo.CortesBinarios, resultado);
         }
 
         [Theory]

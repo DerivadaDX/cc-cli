@@ -4,6 +4,6 @@ namespace Solver.Individuos
     {
         IntercambioAsignaciones,
         OptimizacionAsignaciones,
-        CortesBinario,
+        CortesBinarios,
     }
 }
