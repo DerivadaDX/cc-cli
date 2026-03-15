@@ -35,7 +35,7 @@ namespace Solver.Individuos
             List<int> asignacionesBaseUno = [.. _asignaciones.Select(asignacion => asignacion + 1)];
             string asignaciones = string.Join(", ", asignacionesBaseUno);
 
-            string fitness = Fitness().ToString(CultureInfo.InvariantCulture);
+            string fitness = _fitness.ToString("0.00", CultureInfo.InvariantCulture);
             string resultado = $"Cortes=[{cortes}], Asignaciones=[{asignaciones}], Fitness={fitness}";
             return resultado;
         }

@@ -155,7 +155,7 @@ namespace Solver.Tests.Individuos
 
             string resultado = individuo.ToString();
 
-            string esperado = "Cortes=[1, 0, 1, 0], Asignaciones=[3, 1, 2], Fitness=1";
+            string esperado = "Cortes=[1, 0, 1, 0], Asignaciones=[3, 1, 2], Fitness=1.00";
             Assert.Equal(esperado, resultado);
         }
 

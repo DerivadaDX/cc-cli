@@ -538,7 +538,7 @@ namespace Solver.Tests.Individuos
             var individuo = new IndividuoFake(cromosoma, instanciaProblema, generadorRandom);
             string resultado = individuo.ToString();
 
-            Assert.Equal("Cromosoma=[1, 2, 4, 1, 4, 3, 2], Fitness=1.0", resultado);
+            Assert.Equal("Cromosoma=[1, 2, 4, 1, 4, 3, 2], Fitness=1.00", resultado);
         }
 
         private class IndividuoFake : IndividuoLegacy
