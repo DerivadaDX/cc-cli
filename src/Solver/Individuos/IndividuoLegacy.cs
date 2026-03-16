@@ -137,7 +137,7 @@ namespace Solver.Individuos
                 {
                     int direccion = _generadorRandom.Siguiente(2) == 0 ? -1 : 1;
                     int nuevoValor = (Cromosoma[i] + direccion + rango) % rango;
-                    Cromosoma[i] = nuevoValor;
+                    ActualizarGen(i, nuevoValor);
                 }
             }
         }
@@ -190,11 +190,11 @@ namespace Solver.Individuos
             return asignacionesHijo;
         }
 
-        private List<int> OrdenarCortes(List<int> cromosoma, InstanciaProblema problema)
+        private List<int> OrdenarCortes(IReadOnlyList<int> cromosoma, InstanciaProblema problema)
         {
             int cantidadCortes = problema.Agentes.Count - 1;
             if (cantidadCortes == 0)
-                return cromosoma;
+                return [.. cromosoma];
 
             var cortesOrdenados = cromosoma.Take(cantidadCortes).OrderBy(x => x).ToList<int>();
             var asignaciones = cromosoma.Skip(cantidadCortes).ToList<int>();

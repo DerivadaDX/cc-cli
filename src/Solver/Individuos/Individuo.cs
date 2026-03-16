@@ -6,6 +6,7 @@ namespace Solver.Individuos
     {
         protected readonly InstanciaProblema _problema;
         protected readonly GeneradorNumerosRandom _generadorRandom;
+        private readonly List<int> _cromosoma;
 
         protected Individuo(List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
         {
@@ -13,12 +14,13 @@ namespace Solver.Individuos
             ArgumentNullException.ThrowIfNull(problema, nameof(problema));
             ArgumentNullException.ThrowIfNull(generadorRandom, nameof(generadorRandom));
 
-            Cromosoma = cromosoma;
+            _cromosoma = cromosoma;
+            Cromosoma = _cromosoma.AsReadOnly();
             _problema = problema;
             _generadorRandom = generadorRandom;
         }
 
-        internal virtual List<int> Cromosoma { get; }
+        internal IReadOnlyList<int> Cromosoma { get; }
 
         protected abstract string FamiliaCromosoma { get; }
 
@@ -34,6 +36,22 @@ namespace Solver.Individuos
 
             if (FamiliaCromosoma != otro.FamiliaCromosoma)
                 throw new InvalidOperationException("No se puede cruzar individuos de familias de cromosoma diferentes.");
+        }
+
+        protected int ObtenerGen(int indice)
+        {
+            int gen = _cromosoma[indice];
+            return gen;
+        }
+
+        protected void ActualizarGen(int indice, int valor)
+        {
+            _cromosoma[indice] = valor;
+        }
+
+        protected void IntercambiarGenes(int indiceA, int indiceB)
+        {
+            (_cromosoma[indiceA], _cromosoma[indiceB]) = (_cromosoma[indiceB], _cromosoma[indiceA]);
         }
     }
 }

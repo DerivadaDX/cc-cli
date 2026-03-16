@@ -318,17 +318,19 @@ namespace Solver.Individuos
                 return false;
 
             int indiceActual = posicionActual - 1;
-            bool posicionActualNoEsCorte = Cromosoma[indiceActual] == 0;
+            int genActual = ObtenerGen(indiceActual);
+            bool posicionActualNoEsCorte = genActual == 0;
             if (posicionActualNoEsCorte)
                 return false;
 
             int indiceNuevo = nuevaPosicion - 1;
-            bool posicionNuevaYaEsCorte = Cromosoma[indiceNuevo] == 1;
+            int genNuevo = ObtenerGen(indiceNuevo);
+            bool posicionNuevaYaEsCorte = genNuevo == 1;
             if (posicionNuevaYaEsCorte)
                 return false;
 
-            Cromosoma[indiceActual] = 0;
-            Cromosoma[indiceNuevo] = 1;
+            ActualizarGen(indiceActual, 0);
+            ActualizarGen(indiceNuevo, 1);
             _posicionesCortes.Remove(posicionActual);
             _posicionesCortes.Add(nuevaPosicion);
             _posicionesCortes.Sort();

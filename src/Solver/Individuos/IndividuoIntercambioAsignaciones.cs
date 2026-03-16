@@ -23,7 +23,7 @@ namespace Solver.Individuos
                 if (probabilidadMutacion < 1.0 / L)
                 {
                     int idxDestino = _generadorRandom.Siguiente(cantidadCortes, L);
-                    (Cromosoma[idxDestino], Cromosoma[idxActual]) = (Cromosoma[idxActual], Cromosoma[idxDestino]);
+                    IntercambiarGenes(idxDestino, idxActual);
                 }
             }
         }

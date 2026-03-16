@@ -112,7 +112,7 @@ namespace Solver.Individuos
             int cantidadCortes = _problema.Agentes.Count - 1;
 
             for (int porcion = 0; porcion < cantidadAsignaciones; porcion++)
-                Cromosoma[cantidadCortes + porcion] = asignacionesOptimas[porcion] + 1;
+                ActualizarGen(cantidadCortes + porcion, asignacionesOptimas[porcion] + 1);
         }
     }
 }
