@@ -236,53 +236,43 @@ namespace Solver.Individuos
             if (tamañoPorcion <= 1)
                 return false;
 
-            bool pudoMover;
-
             bool esPrimeraPorcion = indicePorcion == 0;
             if (esPrimeraPorcion)
             {
-                int corteDerecho = _posicionesCortes[0];
-                pudoMover = MoverCorte(corteDerecho, corteDerecho - 1);
+                bool pudoMover = AgrandarPorcionDerecha(indicePorcion);
                 return pudoMover;
             }
 
             bool esUltimaPorcion = indicePorcion == _posicionesCortes.Count;
             if (esUltimaPorcion)
             {
-                int corteIzquierdo = _posicionesCortes[^1];
-                pudoMover = MoverCorte(corteIzquierdo, corteIzquierdo + 1);
+                bool pudoMover = AgrandarPorcionIzquierda(indicePorcion);
                 return pudoMover;
             }
 
             int preferenciaIzquierda = _preferenciasPorcion[indicePorcion - 1];
             int preferenciaDerecha = _preferenciasPorcion[indicePorcion + 1];
 
-            if (preferenciaIzquierda == preferenciaDerecha)
+            bool estanEmpatadas = preferenciaIzquierda == preferenciaDerecha;
+            if (estanEmpatadas)
             {
                 int indiceGanador = _generadorRandom.Siguiente(2);
                 bool agrandaIzquierda = indiceGanador == 0;
-                if (agrandaIzquierda)
-                {
-                    int corteIzquierdo = _posicionesCortes[indicePorcion - 1];
-                    pudoMover = MoverCorte(corteIzquierdo, corteIzquierdo + 1);
-                    return pudoMover;
-                }
-
-                int corteDerecho = _posicionesCortes[indicePorcion];
-                pudoMover = MoverCorte(corteDerecho, corteDerecho - 1);
+                bool pudoMover = agrandaIzquierda
+                    ? AgrandarPorcionIzquierda(indicePorcion)
+                    : AgrandarPorcionDerecha(indicePorcion);
                 return pudoMover;
             }
 
-            if (preferenciaIzquierda < preferenciaDerecha)
+            bool izquierdaEsMenosDeseada = preferenciaIzquierda < preferenciaDerecha;
+            if (izquierdaEsMenosDeseada)
             {
-                int corteIzquierdo = _posicionesCortes[indicePorcion - 1];
-                pudoMover = MoverCorte(corteIzquierdo, corteIzquierdo + 1);
+                bool pudoMover = AgrandarPorcionIzquierda(indicePorcion);
                 return pudoMover;
             }
 
-            int corteDerechoMenosDeseado = _posicionesCortes[indicePorcion];
-            pudoMover = MoverCorte(corteDerechoMenosDeseado, corteDerechoMenosDeseado - 1);
-            return pudoMover;
+            bool pudoMoverDerecha = AgrandarPorcionDerecha(indicePorcion);
+            return pudoMoverDerecha;
         }
 
         private int CalcularTamañoPorcion(int indicePorcion)
@@ -297,6 +287,48 @@ namespace Solver.Individuos
 
             int tamaño = fin - inicio + 1;
             return tamaño;
+        }
+
+        private bool AgrandarPorcionIzquierda(int indicePorcion)
+        {
+            int posicionActualDelCorte;
+            int nuevaPosicionDelCorte;
+
+            bool esUltimaPorcion = indicePorcion == _posicionesCortes.Count;
+            if (esUltimaPorcion)
+            {
+                posicionActualDelCorte = _posicionesCortes[^1];
+                nuevaPosicionDelCorte = posicionActualDelCorte + 1;
+            }
+            else
+            {
+                posicionActualDelCorte = _posicionesCortes[indicePorcion - 1];
+                nuevaPosicionDelCorte = posicionActualDelCorte + 1;
+            }
+
+            bool pudoMover = MoverCorte(posicionActualDelCorte, nuevaPosicionDelCorte);
+            return pudoMover;
+        }
+
+        private bool AgrandarPorcionDerecha(int indicePorcion)
+        {
+            int posicionActualDelCorte;
+            int nuevaPosicionDelCorte;
+
+            bool esPrimeraPorcion = indicePorcion == 0;
+            if (esPrimeraPorcion)
+            {
+                posicionActualDelCorte = _posicionesCortes[0];
+                nuevaPosicionDelCorte = posicionActualDelCorte - 1;
+            }
+            else
+            {
+                posicionActualDelCorte = _posicionesCortes[indicePorcion];
+                nuevaPosicionDelCorte = posicionActualDelCorte - 1;
+            }
+
+            bool pudoMover = MoverCorte(posicionActualDelCorte, nuevaPosicionDelCorte);
+            return pudoMover;
         }
 
         private bool MoverCorte(int posicionActual, int nuevaPosicion)
