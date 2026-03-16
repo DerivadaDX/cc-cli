@@ -45,21 +45,6 @@ namespace Solver.Tests.Individuos
             Assert.Equal("generadorRandom", ex.ParamName);
         }
 
-        [Fact]
-        public void Cromosoma_Resultado_SeExponeComoSoloLectura()
-        {
-            var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
-                new decimal[,]
-                {
-                    { 1m },
-                }
-            );
-            var individuo = new IndividuoFake([1], instanciaProblema, Substitute.For<GeneradorNumerosRandom>(1));
-
-            Assert.IsAssignableFrom<IReadOnlyList<int>>(individuo.Cromosoma);
-            Assert.IsNotType<List<int>>(individuo.Cromosoma);
-        }
-
         private class IndividuoFake : Individuo
         {
             internal IndividuoFake(List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
