@@ -236,11 +236,13 @@ namespace Solver.Individuos
             if (tamañoPorcion <= 1)
                 return false;
 
+            bool pudoMover;
+
             bool esPrimeraPorcion = indicePorcion == 0;
             if (esPrimeraPorcion)
             {
                 int corteDerecho = _posicionesCortes[0];
-                bool pudoMover = MoverCorte(corteDerecho, corteDerecho - 1);
+                pudoMover = MoverCorte(corteDerecho, corteDerecho - 1);
                 return pudoMover;
             }
 
@@ -248,23 +250,39 @@ namespace Solver.Individuos
             if (esUltimaPorcion)
             {
                 int corteIzquierdo = _posicionesCortes[^1];
-                bool pudoMover = MoverCorte(corteIzquierdo, corteIzquierdo + 1);
+                pudoMover = MoverCorte(corteIzquierdo, corteIzquierdo + 1);
                 return pudoMover;
             }
 
             int preferenciaIzquierda = _preferenciasPorcion[indicePorcion - 1];
             int preferenciaDerecha = _preferenciasPorcion[indicePorcion + 1];
-            bool porcionIzquierdaEsMenosDeseada = preferenciaIzquierda <= preferenciaDerecha;
-            if (porcionIzquierdaEsMenosDeseada)
+
+            if (preferenciaIzquierda == preferenciaDerecha)
             {
-                int corteIzquierdo = _posicionesCortes[indicePorcion - 1];
-                bool pudoMoverIzquierdo = MoverCorte(corteIzquierdo, corteIzquierdo + 1);
-                return pudoMoverIzquierdo;
+                int indiceGanador = _generadorRandom.Siguiente(2);
+                bool agrandaIzquierda = indiceGanador == 0;
+                if (agrandaIzquierda)
+                {
+                    int corteIzquierdo = _posicionesCortes[indicePorcion - 1];
+                    pudoMover = MoverCorte(corteIzquierdo, corteIzquierdo + 1);
+                    return pudoMover;
+                }
+
+                int corteDerecho = _posicionesCortes[indicePorcion];
+                pudoMover = MoverCorte(corteDerecho, corteDerecho - 1);
+                return pudoMover;
             }
 
-            int corteDerechoIntermedio = _posicionesCortes[indicePorcion];
-            bool pudoMoverDerecho = MoverCorte(corteDerechoIntermedio, corteDerechoIntermedio - 1);
-            return pudoMoverDerecho;
+            if (preferenciaIzquierda < preferenciaDerecha)
+            {
+                int corteIzquierdo = _posicionesCortes[indicePorcion - 1];
+                pudoMover = MoverCorte(corteIzquierdo, corteIzquierdo + 1);
+                return pudoMover;
+            }
+
+            int corteDerechoMenosDeseado = _posicionesCortes[indicePorcion];
+            pudoMover = MoverCorte(corteDerechoMenosDeseado, corteDerechoMenosDeseado - 1);
+            return pudoMover;
         }
 
         private int CalcularTamañoPorcion(int indicePorcion)

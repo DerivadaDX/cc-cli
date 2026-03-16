@@ -355,7 +355,7 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void Mutar_VecinasEmpatadas_AgrandaLaIzquierda()
+        public void Mutar_VecinasEmpatadasYRandomDevuelveCero_AgrandaLaIzquierda()
         {
             // Preferencias por porción para cortes [1, 3]: [0, 3, 0].
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
@@ -366,11 +366,39 @@ namespace Solver.Tests.Individuos
                 { 1m, 1m, 1m },
                 { 1m, 1m, 1m },
             });
-            IndividuoCortesBinarios individuo = CrearIndividuo([1, 0, 1, 0], problema);
+
+            var generador = Substitute.For<GeneradorNumerosRandom>(1);
+            generador.Siguiente(2).Returns(0);
+
+            IndividuoCortesBinarios individuo = CrearIndividuo([1, 0, 1, 0], problema, generador);
 
             individuo.Mutar();
 
             List<int> cromosomaEsperado = [0, 1, 1, 0];
+            Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
+        }
+
+        [Fact]
+        public void Mutar_VecinasEmpatadasYRandomDevuelveUno_AgrandaLaDerecha()
+        {
+            // Preferencias por porción para cortes [1, 3]: [0, 3, 0].
+            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+            {
+                { 1m, 1m, 1m },
+                { 9m, 9m, 9m },
+                { 9m, 9m, 9m },
+                { 1m, 1m, 1m },
+                { 1m, 1m, 1m },
+            });
+
+            var generador = Substitute.For<GeneradorNumerosRandom>(1);
+            generador.Siguiente(2).Returns(1);
+
+            IndividuoCortesBinarios individuo = CrearIndividuo([1, 0, 1, 0], problema, generador);
+
+            individuo.Mutar();
+
+            List<int> cromosomaEsperado = [1, 1, 0, 0];
             Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 
