@@ -66,7 +66,7 @@ namespace Solver.Tests
             random.Siguiente(tamaño).Returns(indicePadre1, indicePadre2);
 
             var poblacion = new Poblacion(tamaño, random);
-            poblacion.Individuos.AddRange([CrearIndividuoFake(), CrearIndividuoFake()]);
+            poblacion.Individuos.AddRange([CrearIndividuoFake(fitness: 5), CrearIndividuoFake(fitness: 15)]);
             poblacion.GenerarNuevaGeneracion();
 
             poblacion.Individuos[indicePadre1].Received(1).Cruzar(poblacion.Individuos[indicePadre2]);
@@ -87,6 +87,28 @@ namespace Solver.Tests
             poblacion.GenerarNuevaGeneracion();
 
             hijoMock.Received(1).Mutar();
+        }
+
+        [Fact]
+        public void GenerarNuevaGeneracion_PadresConIgualFitness_DesempataAlAzarEnTorneo()
+        {
+            // Torneo 1: elige índices 0 y 1, y en el empate devuelve 1 para seleccionar al segundo.
+            // Torneo 2: elige dos veces el índice 2 para que el otro padre sea el tercer individuo.
+            var random = Substitute.For<GeneradorNumerosRandom>(1);
+            random.Siguiente(Arg.Any<int>()).Returns(0, 1, 1, 2, 2);
+
+            Individuo padre1 = CrearIndividuoFake(fitness: 5);
+            Individuo padre2 = CrearIndividuoFake(fitness: 5);
+            Individuo padre3 = CrearIndividuoFake(fitness: 9);
+            Individuo hijo = CrearIndividuoFake(fitness: 3);
+            padre2.Cruzar(padre3).Returns(hijo);
+
+            var poblacion = new Poblacion(tamaño: 3, random);
+            poblacion.Individuos.AddRange([padre1, padre2, padre3]);
+
+            poblacion.GenerarNuevaGeneracion();
+
+            padre2.Received(1).Cruzar(padre3);
         }
 
         [Fact]
