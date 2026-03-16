@@ -443,7 +443,7 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void Mutar_MasDeUnaPorcionMasDeseada_SeleccionaAleatoriamenteUnaDeLasMasDeseadasYLaAchica()
+        public void Mutar_MasDeUnaPorcionMasDeseadaDeIgualTamaño_SeleccionaAleatoriamenteUnaDeLasMasDeseadasYLaAchica()
         {
             // Preferencias por porción para cortes [2, 4, 6]: [0, 3, 3, 1].
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
@@ -458,7 +458,7 @@ namespace Solver.Tests.Individuos
                 { 1m, 1m, 1m, 9m },
             });
 
-            // En el empate [1, 2], se mezclan con Fisher-Yates.
+            // En el empate [1, 2], ambas porciones tienen igual tamaño y se mezclan con Fisher-Yates.
             // Devolviendo 0, se intercambia el índice 1 por el 0: [1, 2] -> [2, 1].
             // Por eso se intenta achicar primero la porción 2.
             var generador = Substitute.For<GeneradorNumerosRandom>(1);
@@ -531,7 +531,7 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void Mutar_PorcionMasDeseadaDeUnAtomoConSegundasMasDeseadasEmpatadas_AchicaLaPorcionSeleccionadaAlAzar()
+        public void Mutar_PorcionMasDeseadaDeUnAtomoConSegundasMasDeseadasEmpatadasDeIgualTamaño_AchicaLaPorcionSeleccionadaAlAzar()
         {
             // Preferencias por porción para cortes [1, 3, 5]: [2, 1, 1, 0].
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
@@ -544,7 +544,8 @@ namespace Solver.Tests.Individuos
                 { 1m, 1m, 1m, 1m },
             });
 
-            // En el empate [1, 2], devolver 0 en Fisher-Yates produce [2, 1].
+            // En el empate [1, 2], ambas porciones tienen igual tamaño.
+            // Devolver 0 en Fisher-Yates produce [2, 1].
             var generador = Substitute.For<GeneradorNumerosRandom>(1);
             generador.Siguiente(Arg.Any<int>()).Returns(0);
 
@@ -556,26 +557,23 @@ namespace Solver.Tests.Individuos
         }
 
         [Fact]
-        public void Mutar_PorcionesEmpatadasConSeleccionadaDeUnAtomo_AchicaLaSiguienteAleatoria()
+        public void Mutar_PorcionesEmpatadasConDistintoTamaño_AchicaPrimeroLaMasGrande()
         {
-            // Preferencias por porción para cortes [1, 3]: [3, 3, 3].
+            // Preferencias por porción para cortes [3, 5]: [3, 3, 3].
             var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
+                { 2m, 2m, 2m },
+                { 2m, 2m, 2m },
                 { 4m, 4m, 4m },
-                { 2m, 2m, 2m },
-                { 2m, 2m, 2m },
-                { 2m, 2m, 2m },
-                { 2m, 2m, 2m },
+                { 4m, 4m, 4m },
+                { 4m, 4m, 4m },
+                { 8m, 8m, 8m },
             });
 
-            // Mezcla [0, 1, 2] con Fisher-Yates: 1 y luego 1 => [0, 2, 1].
-            var generador = Substitute.For<GeneradorNumerosRandom>(1);
-            generador.Siguiente(Arg.Any<int>()).Returns(1, 1);
-
-            var individuo = new IndividuoCortesBinarios([1, 0, 1, 0], problema, generador);
+            IndividuoCortesBinarios individuo = CrearIndividuo([0, 0, 1, 0, 1], problema);
             individuo.Mutar();
 
-            List<int> cromosomaEsperado = [1, 0, 0, 1];
+            List<int> cromosomaEsperado = [0, 1, 0, 0, 1];
             Assert.Equal(cromosomaEsperado, individuo.Cromosoma);
         }
 

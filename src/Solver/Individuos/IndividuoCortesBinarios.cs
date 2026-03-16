@@ -206,16 +206,23 @@ namespace Solver.Individuos
         private List<int> ObtenerPorcionesOrdenadasPorPreferencia()
         {
             var indices = Enumerable.Range(0, _preferenciasPorcion.Count).ToList<int>();
-            var gruposPorPreferencia = indices
+            IOrderedEnumerable<IGrouping<int, int>> gruposPorPreferencia = indices
                 .GroupBy(indice => _preferenciasPorcion[indice])
                 .OrderByDescending(grupo => grupo.Key);
 
             var resultado = new List<int>(indices.Count);
             foreach (IGrouping<int, int> grupo in gruposPorPreferencia)
             {
-                var porcionesEmpatadas = grupo.ToList<int>();
-                MezclarPorcionesEmpatadas(porcionesEmpatadas);
-                resultado.AddRange(porcionesEmpatadas);
+                IOrderedEnumerable<IGrouping<int, int>> gruposPorTamaño = grupo
+                    .GroupBy(CalcularTamañoPorcion)
+                    .OrderByDescending(subgrupo => subgrupo.Key);
+
+                foreach (IGrouping<int, int> subgrupo in gruposPorTamaño)
+                {
+                    var porcionesEmpatadas = subgrupo.ToList<int>();
+                    MezclarPorcionesEmpatadas(porcionesEmpatadas);
+                    resultado.AddRange(porcionesEmpatadas);
+                }
             }
 
             return resultado;
