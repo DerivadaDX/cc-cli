@@ -291,43 +291,23 @@ namespace Solver.Individuos
 
         private bool AgrandarPorcionIzquierda(int indicePorcion)
         {
-            int posicionActualDelCorte;
-            int nuevaPosicionDelCorte;
+            bool noEsUltimaPorcion = indicePorcion != _posicionesCortes.Count;
+            int posicionActualDelCorte = noEsUltimaPorcion
+                ? _posicionesCortes[indicePorcion - 1]
+                : _posicionesCortes[^1];
 
-            bool esUltimaPorcion = indicePorcion == _posicionesCortes.Count;
-            if (esUltimaPorcion)
-            {
-                posicionActualDelCorte = _posicionesCortes[^1];
-                nuevaPosicionDelCorte = posicionActualDelCorte + 1;
-            }
-            else
-            {
-                posicionActualDelCorte = _posicionesCortes[indicePorcion - 1];
-                nuevaPosicionDelCorte = posicionActualDelCorte + 1;
-            }
-
-            bool pudoMover = MoverCorte(posicionActualDelCorte, nuevaPosicionDelCorte);
+            bool pudoMover = MoverCorte(posicionActualDelCorte, posicionActualDelCorte + 1);
             return pudoMover;
         }
 
         private bool AgrandarPorcionDerecha(int indicePorcion)
         {
-            int posicionActualDelCorte;
-            int nuevaPosicionDelCorte;
+            bool noEsPrimeraPorcion = indicePorcion != 0;
+            int posicionActualDelCorte = noEsPrimeraPorcion
+                ? _posicionesCortes[indicePorcion]
+                : _posicionesCortes[0];
 
-            bool esPrimeraPorcion = indicePorcion == 0;
-            if (esPrimeraPorcion)
-            {
-                posicionActualDelCorte = _posicionesCortes[0];
-                nuevaPosicionDelCorte = posicionActualDelCorte - 1;
-            }
-            else
-            {
-                posicionActualDelCorte = _posicionesCortes[indicePorcion];
-                nuevaPosicionDelCorte = posicionActualDelCorte - 1;
-            }
-
-            bool pudoMover = MoverCorte(posicionActualDelCorte, nuevaPosicionDelCorte);
+            bool pudoMover = MoverCorte(posicionActualDelCorte, posicionActualDelCorte - 1);
             return pudoMover;
         }
 
