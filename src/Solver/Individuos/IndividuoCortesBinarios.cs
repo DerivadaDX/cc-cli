@@ -117,7 +117,7 @@ namespace Solver.Individuos
 
         internal override void Mutar()
         {
-            List<int> porcionesOrdenadas = ObtenerPorcionesOrdenadasPorPreferencia();
+            List<int> porcionesOrdenadas = ObtenerPorcionesEnOrdenDeMutacion();
             foreach (int indicePorcion in porcionesOrdenadas)
             {
                 bool seAchico = AchicarPorcion(indicePorcion);
@@ -203,29 +203,46 @@ namespace Solver.Individuos
             return envidiaTotal;
         }
 
-        private List<int> ObtenerPorcionesOrdenadasPorPreferencia()
+        private List<int> ObtenerPorcionesEnOrdenDeMutacion()
         {
-            var indices = Enumerable.Range(0, _preferenciasPorcion.Count).ToList<int>();
-            IOrderedEnumerable<IGrouping<int, int>> gruposPorPreferencia = indices
-                .GroupBy(indice => _preferenciasPorcion[indice])
-                .OrderByDescending(grupo => grupo.Key);
+            List<int> indicesPorcion = [.. Enumerable.Range(0, _preferenciasPorcion.Count)];
+            IOrderedEnumerable<IGrouping<int, int>> porcionesAgrupadasPorPreferencia =
+                AgruparPorcionesPorPreferencia(indicesPorcion);
 
-            var resultado = new List<int>(indices.Count);
-            foreach (IGrouping<int, int> grupo in gruposPorPreferencia)
+            List<int> porcionesOrdenadas = new(indicesPorcion.Count);
+            foreach (IGrouping<int, int> porcionesConMismaPreferencia in porcionesAgrupadasPorPreferencia)
             {
-                IOrderedEnumerable<IGrouping<int, int>> gruposPorTamaño = grupo
-                    .GroupBy(CalcularTamañoPorcion)
-                    .OrderByDescending(subgrupo => subgrupo.Key);
+                IOrderedEnumerable<IGrouping<int, int>> porcionesAgrupadasPorTamaño =
+                    AgruparPorcionesPorTamaño(porcionesConMismaPreferencia);
 
-                foreach (IGrouping<int, int> subgrupo in gruposPorTamaño)
+                foreach (IGrouping<int, int> porcionesConMismoTamaño in porcionesAgrupadasPorTamaño)
                 {
-                    var porcionesEmpatadas = subgrupo.ToList<int>();
+                    List<int> porcionesEmpatadas = [.. porcionesConMismoTamaño];
                     MezclarPorcionesEmpatadas(porcionesEmpatadas);
-                    resultado.AddRange(porcionesEmpatadas);
+                    porcionesOrdenadas.AddRange(porcionesEmpatadas);
                 }
             }
 
-            return resultado;
+            return porcionesOrdenadas;
+        }
+
+        private IOrderedEnumerable<IGrouping<int, int>> AgruparPorcionesPorPreferencia(List<int> indicesPorcion)
+        {
+            IOrderedEnumerable<IGrouping<int, int>> porcionesAgrupadasPorPreferencia = indicesPorcion
+                .GroupBy(indicePorcion => _preferenciasPorcion[indicePorcion])
+                .OrderByDescending(grupoPreferencia => grupoPreferencia.Key);
+
+            return porcionesAgrupadasPorPreferencia;
+        }
+
+        private IOrderedEnumerable<IGrouping<int, int>> AgruparPorcionesPorTamaño(
+            IGrouping<int, int> porcionesConMismaPreferencia)
+        {
+            IOrderedEnumerable<IGrouping<int, int>> porcionesAgrupadasPorTamaño = porcionesConMismaPreferencia
+                .GroupBy(CalcularTamañoPorcion)
+                .OrderByDescending(grupoTamaño => grupoTamaño.Key);
+
+            return porcionesAgrupadasPorTamaño;
         }
 
         private void MezclarPorcionesEmpatadas(List<int> porciones)
