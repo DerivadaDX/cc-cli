@@ -64,12 +64,24 @@ namespace Solver
         {
             int indice1 = _generadorRandom.Siguiente(Individuos.Count);
             Individuo individuo1 = Individuos[indice1];
+            decimal fitness1 = individuo1.Fitness();
 
             int indice2 = _generadorRandom.Siguiente(Individuos.Count);
             Individuo individuo2 = Individuos[indice2];
+            decimal fitness2 = individuo2.Fitness();
 
-            Individuo resultado = individuo1.Fitness() <= individuo2.Fitness() ? individuo1 : individuo2;
-            return resultado;
+            Individuo ganador;
+            if (fitness1 == fitness2)
+            {
+                int indiceGanador = _generadorRandom.Siguiente(2);
+                ganador = indiceGanador == 0 ? individuo1 : individuo2;
+            }
+            else
+            {
+                ganador = fitness1 < fitness2 ? individuo1 : individuo2;
+            }
+
+            return ganador;
         }
     }
 }

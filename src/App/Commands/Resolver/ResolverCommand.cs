@@ -30,7 +30,7 @@ namespace App.Commands.Resolver
             };
             var tipoIndividuoOption = new Option<string>("--tipo-individuo", () => "optimizacion")
             {
-                Description = "Tipo de individuo a utilizar (intercambio|optimizacion)",
+                Description = "Tipo de individuo a utilizar (intercambio|optimizacion|cortes-binarios)",
             };
             var seedOption = new Option<int?>("--seed") { Description = "Semilla para la generación de números aleatorios" };
 
