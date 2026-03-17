@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/DerivadaDX/cc-cli/compare/v3.0.0...v3.1.0) (2026-03-17)
+
+
+### Features
+
+* **individuos:** implementación de IndividuoCortesBinarios con nueva famialia de cromosoma ([#75](https://github.com/DerivadaDX/cc-cli/issues/75)) ([0ff72ae](https://github.com/DerivadaDX/cc-cli/commit/0ff72ae15691a69eb16960818ae138fa376990d9))
+
 ## [3.0.0](https://github.com/DerivadaDX/cc-cli/compare/v2.0.0...v3.0.0) (2025-10-27)
 
 
