@@ -78,6 +78,17 @@ namespace App.Tests.Commands.Resolver
         }
 
         [Fact]
+        public void Crear_DescripcionTipoIndividuo_IncluyeTodosLosTiposDisponibles()
+        {
+            var comandoResolver = ResolverCommand.Crear();
+            var tipoIndividuoOption = (Option<string>)comandoResolver.Options.First(o => o.Name == "tipo-individuo");
+
+            Assert.Contains("intercambio", tipoIndividuoOption.Description);
+            Assert.Contains("optimizacion", tipoIndividuoOption.Description);
+            Assert.Contains("cortes-binarios", tipoIndividuoOption.Description);
+        }
+
+        [Fact]
         public void Crear_SemillaNoEspecificada_UsaNull()
         {
             var comandoResolver = ResolverCommand.Crear();

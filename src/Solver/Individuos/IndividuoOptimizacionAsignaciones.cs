@@ -2,13 +2,10 @@ using Common;
 
 namespace Solver.Individuos
 {
-    internal class IndividuoOptimizacionAsignaciones : Individuo
+    internal class IndividuoOptimizacionAsignaciones : IndividuoLegacy
     {
         internal IndividuoOptimizacionAsignaciones(
-            List<int> cromosoma,
-            InstanciaProblema problema,
-            GeneradorNumerosRandom generadorRandom
-        )
+            List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
             : base(cromosoma, problema, generadorRandom) { }
 
         protected override void MutarAsignaciones()
@@ -115,7 +112,7 @@ namespace Solver.Individuos
             int cantidadCortes = _problema.Agentes.Count - 1;
 
             for (int porcion = 0; porcion < cantidadAsignaciones; porcion++)
-                Cromosoma[cantidadCortes + porcion] = asignacionesOptimas[porcion] + 1;
+                ActualizarGen(cantidadCortes + porcion, asignacionesOptimas[porcion] + 1);
         }
     }
 }
