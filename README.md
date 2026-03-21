@@ -9,7 +9,7 @@ técnicas genéticas para encontrar asignaciones **libres de envidia** (_envy-fr
 La herramienta permite:
 
 - Generar y exportar instancias del problema con diferentes configuraciones.
-- Resolver instancias utilizando un algoritmo genético (_todavía en desarrollo_).
+- Resolver instancias utilizando un algoritmo genético.
 
 ## Contexto
 
