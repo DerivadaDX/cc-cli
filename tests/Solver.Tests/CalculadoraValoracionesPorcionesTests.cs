@@ -139,7 +139,7 @@ namespace Solver.Tests
             Assert.Equal([2, 2, 2], preferencias);
         }
 
-        private void AssertMatricesIguales(decimal[,] esperado, decimal[,] obtenido)
+        private static void AssertMatricesIguales(decimal[,] esperado, decimal[,] obtenido)
         {
             Assert.Equal(esperado.GetLength(0), obtenido.GetLength(0));
             Assert.Equal(esperado.GetLength(1), obtenido.GetLength(1));

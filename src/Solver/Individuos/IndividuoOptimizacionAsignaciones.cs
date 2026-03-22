@@ -56,7 +56,7 @@ namespace Solver.Individuos
             return valoraciones;
         }
 
-        private decimal CalcularValorPorcion(Agente agente, int atomoInicio, int atomoFin)
+        private static decimal CalcularValorPorcion(Agente agente, int atomoInicio, int atomoFin)
         {
             decimal valor = 0;
             foreach (Atomo atomo in agente.Valoraciones)
@@ -67,7 +67,7 @@ namespace Solver.Individuos
             return valor;
         }
 
-        private int[,] ConvertirValoracionesACostos(decimal[,] valoraciones)
+        private static int[,] ConvertirValoracionesACostos(decimal[,] valoraciones)
         {
             decimal valorMaximo = ObtenerValorMaximo(valoraciones);
             int porciones = valoraciones.GetLength(0);
@@ -87,7 +87,7 @@ namespace Solver.Individuos
             return costos;
         }
 
-        private decimal ObtenerValorMaximo(decimal[,] matriz)
+        private static decimal ObtenerValorMaximo(decimal[,] matriz)
         {
             int porciones = matriz.GetLength(0);
             int agentes = matriz.GetLength(1);

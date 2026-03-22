@@ -32,7 +32,7 @@ namespace Solver.Individuos
             return violacionTotal;
         }
 
-        private List<Agente> ExtraerAsignacion(Individuo individuo, InstanciaProblema problema)
+        private static List<Agente> ExtraerAsignacion(Individuo individuo, InstanciaProblema problema)
         {
             int cantidadAgentes = problema.Agentes.Count;
             int cantidadCortes = cantidadAgentes - 1;
@@ -68,7 +68,7 @@ namespace Solver.Individuos
             return resultado;
         }
 
-        private decimal CalcularValoracionAjena(Agente agenteValuador, Agente otroAgente, InstanciaProblema problema)
+        private static decimal CalcularValoracionAjena(Agente agenteValuador, Agente otroAgente, InstanciaProblema problema)
         {
             decimal resultado = 0;
 

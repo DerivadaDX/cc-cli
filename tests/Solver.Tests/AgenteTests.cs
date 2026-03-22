@@ -44,7 +44,7 @@
             Assert.Contains("Ya existe valoración para el átomo", ex.Message);
         }
 
-        private Agente ObtenerAgente()
+        private static Agente ObtenerAgente()
         {
             var agente = new Agente(1);
             return agente;

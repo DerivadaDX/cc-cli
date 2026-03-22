@@ -27,7 +27,7 @@ namespace Solver
             return matriz;
         }
 
-        private void ValidarFormatoArchivo(string[] lineas)
+        private static void ValidarFormatoArchivo(string[] lineas)
         {
             if (lineas.Length < 1)
                 throw new FormatException("El archivo está vacío o tiene un formato inválido");
@@ -45,7 +45,7 @@ namespace Solver
             }
         }
 
-        private decimal[,] ParsearLineasAMatriz(string[] lineas)
+        private static decimal[,] ParsearLineasAMatriz(string[] lineas)
         {
             (int filas, int columnas) = ObtenerDimensionesMatriz(lineas[0]);
             var matriz = new decimal[filas, columnas];
@@ -66,7 +66,7 @@ namespace Solver
             return matriz;
         }
 
-        private (int filas, int columnas) ObtenerDimensionesMatriz(string primeraLinea)
+        private static (int filas, int columnas) ObtenerDimensionesMatriz(string primeraLinea)
         {
             string[] partes = primeraLinea.Trim().Split(' ');
             if (partes.Length != 2)
