@@ -1,23 +1,22 @@
-﻿namespace App
-{
-    internal static class ConsoleProxyFactory
-    {
-        private static ConsoleProxy _consola = null;
+﻿namespace App;
 
-        internal static ConsoleProxy Crear()
-        {
-            var consola = _consola ?? new ConsoleProxy();
-            return consola;
-        }
+internal static class ConsoleProxyFactory
+{
+    private static ConsoleProxy _consola = null;
+
+    internal static ConsoleProxy Crear()
+    {
+        var consola = _consola ?? new ConsoleProxy();
+        return consola;
+    }
 
 #if DEBUG
-        /// <summary>
-        /// Solo usar para tests. Solamente está disponible en modo DEBUG.
-        /// </summary>
-        internal static void SetearConsola(ConsoleProxy consola)
-        {
-            _consola = consola;
-        }
-#endif
+    /// <summary>
+    /// Solo usar para tests. Solamente está disponible en modo DEBUG.
+    /// </summary>
+    internal static void SetearConsola(ConsoleProxy consola)
+    {
+        _consola = consola;
     }
+#endif
 }

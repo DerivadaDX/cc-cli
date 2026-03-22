@@ -1,55 +1,54 @@
 ﻿using System;
 
-namespace Common
+namespace Common;
+
+public class GeneradorNumerosRandom
 {
-    public class GeneradorNumerosRandom
+    private static int? _seed = null;
+
+    private readonly Random _random;
+
+    internal GeneradorNumerosRandom(int seed)
     {
-        private static int? _seed = null;
+        if (seed < 0)
+            throw new ArgumentOutOfRangeException(nameof(seed), $"La semilla no puede ser negativa (valor: {seed})");
 
-        private readonly Random _random;
-
-        internal GeneradorNumerosRandom(int seed)
-        {
-            if (seed < 0)
-                throw new ArgumentOutOfRangeException(nameof(seed), $"La semilla no puede ser negativa (valor: {seed})");
-
-            _random = new Random(seed);
-        }
+        _random = new Random(seed);
+    }
 
 #if DEBUG
-        /// <summary>
-        /// Solo usar para tests. Solamente está disponible en modo DEBUG.
-        /// </summary>
-        public static void SetearSeed(int seed)
-        {
-            if (seed < 0)
-                throw new ArgumentOutOfRangeException(nameof(seed), $"La semilla no puede ser negativa (valor: {seed})");
-            _seed = seed;
-        }
+    /// <summary>
+    /// Solo usar para tests. Solamente está disponible en modo DEBUG.
+    /// </summary>
+    public static void SetearSeed(int seed)
+    {
+        if (seed < 0)
+            throw new ArgumentOutOfRangeException(nameof(seed), $"La semilla no puede ser negativa (valor: {seed})");
+        _seed = seed;
+    }
 #endif
 
-        public static int GenerarSeed()
-        {
-            if (_seed.HasValue)
-                return _seed.Value;
+    public static int GenerarSeed()
+    {
+        if (_seed.HasValue)
+            return _seed.Value;
 
-            int seed = Environment.TickCount;
-            return seed;
-        }
+        int seed = Environment.TickCount;
+        return seed;
+    }
 
-        public virtual int Siguiente(int maximo)
-        {
-            return _random.Next(maximo);
-        }
+    public virtual int Siguiente(int maximo)
+    {
+        return _random.Next(maximo);
+    }
 
-        public virtual int Siguiente(int minimo, int maximo)
-        {
-            return _random.Next(minimo, maximo);
-        }
+    public virtual int Siguiente(int minimo, int maximo)
+    {
+        return _random.Next(minimo, maximo);
+    }
 
-        public virtual double SiguienteDouble()
-        {
-            return _random.NextDouble();
-        }
+    public virtual double SiguienteDouble()
+    {
+        return _random.NextDouble();
     }
 }

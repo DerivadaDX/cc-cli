@@ -1,23 +1,22 @@
-﻿namespace Solver.Individuos
-{
-    internal static class CalculadoraFitnessFactory
-    {
-        private static CalculadoraFitness _calculadora = null;
+﻿namespace Solver.Individuos;
 
-        public static CalculadoraFitness Crear()
-        {
-            var calculadora = _calculadora ?? new CalculadoraFitness();
-            return calculadora;
-        }
+internal static class CalculadoraFitnessFactory
+{
+    private static CalculadoraFitness _calculadora = null;
+
+    public static CalculadoraFitness Crear()
+    {
+        var calculadora = _calculadora ?? new CalculadoraFitness();
+        return calculadora;
+    }
 
 #if DEBUG
-        /// <summary>
-        /// Solo usar para tests. Solamente está disponible en modo DEBUG.
-        /// </summary>
-        public static void SetearCalculadora(CalculadoraFitness calculadora)
-        {
-            _calculadora = calculadora;
-        }
-#endif
+    /// <summary>
+    /// Solo usar para tests. Solamente está disponible en modo DEBUG.
+    /// </summary>
+    public static void SetearCalculadora(CalculadoraFitness calculadora)
+    {
+        _calculadora = calculadora;
     }
+#endif
 }

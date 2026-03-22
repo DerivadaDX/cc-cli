@@ -1,23 +1,22 @@
-﻿namespace Common
-{
-    public static class GeneradorNumerosRandomFactory
-    {
-        private static GeneradorNumerosRandom _generador = null;
+﻿namespace Common;
 
-        public static GeneradorNumerosRandom Crear(int seed)
-        {
-            var generador = _generador ?? new GeneradorNumerosRandom(seed);
-            return generador;
-        }
+public static class GeneradorNumerosRandomFactory
+{
+    private static GeneradorNumerosRandom _generador = null;
+
+    public static GeneradorNumerosRandom Crear(int seed)
+    {
+        var generador = _generador ?? new GeneradorNumerosRandom(seed);
+        return generador;
+    }
 
 #if DEBUG
-        /// <summary>
-        /// Solo usar para tests. Solamente está disponible en modo DEBUG.
-        /// </summary>
-        public static void SetearGenerador(GeneradorNumerosRandom generador)
-        {
-            _generador = generador;
-        }
-#endif
+    /// <summary>
+    /// Solo usar para tests. Solamente está disponible en modo DEBUG.
+    /// </summary>
+    public static void SetearGenerador(GeneradorNumerosRandom generador)
+    {
+        _generador = generador;
     }
+#endif
 }

@@ -4,78 +4,77 @@ using Common;
 using NSubstitute;
 using Solver.Individuos;
 
-namespace Solver.Tests.Individuos
+namespace Solver.Tests.Individuos;
+
+public class CalculadoraFitnessTests
 {
-    public class CalculadoraFitnessTests
+    private readonly CalculadoraFitness _calculadora = new();
+
+    [Fact]
+    public void CalcularFitness_AsignacionSinEnvidia_RetornaCero()
     {
-        private readonly CalculadoraFitness _calculadora = new();
-
-        [Fact]
-        public void CalcularFitness_AsignacionSinEnvidia_RetornaCero()
-        {
-            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
-                new decimal[,]
-                {
-                    { 1m, 0m },
-                    { 0m, 1m },
-                }
-            );
-            var cromosoma = new List<int> { 1, 1, 2 };
-            var individuo = new IndividuoFake(cromosoma, problema);
-
-            decimal fitness = _calculadora.CalcularFitness(individuo, problema);
-            Assert.Equal(0, fitness);
-        }
-
-        [Fact]
-        public void CalcularFitness_HayEnvidia_RetornaPositivo()
-        {
-            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
-                new decimal[,]
-                {
-                    { 1m, .5m },
-                    { 0m, .5m },
-                }
-            );
-            var cromosoma = new List<int> { 1, 2, 1 };
-            var individuo = new IndividuoFake(cromosoma, problema);
-
-            decimal fitness = _calculadora.CalcularFitness(individuo, problema);
-            Assert.True(fitness > 0);
-        }
-
-        [Fact]
-        public void CalcularFitness_TodosValoracionesIguales_SinEnvidia()
-        {
-            var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
-                new decimal[,]
-                {
-                    { .5m, .5m },
-                    { .5m, .5m },
-                }
-            );
-
-            var cromosoma = new List<int> { 1, 1, 2 };
-            var individuo = new IndividuoFake(cromosoma, problema);
-
-            decimal fitness = _calculadora.CalcularFitness(individuo, problema);
-            Assert.Equal(0, fitness);
-        }
-
-        private class IndividuoFake : IndividuoLegacy
-        {
-            internal IndividuoFake(List<int> cromosoma, InstanciaProblema problema)
-                : base(cromosoma, problema, Substitute.For<GeneradorNumerosRandom>(1)) { }
-
-            protected override void MutarAsignaciones()
+        var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
+            new decimal[,]
             {
-                throw new NotImplementedException();
+                { 1m, 0m },
+                { 0m, 1m },
             }
+        );
+        var cromosoma = new List<int> { 1, 1, 2 };
+        var individuo = new IndividuoFake(cromosoma, problema);
 
-            protected override Individuo CrearNuevoIndividuo(List<int> cromosoma)
+        decimal fitness = _calculadora.CalcularFitness(individuo, problema);
+        Assert.Equal(0, fitness);
+    }
+
+    [Fact]
+    public void CalcularFitness_HayEnvidia_RetornaPositivo()
+    {
+        var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
+            new decimal[,]
             {
-                throw new NotImplementedException();
+                { 1m, .5m },
+                { 0m, .5m },
             }
+        );
+        var cromosoma = new List<int> { 1, 2, 1 };
+        var individuo = new IndividuoFake(cromosoma, problema);
+
+        decimal fitness = _calculadora.CalcularFitness(individuo, problema);
+        Assert.True(fitness > 0);
+    }
+
+    [Fact]
+    public void CalcularFitness_TodosValoracionesIguales_SinEnvidia()
+    {
+        var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
+            new decimal[,]
+            {
+                { .5m, .5m },
+                { .5m, .5m },
+            }
+        );
+
+        var cromosoma = new List<int> { 1, 1, 2 };
+        var individuo = new IndividuoFake(cromosoma, problema);
+
+        decimal fitness = _calculadora.CalcularFitness(individuo, problema);
+        Assert.Equal(0, fitness);
+    }
+
+    private class IndividuoFake : IndividuoLegacy
+    {
+        internal IndividuoFake(List<int> cromosoma, InstanciaProblema problema)
+            : base(cromosoma, problema, Substitute.For<GeneradorNumerosRandom>(1)) { }
+
+        protected override void MutarAsignaciones()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Individuo CrearNuevoIndividuo(List<int> cromosoma)
+        {
+            throw new NotImplementedException();
         }
     }
 }

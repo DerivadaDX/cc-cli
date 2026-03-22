@@ -1,9 +1,8 @@
-namespace Solver.Individuos
+namespace Solver.Individuos;
+
+public enum TipoIndividuo
 {
-    public enum TipoIndividuo
-    {
-        IntercambioAsignaciones,
-        OptimizacionAsignaciones,
-        CortesBinarios,
-    }
+    IntercambioAsignaciones,
+    OptimizacionAsignaciones,
+    CortesBinarios,
 }
