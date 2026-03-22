@@ -2,40 +2,35 @@
 using Common;
 using Solver.Individuos;
 
-namespace Solver
+namespace Solver;
+
+public static class PoblacionFactory
 {
-    public static class PoblacionFactory
+    private static Poblacion _poblacion = null;
+
+    public static Poblacion Crear(
+        int tamaño, InstanciaProblema problema, TipoIndividuo tipoIndividuo, GeneradorNumerosRandom generadorRandom)
     {
-        private static Poblacion _poblacion = null;
+        ArgumentNullException.ThrowIfNull(problema, nameof(problema));
+        ArgumentNullException.ThrowIfNull(generadorRandom, nameof(generadorRandom));
 
-        public static Poblacion Crear(
-            int tamaño,
-            InstanciaProblema problema,
-            TipoIndividuo tipoIndividuo,
-            GeneradorNumerosRandom generadorRandom
-        )
+        var poblacion = _poblacion ?? new Poblacion(tamaño, generadorRandom);
+        for (int i = 0; i < tamaño; i++)
         {
-            ArgumentNullException.ThrowIfNull(problema, nameof(problema));
-            ArgumentNullException.ThrowIfNull(generadorRandom, nameof(generadorRandom));
-
-            var poblacion = _poblacion ?? new Poblacion(tamaño, generadorRandom);
-            for (int i = 0; i < tamaño; i++)
-            {
-                Individuo individuo = IndividuoFactory.CrearAleatorio(problema, tipoIndividuo, generadorRandom);
-                poblacion.Individuos.Add(individuo);
-            }
-
-            return poblacion;
+            Individuo individuo = IndividuoFactory.CrearAleatorio(problema, tipoIndividuo, generadorRandom);
+            poblacion.Individuos.Add(individuo);
         }
+
+        return poblacion;
+    }
 
 #if DEBUG
-        /// <summary>
-        /// Solo usar para tests. Solamente está disponible en modo DEBUG.
-        /// </summary>
-        public static void SetearPoblacion(Poblacion poblacion)
-        {
-            _poblacion = poblacion;
-        }
-#endif
+    /// <summary>
+    /// Solo usar para tests. Solamente está disponible en modo DEBUG.
+    /// </summary>
+    public static void SetearPoblacion(Poblacion poblacion)
+    {
+        _poblacion = poblacion;
     }
+#endif
 }

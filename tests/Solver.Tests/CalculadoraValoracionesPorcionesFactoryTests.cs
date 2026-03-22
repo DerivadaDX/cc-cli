@@ -1,33 +1,32 @@
 using System;
 
-namespace Solver.Tests
+namespace Solver.Tests;
+
+public class CalculadoraValoracionesPorcionesFactoryTests : IDisposable
 {
-    public class CalculadoraValoracionesPorcionesFactoryTests : IDisposable
+    public void Dispose()
     {
-        public void Dispose()
-        {
-            CalculadoraValoracionesPorcionesFactory.SetearInstancia(null);
-            GC.SuppressFinalize(this);
-        }
+        CalculadoraValoracionesPorcionesFactory.SetearInstancia(null);
+        GC.SuppressFinalize(this);
+    }
 
-        [Fact]
-        public void Crear_InstanciaDevuelta_EsValida()
-        {
-            var calculadora = CalculadoraValoracionesPorcionesFactory.Crear();
+    [Fact]
+    public void Crear_InstanciaDevuelta_EsValida()
+    {
+        var calculadora = CalculadoraValoracionesPorcionesFactory.Crear();
 
-            Assert.NotNull(calculadora);
-            Assert.IsType<CalculadoraValoracionesPorciones>(calculadora);
-        }
+        Assert.NotNull(calculadora);
+        Assert.IsType<CalculadoraValoracionesPorciones>(calculadora);
+    }
 
-        [Fact]
-        public void SetearInstancia_InstanciaSeteada_EsDevueltaPorElFactory()
-        {
-            var calculadoraSeteada = new CalculadoraValoracionesPorciones();
-            CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadoraSeteada);
+    [Fact]
+    public void SetearInstancia_InstanciaSeteada_EsDevueltaPorElFactory()
+    {
+        var calculadoraSeteada = new CalculadoraValoracionesPorciones();
+        CalculadoraValoracionesPorcionesFactory.SetearInstancia(calculadoraSeteada);
 
-            var calculadoraObtenida = CalculadoraValoracionesPorcionesFactory.Crear();
+        var calculadoraObtenida = CalculadoraValoracionesPorcionesFactory.Crear();
 
-            Assert.Same(calculadoraSeteada, calculadoraObtenida);
-        }
+        Assert.Same(calculadoraSeteada, calculadoraObtenida);
     }
 }
