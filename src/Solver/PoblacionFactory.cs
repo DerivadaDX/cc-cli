@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using System;
+using Common;
 using Solver.Individuos;
 
 namespace Solver

@@ -1,3 +1,4 @@
+using System;
 using App.Commands.Resolver;
 using Solver.Individuos;
 

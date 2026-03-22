@@ -1,5 +1,6 @@
 ﻿using System.CommandLine;
 using System.CommandLine.Parsing;
+using System.Linq;
 using App.Commands.Resolver;
 using Common;
 using NSubstitute;
