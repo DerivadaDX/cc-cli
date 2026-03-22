@@ -1,4 +1,61 @@
 root = true
 
+[*]
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*Tests.cs]
+# CA1707: Remove the underscores from member names
+dotnet_diagnostic.CA1707.severity = none
+
 [*.cs]
+tab_width = 4
+indent_size = 4
+indent_style = space
+
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+
+# IDE0161: Use file-scoped namespace
 csharp_style_namespace_declarations = file_scoped:error
+# CA1051: Do not declare visible instance fields
+dotnet_diagnostic.CA1051.severity = none
+# CA1305: Specify IFormatProvider
+dotnet_diagnostic.CA1305.severity = none
+# CA1805: Do not initialize unnecessarily
+dotnet_diagnostic.CA1805.severity = warning
+# CA1822: Mark members as static
+dotnet_diagnostic.CA1822.severity = suggestion
+# CA1852: Seal internal types
+dotnet_diagnostic.CA1852.severity = error
+# CA2201: Do not raise reserved exception types
+dotnet_diagnostic.CA2201.severity = none
+# IDE0210: Convert to top-level statements
+dotnet_diagnostic.IDE0210.severity = none
+
+# Deshabilitar categorías de reglas de StyleCop
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.DocumentationRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.LayoutRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.MaintainabilityRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.NamingRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.OrderingRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.ReadabilityRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.SpacingRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.SpecialRules.severity = none
+
+# Controlar reglas específicas de StyleCop
+
+# SA0001: XML comment analysis is disabled due to project configuration
+dotnet_diagnostic.SA0001.severity = none
+# SA1202: Elements should be ordered by access
+dotnet_diagnostic.SA1202.severity = error
+# SA1204: Static elements should appear before instance elements
+dotnet_diagnostic.SA1204.severity = error
+# SA1502: Element should not be on a single line
+dotnet_diagnostic.SA1502.severity = error
+# SA1505: Opening braces should not be followed by blank line
+dotnet_diagnostic.SA1505.severity = error
+# SA1508: Closing braces should not be preceded by blank line
+dotnet_diagnostic.SA1508.severity = error
+# SA1513: Closing brace should be followed by blank line
+dotnet_diagnostic.SA1513.severity = error
