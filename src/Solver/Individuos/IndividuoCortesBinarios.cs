@@ -27,9 +27,9 @@ internal class IndividuoCortesBinarios : Individuo
         CalcularEstado();
     }
 
-    protected override string FamiliaCromosoma => "cortes-binarios";
-
     internal IReadOnlyList<int> Asignaciones => _asignaciones;
+
+    protected override string FamiliaCromosoma => "cortes-binarios";
 
     public override string ToString()
     {

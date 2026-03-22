@@ -19,6 +19,16 @@ internal abstract class IndividuoLegacy : Individuo
 
     protected override string FamiliaCromosoma => "legacy";
 
+    public override string ToString()
+    {
+        List<int> cromosomaOrdenado = OrdenarCortes(Cromosoma, _problema);
+        string cromosoma = string.Join(", ", cromosomaOrdenado);
+        decimal fitness = Fitness();
+
+        string resultado = $"Cromosoma=[{cromosoma}], Fitness={fitness.ToString("0.00", CultureInfo.InvariantCulture)}";
+        return resultado;
+    }
+
     internal override void Mutar()
     {
         MutarCortes();
@@ -47,16 +57,6 @@ internal abstract class IndividuoLegacy : Individuo
     {
         decimal fitness = _calculadoraFitness.CalcularFitness(this, _problema);
         return fitness;
-    }
-
-    public override string ToString()
-    {
-        List<int> cromosomaOrdenado = OrdenarCortes(Cromosoma, _problema);
-        string cromosoma = string.Join(", ", cromosomaOrdenado);
-        decimal fitness = Fitness();
-
-        string resultado = $"Cromosoma=[{cromosoma}], Fitness={fitness.ToString("0.00", CultureInfo.InvariantCulture)}";
-        return resultado;
     }
 
     protected abstract void MutarAsignaciones();
@@ -127,6 +127,19 @@ internal abstract class IndividuoLegacy : Individuo
         }
     }
 
+    private static List<int> OrdenarCortes(IReadOnlyList<int> cromosoma, InstanciaProblema problema)
+    {
+        int cantidadCortes = problema.Agentes.Count - 1;
+        if (cantidadCortes == 0)
+            return [.. cromosoma];
+
+        var cortesOrdenados = cromosoma.Take(cantidadCortes).OrderBy(x => x).ToList<int>();
+        var asignaciones = cromosoma.Skip(cantidadCortes).ToList<int>();
+        var cromosomaOrdenado = cortesOrdenados.Concat(asignaciones).ToList<int>();
+
+        return cromosomaOrdenado;
+    }
+
     private void MutarCortes()
     {
         int cantidadCortes = _problema.Agentes.Count - 1;
@@ -191,18 +204,5 @@ internal abstract class IndividuoLegacy : Individuo
         }
 
         return asignacionesHijo;
-    }
-
-    private static List<int> OrdenarCortes(IReadOnlyList<int> cromosoma, InstanciaProblema problema)
-    {
-        int cantidadCortes = problema.Agentes.Count - 1;
-        if (cantidadCortes == 0)
-            return [.. cromosoma];
-
-        var cortesOrdenados = cromosoma.Take(cantidadCortes).OrderBy(x => x).ToList<int>();
-        var asignaciones = cromosoma.Skip(cantidadCortes).ToList<int>();
-        var cromosomaOrdenado = cortesOrdenados.Concat(asignaciones).ToList<int>();
-
-        return cromosomaOrdenado;
     }
 }

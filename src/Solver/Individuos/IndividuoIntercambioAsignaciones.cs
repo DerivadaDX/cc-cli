@@ -7,7 +7,9 @@ internal class IndividuoIntercambioAsignaciones : IndividuoLegacy
 {
     internal IndividuoIntercambioAsignaciones(
         List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
-        : base(cromosoma, problema, generadorRandom) { }
+        : base(cromosoma, problema, generadorRandom)
+    {
+    }
 
     protected override void MutarAsignaciones()
     {

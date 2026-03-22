@@ -62,10 +62,12 @@ public class CalculadoraFitnessTests
         Assert.Equal(0, fitness);
     }
 
-    private class IndividuoFake : IndividuoLegacy
+    private sealed class IndividuoFake : IndividuoLegacy
     {
         internal IndividuoFake(List<int> cromosoma, InstanciaProblema problema)
-            : base(cromosoma, problema, Substitute.For<GeneradorNumerosRandom>(1)) { }
+            : base(cromosoma, problema, Substitute.For<GeneradorNumerosRandom>(1))
+        {
+        }
 
         protected override void MutarAsignaciones()
         {

@@ -699,13 +699,12 @@ public class IndividuoCortesBinariosTests : IDisposable
         return instanciaProblema;
     }
 
-    private class IndividuoOtraFamiliaFake : Individuo
+    private sealed class IndividuoOtraFamiliaFake : Individuo
     {
-        internal IndividuoOtraFamiliaFake(
-            List<int> cromosoma,
-            InstanciaProblema problema,
-            GeneradorNumerosRandom generadorRandom)
-            : base(cromosoma, problema, generadorRandom) { }
+        internal IndividuoOtraFamiliaFake(List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
+            : base(cromosoma, problema, generadorRandom)
+        {
+        }
 
         protected override string FamiliaCromosoma => "legacy";
 

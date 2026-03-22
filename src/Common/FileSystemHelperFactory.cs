@@ -2,7 +2,7 @@
 
 public static class FileSystemHelperFactory
 {
-    private static FileSystemHelper _helper = null;
+    private static FileSystemHelper _helper;
 
     public static FileSystemHelper Crear()
     {

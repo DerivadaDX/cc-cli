@@ -9,7 +9,7 @@ namespace App;
 
 internal class Program
 {
-    static async Task<int> Main(string[] args)
+    internal static async Task<int> Main(string[] args)
     {
         Console.OutputEncoding = Encoding.UTF8;
 

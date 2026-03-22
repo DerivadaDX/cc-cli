@@ -544,17 +544,21 @@ public class IndividuoLegacyTests
         Assert.Equal("Cromosoma=[1, 2, 4, 1, 4, 3, 2], Fitness=1.00", resultado);
     }
 
-    private class IndividuoFake : IndividuoLegacy
+    private sealed class IndividuoFake : IndividuoLegacy
     {
         internal IndividuoFake(List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
-            : base(cromosoma, problema, generadorRandom) { }
+            : base(cromosoma, problema, generadorRandom)
+        {
+        }
 
         internal override decimal Fitness()
         {
             return 1.0m;
         }
 
-        protected override void MutarAsignaciones() { }
+        protected override void MutarAsignaciones()
+        {
+        }
 
         protected override Individuo CrearNuevoIndividuo(List<int> cromosoma)
         {
@@ -563,11 +567,13 @@ public class IndividuoLegacyTests
         }
     }
 
-    private class IndividuoOtraFamiliaFake : Individuo
+    private sealed class IndividuoOtraFamiliaFake : Individuo
     {
         internal IndividuoOtraFamiliaFake(
             List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
-            : base(cromosoma, problema, generadorRandom) { }
+            : base(cromosoma, problema, generadorRandom)
+        {
+        }
 
         protected override string FamiliaCromosoma => "nuevo";
 

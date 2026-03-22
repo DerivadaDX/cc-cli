@@ -5,7 +5,7 @@ namespace App;
 internal class Presentador
 {
     private readonly ConsoleProxy _consola;
-    private bool _lineaEnCurso = false;
+    private bool _lineaEnCurso;
 
     internal Presentador(ConsoleProxy consola)
     {

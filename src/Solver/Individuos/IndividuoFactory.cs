@@ -8,9 +8,7 @@ namespace Solver.Individuos;
 public static class IndividuoFactory
 {
     public static Individuo CrearAleatorio(
-        InstanciaProblema problema,
-        TipoIndividuo tipoIndividuo,
-        GeneradorNumerosRandom generadorRandom
+        InstanciaProblema problema, TipoIndividuo tipoIndividuo, GeneradorNumerosRandom generadorRandom
     )
     {
         ArgumentNullException.ThrowIfNull(problema, nameof(problema));

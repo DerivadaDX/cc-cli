@@ -47,10 +47,12 @@ public class IndividuoTests
         Assert.Equal("generadorRandom", ex.ParamName);
     }
 
-    private class IndividuoFake : Individuo
+    private sealed class IndividuoFake : Individuo
     {
         internal IndividuoFake(List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
-            : base(cromosoma, problema, generadorRandom) { }
+            : base(cromosoma, problema, generadorRandom)
+        {
+        }
 
         protected override string FamiliaCromosoma => "fake";
 
