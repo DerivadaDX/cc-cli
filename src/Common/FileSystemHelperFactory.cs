@@ -1,6 +1,6 @@
 ﻿namespace Common
 {
-    public class FileSystemHelperFactory
+    public static class FileSystemHelperFactory
     {
         private static FileSystemHelper _helper = null;
 

@@ -60,7 +60,7 @@ namespace Solver.Individuos
 
         protected abstract Individuo CrearNuevoIndividuo(List<int> cromosoma);
 
-        private void ValidarCromosoma(List<int> cromosoma, InstanciaProblema problema)
+        private static void ValidarCromosoma(List<int> cromosoma, InstanciaProblema problema)
         {
             if (cromosoma.Count == 0)
                 throw new ArgumentException("El cromosoma no puede estar vacío", nameof(cromosoma));
@@ -73,7 +73,7 @@ namespace Solver.Individuos
             ValidarAsignaciones(cromosoma, cantidadAgentes, cantidadCortesEsperada);
         }
 
-        private void ValidarCantidadGenes(List<int> cromosoma, int cantidadAgentes)
+        private static void ValidarCantidadGenes(List<int> cromosoma, int cantidadAgentes)
         {
             int cantidadCortesEsperada = cantidadAgentes - 1;
             int cantidadGenesEsperada = cantidadCortesEsperada + cantidadAgentes;
@@ -85,7 +85,7 @@ namespace Solver.Individuos
             }
         }
 
-        private void ValidarCortes(List<int> cromosoma, InstanciaProblema problema, int cantidadCortesEsperada)
+        private static void ValidarCortes(List<int> cromosoma, InstanciaProblema problema, int cantidadCortesEsperada)
         {
             List<int> cortes = [.. cromosoma.Take(cantidadCortesEsperada).Order()];
 
@@ -106,7 +106,7 @@ namespace Solver.Individuos
             }
         }
 
-        private void ValidarAsignaciones(List<int> cromosoma, int cantidadAgentes, int cantidadCortesEsperada)
+        private static void ValidarAsignaciones(List<int> cromosoma, int cantidadAgentes, int cantidadCortesEsperada)
         {
             List<int> asignaciones = [.. cromosoma.Skip(cantidadCortesEsperada)];
             List<int> fueraDeRango = [.. asignaciones.Where(a => a < 1 || a > cantidadAgentes).Distinct().Order()];
@@ -190,7 +190,7 @@ namespace Solver.Individuos
             return asignacionesHijo;
         }
 
-        private List<int> OrdenarCortes(IReadOnlyList<int> cromosoma, InstanciaProblema problema)
+        private static List<int> OrdenarCortes(IReadOnlyList<int> cromosoma, InstanciaProblema problema)
         {
             int cantidadCortes = problema.Agentes.Count - 1;
             if (cantidadCortes == 0)

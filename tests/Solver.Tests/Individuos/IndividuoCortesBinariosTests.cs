@@ -632,7 +632,7 @@ namespace Solver.Tests.Individuos
             Assert.Equal(asignacionesEsperadas, individuo.Asignaciones);
         }
 
-        private IndividuoCortesBinarios CrearIndividuoCincoAtomosTresAgentes(
+        private static IndividuoCortesBinarios CrearIndividuoCincoAtomosTresAgentes(
             List<int> cromosoma, GeneradorNumerosRandom generadorRandom = null)
         {
             InstanciaProblema problema = CrearInstanciaProblemaCincoAtomosTresAgentes();
@@ -640,7 +640,7 @@ namespace Solver.Tests.Individuos
             return individuo;
         }
 
-        private IndividuoCortesBinarios CrearIndividuoSieteAtomosCuatroAgentes(
+        private static IndividuoCortesBinarios CrearIndividuoSieteAtomosCuatroAgentes(
             List<int> cromosoma, GeneradorNumerosRandom generadorRandom = null)
         {
             InstanciaProblema problema = CrearInstanciaProblemaSieteAtomosCuatroAgentes();
@@ -648,7 +648,7 @@ namespace Solver.Tests.Individuos
             return individuo;
         }
 
-        private IndividuoCortesBinarios CrearIndividuo(
+        private static IndividuoCortesBinarios CrearIndividuo(
             List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom = null)
         {
             GeneradorNumerosRandom generador = generadorRandom ?? GeneradorNumerosRandomFactory.Crear(1);
@@ -656,7 +656,7 @@ namespace Solver.Tests.Individuos
             return individuo;
         }
 
-        private InstanciaProblema CrearInstanciaProblemaCincoAtomosTresAgentes()
+        private static InstanciaProblema CrearInstanciaProblemaCincoAtomosTresAgentes()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
@@ -669,7 +669,7 @@ namespace Solver.Tests.Individuos
             return instanciaProblema;
         }
 
-        private InstanciaProblema CrearInstanciaProblemaSieteAtomosCuatroAgentes()
+        private static InstanciaProblema CrearInstanciaProblemaSieteAtomosCuatroAgentes()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {
@@ -684,7 +684,7 @@ namespace Solver.Tests.Individuos
             return instanciaProblema;
         }
 
-        private InstanciaProblema CrearInstanciaProblemaCincoAtomosDosAgentes()
+        private static InstanciaProblema CrearInstanciaProblemaCincoAtomosDosAgentes()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
             {

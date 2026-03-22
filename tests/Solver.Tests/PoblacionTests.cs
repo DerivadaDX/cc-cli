@@ -125,7 +125,7 @@ namespace Solver.Tests
             Assert.Equal(mejorFitness, mejorIndividuo.Fitness());
         }
 
-        private Individuo CrearIndividuoFake(int fitness = 0)
+        private static Individuo CrearIndividuoFake(int fitness = 0)
         {
             var cromosoma = new List<int> { 1, 1, 2 };
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(

@@ -337,7 +337,7 @@ namespace App.Tests
             consola.DidNotReceive().WriteLine(string.Empty);
         }
 
-        private (Presentador presentador, ConsoleProxy consola) CrearPresentadorConConsolaFake()
+        private static (Presentador presentador, ConsoleProxy consola) CrearPresentadorConConsolaFake()
         {
             var consola = Substitute.For<ConsoleProxy>();
             var presentador = new Presentador(consola);

@@ -13,7 +13,7 @@ namespace Solver
             return resultado;
         }
 
-        private int[,] ConvertirValoracionesACostos(decimal[,] valoracionesDePorciones)
+        private static int[,] ConvertirValoracionesACostos(decimal[,] valoracionesDePorciones)
         {
             decimal valoracionMaxima = ObtenerValoracionMaxima(valoracionesDePorciones);
             int cantidadPorciones = valoracionesDePorciones.GetLength(0);
@@ -35,7 +35,7 @@ namespace Solver
             return costos;
         }
 
-        private decimal ObtenerValoracionMaxima(decimal[,] valoraciones)
+        private static decimal ObtenerValoracionMaxima(decimal[,] valoraciones)
         {
             int cantidadPorciones = valoraciones.GetLength(0);
             int cantidadAgentes = valoraciones.GetLength(1);

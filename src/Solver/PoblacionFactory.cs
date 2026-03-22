@@ -3,7 +3,7 @@ using Solver.Individuos;
 
 namespace Solver
 {
-    public class PoblacionFactory
+    public static class PoblacionFactory
     {
         private static Poblacion _poblacion = null;
 

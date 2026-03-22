@@ -124,7 +124,7 @@ namespace Solver.Tests
             var algoritmo = new AlgoritmoGenetico(poblacion, limiteGeneraciones: 10, limiteGeneracionesSinMejora: 0);
             algoritmo.Ejecutar();
 
-            // En este test la población se devuelve a sí misma en cada generación, por lo que recibe todos los llamados
+            // En este test la poblaciÃ³n se devuelve a sÃ­ misma en cada generaciÃ³n, por lo que recibe todos los llamados
             poblacion.Received(10).GenerarNuevaGeneracion();
         }
 
@@ -198,7 +198,7 @@ namespace Solver.Tests
             Assert.Equal([1], generacionesNotificadas);
         }
 
-        private (Poblacion poblacion, Individuo individuo) CrearPoblacionFakeConIndividuoNoOptimo()
+        private static (Poblacion poblacion, Individuo individuo) CrearPoblacionFakeConIndividuoNoOptimo()
         {
             Individuo individuo = CrearIndividuoFake();
             individuo.Fitness().Returns(1);
@@ -209,7 +209,7 @@ namespace Solver.Tests
             return (poblacion, individuo);
         }
 
-        private (Poblacion poblacion, Individuo individuo) CrearPoblacionFakeConIndividuoOptimo()
+        private static (Poblacion poblacion, Individuo individuo) CrearPoblacionFakeConIndividuoOptimo()
         {
             Individuo individuo = CrearIndividuoFake();
             individuo.Fitness().Returns(0);
@@ -220,7 +220,7 @@ namespace Solver.Tests
             return (poblacion, individuo);
         }
 
-        private Individuo CrearIndividuoFake()
+        private static Individuo CrearIndividuoFake()
         {
             var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
                 new decimal[,]

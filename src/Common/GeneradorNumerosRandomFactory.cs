@@ -1,6 +1,6 @@
 ﻿namespace Common
 {
-    public class GeneradorNumerosRandomFactory
+    public static class GeneradorNumerosRandomFactory
     {
         private static GeneradorNumerosRandom _generador = null;
 

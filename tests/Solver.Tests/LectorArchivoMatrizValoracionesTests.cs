@@ -200,7 +200,7 @@ namespace Solver.Tests
             Assert.Equal(6.6m, matriz[1, 2]);
         }
 
-        private LectorArchivoMatrizValoraciones ObtenerLectorArchivoMatrizValoraciones(FileSystemHelper fileSystemHelper)
+        private static LectorArchivoMatrizValoraciones ObtenerLectorArchivoMatrizValoraciones(FileSystemHelper fileSystemHelper)
         {
             var lector = new LectorArchivoMatrizValoraciones(fileSystemHelper);
             return lector;

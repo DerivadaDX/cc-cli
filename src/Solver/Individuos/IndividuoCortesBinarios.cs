@@ -134,7 +134,7 @@ namespace Solver.Individuos
             return _fitness;
         }
 
-        private void ValidarCromosoma(List<int> cromosoma, InstanciaProblema problema)
+        private static void ValidarCromosoma(List<int> cromosoma, InstanciaProblema problema)
         {
             int cantidadGenesEsperada = problema.CantidadAtomos - 1;
             if (cromosoma.Count != cantidadGenesEsperada)
