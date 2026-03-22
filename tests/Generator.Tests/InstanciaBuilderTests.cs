@@ -216,14 +216,14 @@ namespace Generator.Tests
             Assert.NotEqual(0, instancia[2, 2]);
         }
 
-        private InstanciaBuilder ObtenerInstanciaBuilder()
+        private static InstanciaBuilder ObtenerInstanciaBuilder()
         {
             var generadorNumerosRandom = Substitute.For<GeneradorNumerosRandom>(1);
             var instanciaBuilder = new InstanciaBuilder(generadorNumerosRandom);
             return instanciaBuilder;
         }
 
-        private InstanciaBuilder ObtenerInstanciaBuilder(GeneradorNumerosRandom generador)
+        private static InstanciaBuilder ObtenerInstanciaBuilder(GeneradorNumerosRandom generador)
         {
             var instanciaBuilder = new InstanciaBuilder(generador);
             return instanciaBuilder;

@@ -119,14 +119,14 @@ namespace Generator.Tests
             Assert.Contains(mensajeExcepcionInterna, ex.Message);
         }
 
-        private EscritorInstancia ObtenerEscritorInstancia()
+        private static EscritorInstancia ObtenerEscritorInstancia()
         {
             var fileSystemHelper = Substitute.For<FileSystemHelper>();
             var escritor = new EscritorInstancia(fileSystemHelper);
             return escritor;
         }
 
-        private EscritorInstancia ObtenerEscritorInstancia(FileSystemHelper fileSystemHelper)
+        private static EscritorInstancia ObtenerEscritorInstancia(FileSystemHelper fileSystemHelper)
         {
             var escritor = new EscritorInstancia(fileSystemHelper);
             return escritor;

@@ -40,7 +40,7 @@ namespace Generator
             }
         }
 
-        private List<string> GenerarLineasDeInstancia(decimal[,] instancia)
+        private static List<string> GenerarLineasDeInstancia(decimal[,] instancia)
         {
             List<string> lineas = [$"{instancia.GetLength(0)} {instancia.GetLength(1)}"];
 
@@ -53,7 +53,7 @@ namespace Generator
             return lineas;
         }
 
-        private string ObtenerLineaFila(decimal[,] instancia, int indiceFila)
+        private static string ObtenerLineaFila(decimal[,] instancia, int indiceFila)
         {
             var fila = new decimal[instancia.GetLength(1)];
             for (int indiceColumna = 0; indiceColumna < instancia.GetLength(1); indiceColumna++)

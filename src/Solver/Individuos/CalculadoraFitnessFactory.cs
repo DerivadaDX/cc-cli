@@ -1,6 +1,6 @@
 ﻿namespace Solver.Individuos
 {
-    internal class CalculadoraFitnessFactory
+    internal static class CalculadoraFitnessFactory
     {
         private static CalculadoraFitness _calculadora = null;
 

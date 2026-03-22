@@ -74,7 +74,7 @@ namespace Solver
             return preferencias;
         }
 
-        private decimal CalcularValorPorcion(Agente agente, int atomoInicio, int atomoFin)
+        private static decimal CalcularValorPorcion(Agente agente, int atomoInicio, int atomoFin)
         {
             decimal valor = 0;
             foreach (Atomo atomo in agente.Valoraciones)
