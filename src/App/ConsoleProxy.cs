@@ -1,4 +1,6 @@
-﻿namespace App
+﻿using System;
+
+namespace App
 {
     internal class ConsoleProxy
     {

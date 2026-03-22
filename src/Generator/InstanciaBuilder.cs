@@ -1,4 +1,6 @@
-﻿using Common;
+﻿using System;
+using System.Linq;
+using Common;
 
 namespace Generator
 {

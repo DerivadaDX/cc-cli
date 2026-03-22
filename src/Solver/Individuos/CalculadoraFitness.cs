@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Solver.Individuos
 {
     public class CalculadoraFitness

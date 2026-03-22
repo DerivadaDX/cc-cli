@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Common;
 using NSubstitute;
 using Solver.Individuos;

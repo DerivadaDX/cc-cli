@@ -1,4 +1,7 @@
-﻿using Common;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using Common;
 using NSubstitute;
 
 namespace Generator.Tests

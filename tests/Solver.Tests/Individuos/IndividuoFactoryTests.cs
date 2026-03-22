@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Common;
 using NSubstitute;
 using Solver.Individuos;

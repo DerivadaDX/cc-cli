@@ -1,4 +1,8 @@
-﻿namespace Solver
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Solver
 {
     internal class Agente
     {

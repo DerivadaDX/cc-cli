@@ -1,4 +1,6 @@
-﻿namespace App.Tests
+﻿using System;
+
+namespace App.Tests
 {
     public class ConsoleProxyFactoryTests : IDisposable
     {

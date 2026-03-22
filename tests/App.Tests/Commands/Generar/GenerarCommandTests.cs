@@ -1,5 +1,7 @@
+using System;
 using System.CommandLine;
 using System.CommandLine.Parsing;
+using System.Linq;
 using App.Commands.Generar;
 using Common;
 using Generator;
