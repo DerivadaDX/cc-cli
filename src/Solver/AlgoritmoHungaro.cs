@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using HungarianAlgorithmSolver = HungarianAlgorithm.HungarianAlgorithm;
 
 namespace Solver

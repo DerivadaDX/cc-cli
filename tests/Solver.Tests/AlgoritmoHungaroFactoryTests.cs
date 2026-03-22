@@ -1,3 +1,5 @@
+using System;
+
 namespace Solver.Tests
 {
     public class AlgoritmoHungaroFactoryTests : IDisposable

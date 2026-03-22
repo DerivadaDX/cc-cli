@@ -1,4 +1,7 @@
-﻿namespace Common
+﻿using System.Collections.Generic;
+using System.IO;
+
+namespace Common
 {
     public class FileSystemHelper
     {

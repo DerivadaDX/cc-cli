@@ -1,4 +1,6 @@
-﻿namespace Common.Tests
+﻿using System;
+
+namespace Common.Tests
 {
     public class GeneradorNumerosRandomFactoryTests : IDisposable
     {

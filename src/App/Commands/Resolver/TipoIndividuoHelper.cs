@@ -1,4 +1,5 @@
-﻿using Solver.Individuos;
+﻿using System;
+using Solver.Individuos;
 
 namespace App.Commands.Resolver
 {

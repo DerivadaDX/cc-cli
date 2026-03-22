@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using Solver.Individuos;
 
 namespace Solver

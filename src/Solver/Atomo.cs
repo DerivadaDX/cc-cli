@@ -1,4 +1,6 @@
-﻿namespace Solver
+﻿using System;
+
+namespace Solver
 {
     internal class Atomo
     {

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Common;
 
 namespace Solver.Individuos

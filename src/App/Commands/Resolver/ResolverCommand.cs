@@ -1,5 +1,7 @@
+using System;
 using System.CommandLine;
 using System.Diagnostics;
+using System.Threading;
 using Common;
 using Solver;
 using Solver.Individuos;

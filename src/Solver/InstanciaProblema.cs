@@ -1,4 +1,7 @@
-﻿namespace Solver
+﻿using System;
+using System.Collections.Generic;
+
+namespace Solver
 {
     public class InstanciaProblema
     {

@@ -1,4 +1,6 @@
-﻿namespace Solver.Tests
+﻿using System;
+
+namespace Solver.Tests
 {
     public class AtomoTests
     {
