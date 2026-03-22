@@ -1,6 +1,6 @@
 ﻿namespace App
 {
-    internal class ConsoleProxyFactory
+    internal static class ConsoleProxyFactory
     {
         private static ConsoleProxy _consola = null;
 
