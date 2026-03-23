@@ -52,7 +52,7 @@ public class AlgoritmoGeneticoTests
     [Fact]
     public void Ejecutar_EjecucionCancelada_DetieneProcesamiento()
     {
-        var generacionesNotificadas = new List<int>();
+        List<int> generacionesNotificadas = [];
         (Poblacion poblacion, _) = CrearPoblacionFakeConIndividuoNoOptimo();
 
         var algoritmo = new AlgoritmoGenetico(poblacion, limiteGeneraciones: 0, limiteGeneracionesSinMejora: 0);
@@ -173,7 +173,7 @@ public class AlgoritmoGeneticoTests
     [Fact]
     public void Ejecutar_GeneracionProcesada_NotificaNumeroDeGeneracion()
     {
-        var generacionesNotificadas = new List<int>();
+        List<int> generacionesNotificadas = [];
 
         (Poblacion poblacion, _) = CrearPoblacionFakeConIndividuoNoOptimo();
         poblacion.GenerarNuevaGeneracion().Returns(poblacion);
@@ -188,7 +188,7 @@ public class AlgoritmoGeneticoTests
     [Fact]
     public void Ejecutar_EncuentraSolucionOptima_NotificaSoloGeneracionesHastaSolucion()
     {
-        var generacionesNotificadas = new List<int>();
+        List<int> generacionesNotificadas = [];
 
         (Poblacion poblacionInicial, _) = CrearPoblacionFakeConIndividuoNoOptimo();
         (Poblacion poblacionSiguiente, _) = CrearPoblacionFakeConIndividuoOptimo();
@@ -233,8 +233,9 @@ public class AlgoritmoGeneticoTests
                 { 0m, 1m },
             }
         );
+        List<int> cromosoma = [1, 1, 2];
         var generadorRandom = Substitute.For<GeneradorNumerosRandom>(1);
-        var individuo = Substitute.For<Individuo>(new List<int> { 1, 1, 2 }, instanciaProblema, generadorRandom);
+        var individuo = Substitute.For<Individuo>(cromosoma, instanciaProblema, generadorRandom);
         return individuo;
     }
 }

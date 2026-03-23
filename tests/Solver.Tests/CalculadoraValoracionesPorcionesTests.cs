@@ -40,7 +40,7 @@ public class CalculadoraValoracionesPorcionesTests
         };
         InstanciaProblema problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(valoraciones);
         var calculadora = new CalculadoraValoracionesPorciones();
-        var cortes = new List<int> { 1 };
+        List<int> cortes = [1];
 
         var ex = Assert.Throws<ArgumentException>(
             () => calculadora.CalcularMatrizValoracionesPorcionAgente(problema, cortes));
@@ -62,7 +62,7 @@ public class CalculadoraValoracionesPorcionesTests
         };
         InstanciaProblema problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(valoraciones);
         var calculadora = new CalculadoraValoracionesPorciones();
-        var cortes = new List<int> { 4, 2 };
+        List<int> cortes = [4, 2];
 
         decimal[,] resultado = calculadora.CalcularMatrizValoracionesPorcionAgente(problema, cortes);
 

@@ -169,7 +169,7 @@ public class IndividuoLegacyTests
         // Cortes: 1, Asignaciones: 2, 1
         // - 1ra porción se asigna al agente 2
         // - 2da Porción se asigna al agente 1
-        var cromosomaValido = new List<int> { 1, 2, 1 };
+        List<int> cromosomaValido = [1, 2, 1];
 
         // 3 átomos, 2 agentes
         var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
@@ -190,7 +190,7 @@ public class IndividuoLegacyTests
     public void Constructor_CromosomaValidoParaUnAgente_NoLanzaExcepciones()
     {
         // 1ra porción se asigna al agente 1
-        var cromosomaValido = new List<int> { 1 };
+        List<int> cromosomaValido = [1];
 
         // 1 átomo, 1 agente
         var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
@@ -211,7 +211,7 @@ public class IndividuoLegacyTests
         var generadorRandom = Substitute.For<GeneradorNumerosRandom>(1);
         generadorRandom.SiguienteDouble().Returns(0.0);
 
-        var cromosomaOriginal = new List<int> { 1 };
+        List<int> cromosomaOriginal = [1];
         var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
             new decimal[,]
             {
@@ -232,7 +232,7 @@ public class IndividuoLegacyTests
         generadorRandom.SiguienteDouble().Returns(0.0, 1.0); // Solo el primero muta
         generadorRandom.Siguiente(2).Returns(1); // Dirección +1
 
-        var cromosomaOriginal = new List<int> { 0, 1, 2 };
+        List<int> cromosomaOriginal = [0, 1, 2];
         var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
             new decimal[,]
             {
@@ -256,7 +256,7 @@ public class IndividuoLegacyTests
         generadorRandom.SiguienteDouble().Returns(0.0, 1.0); // Mutan los cortes, las asignaciones no
         generadorRandom.Siguiente(2).Returns(0);
 
-        var cromosomaOriginal = new List<int> { 0, 1, 2 };
+        List<int> cromosomaOriginal = [0, 1, 2];
         var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
             new decimal[,]
             {
@@ -278,7 +278,7 @@ public class IndividuoLegacyTests
         generadorRandom.SiguienteDouble().Returns(0.0, 1.0); // Mutan los cortes, las asignaciones no
         generadorRandom.Siguiente(2).Returns(1);
 
-        var cromosomaOriginal = new List<int> { 2, 1, 2 };
+        List<int> cromosomaOriginal = [2, 1, 2];
         var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
             new decimal[,]
             {
@@ -526,7 +526,7 @@ public class IndividuoLegacyTests
     [Fact]
     public void ToString_Resultado_CromosomaCortesOrdenadoYFitness()
     {
-        var cromosoma = new List<int> { 4, 1, 2, 1, 4, 3, 2 };
+        List<int> cromosoma = [4, 1, 2, 1, 4, 3, 2];
         var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
             new decimal[,]
             {

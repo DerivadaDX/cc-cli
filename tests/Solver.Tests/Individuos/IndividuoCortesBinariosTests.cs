@@ -106,7 +106,7 @@ public class IndividuoCortesBinariosTests : IDisposable
     [Fact]
     public void Constructor_AsignacionDePorciones_UsaResultadoDelAlgoritmoHungaro()
     {
-        var asignacionOptima = new List<int> { 0, 2, 1 };
+        List<int> asignacionOptima = [0, 2, 1];
 
         var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
         algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns(asignacionOptima);

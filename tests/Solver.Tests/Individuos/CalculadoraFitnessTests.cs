@@ -20,7 +20,7 @@ public class CalculadoraFitnessTests
                 { 0m, 1m },
             }
         );
-        var cromosoma = new List<int> { 1, 1, 2 };
+        List<int> cromosoma = [1, 1, 2];
         var individuo = new IndividuoFake(cromosoma, problema);
 
         decimal fitness = _calculadora.CalcularFitness(individuo, problema);
@@ -37,7 +37,7 @@ public class CalculadoraFitnessTests
                 { 0m, .5m },
             }
         );
-        var cromosoma = new List<int> { 1, 2, 1 };
+        List<int> cromosoma = [1, 2, 1];
         var individuo = new IndividuoFake(cromosoma, problema);
 
         decimal fitness = _calculadora.CalcularFitness(individuo, problema);
@@ -55,7 +55,7 @@ public class CalculadoraFitnessTests
             }
         );
 
-        var cromosoma = new List<int> { 1, 1, 2 };
+        List<int> cromosoma = [1, 1, 2];
         var individuo = new IndividuoFake(cromosoma, problema);
 
         decimal fitness = _calculadora.CalcularFitness(individuo, problema);
