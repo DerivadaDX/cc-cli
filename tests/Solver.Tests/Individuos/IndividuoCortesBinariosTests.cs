@@ -106,7 +106,7 @@ public class IndividuoCortesBinariosTests : IDisposable
     [Fact]
     public void Constructor_AsignacionDePorciones_UsaResultadoDelAlgoritmoHungaro()
     {
-        var asignacionOptima = new List<int> { 0, 2, 1 };
+        List<int> asignacionOptima = [0, 2, 1];
 
         var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
         algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns(asignacionOptima);
@@ -699,13 +699,12 @@ public class IndividuoCortesBinariosTests : IDisposable
         return instanciaProblema;
     }
 
-    private class IndividuoOtraFamiliaFake : Individuo
+    private sealed class IndividuoOtraFamiliaFake : Individuo
     {
-        internal IndividuoOtraFamiliaFake(
-            List<int> cromosoma,
-            InstanciaProblema problema,
-            GeneradorNumerosRandom generadorRandom)
-            : base(cromosoma, problema, generadorRandom) { }
+        internal IndividuoOtraFamiliaFake(List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
+            : base(cromosoma, problema, generadorRandom)
+        {
+        }
 
         protected override string FamiliaCromosoma => "legacy";
 

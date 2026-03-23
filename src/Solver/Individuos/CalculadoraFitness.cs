@@ -64,6 +64,7 @@ public class CalculadoraFitness
                 decimal valoracion = atomoValorado?.Valoracion ?? 0;
                 agente.AgregarValoracion(new Atomo(pos, valoracion));
             }
+
             atomoInicio = atomoFin + 1;
         }
 

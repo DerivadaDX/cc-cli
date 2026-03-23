@@ -6,7 +6,7 @@ namespace Solver;
 
 public static class PoblacionFactory
 {
-    private static Poblacion _poblacion = null;
+    private static Poblacion _poblacion;
 
     public static Poblacion Crear(
         int tamaño, InstanciaProblema problema, TipoIndividuo tipoIndividuo, GeneradorNumerosRandom generadorRandom)

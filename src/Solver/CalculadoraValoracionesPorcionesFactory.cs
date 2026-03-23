@@ -2,7 +2,7 @@ namespace Solver;
 
 internal static class CalculadoraValoracionesPorcionesFactory
 {
-    private static CalculadoraValoracionesPorciones _instancia = null;
+    private static CalculadoraValoracionesPorciones _instancia;
 
     public static CalculadoraValoracionesPorciones Crear()
     {

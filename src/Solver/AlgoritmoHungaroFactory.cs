@@ -2,7 +2,7 @@ namespace Solver;
 
 internal static class AlgoritmoHungaroFactory
 {
-    private static AlgoritmoHungaro _instancia = null;
+    private static AlgoritmoHungaro _instancia;
 
     public static AlgoritmoHungaro Crear()
     {

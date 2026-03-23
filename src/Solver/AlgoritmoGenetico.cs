@@ -4,19 +4,16 @@ using Solver.Individuos;
 
 namespace Solver;
 
-public delegate void GeneracionProcesadaEventHandler(int generacion, CancellationToken cancellationToken);
-public delegate void EstancamientoDetectadoEventHandler();
+public delegate void GeneracionProcesadaHandler(int generacion, CancellationToken cancellationToken);
+public delegate void EstancamientoDetectadoHandler();
 
 public class AlgoritmoGenetico
 {
-    private Poblacion _poblacion;
     private readonly int _limiteGeneraciones;
     private readonly bool _validarLimiteGeneraciones;
     private readonly int _limiteGeneracionesSinMejora;
     private readonly bool _validarEstancamiento;
-
-    public event GeneracionProcesadaEventHandler GeneracionProcesada;
-    public event EstancamientoDetectadoEventHandler EstancamientoDetectado;
+    private Poblacion _poblacion;
 
     public AlgoritmoGenetico(Poblacion poblacion, int limiteGeneraciones, int limiteGeneracionesSinMejora)
     {
@@ -40,6 +37,9 @@ public class AlgoritmoGenetico
         _limiteGeneracionesSinMejora = limiteGeneracionesSinMejora;
         _validarEstancamiento = limiteGeneracionesSinMejora > 0;
     }
+
+    public event GeneracionProcesadaHandler GeneracionProcesada;
+    public event EstancamientoDetectadoHandler EstancamientoDetectado;
 
     public (Individuo mejorIndividuo, int generaciones) Ejecutar(CancellationToken cancellationToken = default)
     {

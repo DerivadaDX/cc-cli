@@ -34,15 +34,6 @@ public class EscritorInstancia
         }
     }
 
-    private void CrearDirectorioSiNoExiste(string rutaArchivo)
-    {
-        string directorio = Path.GetDirectoryName(rutaArchivo);
-        if (!string.IsNullOrEmpty(directorio) && !_fileSystemHelper.DirectoryExists(directorio))
-        {
-            _fileSystemHelper.CreateDirectory(directorio);
-        }
-    }
-
     private static List<string> GenerarLineasDeInstancia(decimal[,] instancia)
     {
         List<string> lineas = [$"{instancia.GetLength(0)} {instancia.GetLength(1)}"];
@@ -66,5 +57,14 @@ public class EscritorInstancia
 
         string lineaFila = string.Join("\t", fila);
         return lineaFila;
+    }
+
+    private void CrearDirectorioSiNoExiste(string rutaArchivo)
+    {
+        string directorio = Path.GetDirectoryName(rutaArchivo);
+        if (!string.IsNullOrEmpty(directorio) && !_fileSystemHelper.DirectoryExists(directorio))
+        {
+            _fileSystemHelper.CreateDirectory(directorio);
+        }
     }
 }

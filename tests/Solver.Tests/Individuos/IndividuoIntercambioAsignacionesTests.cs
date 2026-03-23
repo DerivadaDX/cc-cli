@@ -14,7 +14,7 @@ public class IndividuoIntercambioAsignacionesTests
         generadorRandom.SiguienteDouble().Returns(1.0, 0.0, 1.0); // Cortes no mutan, asignaciones solo la primera
         generadorRandom.Siguiente(1, 3).Returns(2); // Intercambia con la posición 2
 
-        var cromosomaOriginal = new List<int> { 0, 1, 2 };
+        List<int> cromosomaOriginal = [0, 1, 2];
         var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
             new decimal[,]
             {

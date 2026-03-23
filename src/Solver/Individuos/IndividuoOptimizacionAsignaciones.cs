@@ -9,7 +9,9 @@ internal class IndividuoOptimizacionAsignaciones : IndividuoLegacy
 {
     internal IndividuoOptimizacionAsignaciones(
         List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
-        : base(cromosoma, problema, generadorRandom) { }
+        : base(cromosoma, problema, generadorRandom)
+    {
+    }
 
     protected override void MutarAsignaciones()
     {
@@ -31,34 +33,6 @@ internal class IndividuoOptimizacionAsignaciones : IndividuoLegacy
         return individuo;
     }
 
-    private List<int> ObtenerCortesOrdenados()
-    {
-        int cantidadCortes = _problema.Agentes.Count - 1;
-        var cortes = Cromosoma.Take(cantidadCortes).OrderBy(x => x).ToList<int>();
-        return cortes;
-    }
-
-    private decimal[,] CalcularValoracionesPorPorcionYAgente(List<int> cortes)
-    {
-        int cantidadAgentes = _problema.Agentes.Count;
-        decimal[,] valoraciones = new decimal[cantidadAgentes, cantidadAgentes];
-
-        for (int porcion = 0; porcion < cantidadAgentes; porcion++)
-        {
-            int atomoInicio = porcion > 0 ? cortes[porcion - 1] + 1 : 1;
-            int atomoFin = porcion < cortes.Count ? cortes[porcion] : _problema.CantidadAtomos;
-
-            for (int agenteIdx = 0; agenteIdx < cantidadAgentes; agenteIdx++)
-            {
-                Agente agente = _problema.Agentes[agenteIdx];
-                decimal valorPorcion = CalcularValorPorcion(agente, atomoInicio, atomoFin);
-                valoraciones[porcion, agenteIdx] = valorPorcion;
-            }
-        }
-
-        return valoraciones;
-    }
-
     private static decimal CalcularValorPorcion(Agente agente, int atomoInicio, int atomoFin)
     {
         decimal valor = 0;
@@ -67,6 +41,7 @@ internal class IndividuoOptimizacionAsignaciones : IndividuoLegacy
             if (atomo.Posicion >= atomoInicio && atomo.Posicion <= atomoFin)
                 valor += atomo.Valoracion;
         }
+
         return valor;
     }
 
@@ -107,6 +82,34 @@ internal class IndividuoOptimizacionAsignaciones : IndividuoLegacy
         }
 
         return valorMaximo;
+    }
+
+    private List<int> ObtenerCortesOrdenados()
+    {
+        int cantidadCortes = _problema.Agentes.Count - 1;
+        var cortes = Cromosoma.Take(cantidadCortes).OrderBy(x => x).ToList<int>();
+        return cortes;
+    }
+
+    private decimal[,] CalcularValoracionesPorPorcionYAgente(List<int> cortes)
+    {
+        int cantidadAgentes = _problema.Agentes.Count;
+        decimal[,] valoraciones = new decimal[cantidadAgentes, cantidadAgentes];
+
+        for (int porcion = 0; porcion < cantidadAgentes; porcion++)
+        {
+            int atomoInicio = porcion > 0 ? cortes[porcion - 1] + 1 : 1;
+            int atomoFin = porcion < cortes.Count ? cortes[porcion] : _problema.CantidadAtomos;
+
+            for (int agenteIdx = 0; agenteIdx < cantidadAgentes; agenteIdx++)
+            {
+                Agente agente = _problema.Agentes[agenteIdx];
+                decimal valorPorcion = CalcularValorPorcion(agente, atomoInicio, atomoFin);
+                valoraciones[porcion, agenteIdx] = valorPorcion;
+            }
+        }
+
+        return valoraciones;
     }
 
     private void ActualizarCromosomaConAsignaciones(int[] asignacionesOptimas)

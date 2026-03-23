@@ -6,12 +6,12 @@ namespace Generator;
 
 public class InstanciaBuilder
 {
+    private readonly GeneradorNumerosRandom _generadorNumerosRandom;
+
     private int _cantidadAtomos;
     private int _cantidadAgentes;
     private int _valorMaximo;
     private bool? _valoracionesDisjuntas;
-
-    private readonly GeneradorNumerosRandom _generadorNumerosRandom;
 
     public InstanciaBuilder(GeneradorNumerosRandom generadorNumerosRandom)
     {

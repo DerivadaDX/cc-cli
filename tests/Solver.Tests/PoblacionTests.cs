@@ -129,7 +129,7 @@ public class PoblacionTests : IDisposable
 
     private static Individuo CrearIndividuoFake(int fitness = 0)
     {
-        var cromosoma = new List<int> { 1, 1, 2 };
+        List<int> cromosoma = [1, 1, 2];
         var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
             new decimal[,]
             {
