@@ -21,4 +21,11 @@ publish:
 	@echo "Listo."
 
 version:
-	npx standard-version --skip.commit=true --skip.tag=true
+	@npx standard-version --skip.commit=true --skip.tag=true
+	@version=$$(sed -n 's:^## \[\([0-9][^]]*\)\].*:\1:p' CHANGELOG.md | head -n 1); \
+	if [ -z "$$version" ]; then \
+		echo "ERROR: no se pudo obtener la nueva versión desde CHANGELOG.md"; \
+		exit 1; \
+	fi; \
+	sed -i 's:<Version>[^<]*</Version>:<Version>'"$$version"'</Version>:' Directory.Build.props; \
+	echo "Version sincronizada en Directory.Build.props: $$version"
