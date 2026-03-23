@@ -8,9 +8,7 @@ namespace Solver.Individuos;
 public static class IndividuoFactory
 {
     public static Individuo CrearAleatorio(
-        InstanciaProblema problema,
-        TipoIndividuo tipoIndividuo,
-        GeneradorNumerosRandom generadorRandom
+        InstanciaProblema problema, TipoIndividuo tipoIndividuo, GeneradorNumerosRandom generadorRandom
     )
     {
         ArgumentNullException.ThrowIfNull(problema, nameof(problema));
@@ -65,7 +63,7 @@ public static class IndividuoFactory
     {
         int cantidadCortes = problema.Agentes.Count - 1;
 
-        var cortes = new List<int>();
+        List<int> cortes = [];
         for (int i = 0; i < cantidadCortes; i++)
         {
             int corte = random.Siguiente(problema.CantidadAtomos + 1);

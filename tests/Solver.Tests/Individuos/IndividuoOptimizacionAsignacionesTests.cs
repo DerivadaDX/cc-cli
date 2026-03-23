@@ -22,7 +22,7 @@ public class IndividuoOptimizacionAsignacionesTests
                 { 10m, 11m, 12m, 100m },
             }
         );
-        var cromosoma = new List<int> { 1, 2, 3, 4, 3, 2, 1 };
+        List<int> cromosoma = [1, 2, 3, 4, 3, 2, 1];
         var individuo = new IndividuoOptimizacionAsignaciones(cromosoma, problema, generadorRandom);
 
         individuo.Mutar();

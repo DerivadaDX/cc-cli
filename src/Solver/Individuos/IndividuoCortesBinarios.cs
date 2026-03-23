@@ -27,9 +27,9 @@ internal class IndividuoCortesBinarios : Individuo
         CalcularEstado();
     }
 
-    protected override string FamiliaCromosoma => "cortes-binarios";
-
     internal IReadOnlyList<int> Asignaciones => _asignaciones;
+
+    protected override string FamiliaCromosoma => "cortes-binarios";
 
     public override string ToString()
     {
@@ -64,7 +64,7 @@ internal class IndividuoCortesBinarios : Individuo
             throw new ArgumentException("Los cromosomas no tienen la misma cantidad de cortes.");
 
         int cantidadCortesSeleccionados = 0;
-        var cortesDisponibles = new List<int>();
+        List<int> cortesDisponibles = [];
         var cromosomaHijo = Enumerable.Repeat(0, Cromosoma.Count).ToList<int>();
 
         for (int indice = 0; indice < Cromosoma.Count; indice++)
@@ -95,8 +95,8 @@ internal class IndividuoCortesBinarios : Individuo
         bool hijoIgualOtro = cromosomaHijo.SequenceEqual(otro.Cromosoma);
         if (hijoIgualPadre || hijoIgualOtro)
         {
-            var indicesConUno = new List<int>();
-            var indicesConCero = new List<int>();
+            List<int> indicesConUno = [];
+            List<int> indicesConCero = [];
             for (int indice = 0; indice < cromosomaHijo.Count; indice++)
             {
                 if (cromosomaHijo[indice] == 1)

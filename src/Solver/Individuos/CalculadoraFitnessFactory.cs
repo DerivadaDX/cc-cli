@@ -2,7 +2,7 @@
 
 internal static class CalculadoraFitnessFactory
 {
-    private static CalculadoraFitness _calculadora = null;
+    private static CalculadoraFitness _calculadora;
 
     public static CalculadoraFitness Crear()
     {
