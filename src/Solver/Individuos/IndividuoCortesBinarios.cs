@@ -91,35 +91,10 @@ internal class IndividuoCortesBinarios : Individuo
             cantidadCortesSeleccionados++;
         }
 
-        bool hijoIgualPadre = cromosomaHijo.SequenceEqual(Cromosoma);
-        bool hijoIgualOtro = cromosomaHijo.SequenceEqual(otro.Cromosoma);
-        if (hijoIgualPadre || hijoIgualOtro)
-        {
-            List<int> indicesConUno = [];
-            List<int> indicesConCero = [];
-            for (int indice = 0; indice < cromosomaHijo.Count; indice++)
-            {
-                if (cromosomaHijo[indice] == 1)
-                    indicesConUno.Add(indice);
-                else
-                    indicesConCero.Add(indice);
-            }
+        AplicarPoliticaAnticlon(cromosomaHijo, otro);
 
-            bool noHaySwapValido = indicesConUno.Count == 0 || indicesConCero.Count == 0;
-            if (noHaySwapValido)
-                return new IndividuoCortesBinarios(cromosomaHijo, _problema, _generadorRandom);
-
-            int indiceUno = _generadorRandom.Siguiente(indicesConUno.Count);
-            int posicionUno = indicesConUno[indiceUno];
-            cromosomaHijo[posicionUno] = 0;
-
-            int indiceCero = _generadorRandom.Siguiente(indicesConCero.Count);
-            int posicionCero = indicesConCero[indiceCero];
-            cromosomaHijo[posicionCero] = 1;
-        }
-
-        var hijo = new IndividuoCortesBinarios(cromosomaHijo, _problema, _generadorRandom);
-        return hijo;
+        var resultado = new IndividuoCortesBinarios(cromosomaHijo, _problema, _generadorRandom);
+        return resultado;
     }
 
     internal override void Mutar()
@@ -208,6 +183,37 @@ internal class IndividuoCortesBinarios : Individuo
         }
 
         return envidiaTotal;
+    }
+
+    private void AplicarPoliticaAnticlon(List<int> cromosomaHijo, IndividuoCortesBinarios otro)
+    {
+        bool hijoIgualPadre = cromosomaHijo.SequenceEqual(Cromosoma);
+        bool hijoIgualOtro = cromosomaHijo.SequenceEqual(otro.Cromosoma);
+        bool hijoNoEsClon = !hijoIgualPadre && !hijoIgualOtro;
+        if (hijoNoEsClon)
+            return;
+
+        List<int> indicesConUno = [];
+        List<int> indicesConCero = [];
+        for (int indice = 0; indice < cromosomaHijo.Count; indice++)
+        {
+            if (cromosomaHijo[indice] == 1)
+                indicesConUno.Add(indice);
+            else
+                indicesConCero.Add(indice);
+        }
+
+        bool haySwapValido = indicesConUno.Count > 0 && indicesConCero.Count > 0;
+        if (!haySwapValido)
+            return;
+
+        int indiceUno = _generadorRandom.Siguiente(indicesConUno.Count);
+        int posicionUno = indicesConUno[indiceUno];
+        cromosomaHijo[posicionUno] = 0;
+
+        int indiceCero = _generadorRandom.Siguiente(indicesConCero.Count);
+        int posicionCero = indicesConCero[indiceCero];
+        cromosomaHijo[posicionCero] = 1;
     }
 
     private List<int> ObtenerPorcionesEnOrdenDeMutacion()
