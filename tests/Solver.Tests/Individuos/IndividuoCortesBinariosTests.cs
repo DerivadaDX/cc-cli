@@ -316,6 +316,25 @@ public class IndividuoCortesBinariosTests : IDisposable
     }
 
     [Fact]
+    public void Cruzar_TodosLosGenesSonCortes_DevuelveUnClonDelPadre()
+    {
+        var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+        {
+            { 9m, 1m, 1m, 1m, 1m },
+            { 1m, 9m, 1m, 1m, 1m },
+            { 1m, 1m, 9m, 1m, 1m },
+            { 1m, 1m, 1m, 9m, 1m },
+            { 1m, 1m, 1m, 1m, 9m },
+        });
+        var generador = GeneradorNumerosRandomFactory.Crear(1);
+        var padre = new IndividuoCortesBinarios([1, 1, 1, 1], problema, generador);
+
+        IndividuoCortesBinarios hijo = padre.Cruzar(padre);
+
+        Assert.Equal(padre.Cromosoma, hijo.Cromosoma);
+    }
+
+    [Fact]
     public void Cruzar_Hijo_CalculaAsignacionesYPreferencias()
     {
         List<int> asignacionesEsperadas = [0, 1, 2, 3];
