@@ -203,8 +203,8 @@ internal class IndividuoCortesBinarios : Individuo
                 indicesConCero.Add(indice);
         }
 
-        bool haySwapValido = indicesConUno.Count > 0 && indicesConCero.Count > 0;
-        if (!haySwapValido)
+        bool noHaySwapValido = indicesConCero.Count == 0;
+        if (noHaySwapValido)
             return;
 
         int indiceUno = _generadorRandom.Siguiente(indicesConUno.Count);
