@@ -93,8 +93,8 @@ internal class IndividuoCortesBinarios : Individuo
 
         AplicarPoliticaAnticlon(cromosomaHijo, otro);
 
-        var resultado = new IndividuoCortesBinarios(cromosomaHijo, _problema, _generadorRandom);
-        return resultado;
+        var hijo = new IndividuoCortesBinarios(cromosomaHijo, _problema, _generadorRandom);
+        return hijo;
     }
 
     internal override void Mutar()
