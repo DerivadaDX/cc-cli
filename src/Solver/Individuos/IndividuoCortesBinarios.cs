@@ -105,6 +105,10 @@ internal class IndividuoCortesBinarios : Individuo
                     indicesConCero.Add(indice);
             }
 
+            bool noHaySwapValido = indicesConUno.Count == 0 || indicesConCero.Count == 0;
+            if (noHaySwapValido)
+                return new IndividuoCortesBinarios(cromosomaHijo, _problema, _generadorRandom);
+
             int indiceUno = _generadorRandom.Siguiente(indicesConUno.Count);
             int posicionUno = indicesConUno[indiceUno];
             cromosomaHijo[posicionUno] = 0;
