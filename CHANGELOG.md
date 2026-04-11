@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.1.1](https://github.com/DerivadaDX/cc-cli/compare/v3.1.0...v3.1.1) (2026-04-11)
+
+
+### Bug Fixes
+
+* **individuos:** corrección de error al cruzar cortes-binarios para instancias de matrices cuadradas ([#84](https://github.com/DerivadaDX/cc-cli/issues/84)) ([6108510](https://github.com/DerivadaDX/cc-cli/commit/6108510cebc973e95f6f3864253c524896bd3b1b))
+
 ## [3.1.0](https://github.com/DerivadaDX/cc-cli/compare/v3.0.0...v3.1.0) (2026-03-17)
 
 
