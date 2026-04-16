@@ -1,12 +1,12 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace Solver;
 
 internal class AlgoritmoHungaro
 {
-    public virtual List<int> CalcularAsignacionOptimaDePorciones(decimal[,] valoracionesDePorciones)
+    public virtual ImmutableArray<int> CalcularAsignacionOptimaDePorciones(decimal[,] valoracionesDePorciones)
     {
         ArgumentNullException.ThrowIfNull(valoracionesDePorciones, nameof(valoracionesDePorciones));
 
@@ -18,7 +18,7 @@ internal class AlgoritmoHungaro
         decimal[,] costos = ConvertirValoracionesACostos(valoracionesDePorciones);
         int[] asignaciones = ResolverAsignacionesMinimizandoCostos(costos);
 
-        List<int> resultado = [.. asignaciones];
+        ImmutableArray<int> resultado = asignaciones.ToImmutableArray();
         return resultado;
     }
 

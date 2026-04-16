@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using Common;
 using NSubstitute;
 using Solver.Individuos;
@@ -106,7 +107,7 @@ public class IndividuoCortesBinariosTests : IDisposable
     [Fact]
     public void Constructor_AsignacionDePorciones_UsaResultadoDelAlgoritmoHungaro()
     {
-        List<int> asignacionOptima = [0, 2, 1];
+        ImmutableArray<int> asignacionOptima = [0, 2, 1];
 
         var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
         algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns(asignacionOptima);
@@ -337,7 +338,7 @@ public class IndividuoCortesBinariosTests : IDisposable
     [Fact]
     public void Cruzar_Hijo_CalculaAsignacionesYPreferencias()
     {
-        List<int> asignacionesEsperadas = [0, 1, 2, 3];
+        ImmutableArray<int> asignacionesEsperadas = [0, 1, 2, 3];
 
         var algoritmoHungaro = Substitute.For<AlgoritmoHungaro>();
         algoritmoHungaro.CalcularAsignacionOptimaDePorciones(Arg.Any<decimal[,]>()).Returns(asignacionesEsperadas);
@@ -649,7 +650,7 @@ public class IndividuoCortesBinariosTests : IDisposable
 
         individuo.Mutar();
 
-        List<int> asignacionesEsperadas = [0, 1, 2];
+        ImmutableArray<int> asignacionesEsperadas = [0, 1, 2];
         Assert.Equal(asignacionesEsperadas, individuo.Asignaciones);
     }
 

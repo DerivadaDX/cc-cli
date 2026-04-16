@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Common;
 
@@ -23,7 +24,7 @@ internal class IndividuoOptimizacionAsignaciones : IndividuoLegacy
 
         List<int> cortes = ObtenerCortesOrdenados();
         decimal[,] matrizValoraciones = CalcularValoracionesPorPorcionYAgente(cortes);
-        List<int> asignacionesOptimas = _algoritmoHungaro.CalcularAsignacionOptimaDePorciones(matrizValoraciones);
+        ImmutableArray<int> asignacionesOptimas = _algoritmoHungaro.CalcularAsignacionOptimaDePorciones(matrizValoraciones);
 
         ActualizarCromosomaConAsignaciones(asignacionesOptimas);
     }
@@ -74,7 +75,7 @@ internal class IndividuoOptimizacionAsignaciones : IndividuoLegacy
         return valoraciones;
     }
 
-    private void ActualizarCromosomaConAsignaciones(List<int> asignacionesOptimas)
+    private void ActualizarCromosomaConAsignaciones(ImmutableArray<int> asignacionesOptimas)
     {
         int cantidadAsignaciones = _problema.Agentes.Count;
         int cantidadCortes = _problema.Agentes.Count - 1;
