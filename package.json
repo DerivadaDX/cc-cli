@@ -1,0 +1,28 @@
+{
+  "name": "cc-cli",
+  "version": "3.1.1",
+  "private": true,
+  "scripts": {
+    "version": "commit-and-tag-version --skip.commit=true --skip.tag=true"
+  },
+  "commit-and-tag-version": {
+    "packageFiles": [
+      "package.json",
+      {
+        "filename": "Directory.Build.props",
+        "type": "csproj"
+      }
+    ],
+    "bumpFiles": [
+      "package.json",
+      "package-lock.json",
+      {
+        "filename": "Directory.Build.props",
+        "type": "csproj"
+      }
+    ]
+  },
+  "devDependencies": {
+    "commit-and-tag-version": "12.7.1"
+  }
+}
