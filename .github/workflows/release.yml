@@ -1,0 +1,229 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prepare release context
+        id: prepare
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ "${GITHUB_REF}" != "refs/heads/main" ]]; then
+            echo "Este workflow solo puede ejecutarse sobre refs/heads/main. Ref actual: ${GITHUB_REF}" >&2
+            exit 1
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          head_subject="$(git log -1 --pretty=%s)"
+          release_commit_regex='^chore\(release\): v[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$'
+          package_version="$(node -p "require('./package.json').version")"
+
+          if [[ "${head_subject}" =~ ${release_commit_regex} ]]; then
+            version="${head_subject#chore(release): v}"
+            if gh release view "v${version}" >/dev/null 2>&1; then
+              echo "El release v${version} ya existe. No hay recuperación pendiente para HEAD." >&2
+              exit 1
+            fi
+
+            if [[ "${package_version}" != "${version}" ]]; then
+              echo "HEAD es un commit de release para v${version}, pero package.json tiene ${package_version}" >&2
+              exit 1
+            fi
+
+            echo "mode=recover" >> "${GITHUB_OUTPUT}"
+            echo "version=${version}" >> "${GITHUB_OUTPUT}"
+            echo "target_sha=$(git rev-parse HEAD)" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+
+          last_tag="$(git tag --list 'v*' --sort=-version:refname | head -n 1)"
+
+          if [[ -n "${last_tag}" ]] && [[ -z "$(git rev-list "${last_tag}"..HEAD --max-count=1)" ]]; then
+            echo "No hay commits nuevos desde ${last_tag}" >&2
+            exit 1
+          fi
+
+          echo "mode=normal" >> "${GITHUB_OUTPUT}"
+
+      - name: Version repository
+        id: version
+        if: steps.prepare.outputs.mode == 'normal'
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          npm run version
+
+          version="$(node -p "require('./package.json').version")"
+
+          if git diff --quiet -- package.json package-lock.json Directory.Build.props CHANGELOG.md; then
+            echo "npm run version no produjo cambios de release" >&2
+            exit 1
+          fi
+
+          echo "version=${version}" >> "${GITHUB_OUTPUT}"
+
+      - name: Extract release notes
+        id: notes
+        shell: bash
+        env:
+          RELEASE_VERSION: ${{ steps.prepare.outputs.version || steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+
+          version="${RELEASE_VERSION}"
+          notes_file="${RUNNER_TEMP}/release-notes.md"
+
+          awk -v version="${version}" '
+            $0 ~ "^## \\[" version "\\]" { printing=1 }
+            printing && $0 ~ "^## \\[" && $0 !~ "^## \\[" version "\\]" { exit }
+            printing { print }
+          ' CHANGELOG.md > "${notes_file}"
+
+          if [[ ! -s "${notes_file}" ]]; then
+            echo "No se pudo extraer la sección ${version} de CHANGELOG.md" >&2
+            exit 1
+          fi
+
+          echo "file=${notes_file}" >> "${GITHUB_OUTPUT}"
+
+      - name: Create release commit
+        id: commit
+        if: steps.prepare.outputs.mode == 'normal'
+        shell: bash
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+
+          version="${RELEASE_VERSION}"
+          git add package.json package-lock.json Directory.Build.props CHANGELOG.md
+          git commit -m "chore(release): v${version}"
+
+          echo "target_sha=$(git rev-parse HEAD)" >> "${GITHUB_OUTPUT}"
+
+      - name: Publish binaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          make publish
+
+      - name: Package assets
+        id: assets
+        shell: bash
+        env:
+          RELEASE_VERSION: ${{ steps.prepare.outputs.version || steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+
+          version="${RELEASE_VERSION}"
+          publish_root="src/App/bin/Release/publish"
+          shopt -s nullglob
+          matches=("${publish_root}/cc-cli-v${version}-"*)
+          shopt -u nullglob
+
+          if [[ ${#matches[@]} -eq 0 ]]; then
+            echo "No se encontraron directorios publicados para v${version} en ${publish_root}" >&2
+            exit 1
+          fi
+
+          assets=()
+          for dir in "${matches[@]}"; do
+            if [[ ! -d "${dir}" ]]; then
+              continue
+            fi
+
+            base_name="$(basename "${dir}")"
+            zip_path="${RUNNER_TEMP}/${base_name}.zip"
+            rm -f "${zip_path}"
+            (
+              cd "${publish_root}"
+              zip -r "${zip_path}" "${base_name}"
+            )
+            assets+=("${zip_path}")
+          done
+
+          if [[ ${#assets[@]} -eq 0 ]]; then
+            echo "No se pudo generar ningún .zip para v${version}" >&2
+            exit 1
+          fi
+
+          {
+            echo "files<<EOF"
+            printf '%s\n' "${assets[@]}"
+            echo "EOF"
+          } >> "${GITHUB_OUTPUT}"
+
+      - name: Push release commit
+        if: steps.prepare.outputs.mode == 'normal'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git push origin HEAD:main
+
+      - name: Create GitHub release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_VERSION: ${{ steps.prepare.outputs.version || steps.version.outputs.version }}
+          RELEASE_SHA: ${{ steps.prepare.outputs.target_sha || steps.commit.outputs.target_sha }}
+          RELEASE_NOTES_FILE: ${{ steps.notes.outputs.file }}
+          RELEASE_ASSETS: ${{ steps.assets.outputs.files }}
+        run: |
+          set -euo pipefail
+
+          version="${RELEASE_VERSION}"
+
+          if gh release view "v${version}" >/dev/null 2>&1; then
+            echo "El release v${version} ya existe" >&2
+            exit 1
+          fi
+
+          mapfile -t assets <<< "${RELEASE_ASSETS}"
+
+          if [[ ${#assets[@]} -eq 0 ]]; then
+            echo "No hay assets para adjuntar al release v${version}" >&2
+            exit 1
+          fi
+
+          gh release create "v${version}" \
+            --target "${RELEASE_SHA}" \
+            --title "v${version}" \
+            --notes-file "${RELEASE_NOTES_FILE}" \
+            "${assets[@]}"
