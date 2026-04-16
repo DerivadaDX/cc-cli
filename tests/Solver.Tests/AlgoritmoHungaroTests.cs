@@ -158,7 +158,7 @@ public class AlgoritmoHungaroTests
     }
 
     [Fact]
-    public void CalcularAsignacionOptimaDePorciones_ValoracionesMuyCercanas_RetornaAsignacionOptimaReal()
+    public void CalcularAsignacionOptimaDePorciones_ValoracionesMuyCercanas_NoPierdePrecisionEnLaAsignacion()
     {
         var algoritmoHungaro = new AlgoritmoHungaro();
         decimal[,] valoraciones =
