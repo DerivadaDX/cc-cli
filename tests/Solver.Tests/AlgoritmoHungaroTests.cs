@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace Solver.Tests;
@@ -7,15 +8,43 @@ namespace Solver.Tests;
 public class AlgoritmoHungaroTests
 {
     [Fact]
+    public void CalcularAsignacionOptimaDePorciones_ValoracionesNull_LanzaArgumentNullException()
+    {
+        var algoritmoHungaro = new AlgoritmoHungaro();
+
+        var ex = Assert.Throws<ArgumentNullException>(
+            () => algoritmoHungaro.CalcularAsignacionOptimaDePorciones(null));
+
+        Assert.Equal("valoracionesDePorciones", ex.ParamName);
+    }
+
+    [Fact]
+    public void CalcularAsignacionOptimaDePorciones_MatrizNoCuadrada_LanzaArgumentException()
+    {
+        var algoritmoHungaro = new AlgoritmoHungaro();
+        decimal[,] valoraciones =
+        {
+            { 5m, 4m, 3m },
+            { 2m, 1m, 0m },
+        };
+
+        var ex = Assert.Throws<ArgumentException>(
+            () => algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones));
+
+        Assert.Equal("valoracionesDePorciones", ex.ParamName);
+        Assert.Contains("debe ser cuadrada", ex.Message);
+    }
+
+    [Fact]
     public void CalcularAsignacionOptimaDePorciones_MatrizUnElemento_AsignaUnicaPorcionAlUnicoAgente()
     {
         var algoritmoHungaro = new AlgoritmoHungaro();
         decimal[,] valoraciones = new decimal[,]
         {
-                { 42m },
+            { 42m },
         };
 
-        List<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
+        ImmutableArray<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
 
         List<int> asignacionEsperada = [0];
         Assert.Equal(asignacionEsperada, asignacion);
@@ -31,7 +60,7 @@ public class AlgoritmoHungaroTests
             { 10m, 50m },
         };
 
-        List<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
+        ImmutableArray<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
 
         List<int> asignacionEsperada = [0, 1];
         Assert.Equal(asignacionEsperada, asignacion);
@@ -47,7 +76,7 @@ public class AlgoritmoHungaroTests
             { 20m, 20m },
         };
 
-        List<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
+        ImmutableArray<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
 
         List<int> asignacionEsperada1 = [0, 1];
         List<int> asignacionEsperada2 = [1, 0];
@@ -71,8 +100,8 @@ public class AlgoritmoHungaroTests
             { 12m, 14m },
         };
 
-        List<int> asignacionValoracionesBase = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoracionesNormal);
-        List<int> asignacionValoracionesEscaladas = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoracionesEscaladas);
+        ImmutableArray<int> asignacionValoracionesBase = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoracionesNormal);
+        ImmutableArray<int> asignacionValoracionesEscaladas = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoracionesEscaladas);
 
         Assert.Equal(asignacionValoracionesBase, asignacionValoracionesEscaladas);
     }
@@ -87,7 +116,7 @@ public class AlgoritmoHungaroTests
             { 0.200m, 1.233m },
         };
 
-        List<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
+        ImmutableArray<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
 
         List<int> asignacionEsperada = [0, 1];
         Assert.Equal(asignacionEsperada, asignacion);
@@ -103,7 +132,7 @@ public class AlgoritmoHungaroTests
             { -20m, -2m },
         };
 
-        List<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
+        ImmutableArray<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
 
         List<int> asignacionEsperada = [0, 1];
         Assert.Equal(asignacionEsperada, asignacion);
@@ -122,14 +151,14 @@ public class AlgoritmoHungaroTests
             { 1m, 2m, 3m, 4m, 9m },
         };
 
-        List<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
+        ImmutableArray<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
 
         List<int> asignacionEsperada = [0, 1, 2, 3, 4];
         Assert.Equal(asignacionEsperada, asignacion);
     }
 
     [Fact]
-    public void CalcularAsignacionOptimaDePorciones_ValoracionesMuyCercanas_CometeErorrPorRedondeo()
+    public void CalcularAsignacionOptimaDePorciones_ValoracionesMuyCercanas_NoPierdePrecisionEnLaAsignacion()
     {
         var algoritmoHungaro = new AlgoritmoHungaro();
         decimal[,] valoraciones =
@@ -138,12 +167,12 @@ public class AlgoritmoHungaroTests
             { 0.998660m, 1.000000m },
         };
 
-        List<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
+        ImmutableArray<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);
 
         // Suma real:
         // Asignación [0, 1]: 0.998348 + 1.000000 = 1.998348  (óptimo real)
         // Asignación [1, 0]: 0.999539 + 0.998660 = 1.998199
-        List<int> asignacionErroneaEsperada = [1, 0];
-        Assert.Equal(asignacionErroneaEsperada, asignacion);
+        List<int> asignacionOptimaEsperada = [0, 1];
+        Assert.Equal(asignacionOptimaEsperada, asignacion);
     }
 }

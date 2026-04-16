@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using Common;
@@ -10,7 +11,7 @@ internal class IndividuoCortesBinarios : Individuo
 {
     private readonly CalculadoraValoracionesPorciones _calculadoraValoraciones;
     private readonly AlgoritmoHungaro _algoritmoHungaro;
-    private List<int> _asignaciones = [];
+    private ImmutableArray<int> _asignaciones = [];
     private List<int> _preferenciasPorcion = [];
     private List<int> _posicionesCortes = [];
     private decimal _fitness;
@@ -27,7 +28,7 @@ internal class IndividuoCortesBinarios : Individuo
         CalcularEstado();
     }
 
-    internal IReadOnlyList<int> Asignaciones => _asignaciones;
+    internal ImmutableArray<int> Asignaciones => _asignaciones;
 
     protected override string FamiliaCromosoma => "cortes-binarios";
 
@@ -161,7 +162,7 @@ internal class IndividuoCortesBinarios : Individuo
         int cantidadAgentes = _problema.Agentes.Count;
         for (int indiceAgente = 0; indiceAgente < cantidadAgentes; indiceAgente++)
         {
-            int indicePorcionPropia = _asignaciones.FindIndex(asignacion => asignacion == indiceAgente);
+            int indicePorcionPropia = ObtenerIndicePorcionAsignada(indiceAgente);
             decimal valoracionPropia = valoracionesPorcionAgente[indicePorcionPropia, indiceAgente];
             decimal maxViolacion = 0;
 
@@ -183,6 +184,17 @@ internal class IndividuoCortesBinarios : Individuo
         }
 
         return envidiaTotal;
+    }
+
+    private int ObtenerIndicePorcionAsignada(int indiceAgente)
+    {
+        for (int indicePorcion = 0; indicePorcion < _asignaciones.Length; indicePorcion++)
+        {
+            if (_asignaciones[indicePorcion] == indiceAgente)
+                return indicePorcion;
+        }
+
+        return -1;
     }
 
     private void AplicarPoliticaAnticlon(List<int> cromosomaHijo, IndividuoCortesBinarios otro)
