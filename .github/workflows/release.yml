@@ -196,8 +196,12 @@ jobs:
       - name: Push release commit
         if: steps.prepare.outputs.mode == 'normal'
         shell: bash
+        env:
+          PAT_PUSH_MAIN: ${{ secrets.PUSH_MAIN }}
         run: |
           set -euo pipefail
+
+          git remote set-url origin "https://x-access-token:${PAT_PUSH_MAIN}@github.com/DerivadaDX/cc-cli.git"
           git push origin HEAD:main
 
       - name: Create GitHub release
