@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <Authors>DerivadaDX</Authors>
-    <Version>3.1.1</Version>
+    <Version>3.1.2</Version>
     <Copyright>Copyright © 2026 DerivadaDX. Licensed under GNU AGPL v3.</Copyright>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
   </PropertyGroup>

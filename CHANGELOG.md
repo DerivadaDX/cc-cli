@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.1.2](https://github.com/DerivadaDX/cc-cli/compare/v3.1.1...v3.1.2) (2026-04-16)
+
+
+### Bug Fixes
+
+* **github-actions:** corrección de error al pushear a main en workflow release ([#91](https://github.com/DerivadaDX/cc-cli/issues/91)) ([c37abd9](https://github.com/DerivadaDX/cc-cli/commit/c37abd92491854ba16d37cb19d66a900b86cec48))
+* **solver:** se solucionó pérdida de precisión por redondeo en algorimo húngaro ([#89](https://github.com/DerivadaDX/cc-cli/issues/89)) ([c65fbe1](https://github.com/DerivadaDX/cc-cli/commit/c65fbe1af46bac3be3fc80dd119177ba8f094f9a))
+
 ## [3.1.1](https://github.com/DerivadaDX/cc-cli/compare/v3.1.0...v3.1.1) (2026-04-11)
 
 
