@@ -146,7 +146,10 @@ cc-cli.exe generar --help
 cc-cli.exe resolver --help
 ```
 
-## Referencias
+## Base teórica e implementación
 
 - Marenco, J., & Tetzlaff, T. (2013). _Envy-free division of discrete cakes_. Discrete Applied Mathematics, 163(Part 2),
   233-244. [DOI: 10.1016/j.dam.2013.06.032](https://doi.org/10.1016/j.dam.2013.06.032)
+- Fernández, I., Marenco, J., & Tetzlaff, T. (2025). _Técnicas evolutivas para división justa de tortas discretas_.
+  JAIIO, Jornadas Argentinas de Informática, 11(14), 247-249.
+  https://revistas.unlp.edu.ar/JAIIO/article/view/19486
