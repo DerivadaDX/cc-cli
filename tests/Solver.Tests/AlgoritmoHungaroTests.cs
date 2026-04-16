@@ -157,7 +157,7 @@ public class AlgoritmoHungaroTests
     }
 
     [Fact]
-    public void CalcularAsignacionOptimaDePorciones_ValoracionesMuyCercanas_CometeErorrPorRedondeo()
+    public void CalcularAsignacionOptimaDePorciones_ValoracionesMuyCercanas_RetornaAsignacionOptimaReal()
     {
         var algoritmoHungaro = new AlgoritmoHungaro();
         decimal[,] valoraciones =
@@ -171,7 +171,7 @@ public class AlgoritmoHungaroTests
         // Suma real:
         // Asignación [0, 1]: 0.998348 + 1.000000 = 1.998348  (óptimo real)
         // Asignación [1, 0]: 0.999539 + 0.998660 = 1.998199
-        List<int> asignacionErroneaEsperada = [1, 0];
-        Assert.Equal(asignacionErroneaEsperada, asignacion);
+        List<int> asignacionOptimaEsperada = [0, 1];
+        Assert.Equal(asignacionOptimaEsperada, asignacion);
     }
 }
