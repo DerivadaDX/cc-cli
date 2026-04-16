@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Common;
 
@@ -7,10 +7,13 @@ namespace Solver.Individuos;
 
 internal class IndividuoOptimizacionAsignaciones : IndividuoLegacy
 {
+    private readonly AlgoritmoHungaro _algoritmoHungaro;
+
     internal IndividuoOptimizacionAsignaciones(
         List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
         : base(cromosoma, problema, generadorRandom)
     {
+        _algoritmoHungaro = AlgoritmoHungaroFactory.Crear();
     }
 
     protected override void MutarAsignaciones()
@@ -21,8 +24,7 @@ internal class IndividuoOptimizacionAsignaciones : IndividuoLegacy
 
         List<int> cortes = ObtenerCortesOrdenados();
         decimal[,] matrizValoraciones = CalcularValoracionesPorPorcionYAgente(cortes);
-        int[,] matrizCostos = ConvertirValoracionesACostos(matrizValoraciones);
-        int[] asignacionesOptimas = HungarianAlgorithm.HungarianAlgorithm.FindAssignments(matrizCostos);
+        ImmutableArray<int> asignacionesOptimas = _algoritmoHungaro.CalcularAsignacionOptimaDePorciones(matrizValoraciones);
 
         ActualizarCromosomaConAsignaciones(asignacionesOptimas);
     }
@@ -43,45 +45,6 @@ internal class IndividuoOptimizacionAsignaciones : IndividuoLegacy
         }
 
         return valor;
-    }
-
-    private static int[,] ConvertirValoracionesACostos(decimal[,] valoraciones)
-    {
-        decimal valorMaximo = ObtenerValorMaximo(valoraciones);
-        int porciones = valoraciones.GetLength(0);
-        int agentes = valoraciones.GetLength(1);
-
-        int[,] costos = new int[porciones, agentes];
-        for (int porcion = 0; porcion < porciones; porcion++)
-        {
-            for (int agente = 0; agente < agentes; agente++)
-            {
-                // Convertir el problema de maximización a minimización
-                decimal costo = (valorMaximo - valoraciones[porcion, agente]) * 1000m;
-                costos[porcion, agente] = (int)Math.Round(costo);
-            }
-        }
-
-        return costos;
-    }
-
-    private static decimal ObtenerValorMaximo(decimal[,] matriz)
-    {
-        int porciones = matriz.GetLength(0);
-        int agentes = matriz.GetLength(1);
-
-        var valorMaximo = decimal.MinValue;
-        for (int porcion = 0; porcion < porciones; porcion++)
-        {
-            for (int agente = 0; agente < agentes; agente++)
-            {
-                decimal valorActual = matriz[porcion, agente];
-                if (valorActual > valorMaximo)
-                    valorMaximo = valorActual;
-            }
-        }
-
-        return valorMaximo;
     }
 
     private List<int> ObtenerCortesOrdenados()
@@ -112,7 +75,7 @@ internal class IndividuoOptimizacionAsignaciones : IndividuoLegacy
         return valoraciones;
     }
 
-    private void ActualizarCromosomaConAsignaciones(int[] asignacionesOptimas)
+    private void ActualizarCromosomaConAsignaciones(ImmutableArray<int> asignacionesOptimas)
     {
         int cantidadAsignaciones = _problema.Agentes.Count;
         int cantidadCortes = _problema.Agentes.Count - 1;
