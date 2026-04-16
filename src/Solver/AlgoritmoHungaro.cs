@@ -42,6 +42,25 @@ internal class AlgoritmoHungaro
         return costos;
     }
 
+    private static decimal ObtenerValoracionMaxima(decimal[,] valoraciones)
+    {
+        int cantidadPorciones = valoraciones.GetLength(0);
+        int cantidadAgentes = valoraciones.GetLength(1);
+
+        var valoracionMaxima = decimal.MinValue;
+        for (int indicePorcion = 0; indicePorcion < cantidadPorciones; indicePorcion++)
+        {
+            for (int indiceAgente = 0; indiceAgente < cantidadAgentes; indiceAgente++)
+            {
+                decimal valorActual = valoraciones[indicePorcion, indiceAgente];
+                if (valorActual > valoracionMaxima)
+                    valoracionMaxima = valorActual;
+            }
+        }
+
+        return valoracionMaxima;
+    }
+
     private static int[] ResolverAsignacionesMinimizandoCostos(decimal[,] costos)
     {
         int cantidadFilas = costos.GetLength(0);
@@ -133,24 +152,5 @@ internal class AlgoritmoHungaro
         }
 
         return asignaciones;
-    }
-
-    private static decimal ObtenerValoracionMaxima(decimal[,] valoraciones)
-    {
-        int cantidadPorciones = valoraciones.GetLength(0);
-        int cantidadAgentes = valoraciones.GetLength(1);
-
-        var valoracionMaxima = decimal.MinValue;
-        for (int indicePorcion = 0; indicePorcion < cantidadPorciones; indicePorcion++)
-        {
-            for (int indiceAgente = 0; indiceAgente < cantidadAgentes; indiceAgente++)
-            {
-                decimal valorActual = valoraciones[indicePorcion, indiceAgente];
-                if (valorActual > valoracionMaxima)
-                    valoracionMaxima = valorActual;
-            }
-        }
-
-        return valoracionMaxima;
     }
 }
