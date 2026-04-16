@@ -7,12 +7,40 @@ namespace Solver.Tests;
 public class AlgoritmoHungaroTests
 {
     [Fact]
+    public void CalcularAsignacionOptimaDePorciones_ValoracionesNull_LanzaArgumentNullException()
+    {
+        var algoritmoHungaro = new AlgoritmoHungaro();
+
+        var ex = Assert.Throws<ArgumentNullException>(
+            () => algoritmoHungaro.CalcularAsignacionOptimaDePorciones(null));
+
+        Assert.Equal("valoracionesDePorciones", ex.ParamName);
+    }
+
+    [Fact]
+    public void CalcularAsignacionOptimaDePorciones_MatrizNoCuadrada_LanzaArgumentException()
+    {
+        var algoritmoHungaro = new AlgoritmoHungaro();
+        decimal[,] valoraciones =
+        {
+            { 5m, 4m, 3m },
+            { 2m, 1m, 0m },
+        };
+
+        var ex = Assert.Throws<ArgumentException>(
+            () => algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones));
+
+        Assert.Equal("valoracionesDePorciones", ex.ParamName);
+        Assert.Contains("debe ser cuadrada", ex.Message);
+    }
+
+    [Fact]
     public void CalcularAsignacionOptimaDePorciones_MatrizUnElemento_AsignaUnicaPorcionAlUnicoAgente()
     {
         var algoritmoHungaro = new AlgoritmoHungaro();
         decimal[,] valoraciones = new decimal[,]
         {
-                { 42m },
+            { 42m },
         };
 
         List<int> asignacion = algoritmoHungaro.CalcularAsignacionOptimaDePorciones(valoraciones);

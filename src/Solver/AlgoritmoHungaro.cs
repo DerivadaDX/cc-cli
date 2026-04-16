@@ -8,6 +8,13 @@ internal class AlgoritmoHungaro
 {
     public virtual List<int> CalcularAsignacionOptimaDePorciones(decimal[,] valoracionesDePorciones)
     {
+        ArgumentNullException.ThrowIfNull(valoracionesDePorciones, nameof(valoracionesDePorciones));
+
+        int cantidadPorciones = valoracionesDePorciones.GetLength(0);
+        int cantidadAgentes = valoracionesDePorciones.GetLength(1);
+        if (cantidadPorciones != cantidadAgentes)
+            throw new ArgumentException("La matriz de valoraciones debe ser cuadrada.", nameof(valoracionesDePorciones));
+
         int[,] matrizCostosEnteros = ConvertirValoracionesACostos(valoracionesDePorciones);
         int[] asignaciones = HungarianAlgorithmSolver.FindAssignments(matrizCostosEnteros);
 
