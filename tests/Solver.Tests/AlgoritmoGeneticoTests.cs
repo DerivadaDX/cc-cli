@@ -48,6 +48,22 @@ public class AlgoritmoGeneticoTests
     }
 
     [Fact]
+    public void Ejecutar_PoblacionNoAdmiteEvolucion_NoGeneraNuevaGeneracion()
+    {
+        List<int> generacionesNotificadas = [];
+        (Poblacion poblacion, _) = CrearPoblacionFakeNoEvolutiva();
+        poblacion.GenerarNuevaGeneracion().Returns(poblacion);
+
+        var algoritmo = new AlgoritmoGenetico(poblacion, limiteGeneraciones: 10, limiteGeneracionesSinMejora: 0);
+        algoritmo.GeneracionProcesada += (generacion, _) => generacionesNotificadas.Add(generacion);
+
+        algoritmo.Ejecutar();
+
+        poblacion.DidNotReceive().GenerarNuevaGeneracion();
+        Assert.Empty(generacionesNotificadas);
+    }
+
+    [Fact]
     public void Ejecutar_EjecucionCancelada_RetornaMejorIndividuoActual()
     {
         (Poblacion poblacion, Individuo mejorIndividuo) = CrearPoblacionFakeConIndividuoNoOptimo();
