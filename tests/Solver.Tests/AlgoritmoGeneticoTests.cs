@@ -221,6 +221,7 @@ public class AlgoritmoGeneticoTests
 
         var poblacion = Substitute.For<Poblacion>(1, Substitute.For<GeneradorNumerosRandom>(1));
         poblacion.ObtenerMejorIndividuo().Returns(individuo);
+        poblacion.AdmiteEvolucion().Returns(true);
 
         return (poblacion, individuo);
     }
@@ -232,6 +233,7 @@ public class AlgoritmoGeneticoTests
 
         var poblacion = Substitute.For<Poblacion>(1, Substitute.For<GeneradorNumerosRandom>(1));
         poblacion.ObtenerMejorIndividuo().Returns(individuo);
+        poblacion.AdmiteEvolucion().Returns(true);
 
         return (poblacion, individuo);
     }
@@ -239,11 +241,12 @@ public class AlgoritmoGeneticoTests
     private static (Poblacion poblacion, Individuo individuo) CrearPoblacionFakeNoEvolutiva()
     {
         Individuo individuo = CrearIndividuoFake();
-        individuo.Fitness().Returns(1);
         individuo.AdmiteEvolucion().Returns(false);
+        individuo.Fitness().Returns(1);
 
         var poblacion = Substitute.For<Poblacion>(1, Substitute.For<GeneradorNumerosRandom>(1));
         poblacion.ObtenerMejorIndividuo().Returns(individuo);
+        poblacion.AdmiteEvolucion().Returns(false);
 
         return (poblacion, individuo);
     }
