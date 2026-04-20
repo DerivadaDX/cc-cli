@@ -64,6 +64,35 @@ public class AlgoritmoGeneticoTests
     }
 
     [Fact]
+    public void Ejecutar_MejorIndividuoInicialEsOptimo_HaceEarlyReturn()
+    {
+        (Poblacion poblacion, Individuo individuoOptimo) = CrearPoblacionFakeConIndividuoOptimo();
+
+        var algoritmo = new AlgoritmoGenetico(poblacion, limiteGeneraciones: 10, limiteGeneracionesSinMejora: 5);
+
+        (Individuo mejorIndividuoEncontrado, int generaciones) = algoritmo.Ejecutar();
+
+        Assert.Same(individuoOptimo, mejorIndividuoEncontrado);
+        Assert.Equal(0, generaciones);
+        poblacion.Received(1).ObtenerMejorIndividuo();
+    }
+
+    [Fact]
+    public void Ejecutar_MejorIndividuoInicialEsOptimo_NoGeneraNuevaGeneracion()
+    {
+        List<int> generacionesNotificadas = [];
+        (Poblacion poblacion, _) = CrearPoblacionFakeConIndividuoOptimo();
+
+        var algoritmo = new AlgoritmoGenetico(poblacion, limiteGeneraciones: 10, limiteGeneracionesSinMejora: 5);
+        algoritmo.GeneracionProcesada += (generacion, _) => generacionesNotificadas.Add(generacion);
+
+        algoritmo.Ejecutar();
+
+        poblacion.DidNotReceive().GenerarNuevaGeneracion();
+        Assert.Empty(generacionesNotificadas);
+    }
+
+    [Fact]
     public void Ejecutar_EjecucionCancelada_RetornaMejorIndividuoActual()
     {
         (Poblacion poblacion, Individuo mejorIndividuo) = CrearPoblacionFakeConIndividuoNoOptimo();
@@ -129,24 +158,6 @@ public class AlgoritmoGeneticoTests
         var algoritmo = new AlgoritmoGenetico(poblacion, limiteGeneraciones: 0, limiteGeneracionesSinMejora: 0);
         algoritmo.Ejecutar();
 
-        poblacion.DidNotReceive().GenerarNuevaGeneracion();
-    }
-
-    [Fact]
-    public void Ejecutar_MejorIndividuoInicialEsOptimo_HaceEarlyReturn()
-    {
-        List<int> generacionesNotificadas = [];
-        (Poblacion poblacion, Individuo individuoOptimo) = CrearPoblacionFakeConIndividuoOptimo();
-
-        var algoritmo = new AlgoritmoGenetico(poblacion, limiteGeneraciones: 10, limiteGeneracionesSinMejora: 5);
-        algoritmo.GeneracionProcesada += (generacion, _) => generacionesNotificadas.Add(generacion);
-
-        (Individuo mejorIndividuoEncontrado, int generaciones) = algoritmo.Ejecutar();
-
-        Assert.Same(individuoOptimo, mejorIndividuoEncontrado);
-        Assert.Equal(0, generaciones);
-        Assert.Empty(generacionesNotificadas);
-        poblacion.Received(1).ObtenerMejorIndividuo();
         poblacion.DidNotReceive().GenerarNuevaGeneracion();
     }
 
