@@ -70,5 +70,10 @@ public class IndividuoTests
         {
             throw new NotImplementedException();
         }
+
+        internal override bool AdmiteEvolucion()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

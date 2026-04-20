@@ -177,6 +177,22 @@ public class IndividuoCortesBinariosTests : IDisposable
     }
 
     [Fact]
+    public void AdmiteEvolucion_CromosomaTodoUnos_RetornaFalse()
+    {
+        var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
+        {
+            { 1m, 1m, 1m },
+            { 2m, 2m, 2m },
+            { 3m, 3m, 3m },
+        });
+        IndividuoCortesBinarios individuo = CrearIndividuo([1, 1], problema);
+
+        bool resultado = individuo.AdmiteEvolucion();
+
+        Assert.False(resultado);
+    }
+
+    [Fact]
     public void Fitness_HayEnvidia_RetornaPositivo()
     {
         var problema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(new decimal[,]
@@ -739,6 +755,11 @@ public class IndividuoCortesBinariosTests : IDisposable
         }
 
         internal override decimal Fitness()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal override bool AdmiteEvolucion()
         {
             throw new NotImplementedException();
         }
