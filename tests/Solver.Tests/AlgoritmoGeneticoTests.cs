@@ -35,6 +35,19 @@ public class AlgoritmoGeneticoTests
     }
 
     [Fact]
+    public void Ejecutar_PoblacionNoAdmiteEvolucion_RetornaMejorIndividuoYCeroGeneraciones()
+    {
+        (Poblacion poblacion, Individuo mejorIndividuo) = CrearPoblacionFakeNoEvolutiva();
+        poblacion.GenerarNuevaGeneracion().Returns(poblacion);
+
+        var algoritmo = new AlgoritmoGenetico(poblacion, limiteGeneraciones: 10, limiteGeneracionesSinMejora: 0);
+        (Individuo mejorIndividuoEncontrado, int generaciones) = algoritmo.Ejecutar();
+
+        Assert.Same(mejorIndividuo, mejorIndividuoEncontrado);
+        Assert.Equal(0, generaciones);
+    }
+
+    [Fact]
     public void Ejecutar_EjecucionCancelada_RetornaMejorIndividuoActual()
     {
         (Poblacion poblacion, Individuo mejorIndividuo) = CrearPoblacionFakeConIndividuoNoOptimo();
@@ -201,19 +214,6 @@ public class AlgoritmoGeneticoTests
         Assert.Equal([1], generacionesNotificadas);
     }
 
-    [Fact]
-    public void Ejecutar_MejorIndividuoNoAdmiteEvolucion_RetornaMejorIndividuoYCeroGeneraciones()
-    {
-        (Poblacion poblacion, Individuo mejorIndividuo) = CrearPoblacionFakeConIndividuoNoEvolutivo();
-        poblacion.GenerarNuevaGeneracion().Returns(poblacion);
-
-        var algoritmo = new AlgoritmoGenetico(poblacion, limiteGeneraciones: 10, limiteGeneracionesSinMejora: 0);
-        (Individuo mejorIndividuoEncontrado, int generaciones) = algoritmo.Ejecutar();
-
-        Assert.Same(mejorIndividuo, mejorIndividuoEncontrado);
-        Assert.Equal(0, generaciones);
-    }
-
     private static (Poblacion poblacion, Individuo individuo) CrearPoblacionFakeConIndividuoNoOptimo()
     {
         Individuo individuo = CrearIndividuoFake();
@@ -236,7 +236,7 @@ public class AlgoritmoGeneticoTests
         return (poblacion, individuo);
     }
 
-    private static (Poblacion poblacion, Individuo individuo) CrearPoblacionFakeConIndividuoNoEvolutivo()
+    private static (Poblacion poblacion, Individuo individuo) CrearPoblacionFakeNoEvolutiva()
     {
         Individuo individuo = CrearIndividuoFake();
         individuo.Fitness().Returns(1);
