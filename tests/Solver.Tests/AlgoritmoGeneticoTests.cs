@@ -133,6 +133,24 @@ public class AlgoritmoGeneticoTests
     }
 
     [Fact]
+    public void Ejecutar_MejorIndividuoInicialEsOptimo_HaceEarlyReturn()
+    {
+        List<int> generacionesNotificadas = [];
+        (Poblacion poblacion, Individuo individuoOptimo) = CrearPoblacionFakeConIndividuoOptimo();
+
+        var algoritmo = new AlgoritmoGenetico(poblacion, limiteGeneraciones: 10, limiteGeneracionesSinMejora: 5);
+        algoritmo.GeneracionProcesada += (generacion, _) => generacionesNotificadas.Add(generacion);
+
+        (Individuo mejorIndividuoEncontrado, int generaciones) = algoritmo.Ejecutar();
+
+        Assert.Same(individuoOptimo, mejorIndividuoEncontrado);
+        Assert.Equal(0, generaciones);
+        Assert.Empty(generacionesNotificadas);
+        poblacion.Received(1).ObtenerMejorIndividuo();
+        poblacion.DidNotReceive().GenerarNuevaGeneracion();
+    }
+
+    [Fact]
     public void Ejecutar_HayEstancamiento_NotificaDetencion()
     {
         bool notificado = false;

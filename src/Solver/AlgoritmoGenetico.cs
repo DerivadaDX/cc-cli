@@ -44,11 +44,15 @@ public class AlgoritmoGenetico
     public (Individuo mejorIndividuo, int generaciones) Ejecutar(CancellationToken cancellationToken = default)
     {
         Individuo mejorIndividuo = _poblacion.ObtenerMejorIndividuo();
+
         bool poblacionNoAdmiteEvolucion = !_poblacion.AdmiteEvolucion();
         if (poblacionNoAdmiteEvolucion)
             return (mejorIndividuo, 0);
 
         decimal mejorFitness = mejorIndividuo.Fitness();
+        if (mejorFitness == 0)
+            return (mejorIndividuo, 0);
+
         int ultimaGeneracionConMejora = 0;
         int generacionActual = 0;
 
