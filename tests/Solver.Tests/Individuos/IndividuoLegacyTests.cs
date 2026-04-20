@@ -544,6 +544,24 @@ public class IndividuoLegacyTests
         Assert.Equal("Cromosoma=[1, 2, 4, 1, 4, 3, 2], Fitness=1.00", resultado);
     }
 
+    [Fact]
+    public void AdmiteEvolucion_IndividuoLegacy_RetornaTrue()
+    {
+        var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
+            new decimal[,]
+            {
+                { 1m, 0m },
+                { 0m, 1m },
+            }
+        );
+        var generadorRandom = Substitute.For<GeneradorNumerosRandom>(1);
+        var individuo = new IndividuoFake([1, 1, 2], instanciaProblema, generadorRandom);
+
+        bool resultado = individuo.AdmiteEvolucion();
+
+        Assert.True(resultado);
+    }
+
     private sealed class IndividuoFake : IndividuoLegacy
     {
         internal IndividuoFake(List<int> cromosoma, InstanciaProblema problema, GeneradorNumerosRandom generadorRandom)
@@ -588,6 +606,11 @@ public class IndividuoLegacyTests
         }
 
         internal override decimal Fitness()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal override bool AdmiteEvolucion()
         {
             throw new NotImplementedException();
         }

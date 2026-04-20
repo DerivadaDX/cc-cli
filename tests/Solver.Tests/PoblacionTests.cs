@@ -127,7 +127,39 @@ public class PoblacionTests : IDisposable
         Assert.Equal(mejorFitness, mejorIndividuo.Fitness());
     }
 
-    private static Individuo CrearIndividuoFake(int fitness = 0)
+    [Fact]
+    public void AdmiteEvolucion_UnIndividuoNoAdmiteEvolucion_RetornaFalse()
+    {
+        var poblacion = new Poblacion(tamaño: 2, Substitute.For<GeneradorNumerosRandom>(1));
+        poblacion.Individuos.AddRange(
+            [
+                CrearIndividuoFake(admiteEvolucion: false),
+                CrearIndividuoFake(admiteEvolucion: false),
+            ]
+        );
+
+        bool resultado = poblacion.AdmiteEvolucion();
+
+        Assert.False(resultado);
+    }
+
+    [Fact]
+    public void AdmiteEvolucion_UnIndividuoAdmiteEvolucion_RetornaTrue()
+    {
+        var poblacion = new Poblacion(tamaño: 2, Substitute.For<GeneradorNumerosRandom>(1));
+        poblacion.Individuos.AddRange(
+            [
+                CrearIndividuoFake(admiteEvolucion: true),
+                CrearIndividuoFake(admiteEvolucion: true),
+            ]
+        );
+
+        bool resultado = poblacion.AdmiteEvolucion();
+
+        Assert.True(resultado);
+    }
+
+    private static Individuo CrearIndividuoFake(int fitness = 0, bool admiteEvolucion = true)
     {
         List<int> cromosoma = [1, 1, 2];
         var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
@@ -144,6 +176,7 @@ public class PoblacionTests : IDisposable
         var otroIndividuo = Substitute.For<Individuo>(cromosoma, instanciaProblema, generadorRandom);
         individuo.Cruzar(Arg.Any<Individuo>()).Returns(otroIndividuo);
         individuo.Fitness().Returns(fitness);
+        individuo.AdmiteEvolucion().Returns(admiteEvolucion);
         return individuo;
     }
 }

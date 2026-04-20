@@ -59,6 +59,11 @@ internal abstract class IndividuoLegacy : Individuo
         return fitness;
     }
 
+    internal override bool AdmiteEvolucion()
+    {
+        return true;
+    }
+
     protected abstract void MutarAsignaciones();
 
     protected abstract Individuo CrearNuevoIndividuo(List<int> cromosoma);

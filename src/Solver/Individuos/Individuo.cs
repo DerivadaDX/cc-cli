@@ -32,6 +32,8 @@ public abstract class Individuo
 
     internal abstract decimal Fitness();
 
+    internal abstract bool AdmiteEvolucion();
+
     protected void ValidarCompatibilidadCruce(Individuo otro)
     {
         ArgumentNullException.ThrowIfNull(otro, nameof(otro));

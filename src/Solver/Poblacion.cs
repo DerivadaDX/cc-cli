@@ -52,6 +52,13 @@ public class Poblacion
         return resultado;
     }
 
+    internal virtual bool AdmiteEvolucion()
+    {
+        Individuo individuoRepresentativo = Individuos[0];
+        bool admiteEvolucion = individuoRepresentativo.AdmiteEvolucion();
+        return admiteEvolucion;
+    }
+
     private List<Individuo> SeleccionarElite()
     {
         // Fracción de la población que se selecciona como individuos élite.

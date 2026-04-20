@@ -35,6 +35,35 @@ public class AlgoritmoGeneticoTests
     }
 
     [Fact]
+    public void Ejecutar_PoblacionNoAdmiteEvolucion_RetornaMejorIndividuoYCeroGeneraciones()
+    {
+        (Poblacion poblacion, Individuo mejorIndividuo) = CrearPoblacionFakeNoEvolutiva();
+        poblacion.GenerarNuevaGeneracion().Returns(poblacion);
+
+        var algoritmo = new AlgoritmoGenetico(poblacion, limiteGeneraciones: 10, limiteGeneracionesSinMejora: 0);
+        (Individuo mejorIndividuoEncontrado, int generaciones) = algoritmo.Ejecutar();
+
+        Assert.Same(mejorIndividuo, mejorIndividuoEncontrado);
+        Assert.Equal(0, generaciones);
+    }
+
+    [Fact]
+    public void Ejecutar_PoblacionNoAdmiteEvolucion_NoGeneraNuevaGeneracion()
+    {
+        List<int> generacionesNotificadas = [];
+        (Poblacion poblacion, _) = CrearPoblacionFakeNoEvolutiva();
+        poblacion.GenerarNuevaGeneracion().Returns(poblacion);
+
+        var algoritmo = new AlgoritmoGenetico(poblacion, limiteGeneraciones: 10, limiteGeneracionesSinMejora: 0);
+        algoritmo.GeneracionProcesada += (generacion, _) => generacionesNotificadas.Add(generacion);
+
+        algoritmo.Ejecutar();
+
+        poblacion.DidNotReceive().GenerarNuevaGeneracion();
+        Assert.Empty(generacionesNotificadas);
+    }
+
+    [Fact]
     public void Ejecutar_EjecucionCancelada_RetornaMejorIndividuoActual()
     {
         (Poblacion poblacion, Individuo mejorIndividuo) = CrearPoblacionFakeConIndividuoNoOptimo();
@@ -208,6 +237,7 @@ public class AlgoritmoGeneticoTests
 
         var poblacion = Substitute.For<Poblacion>(1, Substitute.For<GeneradorNumerosRandom>(1));
         poblacion.ObtenerMejorIndividuo().Returns(individuo);
+        poblacion.AdmiteEvolucion().Returns(true);
 
         return (poblacion, individuo);
     }
@@ -219,6 +249,20 @@ public class AlgoritmoGeneticoTests
 
         var poblacion = Substitute.For<Poblacion>(1, Substitute.For<GeneradorNumerosRandom>(1));
         poblacion.ObtenerMejorIndividuo().Returns(individuo);
+        poblacion.AdmiteEvolucion().Returns(true);
+
+        return (poblacion, individuo);
+    }
+
+    private static (Poblacion poblacion, Individuo individuo) CrearPoblacionFakeNoEvolutiva()
+    {
+        Individuo individuo = CrearIndividuoFake();
+        individuo.AdmiteEvolucion().Returns(false);
+        individuo.Fitness().Returns(1);
+
+        var poblacion = Substitute.For<Poblacion>(1, Substitute.For<GeneradorNumerosRandom>(1));
+        poblacion.ObtenerMejorIndividuo().Returns(individuo);
+        poblacion.AdmiteEvolucion().Returns(false);
 
         return (poblacion, individuo);
     }
@@ -236,6 +280,7 @@ public class AlgoritmoGeneticoTests
         List<int> cromosoma = [1, 1, 2];
         var generadorRandom = Substitute.For<GeneradorNumerosRandom>(1);
         var individuo = Substitute.For<Individuo>(cromosoma, instanciaProblema, generadorRandom);
+        individuo.AdmiteEvolucion().Returns(true);
         return individuo;
     }
 }

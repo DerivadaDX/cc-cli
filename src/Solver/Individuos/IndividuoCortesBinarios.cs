@@ -117,6 +117,12 @@ internal class IndividuoCortesBinarios : Individuo
         return _fitness;
     }
 
+    internal override bool AdmiteEvolucion()
+    {
+        bool hayAlgunCero = Cromosoma.Any(gen => gen == 0);
+        return hayAlgunCero;
+    }
+
     private static void ValidarCromosoma(List<int> cromosoma, InstanciaProblema problema)
     {
         int cantidadGenesEsperada = problema.CantidadAtomos - 1;
