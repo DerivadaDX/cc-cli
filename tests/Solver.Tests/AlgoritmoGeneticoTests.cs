@@ -201,6 +201,19 @@ public class AlgoritmoGeneticoTests
         Assert.Equal([1], generacionesNotificadas);
     }
 
+    [Fact]
+    public void Ejecutar_MejorIndividuoNoAdmiteEvolucion_RetornaMejorIndividuoYCeroGeneraciones()
+    {
+        (Poblacion poblacion, Individuo mejorIndividuo) = CrearPoblacionFakeConIndividuoNoEvolutivo();
+        poblacion.GenerarNuevaGeneracion().Returns(poblacion);
+
+        var algoritmo = new AlgoritmoGenetico(poblacion, limiteGeneraciones: 10, limiteGeneracionesSinMejora: 0);
+        (Individuo mejorIndividuoEncontrado, int generaciones) = algoritmo.Ejecutar();
+
+        Assert.Same(mejorIndividuo, mejorIndividuoEncontrado);
+        Assert.Equal(0, generaciones);
+    }
+
     private static (Poblacion poblacion, Individuo individuo) CrearPoblacionFakeConIndividuoNoOptimo()
     {
         Individuo individuo = CrearIndividuoFake();
@@ -223,6 +236,18 @@ public class AlgoritmoGeneticoTests
         return (poblacion, individuo);
     }
 
+    private static (Poblacion poblacion, Individuo individuo) CrearPoblacionFakeConIndividuoNoEvolutivo()
+    {
+        Individuo individuo = CrearIndividuoFake();
+        individuo.Fitness().Returns(1);
+        individuo.AdmiteEvolucion().Returns(false);
+
+        var poblacion = Substitute.For<Poblacion>(1, Substitute.For<GeneradorNumerosRandom>(1));
+        poblacion.ObtenerMejorIndividuo().Returns(individuo);
+
+        return (poblacion, individuo);
+    }
+
     private static Individuo CrearIndividuoFake()
     {
         var instanciaProblema = InstanciaProblema.CrearDesdeMatrizDeValoraciones(
@@ -236,6 +261,7 @@ public class AlgoritmoGeneticoTests
         List<int> cromosoma = [1, 1, 2];
         var generadorRandom = Substitute.For<GeneradorNumerosRandom>(1);
         var individuo = Substitute.For<Individuo>(cromosoma, instanciaProblema, generadorRandom);
+        individuo.AdmiteEvolucion().Returns(true);
         return individuo;
     }
 }
