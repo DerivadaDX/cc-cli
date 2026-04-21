@@ -1,0 +1,160 @@
+name: Publish release
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [ "main" ]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  publish-release:
+    if: >
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.base.ref == 'main' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      startsWith(github.event.pull_request.head.ref, 'chore/release/v')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Extract release context
+        id: release
+        env:
+          RELEASE_BRANCH: ${{ github.event.pull_request.head.ref }}
+          RELEASE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ ! "${RELEASE_BRANCH}" =~ ^chore/release/v[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
+            echo "La rama ${RELEASE_BRANCH} no cumple el formato chore/release/vX.X.X" >&2
+            exit 1
+          fi
+
+          version="${RELEASE_BRANCH#chore/release/v}"
+
+          echo "version=${version}" >> "${GITHUB_OUTPUT}"
+          echo "sha=${RELEASE_SHA}" >> "${GITHUB_OUTPUT}"
+
+      - name: Extract release notes
+        id: notes
+        env:
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          version="${RELEASE_VERSION}"
+          notes_file="${RUNNER_TEMP}/release-notes.md"
+
+          awk -v version="${version}" '
+            $0 ~ "^## \\[" version "\\]" { printing=1 }
+            printing && $0 ~ "^## \\[" && $0 !~ "^## \\[" version "\\]" { exit }
+            printing { print }
+          ' CHANGELOG.md > "${notes_file}"
+
+          if [[ ! -s "${notes_file}" ]]; then
+            echo "No se pudo extraer la sección ${version} de CHANGELOG.md" >&2
+            exit 1
+          fi
+
+          echo "file=${notes_file}" >> "${GITHUB_OUTPUT}"
+
+      - name: Publish binaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          make publish
+
+      - name: Package assets
+        id: assets
+        shell: bash
+        env:
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          set -euo pipefail
+
+          version="${RELEASE_VERSION}"
+          publish_root="src/App/bin/Release/publish"
+          shopt -s nullglob
+          matches=("${publish_root}/cc-cli-v${version}-"*)
+          shopt -u nullglob
+
+          if [[ ${#matches[@]} -eq 0 ]]; then
+            echo "No se encontraron directorios publicados para v${version} en ${publish_root}" >&2
+            exit 1
+          fi
+
+          assets=()
+          for dir in "${matches[@]}"; do
+            if [[ ! -d "${dir}" ]]; then
+              continue
+            fi
+
+            base_name="$(basename "${dir}")"
+            zip_path="${RUNNER_TEMP}/${base_name}.zip"
+            rm -f "${zip_path}"
+            (
+              cd "${publish_root}"
+              zip -r "${zip_path}" "${base_name}"
+            )
+            assets+=("${zip_path}")
+          done
+
+          if [[ ${#assets[@]} -eq 0 ]]; then
+            echo "No se pudo generar ningún .zip para v${version}" >&2
+            exit 1
+          fi
+
+          {
+            echo "files<<EOF"
+            printf '%s\n' "${assets[@]}"
+            echo "EOF"
+          } >> "${GITHUB_OUTPUT}"
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+          RELEASE_SHA: ${{ steps.release.outputs.sha }}
+          RELEASE_NOTES_FILE: ${{ steps.notes.outputs.file }}
+          RELEASE_ASSETS: ${{ steps.assets.outputs.files }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          version="${RELEASE_VERSION}"
+
+          if gh release view "v${version}" >/dev/null 2>&1; then
+            echo "El release v${version} ya existe" >&2
+            exit 1
+          fi
+
+          mapfile -t assets <<< "${RELEASE_ASSETS}"
+
+          if [[ ${#assets[@]} -eq 0 ]]; then
+            echo "No hay assets para adjuntar al release v${version}" >&2
+            exit 1
+          fi
+
+          gh release create "v${version}" \
+            --target "${RELEASE_SHA}" \
+            --title "v${version}" \
+            --notes-file "${RELEASE_NOTES_FILE}" \
+            "${assets[@]}"
