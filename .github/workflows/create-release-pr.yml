@@ -1,4 +1,4 @@
-name: Prepare release
+name: Create release PR
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  prepare-release:
+  create-release-pr:
     runs-on: ubuntu-latest
 
     steps:
