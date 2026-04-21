@@ -36,7 +36,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Prepare release context
+      - name: Prepare context
         id: prepare
         env:
           GH_TOKEN: ${{ secrets.PUSH_MAIN }}
@@ -57,8 +57,8 @@ jobs:
             exit 1
           fi
 
-      - name: Version repository
-        id: version
+      - name: Create commit
+        id: release
         shell: bash
         run: |
           set -euo pipefail
@@ -82,25 +82,17 @@ jobs:
           echo "version=${version}" >> "${GITHUB_OUTPUT}"
           echo "branch=${branch}" >> "${GITHUB_OUTPUT}"
 
-      - name: Create release commit
-        shell: bash
-        env:
-          RELEASE_VERSION: ${{ steps.version.outputs.version }}
-          RELEASE_BRANCH: ${{ steps.version.outputs.branch }}
-        run: |
-          set -euo pipefail
-
-          git switch -c "${RELEASE_BRANCH}"
+          git switch -c "${branch}"
           git add package.json package-lock.json Directory.Build.props CHANGELOG.md
-          git commit -m "chore(release): v${RELEASE_VERSION}"
-          git push origin "${RELEASE_BRANCH}"
+          git commit -m "chore(release): v${version}"
+          git push origin "${branch}"
 
-      - name: Create release pull request
+      - name: Create pull request
         id: pr
         env:
           GH_TOKEN: ${{ secrets.PUSH_MAIN }}
-          RELEASE_VERSION: ${{ steps.version.outputs.version }}
-          RELEASE_BRANCH: ${{ steps.version.outputs.branch }}
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+          RELEASE_BRANCH: ${{ steps.release.outputs.branch }}
         shell: bash
         run: |
           set -euo pipefail
@@ -111,14 +103,6 @@ jobs:
             --title "chore(release): v${RELEASE_VERSION}" \
             --body "Release v${RELEASE_VERSION}")"
 
+          gh pr merge "${pr_url}" --auto --squash
+
           echo "url=${pr_url}" >> "${GITHUB_OUTPUT}"
-
-      - name: Enable auto-merge
-        env:
-          GH_TOKEN: ${{ secrets.PUSH_MAIN }}
-          RELEASE_PR: ${{ steps.pr.outputs.url }}
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          gh pr merge "${RELEASE_PR}" --auto --squash
