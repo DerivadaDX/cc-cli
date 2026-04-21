@@ -1,0 +1,108 @@
+name: Create release PR
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  create-release-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PUSH_MAIN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Prepare context
+        id: prepare
+        env:
+          GH_TOKEN: ${{ secrets.PUSH_MAIN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ "${GITHUB_REF}" != "refs/heads/main" ]]; then
+            echo "Este workflow solo puede ejecutarse sobre refs/heads/main. Ref actual: ${GITHUB_REF}" >&2
+            exit 1
+          fi
+
+          git fetch --tags
+          last_tag="$(git tag --list 'v*' --sort=-version:refname | head -n 1)"
+
+          if [[ -n "${last_tag}" ]] && [[ -z "$(git rev-list "${last_tag}"..HEAD --max-count=1)" ]]; then
+            echo "No hay commits nuevos desde ${last_tag}" >&2
+            exit 1
+          fi
+
+      - name: Create commit
+        id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          npm run version
+
+          version="$(node -p "require('./package.json').version")"
+
+          if git diff --quiet -- package.json package-lock.json Directory.Build.props CHANGELOG.md; then
+            echo "npm run version no produjo cambios de release" >&2
+            exit 1
+          fi
+
+          branch="chore/release/v${version}"
+
+          if git ls-remote --exit-code --heads origin "${branch}" >/dev/null 2>&1; then
+            echo "La rama ${branch} ya existe en origin" >&2
+            exit 1
+          fi
+
+          echo "version=${version}" >> "${GITHUB_OUTPUT}"
+          echo "branch=${branch}" >> "${GITHUB_OUTPUT}"
+
+          git switch -c "${branch}"
+          git add package.json package-lock.json Directory.Build.props CHANGELOG.md
+          git commit -m "chore(release): v${version}"
+          git push origin "${branch}"
+
+      - name: Create pull request
+        id: pr
+        env:
+          GH_TOKEN: ${{ secrets.PUSH_MAIN }}
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+          RELEASE_BRANCH: ${{ steps.release.outputs.branch }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          pr_url="$(gh pr create \
+            --base main \
+            --head "${RELEASE_BRANCH}" \
+            --title "chore(release): v${RELEASE_VERSION}" \
+            --body "Release v${RELEASE_VERSION}")"
+
+          gh pr merge "${pr_url}" --auto --squash
+
+          echo "url=${pr_url}" >> "${GITHUB_OUTPUT}"
