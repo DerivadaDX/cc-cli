@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.2.0](https://github.com/DerivadaDX/CakeCuttingCLI/compare/v3.1.2...v3.2.0) (2026-04-21)
+
+
+### Features
+
+* **solver:** se agregó early return cuando la población no admite evolución ([#94](https://github.com/DerivadaDX/CakeCuttingCLI/issues/94)) ([b798ee4](https://github.com/DerivadaDX/CakeCuttingCLI/commit/b798ee4f6b8d9754f75eba92dc8e90fcb5d9dc8e))
+
+
+### Bug Fixes
+
+* **solver:** se hace early return si el mejor individuo ya es óptimo ([#95](https://github.com/DerivadaDX/CakeCuttingCLI/issues/95)) ([618b3f5](https://github.com/DerivadaDX/CakeCuttingCLI/commit/618b3f57cc8ccc02be1ebfad502d2ef05d797b07))
+
 ## [3.1.2](https://github.com/DerivadaDX/CakeCuttingCLI/compare/v3.1.1...v3.1.2) (2026-04-16)
 
 
